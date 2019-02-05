@@ -8,20 +8,55 @@
 import UIKit
 
 class ApproveViewController: UIViewController {
-
-    @IBOutlet fileprivate weak var promptLabel: UILabel!
-    @IBOutlet fileprivate weak var yesButton: UIButton!
-    @IBOutlet fileprivate weak var cancelButton: UIButton!
+    
+    let gradientView: GradientView = {
+        let gradientView = GradientView()
+        gradientView.translatesAutoresizingMaskIntoConstraints = false
+        return gradientView
+    }()
+    
+    let logo: UIImageView = {
+        let logo = UIImageView()
+        logo.translatesAutoresizingMaskIntoConstraints = false
+        logo.image = UIImage(named: "applogo_white")
+        logo.contentMode = .scaleAspectFit
+        return logo
+    }()
+    
+    let promptLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Would you like to transfer $100.00 to nmel1234?"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    let yesButton: BankAppButton = {
+        let button = BankAppButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Yes", for: .normal)
+        button.addTarget(self, action: #selector(initiateTransfer(_:)), for: .touchUpInside)
+        button.backgroundColor = AppTheme.primaryBlue
+        return button
+    }()
+    
+    let cancelButton: BankAppButton = {
+        let button = BankAppButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Cancel", for: .normal)
+        button.addTarget(self, action: #selector(cancelTransaction(_:)), for: .touchUpInside)
+        button.backgroundColor = AppTheme.primaryBlue
+        return button
+    }()
+    
+    
     private var notification: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.isNavigationBarHidden = true
-
-        setupPrompt()
-        setupButtons()
-        
+        layoutView()
     }
     
     override func didReceiveMemoryWarning() {
@@ -29,9 +64,10 @@ class ApproveViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func cancelTransaction(_ sender: Any) {
-        self.goBack()
+    @objc func cancelTransaction(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
     }
+    
     func handleNotification() {
         notification = NotificationCenter.default.addObserver(forName: .UIApplicationWillEnterForeground, object: nil, queue: .main) {
             [unowned self] notification in
@@ -50,61 +86,73 @@ class ApproveViewController: UIViewController {
             NotificationCenter.default.removeObserver(notification)
         }
     }
-    @IBAction func initiateTransfer(_ sender: Any) {
-        self.view.showActivityIndicator()
-        /*let authService = AuthService();
-        print(AppConfig.UUID)
-        authService.authorize(serialNumber: AppConfig.UUID, sucess: { [weak self] (success) in
-            
-            self?.view.hideActivityIndicator()
-            if  let status = success["status"] as? Bool{
-                UserDefaults.standard.set(true, forKey: "initiatedTransfer");
-                UserDefaults.standard.set(false, forKey: "transaction_denied")
-                
-                UserDefaults.standard.synchronize()
-                self?.handleNotification()
-                if status{
-                    //Call Verify App
-                }else{
-                    
-                }
-            }
-        }) { (error) in
-
-        }*/
-        /*EnterPINViewController.presentPINScreen(on: self) { [weak self] (success) in
-            if success {
-                self?.performSegue(withIdentifier: "segueTransferComplete", sender: self)
-            }
-        }*/
+    
+    @objc func initiateTransfer(_ sender: Any) {
+        //self.view.showActivityIndicator()
+        navigationController?.pushViewController(EnterPINViewController(), animated: true)
+//        let authService = AuthService()
+//
+//        authService.authorize(serialNumber: AppConfig.UUID, sucess: { [weak self] (success) in
+//
+//            self?.view.hideActivityIndicator()
+//            if  let status = success["status"] as? Bool{
+//                UserDefaults.standard.set(true, forKey: "initiatedTransfer");
+//                UserDefaults.standard.set(false, forKey: "transaction_denied")
+//
+//                UserDefaults.standard.synchronize()
+//                self?.handleNotification()
+//                if status{
+//                    //Call Verify App
+//                }else{
+//
+//                }
+//            }
+//        }) { (error) in
+//
+//        }
+//        EnterPINViewController.presentPINScreen(on: self) { [weak self] (success) in
+//            if success {
+//                self?.performSegue(withIdentifier: "segueTransferComplete", sender: self)
+//            }
+//        }
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func layoutView() {
+        view.backgroundColor = .white
+        var constraints: [NSLayoutConstraint] = []
+        let safeAreaGuide = view.safeAreaLayoutGuide
+        
+        
+        view.addSubview(gradientView)
+        view.addSubview(logo)
+        view.addSubview(promptLabel)
+        view.addSubview(yesButton)
+        view.addSubview(cancelButton)
+        
+        constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
+        constraints.append(gradientView.heightAnchor.constraint(equalToConstant: 70))
+        
+        constraints.append(logo.centerYAnchor.constraint(equalTo: gradientView.centerYAnchor))
+        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
+        constraints.append(logo.heightAnchor.constraint(equalToConstant: 60))
+        
+        constraints.append(promptLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
+        constraints.append(promptLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(promptLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        
+        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -30))
+        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+        constraints.append(cancelButton.heightAnchor.constraint(equalToConstant: 48))
+        
+        constraints.append(yesButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -10))
+        constraints.append(yesButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(yesButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+        constraints.append(yesButton.heightAnchor.constraint(equalToConstant: 48))
+        
+        NSLayoutConstraint.activate(constraints)
+        
     }
-    */
 
-}
-
-// MARK: Private
-
-private extension ApproveViewController {
-    
-    func setupPrompt() {
-        promptLabel.text = "Would you like to\ntransfer $100.00 to\nmel1234?"
-    }
-    
-    func setupButtons() {
-        yesButton.layer.cornerRadius = yesButton.frame.size.height/2.0
-        yesButton.layer.borderWidth = 1.0
-        yesButton.layer.borderColor = yesButton.backgroundColor?.cgColor
-        cancelButton.layer.cornerRadius = cancelButton.frame.size.height/2.0
-        cancelButton.layer.borderWidth = 1.0
-        cancelButton.layer.borderColor = cancelButton.backgroundColor?.cgColor
-    }
 }

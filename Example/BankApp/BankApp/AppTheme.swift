@@ -9,7 +9,7 @@ import UIKit
 
 struct AppTheme {
     
-    static let buttonColor = UIColor(hexString: "0BB3D7")
+    static let primaryBlue = UIColor(hexString: "0BB3D7")
     static let gradientTopColor = UIColor(hexString: "518EF5")
     static let gradientBottomColor = UIColor(hexString: "0BB3D7")
 }

@@ -8,20 +8,68 @@ import UIKit
 
 class EnterPINViewController: UIViewController {
     
-    @IBOutlet weak var backButtonBottomContraint: NSLayoutConstraint!
-    @IBOutlet weak var illustrationBottomContraint: NSLayoutConstraint!
-
-    // The six dots
-    @IBOutlet fileprivate weak var dotView0: DotView!
-    @IBOutlet fileprivate weak var dotView1: DotView!
-    @IBOutlet fileprivate weak var dotView2: DotView!
-    @IBOutlet fileprivate weak var dotView3: DotView!
-    @IBOutlet fileprivate weak var dotView4: DotView!
-    @IBOutlet fileprivate weak var dotView5: DotView!
+    let logo: UIImageView = {
+        let logo = UIImageView()
+        logo.translatesAutoresizingMaskIntoConstraints = false
+        logo.image = UIImage(named: "logosmall")
+        logo.contentMode = .scaleAspectFit
+        return logo
+    }()
     
-    fileprivate var dotViews:[DotView] = []
+    let enterPinLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Enter Pin"
+        label.font = UIFont.systemFont(ofSize: 24)
+        label.textColor = UIColor.lightGray
+        label.textAlignment = .center
+        return label
+    }()
+    
+    let confirmLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Unlock to confirm"
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.textColor = UIColor.lightGray
+        label.textAlignment = .center
+        return label
+    }()
+    
+    let dotStack: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.alignment = .fill
+        stack.distribution = .fillEqually
+        stack.spacing = 25
+        stack.contentMode = .scaleAspectFit
+        return stack
+    }()
+    
+    let backButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("< Back", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.setTitleColor(AppTheme.primaryBlue, for: .normal)
+        button.addTarget(self, action: #selector(backButtonTouched(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    private var backBottomConstraint: NSLayoutConstraint!
+    
+    // The six dots
+    let dotView0 = DotView()
+    let dotView1 = DotView()
+    let dotView2 = DotView()
+    let dotView3 = DotView()
+    let dotView4 = DotView()
+    let dotView5 = DotView()
+    
+    fileprivate var dotViews: [DotView] = []
     fileprivate var numDigits = 0
-    fileprivate var completionHandler:((Bool)->Void)?
+    fileprivate var completionHandler: ((Bool)->Void)?
     
     // This is the receiver for user input
     fileprivate var hiddenInputTextField: UITextField!
@@ -36,8 +84,8 @@ class EnterPINViewController: UIViewController {
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShowHide(_:)), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShowHide(_:)), name: .UIKeyboardWillHide, object: nil)
         
+        layoutView()
         setupInputField()
         setupDots()
         applyAppTheme()
@@ -45,12 +93,11 @@ class EnterPINViewController: UIViewController {
     
     @objc func keyboardWillShowHide(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
-            
+
             // Animate the "< Back" button up or down based on whether keyboard was shown or hidden.
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
-            backButtonBottomContraint.constant = keyboardHeight + 34
-            illustrationBottomContraint.constant = keyboardHeight  + 12
+            backBottomConstraint.constant -= keyboardHeight + 34
             UIView.animate(withDuration: 0.5) { [weak self] in
                 self?.view.layoutIfNeeded()
             }
@@ -69,19 +116,56 @@ class EnterPINViewController: UIViewController {
         hiddenInputTextField.becomeFirstResponder()
     }
     
-    @IBAction func onBackButtonTouched(_ sender: Any) {
+    @objc func backButtonTouched(_ sender: Any) {
         completionHandler?(false)
-        goBack()
-        //self.navigationController?.popViewController(animated: true)
-        //navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//
-//    }
+    func layoutView() {
+        view.backgroundColor = .white
+        var constraints: [NSLayoutConstraint] = []
+        let safeAreaGuide = view.safeAreaLayoutGuide
+        
+        
+        view.addSubview(logo)
+        view.addSubview(enterPinLabel)
+        view.addSubview(confirmLabel)
+        view.addSubview(dotStack)
+        view.addSubview(backButton)
+        
+        constraints.append(logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 20))
+        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
+        constraints.append(logo.heightAnchor.constraint(equalToConstant: 46))
+        constraints.append(logo.widthAnchor.constraint(equalToConstant: 46))
+        
+        constraints.append(enterPinLabel.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 20))
+        constraints.append(enterPinLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(enterPinLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        
+        constraints.append(confirmLabel.topAnchor.constraint(equalTo: enterPinLabel.bottomAnchor, constant: 20))
+        constraints.append(confirmLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(confirmLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        
+        constraints.append(dotStack.topAnchor.constraint(equalTo: confirmLabel.bottomAnchor, constant: 50))
+        constraints.append(dotStack.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(dotStack.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        constraints.append(dotStack.heightAnchor.constraint(equalToConstant: 30))
+        
+        let backBottomConstraint = NSLayoutConstraint(item: backButton,
+                                                      attribute: .bottom,
+                                                      relatedBy: .equal,
+                                                      toItem: safeAreaGuide,
+                                                      attribute: .bottom,
+                                                      multiplier: 1,
+                                                      constant: -10)
+        constraints.append(backBottomConstraint)
+        self.backBottomConstraint = backBottomConstraint
+        
+        constraints.append(backButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 20))
+        
+        NSLayoutConstraint.activate(constraints)
+        
+    }
     
 }
 
@@ -138,6 +222,12 @@ private extension EnterPINViewController {
     func setupDots() {
         dotViews = [dotView0, dotView1, dotView2, dotView3, dotView4, dotView5]
         numDigits = dotViews.count
+
+        for dot in dotViews {
+            dot.color = UIColor.lightGray
+            dot.contentMode = .scaleAspectFit
+            dotStack.addArrangedSubview(dot)
+        }
     }
     
     func updateDots() {
@@ -168,23 +258,23 @@ private extension EnterPINViewController {
 
 // MARK: - Factory methods
 
-extension EnterPINViewController {
-    
-    class func create() -> EnterPINViewController {
-        
-        let storyboard = UIStoryboard(name:"Main", bundle: nil)
-        guard let vc = storyboard.instantiateViewController(withIdentifier: "enterPinScene") as? EnterPINViewController else {
-            fatalError("Failed to instantiate a EnterPINViewController from Main.storyboard")
-        }
-        
-        return vc
-    }
-    
-    class func presentPINScreen(on vc: UIViewController, completionHandler:@escaping (Bool)->Void) {
-        let enterPinVC = EnterPINViewController.create()
-        enterPinVC.completionHandler = completionHandler
-        vc.present(enterPinVC, animated: true) {
-            
-        }
-    }
-}
+//extension EnterPINViewController {
+//
+//    class func create() -> EnterPINViewController {
+//
+//        let storyboard = UIStoryboard(name:"Main", bundle: nil)
+//        guard let vc = storyboard.instantiateViewController(withIdentifier: "enterPinScene") as? EnterPINViewController else {
+//            fatalError("Failed to instantiate a EnterPINViewController from Main.storyboard")
+//        }
+//
+//        return vc
+//    }
+//
+//    class func presentPINScreen(on vc: UIViewController, completionHandler:@escaping (Bool)->Void) {
+//        let enterPinVC = EnterPINViewController.create()
+//        enterPinVC.completionHandler = completionHandler
+//        vc.present(enterPinVC, animated: true) {
+//
+//        }
+//    }
+//}

@@ -15,7 +15,7 @@ class BankAppButton: UIButton {
         }
     }
 
-    @IBInspectable var borderColor: UIColor = AppTheme.buttonColor {
+    @IBInspectable var borderColor: UIColor = AppTheme.primaryBlue {
         didSet(newValue) {
             setNeedsDisplay()
         }

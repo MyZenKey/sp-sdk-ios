@@ -10,23 +10,79 @@ import AppAuth
 import CarriersSharedAPI
 
 class EnableVerifyViewController: UIViewController {
-    @IBOutlet weak var btn_cancel: UIButton!
-    @IBOutlet weak var btn_enable: UIButton!
-    @IBOutlet weak var lbl_description: UILabel!
+
+    let gradientView: GradientView = {
+        let gradientView = GradientView()
+        gradientView.translatesAutoresizingMaskIntoConstraints = false
+        return gradientView
+    }()
+    
+    let logo: UIImageView = {
+        let logo = UIImageView()
+        logo.translatesAutoresizingMaskIntoConstraints = false
+        logo.image = UIImage(named: "applogo_white")
+        logo.contentMode = .scaleAspectFit
+        return logo
+    }()
+    
+    let enableButton: BankAppButton = {
+        let button = BankAppButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("YES", for: .normal)
+        button.addTarget(self, action: #selector(enableVerify(_:)), for: .touchUpInside)
+        button.backgroundColor = UIColor(red: 0.36, green: 0.56, blue: 0.93, alpha: 1.0)
+        return button
+    }()
+    
+    let cancelButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("No, thanks", for: .normal)
+        button.addTarget(self, action: #selector(cancelVerify(_:)), for: .touchUpInside)
+        button.setTitleColor(UIColor(red: 0.36, green: 0.56, blue: 0.93, alpha: 1.0), for: .normal)
+
+        return button
+    }()
+    
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        let text = "We now support\nProject Verify"
+        let attributedString = NSMutableAttributedString(string: text)
+        attributedString.addAttributes([NSAttributedStringKey.font :  UIFont.italicSystemFont(ofSize: 38), NSAttributedStringKey.foregroundColor:UIColor.black], range: (text as NSString).range(of: "Project Verify"))
+        label.attributedText = attributedString
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    let descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        let text = "Would you like to use Project Verify to approve future Bank App logins?"
+        let attributedString = NSMutableAttributedString(string: text)
+        attributedString.addAttributes([NSAttributedStringKey.font :  UIFont.italicSystemFont(ofSize: 18), NSAttributedStringKey.foregroundColor:UIColor.black], range: (text as NSString).range(of: "Project Verify"))
+        label.attributedText = attributedString
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
     var openidconfiguration: OIDServiceConfiguration?
-    var carrier:String?
-    var clientId:String? = "BankApp"
-    var secret:String? = "bankapp_client_secret"
-    var state:String? = ""
-    var redirectUri:String? = "com.att.ent.cso.haloc.bankapp://code"
+    var carrier: String?
+    var clientId: String? = "BankApp"
+    var secret: String? = "bankapp_client_secret"
+    var state: String? = ""
+    var redirectUri: String? = "com.att.ent.cso.haloc.bankapp://code"
     var sharedAPI: SharedAPI?
-    var carrierConfig:[String:Any]? = nil
-    var scopes:[String]? = nil
-    var responseTypes:[String]? = nil
+    var carrierConfig: [String:Any]? = nil
+    var scopes: [String]? = nil
+    var responseTypes: [String]? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        btn_enable.layer.cornerRadius = btn_enable.frame.size.height/2.0
+        
+        layoutView()
         
         //init shared api
         self.sharedAPI = SharedAPI()
@@ -35,14 +91,6 @@ class EnableVerifyViewController: UIViewController {
         self.carrierConfig = sharedAPI!.discoverCarrierConfiguration()
         self.scopes = (carrierConfig!["scopes_supported"] as! String).components(separatedBy: " ")
         self.responseTypes = [carrierConfig!["response_types_supported"]! as! String]
-        
-//        self.navigationController?.isNavigationBarHidden = false
-        // Do any additional setup after loading the view.
-        if let text = lbl_description.text{
-            let attributedString = NSMutableAttributedString(string:text)
-            attributedString.addAttributes([NSAttributedStringKey.font :  UIFont.italicSystemFont(ofSize: 18), NSAttributedStringKey.foregroundColor:UIColor.black], range: (text as NSString).range(of: "Project Verify"))
-            lbl_description.attributedText = attributedString
-        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -50,28 +98,26 @@ class EnableVerifyViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func cancelVerify(_ sender: Any) {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.launchLoginScreen()
-        }
+    @objc func cancelVerify(_ sender: Any) {
+        navigationController?.popToRootViewController(animated: true)
     }
     
-    @IBAction func enableVerify(_ sender: Any) {
+    @objc func enableVerify(_ sender: Any) {
         
         //check if carrier config is nil
         if self.carrierConfig != nil {
             print("Found value carrier configuration. Setting auth and token urls in openid config")
             //init service configuration object
-            let authorizationUrlString:String? = self.carrierConfig!["authorization_endpoint"] as! String
+            let authorizationUrlString: String? = self.carrierConfig!["authorization_endpoint"] as! String
             let tokenUrlString:String? = self.carrierConfig!["token_endpoint"] as! String
-            let authorizationURL:URL = URL(string: authorizationUrlString!)!
+            let authorizationURL: URL = URL(string: authorizationUrlString!)!
             let tokenURL:URL = URL(string: tokenUrlString!)! as! URL
             self.openidconfiguration = OIDServiceConfiguration.init(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL)
-            
+
             //create the authorization request
             let authorizationRequest:OIDAuthorizationRequest = self.createAuthorizationRequest(scopes: self.scopes!, responseType: self.responseTypes!)!
             print("Authorization Request created")
-            
+
             //check to see if the authorization url is set as a universal app link
             UIApplication.shared.open(authorizationURL, options: [UIApplicationOpenURLOptionUniversalLinksOnly: true], completionHandler: { success in
                 if success {
@@ -87,7 +133,7 @@ class EnableVerifyViewController: UIViewController {
         else {
             print("Carrier Config is null. Cannot perform authentication")
         }
-        
+
         /*let consentUrlString = "\(AppConfig.AuthorizeURL)?client_id=\(AppConfig.clientID.urlEncode())&response_type=code&state=teststate&redirect_uri=\(AppConfig.code_redirect_uri.urlEncode())&scope=\(AppConfig.consentScope.urlEncode())"
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -182,10 +228,8 @@ class EnableVerifyViewController: UIViewController {
                                     var jsonDocument:JsonDocument = JsonDocument(data: json)
                                     //perform async task to update UI
                                     DispatchQueue.main.async {
-                                        let storyboard = UIStoryboard(name:"Main", bundle: nil)
-                                        let homeVC = storyboard.instantiateViewController(withIdentifier: "homeScene")
                                         let appDelegate = UIApplication.shared.delegate as? AppDelegate
-                                        appDelegate!.window?.rootViewController = homeVC
+                                        appDelegate?.launchHomeScreen()
                                     }
                                 }
                             }catch {
@@ -206,14 +250,46 @@ class EnableVerifyViewController: UIViewController {
         })
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func layoutView() {
+        view.backgroundColor = .white
+        var constraints: [NSLayoutConstraint] = []
+        let safeAreaGuide = view.safeAreaLayoutGuide
+        
+        
+        view.addSubview(gradientView)
+        view.addSubview(logo)
+        view.addSubview(titleLabel)
+        view.addSubview(descriptionLabel)
+        view.addSubview(enableButton)
+        view.addSubview(cancelButton)
+        
+        constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
+        constraints.append(gradientView.heightAnchor.constraint(equalToConstant: 70))
+        
+        constraints.append(logo.centerYAnchor.constraint(equalTo: gradientView.centerYAnchor))
+        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
+        constraints.append(logo.heightAnchor.constraint(equalToConstant: 60))
+        
+        constraints.append(titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
+        constraints.append(titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(titleLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        
+        constraints.append(descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20))
+        constraints.append(descriptionLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(descriptionLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        
+        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -25))
+        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+        constraints.append(cancelButton.heightAnchor.constraint(equalToConstant: 48))
+        
+        constraints.append(enableButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -25))
+        constraints.append(enableButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(enableButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+        constraints.append(enableButton.heightAnchor.constraint(equalToConstant: 48))
+        
+        NSLayoutConstraint.activate(constraints)
+        
     }
-    */
-
 }
