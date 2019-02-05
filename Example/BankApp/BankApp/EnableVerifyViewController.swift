@@ -105,36 +105,35 @@ class EnableVerifyViewController: UIViewController {
     @objc func enableVerify(_ sender: Any) {
         
         //check if carrier config is nil
-        navigationController?.pushViewController(HomeViewController(), animated: true)
-//        if self.carrierConfig != nil {
-//            print("Found value carrier configuration. Setting auth and token urls in openid config")
-//            //init service configuration object
-//            let authorizationUrlString: String? = self.carrierConfig!["authorization_endpoint"] as! String
-//            let tokenUrlString:String? = self.carrierConfig!["token_endpoint"] as! String
-//            let authorizationURL: URL = URL(string: authorizationUrlString!)!
-//            let tokenURL:URL = URL(string: tokenUrlString!)! as! URL
-//            self.openidconfiguration = OIDServiceConfiguration.init(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL)
-//
-//            //create the authorization request
-//            let authorizationRequest:OIDAuthorizationRequest = self.createAuthorizationRequest(scopes: self.scopes!, responseType: self.responseTypes!)!
-//            print("Authorization Request created")
-//
-//            //check to see if the authorization url is set as a universal app link
-//            UIApplication.shared.open(authorizationURL, options: [UIApplicationOpenURLOptionUniversalLinksOnly: true], completionHandler: { success in
-//                if success {
-//                    print("This url can be opened in an app. Launching app...")
-//                    self.initProjectVerifyAuthorization(request: authorizationRequest)
-//                }
-//                else {
-//                    print("Launching default safari controller process...")
-//                    self.performAuthorization(request: authorizationRequest)
-//                }
-//            })
-//        }
-//        else {
-//            print("Carrier Config is null. Cannot perform authentication")
-//        }
-//
+        if self.carrierConfig != nil {
+            print("Found value carrier configuration. Setting auth and token urls in openid config")
+            //init service configuration object
+            let authorizationUrlString: String? = self.carrierConfig!["authorization_endpoint"] as! String
+            let tokenUrlString:String? = self.carrierConfig!["token_endpoint"] as! String
+            let authorizationURL: URL = URL(string: authorizationUrlString!)!
+            let tokenURL:URL = URL(string: tokenUrlString!)! as! URL
+            self.openidconfiguration = OIDServiceConfiguration.init(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL)
+
+            //create the authorization request
+            let authorizationRequest:OIDAuthorizationRequest = self.createAuthorizationRequest(scopes: self.scopes!, responseType: self.responseTypes!)!
+            print("Authorization Request created")
+
+            //check to see if the authorization url is set as a universal app link
+            UIApplication.shared.open(authorizationURL, options: [UIApplicationOpenURLOptionUniversalLinksOnly: true], completionHandler: { success in
+                if success {
+                    print("This url can be opened in an app. Launching app...")
+                    self.initProjectVerifyAuthorization(request: authorizationRequest)
+                }
+                else {
+                    print("Launching default safari controller process...")
+                    self.performAuthorization(request: authorizationRequest)
+                }
+            })
+        }
+        else {
+            print("Carrier Config is null. Cannot perform authentication")
+        }
+
         /*let consentUrlString = "\(AppConfig.AuthorizeURL)?client_id=\(AppConfig.clientID.urlEncode())&response_type=code&state=teststate&redirect_uri=\(AppConfig.code_redirect_uri.urlEncode())&scope=\(AppConfig.consentScope.urlEncode())"
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
