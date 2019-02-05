@@ -11,12 +11,23 @@ import AppAuth
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var navigationController: UINavigationController?
     var launchMapViewFlag: Bool = true
     var currentAuthorizationFlow:OIDExternalUserAgentSession?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let _ = launchTransferCompleteScreenIfNeeded()
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        
+        if let window = window {
+            let mainVC = LoginViewController()
+            navigationController = UINavigationController(rootViewController: mainVC)
+            navigationController?.isNavigationBarHidden = true
+            window.rootViewController = navigationController
+            window.makeKeyAndVisible()
+        }
         
         return true
     }
