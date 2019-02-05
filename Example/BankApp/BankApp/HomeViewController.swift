@@ -75,105 +75,26 @@ class HomeViewController: UIViewController {
         view.addSubview(sendMoneyButton)
         view.addSubview(logoutButton)
         
-        constraints.append(NSLayoutConstraint(item: gradientView,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: view,
-                                              attribute: .top,
-                                              multiplier: 1,
-                                              constant: 0))
-        constraints.append(NSLayoutConstraint(item: gradientView,
-                                              attribute: .width,
-                                              relatedBy: .equal,
-                                              toItem: view,
-                                              attribute: .width,
-                                              multiplier: 1,
-                                              constant: 0))
+        constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
         constraints.append(gradientView.heightAnchor.constraint(equalToConstant: 70))
         
-        constraints.append(NSLayoutConstraint(item: logo,
-                                              attribute: .centerY,
-                                              relatedBy: .equal,
-                                              toItem: gradientView,
-                                              attribute: .centerY,
-                                              multiplier: 1,
-                                              constant: 0))
-        constraints.append(NSLayoutConstraint(item: logo,
-                                              attribute: .centerX,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .centerX,
-                                              multiplier: 1,
-                                              constant: 0))
+        constraints.append(logo.centerYAnchor.constraint(equalTo: gradientView.centerYAnchor))
+        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
         constraints.append(logo.heightAnchor.constraint(equalToConstant: 60))
         
-        constraints.append(NSLayoutConstraint(item: titleLabel,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: gradientView,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 100))
-        constraints.append(NSLayoutConstraint(item: titleLabel,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 30))
-        constraints.append(NSLayoutConstraint(item: titleLabel,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -30))
+        constraints.append(titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
+        constraints.append(titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(titleLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         
-        
-        constraints.append(NSLayoutConstraint(item: sendMoneyButton,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: titleLabel,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 20))
-        constraints.append(NSLayoutConstraint(item: sendMoneyButton,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 48))
-        constraints.append(NSLayoutConstraint(item: sendMoneyButton,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -48))
+        constraints.append(sendMoneyButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20))
+        constraints.append(sendMoneyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(sendMoneyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
         constraints.append(sendMoneyButton.heightAnchor.constraint(equalToConstant: 48))
-        
-        constraints.append(NSLayoutConstraint(item: logoutButton,
-                                              attribute: .bottom,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: -50))
-        constraints.append(NSLayoutConstraint(item: logoutButton,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 48))
-        constraints.append(NSLayoutConstraint(item: logoutButton,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -48))
+
+        constraints.append(logoutButton.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -50))
+        constraints.append(logoutButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(logoutButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
         constraints.append(logoutButton.heightAnchor.constraint(equalToConstant: 48))
         
         NSLayoutConstraint.activate(constraints)

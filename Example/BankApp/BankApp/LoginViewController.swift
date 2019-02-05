@@ -54,7 +54,7 @@ class LoginViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Register", for: .normal)
-        button.titleLabel?.textAlignment = .right
+        button.contentHorizontalAlignment = .right
         button.addTarget(self, action: #selector(signInWithVerifyTouched(_:)), for: .touchUpInside)
         return button
     }()
@@ -62,8 +62,8 @@ class LoginViewController: UIViewController {
     let forgotButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentHorizontalAlignment = .left
         button.setTitle("Forgot User ID or Password", for: .normal)
-        button.titleLabel?.textAlignment = .left
         return button
     }()
 
@@ -111,135 +111,32 @@ class LoginViewController: UIViewController {
         
         gradientBackground.frame = view.frame
         
-        constraints.append(NSLayoutConstraint(item: logo,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .top,
-                                              multiplier: 1,
-                                              constant: 80))
-        constraints.append(NSLayoutConstraint(item: logo,
-                                              attribute: .centerX,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .centerX,
-                                              multiplier: 1,
-                                              constant: 0))
+        constraints.append(logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 80))
+        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
         constraints.append(logo.heightAnchor.constraint(equalToConstant: 20))
         
-        constraints.append(NSLayoutConstraint(item: idTextField,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: logo,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 50))
-        constraints.append(NSLayoutConstraint(item: idTextField,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 30))
-        constraints.append(NSLayoutConstraint(item: idTextField,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -30))
+        constraints.append(idTextField.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 50))
+        constraints.append(idTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(idTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         constraints.append(idTextField.heightAnchor.constraint(equalToConstant: 39))
         
-        constraints.append(NSLayoutConstraint(item: passwordTextField,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: idTextField,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 20))
-        constraints.append(NSLayoutConstraint(item: passwordTextField,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 30))
-        constraints.append(NSLayoutConstraint(item: passwordTextField,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -30))
+        constraints.append(passwordTextField.topAnchor.constraint(equalTo: idTextField.bottomAnchor, constant: 20))
+        constraints.append(passwordTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(passwordTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         constraints.append(passwordTextField.heightAnchor.constraint(equalToConstant: 39))
         
-        constraints.append(NSLayoutConstraint(item: signInButton,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: passwordTextField,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 20))
-        constraints.append(NSLayoutConstraint(item: signInButton,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 30))
-        constraints.append(NSLayoutConstraint(item: signInButton,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -30))
+        constraints.append(signInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20))
+        constraints.append(signInButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(signInButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         constraints.append(signInButton.heightAnchor.constraint(equalToConstant: 39))
         
-        constraints.append(NSLayoutConstraint(item: forgotButton,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: signInButton,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 5))
-        constraints.append(NSLayoutConstraint(item: forgotButton,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: signInButton,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 0))
-        constraints.append(NSLayoutConstraint(item: forgotButton,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: signInButton,
-                                              attribute: .centerX,
-                                              multiplier: 1,
-                                              constant: 0))
+        constraints.append(forgotButton.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 5))
+        constraints.append(forgotButton.leadingAnchor.constraint(equalTo: signInButton.leadingAnchor, constant: 0))
         constraints.append(forgotButton.heightAnchor.constraint(equalToConstant: 39))
         
-        constraints.append(NSLayoutConstraint(item: registerButton,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: signInButton,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 5))
-        constraints.append(NSLayoutConstraint(item: registerButton,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: signInButton,
-                                              attribute: .centerX,
-                                              multiplier: 1,
-                                              constant: 0))
-        constraints.append(NSLayoutConstraint(item: registerButton,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: signInButton,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: 0))
+        constraints.append(registerButton.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 5))
+        constraints.append(registerButton.leadingAnchor.constraint(equalTo: forgotButton.trailingAnchor, constant: 10))
+        constraints.append(registerButton.trailingAnchor.constraint(equalTo: signInButton.trailingAnchor, constant: 0))
         constraints.append(registerButton.heightAnchor.constraint(equalToConstant: 39))
         
         NSLayoutConstraint.activate(constraints)

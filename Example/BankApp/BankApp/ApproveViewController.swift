@@ -129,105 +129,26 @@ class ApproveViewController: UIViewController {
         view.addSubview(yesButton)
         view.addSubview(cancelButton)
         
-        constraints.append(NSLayoutConstraint(item: gradientView,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: view,
-                                              attribute: .top,
-                                              multiplier: 1,
-                                              constant: 0))
-        constraints.append(NSLayoutConstraint(item: gradientView,
-                                              attribute: .width,
-                                              relatedBy: .equal,
-                                              toItem: view,
-                                              attribute: .width,
-                                              multiplier: 1,
-                                              constant: 0))
+        constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
         constraints.append(gradientView.heightAnchor.constraint(equalToConstant: 70))
         
-        constraints.append(NSLayoutConstraint(item: logo,
-                                              attribute: .centerY,
-                                              relatedBy: .equal,
-                                              toItem: gradientView,
-                                              attribute: .centerY,
-                                              multiplier: 1,
-                                              constant: 0))
-        constraints.append(NSLayoutConstraint(item: logo,
-                                              attribute: .centerX,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .centerX,
-                                              multiplier: 1,
-                                              constant: 0))
+        constraints.append(logo.centerYAnchor.constraint(equalTo: gradientView.centerYAnchor))
+        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
         constraints.append(logo.heightAnchor.constraint(equalToConstant: 60))
         
-        constraints.append(NSLayoutConstraint(item: promptLabel,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: gradientView,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 100))
-        constraints.append(NSLayoutConstraint(item: promptLabel,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 30))
-        constraints.append(NSLayoutConstraint(item: promptLabel,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -30))
+        constraints.append(promptLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
+        constraints.append(promptLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(promptLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         
-        
-        constraints.append(NSLayoutConstraint(item: cancelButton,
-                                              attribute: .bottom,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: -30))
-        constraints.append(NSLayoutConstraint(item: cancelButton,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 48))
-        constraints.append(NSLayoutConstraint(item: cancelButton,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -48))
+        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -30))
+        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
         constraints.append(cancelButton.heightAnchor.constraint(equalToConstant: 48))
         
-        constraints.append(NSLayoutConstraint(item: yesButton,
-                                              attribute: .bottom,
-                                              relatedBy: .equal,
-                                              toItem: cancelButton,
-                                              attribute: .top,
-                                              multiplier: 1,
-                                              constant: -10))
-        constraints.append(NSLayoutConstraint(item: yesButton,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 48))
-        constraints.append(NSLayoutConstraint(item: yesButton,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -48))
+        constraints.append(yesButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -10))
+        constraints.append(yesButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(yesButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
         constraints.append(yesButton.heightAnchor.constraint(equalToConstant: 48))
         
         NSLayoutConstraint.activate(constraints)

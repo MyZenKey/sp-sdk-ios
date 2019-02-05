@@ -57,6 +57,8 @@ class EnterPINViewController: UIViewController {
         return button
     }()
     
+    private var backBottomConstraint: NSLayoutConstraint!
+    
     // The six dots
     let dotView0 = DotView()
     let dotView1 = DotView()
@@ -95,8 +97,7 @@ class EnterPINViewController: UIViewController {
             // Animate the "< Back" button up or down based on whether keyboard was shown or hidden.
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
-//            backButtonBottomContraint.constant = keyboardHeight + 34
-            self.backButton.frame.origin.y -= keyboardHeight + 34
+            backBottomConstraint.constant -= keyboardHeight + 34
             UIView.animate(withDuration: 0.5) { [weak self] in
                 self?.view.layoutIfNeeded()
             }
@@ -132,105 +133,35 @@ class EnterPINViewController: UIViewController {
         view.addSubview(dotStack)
         view.addSubview(backButton)
         
-        constraints.append(NSLayoutConstraint(item: logo,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .top,
-                                              multiplier: 1,
-                                              constant: 20))
-        constraints.append(NSLayoutConstraint(item: logo,
-                                              attribute: .centerX,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .centerX,
-                                              multiplier: 1,
-                                              constant: 0))
+        constraints.append(logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 20))
+        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
         constraints.append(logo.heightAnchor.constraint(equalToConstant: 46))
         constraints.append(logo.widthAnchor.constraint(equalToConstant: 46))
         
-        constraints.append(NSLayoutConstraint(item: enterPinLabel,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: logo,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 20))
-        constraints.append(NSLayoutConstraint(item: enterPinLabel,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 30))
-        constraints.append(NSLayoutConstraint(item: enterPinLabel,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -30))
+        constraints.append(enterPinLabel.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 20))
+        constraints.append(enterPinLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(enterPinLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         
-        constraints.append(NSLayoutConstraint(item: confirmLabel,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: enterPinLabel,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 10))
-        constraints.append(NSLayoutConstraint(item: confirmLabel,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 30))
-        constraints.append(NSLayoutConstraint(item: confirmLabel,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -30))
+        constraints.append(confirmLabel.topAnchor.constraint(equalTo: enterPinLabel.bottomAnchor, constant: 20))
+        constraints.append(confirmLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(confirmLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         
-        
-        constraints.append(NSLayoutConstraint(item: dotStack,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: confirmLabel,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 50))
-        constraints.append(NSLayoutConstraint(item: dotStack,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 30))
-        constraints.append(NSLayoutConstraint(item: dotStack,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -30))
+        constraints.append(dotStack.topAnchor.constraint(equalTo: confirmLabel.bottomAnchor, constant: 50))
+        constraints.append(dotStack.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(dotStack.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         constraints.append(dotStack.heightAnchor.constraint(equalToConstant: 30))
         
-        constraints.append(NSLayoutConstraint(item: backButton,
-                                              attribute: .bottom,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: -10))
-        constraints.append(NSLayoutConstraint(item: backButton,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 20))
+        let backBottomConstraint = NSLayoutConstraint(item: backButton,
+                                                      attribute: .bottom,
+                                                      relatedBy: .equal,
+                                                      toItem: safeAreaGuide,
+                                                      attribute: .bottom,
+                                                      multiplier: 1,
+                                                      constant: -10)
+        constraints.append(backBottomConstraint)
+        self.backBottomConstraint = backBottomConstraint
+        
+        constraints.append(backButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 20))
         
         NSLayoutConstraint.activate(constraints)
         

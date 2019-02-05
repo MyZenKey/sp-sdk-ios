@@ -104,36 +104,37 @@ class EnableVerifyViewController: UIViewController {
     
     @objc func enableVerify(_ sender: Any) {
         
-//        //check if carrier config is nil
-        if self.carrierConfig != nil {
-            print("Found value carrier configuration. Setting auth and token urls in openid config")
-            //init service configuration object
-            let authorizationUrlString: String? = self.carrierConfig!["authorization_endpoint"] as! String
-            let tokenUrlString:String? = self.carrierConfig!["token_endpoint"] as! String
-            let authorizationURL: URL = URL(string: authorizationUrlString!)!
-            let tokenURL:URL = URL(string: tokenUrlString!)! as! URL
-            self.openidconfiguration = OIDServiceConfiguration.init(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL)
-
-            //create the authorization request
-            let authorizationRequest:OIDAuthorizationRequest = self.createAuthorizationRequest(scopes: self.scopes!, responseType: self.responseTypes!)!
-            print("Authorization Request created")
-
-            //check to see if the authorization url is set as a universal app link
-            UIApplication.shared.open(authorizationURL, options: [UIApplicationOpenURLOptionUniversalLinksOnly: true], completionHandler: { success in
-                if success {
-                    print("This url can be opened in an app. Launching app...")
-                    self.initProjectVerifyAuthorization(request: authorizationRequest)
-                }
-                else {
-                    print("Launching default safari controller process...")
-                    self.performAuthorization(request: authorizationRequest)
-                }
-            })
-        }
-        else {
-            print("Carrier Config is null. Cannot perform authentication")
-        }
-        
+        //check if carrier config is nil
+        navigationController?.pushViewController(HomeViewController(), animated: true)
+//        if self.carrierConfig != nil {
+//            print("Found value carrier configuration. Setting auth and token urls in openid config")
+//            //init service configuration object
+//            let authorizationUrlString: String? = self.carrierConfig!["authorization_endpoint"] as! String
+//            let tokenUrlString:String? = self.carrierConfig!["token_endpoint"] as! String
+//            let authorizationURL: URL = URL(string: authorizationUrlString!)!
+//            let tokenURL:URL = URL(string: tokenUrlString!)! as! URL
+//            self.openidconfiguration = OIDServiceConfiguration.init(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL)
+//
+//            //create the authorization request
+//            let authorizationRequest:OIDAuthorizationRequest = self.createAuthorizationRequest(scopes: self.scopes!, responseType: self.responseTypes!)!
+//            print("Authorization Request created")
+//
+//            //check to see if the authorization url is set as a universal app link
+//            UIApplication.shared.open(authorizationURL, options: [UIApplicationOpenURLOptionUniversalLinksOnly: true], completionHandler: { success in
+//                if success {
+//                    print("This url can be opened in an app. Launching app...")
+//                    self.initProjectVerifyAuthorization(request: authorizationRequest)
+//                }
+//                else {
+//                    print("Launching default safari controller process...")
+//                    self.performAuthorization(request: authorizationRequest)
+//                }
+//            })
+//        }
+//        else {
+//            print("Carrier Config is null. Cannot perform authentication")
+//        }
+//
         /*let consentUrlString = "\(AppConfig.AuthorizeURL)?client_id=\(AppConfig.clientID.urlEncode())&response_type=code&state=teststate&redirect_uri=\(AppConfig.code_redirect_uri.urlEncode())&scope=\(AppConfig.consentScope.urlEncode())"
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -263,127 +264,30 @@ class EnableVerifyViewController: UIViewController {
         view.addSubview(enableButton)
         view.addSubview(cancelButton)
         
-        constraints.append(NSLayoutConstraint(item: gradientView,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: view,
-                                              attribute: .top,
-                                              multiplier: 1,
-                                              constant: 0))
-        constraints.append(NSLayoutConstraint(item: gradientView,
-                                              attribute: .width,
-                                              relatedBy: .equal,
-                                              toItem: view,
-                                              attribute: .width,
-                                              multiplier: 1,
-                                              constant: 0))
+        constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
+        constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
         constraints.append(gradientView.heightAnchor.constraint(equalToConstant: 70))
         
-        constraints.append(NSLayoutConstraint(item: logo,
-                                              attribute: .centerY,
-                                              relatedBy: .equal,
-                                              toItem: gradientView,
-                                              attribute: .centerY,
-                                              multiplier: 1,
-                                              constant: 0))
-        constraints.append(NSLayoutConstraint(item: logo,
-                                              attribute: .centerX,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .centerX,
-                                              multiplier: 1,
-                                              constant: 0))
+        constraints.append(logo.centerYAnchor.constraint(equalTo: gradientView.centerYAnchor))
+        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
         constraints.append(logo.heightAnchor.constraint(equalToConstant: 60))
         
-        constraints.append(NSLayoutConstraint(item: titleLabel,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: gradientView,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 100))
-        constraints.append(NSLayoutConstraint(item: titleLabel,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 30))
-        constraints.append(NSLayoutConstraint(item: titleLabel,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -30))
+        constraints.append(titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
+        constraints.append(titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(titleLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         
+        constraints.append(descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20))
+        constraints.append(descriptionLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(descriptionLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         
-        constraints.append(NSLayoutConstraint(item: descriptionLabel,
-                                              attribute: .top,
-                                              relatedBy: .equal,
-                                              toItem: titleLabel,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: 20))
-        constraints.append(NSLayoutConstraint(item: descriptionLabel,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 30))
-        constraints.append(NSLayoutConstraint(item: descriptionLabel,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -30))
-        
-        constraints.append(NSLayoutConstraint(item: cancelButton,
-                                              attribute: .bottom,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .bottom,
-                                              multiplier: 1,
-                                              constant: -25))
-        constraints.append(NSLayoutConstraint(item: cancelButton,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 48))
-        constraints.append(NSLayoutConstraint(item: cancelButton,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -48))
+        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -25))
+        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
         constraints.append(cancelButton.heightAnchor.constraint(equalToConstant: 48))
         
-        constraints.append(NSLayoutConstraint(item: enableButton,
-                                              attribute: .bottom,
-                                              relatedBy: .equal,
-                                              toItem: cancelButton,
-                                              attribute: .top,
-                                              multiplier: 1,
-                                              constant: -25))
-        constraints.append(NSLayoutConstraint(item: enableButton,
-                                              attribute: .leading,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .leading,
-                                              multiplier: 1,
-                                              constant: 48))
-        constraints.append(NSLayoutConstraint(item: enableButton,
-                                              attribute: .trailing,
-                                              relatedBy: .equal,
-                                              toItem: safeAreaGuide,
-                                              attribute: .trailing,
-                                              multiplier: 1,
-                                              constant: -48))
+        constraints.append(enableButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -25))
+        constraints.append(enableButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(enableButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
         constraints.append(enableButton.heightAnchor.constraint(equalToConstant: 48))
         
         NSLayoutConstraint.activate(constraints)
