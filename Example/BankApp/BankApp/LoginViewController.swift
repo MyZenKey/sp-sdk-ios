@@ -99,7 +99,7 @@ class LoginViewController: UIViewController {
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let marginGuide = view.safeAreaLayoutGuide
+        let safeAreaGuide = view.safeAreaLayoutGuide
         
         view.addSubview(gradientBackground)
         view.addSubview(logo)
@@ -114,18 +114,18 @@ class LoginViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: logo,
                                               attribute: .top,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .top,
                                               multiplier: 1,
                                               constant: 80))
         constraints.append(NSLayoutConstraint(item: logo,
                                               attribute: .centerX,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .centerX,
                                               multiplier: 1,
                                               constant: 0))
-        logo.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        constraints.append(logo.heightAnchor.constraint(equalToConstant: 20))
         
         constraints.append(NSLayoutConstraint(item: idTextField,
                                               attribute: .top,
@@ -137,18 +137,18 @@ class LoginViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: idTextField,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 30))
         constraints.append(NSLayoutConstraint(item: idTextField,
                                               attribute: .trailing,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: -30))
-        idTextField.heightAnchor.constraint(equalToConstant: 39).isActive = true
+        constraints.append(idTextField.heightAnchor.constraint(equalToConstant: 39))
         
         constraints.append(NSLayoutConstraint(item: passwordTextField,
                                               attribute: .top,
@@ -160,18 +160,18 @@ class LoginViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: passwordTextField,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 30))
         constraints.append(NSLayoutConstraint(item: passwordTextField,
                                               attribute: .trailing,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: -30))
-        passwordTextField.heightAnchor.constraint(equalToConstant: 39).isActive = true
+        constraints.append(passwordTextField.heightAnchor.constraint(equalToConstant: 39))
         
         constraints.append(NSLayoutConstraint(item: signInButton,
                                               attribute: .top,
@@ -183,18 +183,18 @@ class LoginViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: signInButton,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 30))
         constraints.append(NSLayoutConstraint(item: signInButton,
                                               attribute: .trailing,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: -30))
-        signInButton.heightAnchor.constraint(equalToConstant: 39).isActive = true
+        constraints.append(signInButton.heightAnchor.constraint(equalToConstant: 39))
         
         constraints.append(NSLayoutConstraint(item: forgotButton,
                                               attribute: .top,
@@ -217,7 +217,7 @@ class LoginViewController: UIViewController {
                                               attribute: .centerX,
                                               multiplier: 1,
                                               constant: 0))
-        forgotButton.heightAnchor.constraint(equalToConstant: 39).isActive = true
+        constraints.append(forgotButton.heightAnchor.constraint(equalToConstant: 39))
         
         constraints.append(NSLayoutConstraint(item: registerButton,
                                               attribute: .top,
@@ -240,7 +240,7 @@ class LoginViewController: UIViewController {
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: 0))
-        registerButton.heightAnchor.constraint(equalToConstant: 39).isActive = true
+        constraints.append(registerButton.heightAnchor.constraint(equalToConstant: 39))
         
         NSLayoutConstraint.activate(constraints)
         

@@ -104,37 +104,35 @@ class EnableVerifyViewController: UIViewController {
     
     @objc func enableVerify(_ sender: Any) {
         
-        navigationController?.pushViewController(HomeViewController(), animated: true)
-        
 //        //check if carrier config is nil
-//        if self.carrierConfig != nil {
-//            print("Found value carrier configuration. Setting auth and token urls in openid config")
-//            //init service configuration object
-//            let authorizationUrlString: String? = self.carrierConfig!["authorization_endpoint"] as! String
-//            let tokenUrlString:String? = self.carrierConfig!["token_endpoint"] as! String
-//            let authorizationURL: URL = URL(string: authorizationUrlString!)!
-//            let tokenURL:URL = URL(string: tokenUrlString!)! as! URL
-//            self.openidconfiguration = OIDServiceConfiguration.init(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL)
-//
-//            //create the authorization request
-//            let authorizationRequest:OIDAuthorizationRequest = self.createAuthorizationRequest(scopes: self.scopes!, responseType: self.responseTypes!)!
-//            print("Authorization Request created")
-//
-//            //check to see if the authorization url is set as a universal app link
-//            UIApplication.shared.open(authorizationURL, options: [UIApplicationOpenURLOptionUniversalLinksOnly: true], completionHandler: { success in
-//                if success {
-//                    print("This url can be opened in an app. Launching app...")
-//                    self.initProjectVerifyAuthorization(request: authorizationRequest)
-//                }
-//                else {
-//                    print("Launching default safari controller process...")
-//                    self.performAuthorization(request: authorizationRequest)
-//                }
-//            })
-//        }
-//        else {
-//            print("Carrier Config is null. Cannot perform authentication")
-//        }
+        if self.carrierConfig != nil {
+            print("Found value carrier configuration. Setting auth and token urls in openid config")
+            //init service configuration object
+            let authorizationUrlString: String? = self.carrierConfig!["authorization_endpoint"] as! String
+            let tokenUrlString:String? = self.carrierConfig!["token_endpoint"] as! String
+            let authorizationURL: URL = URL(string: authorizationUrlString!)!
+            let tokenURL:URL = URL(string: tokenUrlString!)! as! URL
+            self.openidconfiguration = OIDServiceConfiguration.init(authorizationEndpoint: authorizationURL, tokenEndpoint: tokenURL)
+
+            //create the authorization request
+            let authorizationRequest:OIDAuthorizationRequest = self.createAuthorizationRequest(scopes: self.scopes!, responseType: self.responseTypes!)!
+            print("Authorization Request created")
+
+            //check to see if the authorization url is set as a universal app link
+            UIApplication.shared.open(authorizationURL, options: [UIApplicationOpenURLOptionUniversalLinksOnly: true], completionHandler: { success in
+                if success {
+                    print("This url can be opened in an app. Launching app...")
+                    self.initProjectVerifyAuthorization(request: authorizationRequest)
+                }
+                else {
+                    print("Launching default safari controller process...")
+                    self.performAuthorization(request: authorizationRequest)
+                }
+            })
+        }
+        else {
+            print("Carrier Config is null. Cannot perform authentication")
+        }
         
         /*let consentUrlString = "\(AppConfig.AuthorizeURL)?client_id=\(AppConfig.clientID.urlEncode())&response_type=code&state=teststate&redirect_uri=\(AppConfig.code_redirect_uri.urlEncode())&scope=\(AppConfig.consentScope.urlEncode())"
         
@@ -230,10 +228,8 @@ class EnableVerifyViewController: UIViewController {
                                     var jsonDocument:JsonDocument = JsonDocument(data: json)
                                     //perform async task to update UI
                                     DispatchQueue.main.async {
-                                        let storyboard = UIStoryboard(name:"Main", bundle: nil)
-                                        let homeVC = storyboard.instantiateViewController(withIdentifier: "homeScene")
                                         let appDelegate = UIApplication.shared.delegate as? AppDelegate
-                                        appDelegate!.window?.rootViewController = homeVC
+                                        appDelegate?.launchHomeScreen()
                                     }
                                 }
                             }catch {
@@ -257,7 +253,7 @@ class EnableVerifyViewController: UIViewController {
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let marginGuide = view.safeAreaLayoutGuide
+        let safeAreaGuide = view.safeAreaLayoutGuide
         
         
         view.addSubview(gradientView)
@@ -281,7 +277,7 @@ class EnableVerifyViewController: UIViewController {
                                               attribute: .width,
                                               multiplier: 1,
                                               constant: 0))
-        gradientView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        constraints.append(gradientView.heightAnchor.constraint(equalToConstant: 70))
         
         constraints.append(NSLayoutConstraint(item: logo,
                                               attribute: .centerY,
@@ -293,11 +289,11 @@ class EnableVerifyViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: logo,
                                               attribute: .centerX,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .centerX,
                                               multiplier: 1,
                                               constant: 0))
-        logo.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        constraints.append(logo.heightAnchor.constraint(equalToConstant: 60))
         
         constraints.append(NSLayoutConstraint(item: titleLabel,
                                               attribute: .top,
@@ -309,14 +305,14 @@ class EnableVerifyViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: titleLabel,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 30))
         constraints.append(NSLayoutConstraint(item: titleLabel,
                                               attribute: .trailing,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: -30))
@@ -332,14 +328,14 @@ class EnableVerifyViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: descriptionLabel,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 30))
         constraints.append(NSLayoutConstraint(item: descriptionLabel,
                                               attribute: .trailing,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: -30))
@@ -347,25 +343,25 @@ class EnableVerifyViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: cancelButton,
                                               attribute: .bottom,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .bottom,
                                               multiplier: 1,
                                               constant: -25))
         constraints.append(NSLayoutConstraint(item: cancelButton,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 48))
         constraints.append(NSLayoutConstraint(item: cancelButton,
                                               attribute: .trailing,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: -48))
-        cancelButton.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        constraints.append(cancelButton.heightAnchor.constraint(equalToConstant: 48))
         
         constraints.append(NSLayoutConstraint(item: enableButton,
                                               attribute: .bottom,
@@ -377,18 +373,18 @@ class EnableVerifyViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: enableButton,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 48))
         constraints.append(NSLayoutConstraint(item: enableButton,
                                               attribute: .trailing,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: -48))
-        enableButton.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        constraints.append(enableButton.heightAnchor.constraint(equalToConstant: 48))
         
         NSLayoutConstraint.activate(constraints)
         

@@ -116,15 +116,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Launch root screen flows
     
     func launchHomeScreen() {
-        let storyboard = UIStoryboard(name:"Main", bundle: nil)
-        let homeVC = storyboard.instantiateViewController(withIdentifier: "homeScene")
-        self.window?.rootViewController = homeVC
+        let transferCompleteVC = HomeViewController()
+        navigationController = UINavigationController(rootViewController: transferCompleteVC)
+        navigationController?.isNavigationBarHidden = true
+        self.window?.rootViewController = navigationController
     }
     
     func launchTransferCompleteScreen() {
-        let storyboard = UIStoryboard(name:"Main", bundle: nil)
-        let transferCompleteVC = storyboard.instantiateViewController(withIdentifier: "transferCompleteScene")
-        self.window?.rootViewController = transferCompleteVC
+        let transferCompleteVC = ApproveViewController()
+        navigationController = UINavigationController(rootViewController: transferCompleteVC)
+        navigationController?.isNavigationBarHidden = true
+        self.window?.rootViewController = navigationController
     }
     
     func logout() {
@@ -132,11 +134,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func launchLoginScreen() {
-              //bool(forKey: "initiatedTransfer")
-        let storyboard = UIStoryboard(name:"Main", bundle: nil)
-        let loginVC = storyboard.instantiateViewController(withIdentifier: "loginNavController");
-        //let loginVC = storyboard.instantiateInitialViewController(wi)
-        self.window?.rootViewController = loginVC
+        let loginVC = LoginViewController()
+        navigationController = UINavigationController(rootViewController: loginVC)
+        navigationController?.isNavigationBarHidden = true
+        self.window?.rootViewController = navigationController
     }
     
     func launchTransferCompleteScreenIfNeeded() -> Bool {

@@ -123,7 +123,7 @@ class EnterPINViewController: UIViewController {
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let marginGuide = view.safeAreaLayoutGuide
+        let safeAreaGuide = view.safeAreaLayoutGuide
         
         
         view.addSubview(logo)
@@ -135,19 +135,19 @@ class EnterPINViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: logo,
                                               attribute: .top,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .top,
                                               multiplier: 1,
                                               constant: 20))
         constraints.append(NSLayoutConstraint(item: logo,
                                               attribute: .centerX,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .centerX,
                                               multiplier: 1,
                                               constant: 0))
-        logo.heightAnchor.constraint(equalToConstant: 46).isActive = true
-        logo.widthAnchor.constraint(equalToConstant: 46).isActive = true
+        constraints.append(logo.heightAnchor.constraint(equalToConstant: 46))
+        constraints.append(logo.widthAnchor.constraint(equalToConstant: 46))
         
         constraints.append(NSLayoutConstraint(item: enterPinLabel,
                                               attribute: .top,
@@ -159,14 +159,14 @@ class EnterPINViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: enterPinLabel,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 30))
         constraints.append(NSLayoutConstraint(item: enterPinLabel,
                                               attribute: .trailing,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: -30))
@@ -181,14 +181,14 @@ class EnterPINViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: confirmLabel,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 30))
         constraints.append(NSLayoutConstraint(item: confirmLabel,
                                               attribute: .trailing,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: -30))
@@ -204,30 +204,30 @@ class EnterPINViewController: UIViewController {
         constraints.append(NSLayoutConstraint(item: dotStack,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 30))
         constraints.append(NSLayoutConstraint(item: dotStack,
                                               attribute: .trailing,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .trailing,
                                               multiplier: 1,
                                               constant: -30))
-        dotStack.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        constraints.append(dotStack.heightAnchor.constraint(equalToConstant: 30))
         
         constraints.append(NSLayoutConstraint(item: backButton,
                                               attribute: .bottom,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .bottom,
                                               multiplier: 1,
                                               constant: -10))
         constraints.append(NSLayoutConstraint(item: backButton,
                                               attribute: .leading,
                                               relatedBy: .equal,
-                                              toItem: marginGuide,
+                                              toItem: safeAreaGuide,
                                               attribute: .leading,
                                               multiplier: 1,
                                               constant: 20))
