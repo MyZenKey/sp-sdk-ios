@@ -12,12 +12,22 @@ import AppAuth
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var navigationController: UINavigationController?
     var currentAuthorizationFlow:OIDExternalUserAgentSession?
     var launchMapViewFlag: Bool = true
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        print("onload")
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        
+        if let window = window {
+            let mainVC = ViewController()
+            navigationController = UINavigationController(rootViewController: mainVC)
+            navigationController?.isNavigationBarHidden = true
+            window.rootViewController = navigationController
+            window.makeKeyAndVisible()
+        }
         return true
     }
 
@@ -29,14 +39,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ///   - restorationHandler: A block to execute if your app creates objects to perform the task. Calling this block is optional.
     /// - Returns: true to indicate that your app handled the activity or false to let iOS know that your app did not handle the activity.
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Swift.Void) -> Bool {
+        
         print("Universal link attempt detected: \(String(describing: userActivity.webpageURL))")
 
         if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
             guard let url = userActivity.webpageURL else { return false }
 
-            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "UserInfoViewController") as! UserInfoViewController
+            let vc = UserInfoViewController()
             vc.url = url
-            window?.rootViewController?.present(vc, animated: true, completion: nil)
+            
+            navigationController = UINavigationController(rootViewController: vc)
+            navigationController?.isNavigationBarHidden = true
+            window?.rootViewController = navigationController
+            window?.makeKeyAndVisible()
 
             return true
         }
@@ -94,16 +109,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func launchMapScreen(url: URL) {
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "UserInfoViewController") as! UserInfoViewController
+        let vc = UserInfoViewController()
         vc.url = url
-        window?.rootViewController?.present(vc, animated: true, completion: nil)
+        
+        navigationController = UINavigationController(rootViewController: vc)
+        navigationController?.isNavigationBarHidden = true
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
     }
     
     func launchSignUpScreen(url: URL) {
         print("Launching signup screen")
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SignupNavVC") as! UINavigationController
-        let signupVC = vc.topViewController as! SignUpViewController
-        signupVC.url = url
+        let vc = SignUpViewController()
+        vc.url = url
+        navigationController = UINavigationController(rootViewController: vc)
+        navigationController?.isNavigationBarHidden = true
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
         if var topController = UIApplication.shared.keyWindow?.rootViewController {
             while let presentedViewController = topController.presentedViewController {
                 topController = presentedViewController
@@ -129,9 +151,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func launchLoginScreen() {
         print("Launching login screen")
-        let storyboard = UIStoryboard(name:"Main", bundle: nil)
-        let loginVC = storyboard.instantiateInitialViewController()
-        self.window?.rootViewController = loginVC
+        navigationController = UINavigationController(rootViewController: ViewController())
+        navigationController?.isNavigationBarHidden = true
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
     }
 }
 

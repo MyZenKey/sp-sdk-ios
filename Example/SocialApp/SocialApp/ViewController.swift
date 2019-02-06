@@ -9,14 +9,94 @@ import AppAuth
 import CarriersSharedAPI
 
 class ViewController: UIViewController, UITextFieldDelegate {
-    @IBOutlet var label: UILabel!
-    @IBOutlet var button: UIButton!
-    @IBOutlet var signInButton: UIButton!
-    @IBOutlet weak var tf_name: UITextField!
-    @IBOutlet weak var tf_password: UITextField!
-    @IBOutlet var poweredByContainer: UIView!
-    @IBOutlet var poweredByLabel: UILabel!
-    @IBOutlet var poweredByTrailing: NSLayoutConstraint!
+    
+    let logo: UIImageView = {
+        let img = UIImageView()
+        img.translatesAutoresizingMaskIntoConstraints = false
+        img.image = UIImage(named: "icon_Socialapp")
+        img.contentMode = .scaleAspectFit
+        return img
+    }()
+    
+    let nameField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.layer.cornerRadius = 2.0
+        field.layer.borderWidth = 1.0
+        field.placeholder = "Email or Phone"
+        return field
+    }()
+    
+    let passwordField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.layer.borderWidth = 1.0
+        field.layer.cornerRadius = 2.0
+        field.placeholder = "Password"
+        return field
+    }()
+    
+    let signUpButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Sign up", for: .normal)
+        button.backgroundColor = AppTheme.themeColor
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 7.0
+        button.addTarget(self, action: #selector(signUpPressed(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    let loginButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Log in", for: .normal)
+        button.backgroundColor = AppTheme.themeColor
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 7.0
+        return button
+    }()
+    
+    let orLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "OR"
+        label.textAlignment = .center
+        return label
+    }()
+    
+    let verifyButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
+        button.setImage(UIImage(named: "buttonlogo"), for: .normal)
+        button.setTitle("Sign in with VERIFY", for: .normal)
+        button.backgroundColor = AppTheme.verifyGreen
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 22
+        button.addTarget(self, action: #selector(signInWithVerify), for: .touchUpInside)
+        return button
+    }()
+    
+    let poweredByLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.text = "POWERED BY"
+        label.font = UIFont.systemFont(ofSize: 10)
+        return label
+    }()
+    
+    let illustrationPurposes: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "For illustration purposes only"
+        label.textAlignment = .center
+        return label
+    }()
+    
     var window: UIWindow?
     var openidconfiguration: OIDServiceConfiguration?
     var carrier:String?
@@ -34,21 +114,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        layoutView()
+        
         //init shared api
         self.sharedAPI = SharedAPI()
         
-        tf_name.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
-        tf_name.layer.cornerRadius = 2.0
-        tf_name.layer.borderWidth = 1.0
-        tf_password.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
-        tf_password.layer.borderWidth = 1.0
-        tf_password.layer.cornerRadius = 2.0
-        signInButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
-        
         // set up powered by
-        //let carrier = Carrier()
+        let carrier = Carrier()
         if let logo = UIImage(named: "carrier-logo") {
-            poweredByTrailing.isActive = false
             let imageView = UIImageView(image: logo)
             imageView.translatesAutoresizingMaskIntoConstraints = false
             imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -56,11 +129,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
             poweredByLabel.addSubview(imageView)
 
             imageView.leadingAnchor.constraint(equalTo: poweredByLabel.trailingAnchor, constant: 4).isActive = true
-            imageView.trailingAnchor.constraint(equalTo: poweredByContainer.trailingAnchor).isActive = true
+            imageView.trailingAnchor.constraint(equalTo: poweredByLabel.trailingAnchor).isActive = true
             imageView.heightAnchor.constraint(equalTo: poweredByLabel.heightAnchor).isActive = true
             imageView.centerYAnchor.constraint(equalTo: poweredByLabel.centerYAnchor).isActive = true
         } else {
-            //poweredByLabel.text = "Powered by \(auth.carrierName())"
+            poweredByLabel.text = "Powered by \(carrier.name)"
         }
         updateNavigationThemeColor()
     }
@@ -69,19 +142,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let typeOfSegue: String = "push"
-        
-        if (segue.identifier == "push") {
-            let vc = segue.destination as! SignUpViewController
-            vc.typeOfSegue = typeOfSegue
-        }
-        
+    
+    @objc func signUpPressed(_: UIButton) {
+        navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
 
     /// Launches the Verify app.
-    @IBAction func signInWithVerify() {
+    @objc func signInWithVerify() {
         
         //get carrier data
         self.carrierConfig = sharedAPI!.discoverCarrierConfiguration()
@@ -239,9 +306,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
                                     DispatchQueue.main.async {
                                         //redirect to the user view controller
                                         print("Redirecting to userinfo view controller")
-                                        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "UserInfoViewController") as! UserInfoViewController
+                                        let vc = UserInfoViewController()
                                         vc.userInfoJson = jsonDocument
-                                        self.present(vc, animated: true, completion: nil)
+                                        self.navigationController?.pushViewController(vc, animated: true)
                                     }
                                 }
                             }catch {
@@ -271,5 +338,64 @@ class ViewController: UIViewController, UITextFieldDelegate {
             }
         }
         return nil
+    }
+    
+    func layoutView() {
+        view.backgroundColor = .white
+        var constraints: [NSLayoutConstraint] = []
+        let safeAreaGuide = view.safeAreaLayoutGuide
+        
+        view.addSubview(logo)
+        view.addSubview(nameField)
+        view.addSubview(passwordField)
+        view.addSubview(signUpButton)
+        view.addSubview(loginButton)
+        view.addSubview(orLabel)
+        view.addSubview(verifyButton)
+        view.addSubview(poweredByLabel)
+        view.addSubview(illustrationPurposes)
+        
+        constraints.append(logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 100))
+        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
+        
+        constraints.append(nameField.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 65))
+        constraints.append(nameField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(nameField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        constraints.append(nameField.heightAnchor.constraint(equalToConstant: 44))
+        
+        constraints.append(passwordField.topAnchor.constraint(equalTo: nameField.bottomAnchor, constant: 15))
+        constraints.append(passwordField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(passwordField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        constraints.append(passwordField.heightAnchor.constraint(equalToConstant: 44))
+        
+        constraints.append(signUpButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 15))
+        constraints.append(signUpButton.leadingAnchor.constraint(equalTo: passwordField.leadingAnchor))
+        constraints.append(signUpButton.trailingAnchor.constraint(equalTo: passwordField.centerXAnchor, constant: -7.5))
+        constraints.append(signUpButton.heightAnchor.constraint(equalToConstant: 44))
+        
+        constraints.append(loginButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 15))
+        constraints.append(loginButton.leadingAnchor.constraint(equalTo: passwordField.centerXAnchor, constant: 7.5))
+        constraints.append(loginButton.trailingAnchor.constraint(equalTo: passwordField.trailingAnchor))
+        constraints.append(loginButton.heightAnchor.constraint(equalToConstant: 44))
+
+        constraints.append(orLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 25))
+        constraints.append(orLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(orLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        
+        constraints.append(verifyButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 25))
+        constraints.append(verifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(verifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        constraints.append(verifyButton.heightAnchor.constraint(equalToConstant: 44))
+        
+        constraints.append(poweredByLabel.topAnchor.constraint(equalTo: verifyButton.bottomAnchor, constant: 5))
+        constraints.append(poweredByLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(poweredByLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        
+        constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
+        constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
+        constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
+        
+        NSLayoutConstraint.activate(constraints)
+        
     }
 }
