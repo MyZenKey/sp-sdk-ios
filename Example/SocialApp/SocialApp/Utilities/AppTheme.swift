@@ -10,4 +10,5 @@ class AppTheme {
     static let themeColor = UIColor(hexString: "B683F0")
     static let navGradientStartColor = UIColor(hexString: "CC80F3")
     static let navGradientEndColor = UIColor(hexString: "4A90E2")
+    static let verifyGreen = UIColor(hexString: "4FAD3C")
 }

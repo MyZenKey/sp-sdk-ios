@@ -38,8 +38,7 @@ extension UIViewController {
         self.navigationController!.navigationBar.setBackgroundImage(imageFromLayer(layer: layer), for: UIBarMetrics.default)
     }
     
-    func imageFromLayer (layer : CALayer) -> UIImage
-    {
+    func imageFromLayer (layer : CALayer) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(layer.frame.size, false, UIScreen.main.scale)
         layer.render(in: UIGraphicsGetCurrentContext()!)
         let outputImage = UIGraphicsGetImageFromCurrentImageContext()
