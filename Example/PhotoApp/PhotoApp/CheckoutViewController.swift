@@ -13,7 +13,7 @@ class CheckoutViewController: UIViewController {
     let nameField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
-        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.layer.borderColor =  UIColor(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
         field.borderStyle = .roundedRect
         field.placeholder = "Name"
         return field
@@ -22,7 +22,7 @@ class CheckoutViewController: UIViewController {
     let emailField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
-        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.layer.borderColor =  UIColor(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
         field.borderStyle = .roundedRect
         field.placeholder = "Email"
         return field
@@ -31,7 +31,7 @@ class CheckoutViewController: UIViewController {
     let phoneField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
-        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.layer.borderColor =  UIColor(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
         field.borderStyle = .roundedRect
         field.placeholder = "Phone"
         return field
@@ -40,7 +40,7 @@ class CheckoutViewController: UIViewController {
     let cityField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
-        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.layer.borderColor =  UIColor(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
         field.borderStyle = .roundedRect
         field.placeholder = "City, State"
         return field
@@ -49,7 +49,7 @@ class CheckoutViewController: UIViewController {
     let zipField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
-        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.layer.borderColor =  UIColor(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
         field.borderStyle = .roundedRect
         field.placeholder = "Phone"
         return field

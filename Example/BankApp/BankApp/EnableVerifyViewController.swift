@@ -68,6 +68,14 @@ class EnableVerifyViewController: UIViewController {
         return label
     }()
     
+    let illustrationPurposes: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "For illustration purposes only"
+        label.textAlignment = .center
+        return label
+    }()
+    
     var openidconfiguration: OIDServiceConfiguration?
     var carrier: String?
     var clientId: String? = "BankApp"
@@ -262,6 +270,7 @@ class EnableVerifyViewController: UIViewController {
         view.addSubview(descriptionLabel)
         view.addSubview(enableButton)
         view.addSubview(cancelButton)
+        view.addSubview(illustrationPurposes)
         
         constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
         constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
@@ -288,6 +297,10 @@ class EnableVerifyViewController: UIViewController {
         constraints.append(enableButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
         constraints.append(enableButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
         constraints.append(enableButton.heightAnchor.constraint(equalToConstant: 48))
+        
+        constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
+        constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
+        constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
         
         NSLayoutConstraint.activate(constraints)
         

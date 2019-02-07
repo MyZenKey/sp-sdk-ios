@@ -86,13 +86,13 @@ class ProjectVerifyController: UIViewController {
         
         if let text = headerLabel.text{
             let attributedString = NSMutableAttributedString(string:text)
-            attributedString.addAttributes([NSAttributedStringKey.font : UIFont.init(name: "SFCompactText-Italic", size: 30) ?? UIFont.systemFont(ofSize: 30)], range: (text as NSString).range(of: "Project Verify"))
+            attributedString.addAttributes([NSAttributedStringKey.font : UIFont(name: "SFCompactText-Italic", size: 30) ?? UIFont.systemFont(ofSize: 30)], range: (text as NSString).range(of: "Project Verify"))
             headerLabel.attributedText = attributedString
         }
         
         if let text = descriptionLabel.text{
             let attributedString = NSMutableAttributedString(string:text)
-            attributedString.addAttributes([NSAttributedStringKey.font : UIFont.init(name: "SFCompactText-Italic", size: 18) ?? UIFont.systemFont(ofSize: 18)], range: (text as NSString).range(of: "Project Verify"))
+            attributedString.addAttributes([NSAttributedStringKey.font : UIFont(name: "SFCompactText-Italic", size: 18) ?? UIFont.systemFont(ofSize: 18)], range: (text as NSString).range(of: "Project Verify"))
             descriptionLabel.attributedText = attributedString
         }
         
