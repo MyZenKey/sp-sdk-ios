@@ -7,15 +7,40 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    let itemLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Cart subtotal (1 item): $5.90"
+        return label
+    }()
+    
+    let checkoutButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = AppTheme.themeColor
+        button.setTitle("Checkout", for: .normal)
+        button.addTarget(self, action: #selector(checkoutPressed(sender:)), for: .touchUpInside)
+        return button
+    }()
+    
+    let illustrationPurposes: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "For illustration purposes only"
+        label.textAlignment = .center
+        return label
+    }()
 
     /// Do any additional setup after loading the view, typically from a nib.
     override func viewDidLoad() {
         super.viewDidLoad()
-//       //  Mock
-//        DispatchQueue.main.async {
-//            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CheckoutViewController") as! CheckoutViewController
-//            self.present(vc, animated: true, completion: nil)
-//        }
+        
+        layoutView()
+    }
+    
+    @objc func checkoutPressed(sender: UIButton) {
+        navigationController?.pushViewController(CheckoutViewController(), animated: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,13 +48,31 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let typeOfSegue: String = "push"
-            
-        if (segue.identifier == "push") {
-            let vc = segue.destination as! CheckoutViewController
-            vc.typeOfSegue = typeOfSegue
-        }
+    func layoutView() {
+        view.backgroundColor = .white
+        var constraints: [NSLayoutConstraint] = []
+        let safeAreaGuide = view.safeAreaLayoutGuide
+        
+        navigationItem.title = "ShoppingCart"
+        
+        view.addSubview(itemLabel)
+        view.addSubview(checkoutButton)
+        view.addSubview(illustrationPurposes)
+        
+        constraints.append(itemLabel.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 10))
+        constraints.append(itemLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 10))
+        constraints.append(itemLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -10))
+        
+        constraints.append(checkoutButton.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -100))
+        constraints.append(checkoutButton.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
+        constraints.append(checkoutButton.heightAnchor.constraint(equalToConstant: 44))
+        constraints.append(checkoutButton.widthAnchor.constraint(equalToConstant: 100))
+        
+        constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
+        constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
+        constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
+        
+        NSLayoutConstraint.activate(constraints)
     }
 }
 

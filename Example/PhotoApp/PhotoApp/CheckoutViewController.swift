@@ -9,8 +9,99 @@ import AppAuth
 import CarriersSharedAPI
 
 class CheckoutViewController: UIViewController {
-
     
+    let nameField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.borderStyle = .roundedRect
+        field.placeholder = "Name"
+        return field
+    }()
+    
+    let emailField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.borderStyle = .roundedRect
+        field.placeholder = "Email"
+        return field
+    }()
+    
+    let phoneField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.borderStyle = .roundedRect
+        field.placeholder = "Phone"
+        return field
+    }()
+    
+    let cityField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.borderStyle = .roundedRect
+        field.placeholder = "City, State"
+        return field
+    }()
+    
+    let zipField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.layer.borderColor =  UIColor.init(red: 210/255.0, green: 210/255.0, blue: 210/255.0, alpha: 1.0).cgColor
+        field.borderStyle = .roundedRect
+        field.placeholder = "Phone"
+        return field
+    }()
+    
+    let requiredLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "*All fields are required"
+        label.font = UIFont.italicSystemFont(ofSize: 12)
+        label.textColor = .red
+        return label
+    }()
+    
+    let checkoutButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = AppTheme.themeColor
+        button.setTitle("Checkout", for: .normal)
+        return button
+    }()
+    
+    let verifyButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
+        button.setImage(UIImage(named: "buttonlogo"), for: .normal)
+        button.setTitle("Fill form with VERIFY", for: .normal)
+        button.backgroundColor = AppTheme.verifyGreen
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 22
+        button.addTarget(self, action: #selector(onUseVerifyKeyAddressTapped(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    let poweredByLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.text = "POWERED BY"
+        label.font = UIFont.systemFont(ofSize: 10)
+        return label
+    }()
+    
+    let illustrationPurposes: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "For illustration purposes only"
+        label.textAlignment = .center
+        return label
+    }()
+
     var typeOfSegue: String?
     var authzCode: String?
     var tokenInfo: String?
@@ -18,29 +109,23 @@ class CheckoutViewController: UIViewController {
     let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: Foundation.OperationQueue.main)
     var dataTask: URLSessionDataTask?
     var url: URL?
-    @IBOutlet var poweredByContainer: UIView!
-    @IBOutlet var poweredByLabel: UILabel!
-    @IBOutlet var poweredByTrailing: NSLayoutConstraint!
-    @IBOutlet var nameTF: UITextField!
-    @IBOutlet var phoneTF: UITextField!
-    @IBOutlet var zipTF: UITextField!
-    @IBOutlet var addressTF: UITextField!
-    @IBOutlet var emailTF: UITextField!
     var window: UIWindow?
     var openidconfiguration: OIDServiceConfiguration?
-    var carrier:String?
-    var clientId:String? = "PhotoApp"
-    var secret:String? = "photoapp_client_secret"
-    var state:String? = ""
-    var redirectUri:String? = "com.att.ent.cso.haloc.photoapp://code"
-    var sharedAPI:SharedAPI?
-    var carrierConfig:[String:Any]? = nil
-    var scopes:[String]? = nil
-    var responseTypes:[String]? = nil
+    var carrier: String?
+    var clientId: String? = "PhotoApp"
+    var secret: String? = "photoapp_client_secret"
+    var state: String? = ""
+    var redirectUri: String? = "com.att.ent.cso.haloc.photoapp://code"
+    var sharedAPI: SharedAPI?
+    var carrierConfig: [String:Any]? = nil
+    var scopes: [String]? = nil
+    var responseTypes: [String]? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        layoutView()
         
         //init shared api
         self.sharedAPI = SharedAPI()
@@ -51,7 +136,6 @@ class CheckoutViewController: UIViewController {
         self.responseTypes = [carrierConfig!["response_types_supported"]! as! String]
         
         if let logo = UIImage(named: "carrier-logo") {
-            poweredByTrailing.isActive = false
             let imageView = UIImageView(image: logo)
             imageView.translatesAutoresizingMaskIntoConstraints = false
             imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -59,11 +143,11 @@ class CheckoutViewController: UIViewController {
             poweredByLabel.addSubview(imageView)
             
             imageView.leadingAnchor.constraint(equalTo: poweredByLabel.trailingAnchor, constant: 4).isActive = true
-            imageView.trailingAnchor.constraint(equalTo: poweredByContainer.trailingAnchor).isActive = true
+            imageView.trailingAnchor.constraint(equalTo: poweredByLabel.trailingAnchor).isActive = true
             imageView.heightAnchor.constraint(equalTo: poweredByLabel.heightAnchor).isActive = true
             imageView.centerYAnchor.constraint(equalTo: poweredByLabel.centerYAnchor).isActive = true
         } else {
-            //poweredByLabel.text = "Powered by \(carrier.name)"
+            poweredByLabel.text = "Powered by \(carrier ?? "")"
         }
         
         print("Checking for non-null url passed from app delegate")
@@ -232,10 +316,10 @@ class CheckoutViewController: UIViewController {
                                 DispatchQueue.main.async {
                                     //update the user information fields
                                     if let name = jsonDocument["name"].toString {
-                                        self.nameTF.text = name
+                                        self.nameField.text = name
                                     }
                                     if let email = jsonDocument["email"].toString {
-                                        self.emailTF.text = email
+                                        self.emailField.text = email
                                     }
                                 }
                             }
@@ -254,20 +338,11 @@ class CheckoutViewController: UIViewController {
     }
     
     @IBAction func debug() {
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DebugViewController") as! DebugViewController
+        let vc = DebugViewController()
         vc.finalInit(with: DebugViewController.Info(token: tokenInfo, userInfo: userInfo, code: authzCode))
-        present(vc, animated: true, completion: nil)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
-    @IBAction func cancel() {
-
-        if self.typeOfSegue == "push" {
-              self.navigationController?.popViewController(animated: true)
-        } else {
-            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavViewController")
-            present(vc, animated: true, completion: nil)
-        }
-}
     
     func login(with code: String) {
         
@@ -327,16 +402,16 @@ class CheckoutViewController: UIViewController {
         self.userInfo = json.description
        
         if let family_name = json["family_name"].toString, let given_name = json["given_name"].toString {
-            self.nameTF.text = "\(given_name) \(family_name)"
+            self.nameField.text = "\(given_name) \(family_name)"
         }
         if let email = json["email"].toString {
-            emailTF.text = "john@email.com"
+            emailField.text = "john@email.com"
         }
          if let phone = json["phone_number"].toString {
-            phoneTF.text = phone
+            phoneField.text = phone
         }
         if let zip = json["postal_code"].toString {
-            zipTF.text = String(zip.prefix(5))
+            zipField.text = String(zip.prefix(5))
             var dummyAddress = ""
             let googleapiURL = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?address=\(zip.prefix(5))&sensor=false&key=laksdfjkjahsdfjhqfjw")
             URLSession.shared.dataTask(with:googleapiURL!, completionHandler: {(data, response, error) in
@@ -350,9 +425,9 @@ class CheckoutViewController: UIViewController {
                             if let address = (iteration["formatted_address"]) as? String {
                                 print("The address extracted from ZIP code is \(address)")
                                 dummyAddress = address.replacingOccurrences(of: " \(zip.prefix(5))", with: "")
-                                
+                            
                                 DispatchQueue.main.async {
-                                    self.addressTF.text = dummyAddress
+                                    self.cityField.text = dummyAddress
                                 }
                             }
                         }
@@ -362,6 +437,75 @@ class CheckoutViewController: UIViewController {
                 }
             }).resume()
         }
+    }
+    
+    func layoutView() {
+        view.backgroundColor = .white
+        var constraints: [NSLayoutConstraint] = []
+        let safeAreaGuide = view.safeAreaLayoutGuide
+        
+        navigationItem.title = "Checkout"
+        
+        view.addSubview(nameField)
+        view.addSubview(emailField)
+        view.addSubview(phoneField)
+        view.addSubview(cityField)
+        view.addSubview(zipField)
+        view.addSubview(requiredLabel)
+        view.addSubview(checkoutButton)
+        view.addSubview(verifyButton)
+        view.addSubview(poweredByLabel)
+        view.addSubview(illustrationPurposes)
+        
+        constraints.append(nameField.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 20))
+        constraints.append(nameField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 15))
+        constraints.append(nameField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -15))
+        constraints.append(nameField.heightAnchor.constraint(equalToConstant: 44))
+        
+        constraints.append(emailField.topAnchor.constraint(equalTo: nameField.bottomAnchor, constant: 10))
+        constraints.append(emailField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 15))
+        constraints.append(emailField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -15))
+        constraints.append(emailField.heightAnchor.constraint(equalToConstant: 44))
+        
+        constraints.append(phoneField.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 10))
+        constraints.append(phoneField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 15))
+        constraints.append(phoneField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -15))
+        constraints.append(phoneField.heightAnchor.constraint(equalToConstant: 44))
+        
+        constraints.append(cityField.topAnchor.constraint(equalTo: phoneField.bottomAnchor, constant: 10))
+        constraints.append(cityField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 15))
+        constraints.append(cityField.trailingAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor, constant: 25))
+        constraints.append(cityField.heightAnchor.constraint(equalToConstant: 44))
+        
+        constraints.append(zipField.centerYAnchor.constraint(equalTo: cityField.centerYAnchor))
+        constraints.append(zipField.leadingAnchor.constraint(equalTo: cityField.trailingAnchor, constant: 10))
+        constraints.append(zipField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -15))
+        constraints.append(zipField.heightAnchor.constraint(equalToConstant: 44))
+        
+        constraints.append(requiredLabel.topAnchor.constraint(equalTo: cityField.bottomAnchor, constant: 10))
+        constraints.append(requiredLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 15))
+        constraints.append(requiredLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -15))
+        
+        constraints.append(checkoutButton.topAnchor.constraint(equalTo: requiredLabel.bottomAnchor, constant: 20))
+        constraints.append(checkoutButton.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
+        constraints.append(checkoutButton.heightAnchor.constraint(equalToConstant: 44))
+        constraints.append(checkoutButton.heightAnchor.constraint(equalToConstant: 140))
+        
+        constraints.append(verifyButton.topAnchor.constraint(equalTo: checkoutButton.bottomAnchor, constant: 80))
+        constraints.append(verifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(verifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        constraints.append(verifyButton.heightAnchor.constraint(equalToConstant: 44))
+        
+        constraints.append(poweredByLabel.topAnchor.constraint(equalTo: verifyButton.bottomAnchor, constant: 5))
+        constraints.append(poweredByLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
+        constraints.append(poweredByLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        
+        constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -5))
+        constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
+        constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
+
+        NSLayoutConstraint.activate(constraints)
+        
     }
     
 }
