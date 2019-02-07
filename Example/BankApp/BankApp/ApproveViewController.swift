@@ -50,6 +50,13 @@ class ApproveViewController: UIViewController {
         return button
     }()
     
+    let illustrationPurposes: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "For illustration purposes only"
+        label.textAlignment = .center
+        return label
+    }()
     
     private var notification: NSObjectProtocol?
     
@@ -128,6 +135,7 @@ class ApproveViewController: UIViewController {
         view.addSubview(promptLabel)
         view.addSubview(yesButton)
         view.addSubview(cancelButton)
+        view.addSubview(illustrationPurposes)
         
         constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
         constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
@@ -150,6 +158,10 @@ class ApproveViewController: UIViewController {
         constraints.append(yesButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
         constraints.append(yesButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
         constraints.append(yesButton.heightAnchor.constraint(equalToConstant: 48))
+        
+        constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
+        constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
+        constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
         
         NSLayoutConstraint.activate(constraints)
         

@@ -11,10 +11,22 @@ import AppAuth
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var currentAuthorizationFlow:OIDExternalUserAgentSession?
+    var navigationController: UINavigationController?
+    var currentAuthorizationFlow: OIDExternalUserAgentSession?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        
+        if let window = window {
+            let mainVC = ViewController()
+            navigationController = UINavigationController(rootViewController: mainVC)
+            navigationController?.navigationBar.backgroundColor = AppTheme.themeColor
+            navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+            window.rootViewController = navigationController
+            window.makeKeyAndVisible()
+        }
+        
         return true
     }
 

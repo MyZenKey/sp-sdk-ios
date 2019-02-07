@@ -57,6 +57,14 @@ class EnterPINViewController: UIViewController {
         return button
     }()
     
+    let illustrationPurposes: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "For illustration purposes only"
+        label.textAlignment = .center
+        return label
+    }()
+    
     private var backBottomConstraint: NSLayoutConstraint!
     
     // The six dots
@@ -132,6 +140,7 @@ class EnterPINViewController: UIViewController {
         view.addSubview(confirmLabel)
         view.addSubview(dotStack)
         view.addSubview(backButton)
+        view.addSubview(illustrationPurposes)
         
         constraints.append(logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 20))
         constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
@@ -162,6 +171,10 @@ class EnterPINViewController: UIViewController {
         self.backBottomConstraint = backBottomConstraint
         
         constraints.append(backButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 20))
+        
+        constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
+        constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
+        constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
         
         NSLayoutConstraint.activate(constraints)
         
