@@ -18,9 +18,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: 4-gems-{{ checksum "Gemfile.lock" }}
-          # Fall back to a previous cache if exact match cannot be found
-          key: 4-gems-
+          keys:
+            - 4-gems-{{ checksum "Gemfile.lock" }}
+            # Fall back to a previous cache if exact match cannot be found
+            - 4-gems-
       - run:
           name: Restore Gems
           command: |
@@ -52,9 +53,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: 4-gems-{{ checksum "Gemfile.lock" }}
+          key: 
+            - 4-gems-{{ checksum "Gemfile.lock" }}
           # Fall back to a previous cache if exact match cannot be found
-          key: 4-gems-
+            - 4-gems-
       - run:
           name: Restore Gems
           command: |
@@ -86,9 +88,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: 4-gems-{{ checksum "Gemfile.lock" }}
+          keys:
+            - 4-gems-{{ checksum "Gemfile.lock" }}
           # Fall back to a previous cache if exact match cannot be found
-          key: 4-gems-
+            - 4-gems-
       - run:
           name: Restore Gems
           command: |
