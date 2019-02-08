@@ -51,6 +51,7 @@ platform :ios do
 
   desc "Runs tests"
   lane :test do
+    unlock_keychain(path: './Signing/Raizlabs-DemoApps.keychain', password: ENV['RZ_KEYCHAIN_PASSWORD'] )
     scan(
       output_types: 'junit,html',
       scheme: TEST_SCHEME,
