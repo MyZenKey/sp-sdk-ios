@@ -1,4 +1,4 @@
-fastlane_version "2.90.0"
+fastlane_version "2.115.0"
 
 fastlane_require 'circleci_artifact'
 
@@ -13,8 +13,9 @@ BANK_APP = 'BankApp'
 SOCIAL_APP = 'SocialApp'
 PHOTO_APP = 'PhotoApp'
 
-PRODUCT_NAMES = [BANK_APP, SOCIAL_APP, PHOTO_APP]
+PRODUCT_NAMES = [ SOCIAL_APP, BANK_APP, PHOTO_APP]
 
+# hockey app id hashes
 DEVELOP_IDS = {
   BANK_APP => '0aa24abecfcb48d7ab03ea1cf26074cb',
   SOCIAL_APP => '8ced2056b5884381ac30218cdeab765c',
@@ -27,16 +28,18 @@ SPRINT_IDS = {
   PHOTO_APP => '9ef33650e15f4376804a9194b09efc9c',
 }
 
+# env
+
 ENV['RZ_ARTIFACTS'] ||= ENV['CIRCLE_ARTIFACTS'] || './build'
 ENV['RZ_TEST_REPORTS'] ||= ENV['CIRCLE_TEST_REPORTS'] || './build'
 ENV['FASTLANE_XCODE_LIST_TIMEOUT'] = '120'
 ENV['CI_BUILD'] = 'yes'
-# ENV['GYM_OUTPUT_NAME'] = 'PRODUCTNAME'
-# ENV['FL_HOCKEY_IPA'] = "#{ENV['RZ_ARTIFACTS']}/#{ENV['GYM_OUTPUT_NAME']}.ipa"
 ENV['FL_HOCKEY_NOTIFY'] = '0'
 
 DERIVED_DATA_PATH = "#{ENV['RZ_TEST_REPORTS']}/derived_data"
 TEST_SCHEME = "CarriersSharedAPITests"
+
+# lanes
 
 platform :ios do
   before_all do
@@ -56,6 +59,10 @@ platform :ios do
       code_coverage: true,
       derived_data_path: DERIVED_DATA_PATH
     )
+
+    # TODO: - Add some sort of unit tests to one of the example targets
+    # we want to test integration but keep this quick and not do redundant work
+
     if !ENV['CIRCLE_TEST_REPORTS'].nil?
       # CircleCI requires the "xml" extension for test reporting
       puts "Fixing JUnit report name"
@@ -149,7 +156,8 @@ platform :ios do
   desc "Builds and submits a Develop release to Hockey"
   lane :develop do
     PRODUCT_NAMES.each do |productName|
-      buildDemoApp(productName, "develop-#{productName}", 'enterprise', {
+      buildName = "develop-#{productName}"
+      buildDemoApp(productName, buildName, 'enterprise', {
         teamID: "XRTVVR644Y",
         signingCertificate: "iPhone Distribution",
         provisioningProfiles: { "com.att.ent.cso.haloc.#{productName.downcase}.develop" => "Raizlabs Generic Enterprise Distribution Profile" }
@@ -159,14 +167,15 @@ platform :ios do
         public_identifier: DEVELOP_IDS[productName]
       )
       # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_DEVELOPZZ')
-      # slack(message: "Successfully uploaded build #{build_number} to develop", success: true)  
+      slack(message: "Successfully uploaded #{buildName} build number #{build_number} to develop", success: true)  
     end
   end
 
   desc "Builds and submits a Sprint release to Hockey"
   lane :sprint do
     PRODUCT_NAMES.each do |productName|
-      buildDemoApp(productName, "sprint-#{productName}", 'enterprise', {
+      buildName = "sprint-#{productName}"
+      buildDemoApp(productName, buildName, 'enterprise', {
         teamID: "XRTVVR644Y",
         signingCertificate: "iPhone Distribution",
         provisioningProfiles: { "com.att.ent.cso.haloc.#{productName.downcase}.sprint" => "Raizlabs Generic Enterprise Distribution Profile" }
@@ -176,7 +185,7 @@ platform :ios do
         public_identifier: SPRINT_IDS[productName]
       )
       # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_SPRINTZZ')
-      # slack(message: "Successfully uploaded build #{build_number} to sprint", success: true)
+      slack(message: "Successfully uploaded #{buildName} build number #{build_number} to sprint", success: true)
     end
   end
 

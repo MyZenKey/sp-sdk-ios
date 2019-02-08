@@ -1,0 +1,128 @@
+# .circleci/config.yml
+version: 2
+jobs:
+  test:
+    macos:
+      xcode: "10.0.0"
+    environment:
+      FL_OUTPUT_DIR: /Users/distiller/project/output
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+      BUNDLE_JOBS: 3
+      BUNDLE_RETRY: 3
+      BUNDLE_PATH: /Users/distiller/project/app/build/gems
+      # required to set the correct ruby version
+      # see https://circleci.com/docs/2.0/testing-ios/#custom-ruby-versions
+    shell: /bin/bash --login -eo pipefail
+    working_directory: /Users/distiller/project
+    steps:
+      - checkout
+      - restore_cache:
+          key: 4-gems-{{ checksum "Gemfile.lock" }}
+          # Fall back to a previous cache if exact match cannot be found
+          key: 4-gems-
+      - run:
+          name: Restore Gems
+          command: |
+           bundle check || bundle install
+      - save_cache:
+          key: 4-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - "/Users/distiller/project/app/build/gems"
+      # Make sure that the output directory exists
+      - run: mkdir $FL_OUTPUT_DIR
+      - run:
+          name: Tests
+          command: |
+            bundle exec fastlane test
+  develop:
+    macos:
+      xcode: "10.0.0"
+    environment:
+      FL_OUTPUT_DIR: /Users/distiller/project/output
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+      BUNDLE_JOBS: 3
+      BUNDLE_RETRY: 3
+      BUNDLE_PATH: /Users/distiller/project/app/build/gems
+      # required to set the correct ruby version
+      # see https://circleci.com/docs/2.0/testing-ios/#custom-ruby-versions
+    shell: /bin/bash --login -eo pipefail
+    working_directory: /Users/distiller/project
+    steps:
+      - checkout
+      - restore_cache:
+          key: 4-gems-{{ checksum "Gemfile.lock" }}
+          # Fall back to a previous cache if exact match cannot be found
+          key: 4-gems-
+      - run:
+          name: Restore Gems
+          command: |
+           bundle check || bundle install
+      - save_cache:
+          key: 4-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - "/Users/distiller/project/app/build/gems"
+      # Make sure that the output directory exists
+      - run: mkdir $FL_OUTPUT_DIR
+      - run:
+          name: develop
+          command: |
+            bundle exec fastlane develop
+  sprint:
+    macos:
+      xcode: "10.0.0"
+    environment:
+      FL_OUTPUT_DIR: /Users/distiller/project/output
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+      BUNDLE_JOBS: 3
+      BUNDLE_RETRY: 3
+      BUNDLE_PATH: /Users/distiller/project/app/build/gems
+      # required to set the correct ruby version
+      # see https://circleci.com/docs/2.0/testing-ios/#custom-ruby-versions
+    shell: /bin/bash --login -eo pipefail
+    working_directory: /Users/distiller/project
+    steps:
+      - checkout
+      - restore_cache:
+          key: 4-gems-{{ checksum "Gemfile.lock" }}
+          # Fall back to a previous cache if exact match cannot be found
+          key: 4-gems-
+      - run:
+          name: Restore Gems
+          command: |
+           bundle check || bundle install
+      - save_cache:
+          key: 4-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - "/Users/distiller/project/app/build/gems"
+      # Make sure that the output directory exists
+      - run: mkdir $FL_OUTPUT_DIR
+      - run:
+          name: sprint
+          command: |
+            bundle exec fastlane sprint
+
+workflows:
+  version: 2
+  integration:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /.*/
+      - develop:
+          requires:
+            - test
+          filters:
+            branches:
+              only: develop
+      - sprint:
+          requires:
+            - test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /sprint-.*/
