@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0E3632E17571F73502FA7B32 /* Pods_BankApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE6212B13800D51B30E3D4A9 /* Pods_BankApp.framework */; };
+		233B6172220C98E8008A0E27 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B616F220C98E8008A0E27 /* Debug.xcconfig */; };
+		233B6173220C98E8008A0E27 /* Develop.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B6170220C98E8008A0E27 /* Develop.xcconfig */; };
+		233B6174220C98E8008A0E27 /* Sprint.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B6171220C98E8008A0E27 /* Sprint.xcconfig */; };
 		3508E23A211281940036E4A2 /* ServiceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3508E239211281930036E4A2 /* ServiceAPI.swift */; };
 		6682E1AC21228F9400DBE3C5 /* EnableVerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6682E1AB21228F9400DBE3C5 /* EnableVerifyViewController.swift */; };
 		7D43BF902024FA6700B9BE41 /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D43BF8F2024FA6700B9BE41 /* JsonDocument.swift */; };
@@ -41,6 +44,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		13DCB7D89258CC6FC6E4F461 /* Pods-BankApp.sprint.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankApp.sprint.xcconfig"; path = "Pods/Target Support Files/Pods-BankApp/Pods-BankApp.sprint.xcconfig"; sourceTree = "<group>"; };
+		233B616F220C98E8008A0E27 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		233B6170220C98E8008A0E27 /* Develop.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Develop.xcconfig; sourceTree = "<group>"; };
+		233B6171220C98E8008A0E27 /* Sprint.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Sprint.xcconfig; sourceTree = "<group>"; };
 		3508E239211281930036E4A2 /* ServiceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAPI.swift; sourceTree = "<group>"; };
 		560601015C1001DE5EF28D8B /* Pods-BankApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-BankApp/Pods-BankApp.release.xcconfig"; sourceTree = "<group>"; };
 		6682E1AB21228F9400DBE3C5 /* EnableVerifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableVerifyViewController.swift; sourceTree = "<group>"; };
@@ -64,6 +71,7 @@
 		8C87BE1121268FD500B24707 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		8CDE44DC212DCC4C00F403A2 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		8CFE96FE2121F22900542F46 /* ApproveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApproveViewController.swift; sourceTree = "<group>"; };
+		F47BE0F508829E84600C85E1 /* Pods-BankApp.develop.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankApp.develop.xcconfig"; path = "Pods/Target Support Files/Pods-BankApp/Pods-BankApp.develop.xcconfig"; sourceTree = "<group>"; };
 		FE6212B13800D51B30E3D4A9 /* Pods_BankApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BankApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -79,6 +87,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		233B616D220C98E8008A0E27 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				233B616E220C98E8008A0E27 /* xcconfig */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		233B616E220C98E8008A0E27 /* xcconfig */ = {
+			isa = PBXGroup;
+			children = (
+				233B616F220C98E8008A0E27 /* Debug.xcconfig */,
+				233B6170220C98E8008A0E27 /* Develop.xcconfig */,
+				233B6171220C98E8008A0E27 /* Sprint.xcconfig */,
+			);
+			path = xcconfig;
+			sourceTree = "<group>";
+		};
 		7D43BF8E2024FA5000B9BE41 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +136,7 @@
 		7D89C9D21FFE82F400AE1EF4 /* BankApp */ = {
 			isa = PBXGroup;
 			children = (
+				233B616D220C98E8008A0E27 /* Resources */,
 				8CDE44DB212DCC1B00F403A2 /* Views */,
 				8C6E737121233C3F003B15A4 /* Extensions */,
 				8C6E736F21233B58003B15A4 /* EnterPINViewController.swift */,
@@ -162,6 +189,8 @@
 			children = (
 				89F9A01A772197F60C3FF63C /* Pods-BankApp.debug.xcconfig */,
 				560601015C1001DE5EF28D8B /* Pods-BankApp.release.xcconfig */,
+				F47BE0F508829E84600C85E1 /* Pods-BankApp.develop.xcconfig */,
+				13DCB7D89258CC6FC6E4F461 /* Pods-BankApp.sprint.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -237,7 +266,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D89C9DE1FFE82F400AE1EF4 /* LaunchScreen.storyboard in Resources */,
+				233B6174220C98E8008A0E27 /* Sprint.xcconfig in Resources */,
 				7D89C9DB1FFE82F400AE1EF4 /* Assets.xcassets in Resources */,
+				233B6173220C98E8008A0E27 /* Develop.xcconfig in Resources */,
+				233B6172220C98E8008A0E27 /* Debug.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,8 +361,94 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		233B6175220C990A008A0E27 /* Develop */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 233B6170220C98E8008A0E27 /* Develop.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Develop;
+		};
+		233B6176220C990A008A0E27 /* Develop */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F47BE0F508829E84600C85E1 /* Pods-BankApp.develop.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "${CODE_SIGN_IDENTITY_DEMO_APPS}";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "${DEVELOPMENT_TEAM}";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = BankApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "${PROVISIONING_PROFILE_DEMO_APPS}";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Develop;
+		};
 		7D89C9E01FFE82F400AE1EF4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 233B616F220C98E8008A0E27 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -388,8 +506,9 @@
 			};
 			name = Debug;
 		};
-		7D89C9E11FFE82F400AE1EF4 /* Release */ = {
+		7D89C9E11FFE82F400AE1EF4 /* Sprint */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 233B6171220C98E8008A0E27 /* Sprint.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -438,7 +557,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Sprint;
 		};
 		7D89C9E31FFE82F400AE1EF4 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -446,9 +565,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "${CODE_SIGN_IDENTITY_DEMO_APPS}";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 336S848KQ4;
+				DEVELOPMENT_TEAM = "${DEVELOPMENT_TEAM}";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -456,24 +575,24 @@
 				INFOPLIST_FILE = BankApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.att.ent.cso.haloc.bankapp;
+				PRODUCT_BUNDLE_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Raizlabs Dev Wildcard";
+				PROVISIONING_PROFILE_SPECIFIER = "${PROVISIONING_PROFILE_DEMO_APPS}";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		7D89C9E41FFE82F400AE1EF4 /* Release */ = {
+		7D89C9E41FFE82F400AE1EF4 /* Sprint */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 560601015C1001DE5EF28D8B /* Pods-BankApp.release.xcconfig */;
+			baseConfigurationReference = 13DCB7D89258CC6FC6E4F461 /* Pods-BankApp.sprint.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "${CODE_SIGN_IDENTITY_DEMO_APPS}";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = "${DEVELOPMENT_TEAM}";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -481,13 +600,13 @@
 				INFOPLIST_FILE = BankApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.att.ent.cso.haloc.bankapp;
+				PRODUCT_BUNDLE_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "${PROVISIONING_PROFILE_DEMO_APPS}";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Release;
+			name = Sprint;
 		};
 /* End XCBuildConfiguration section */
 
@@ -496,19 +615,21 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D89C9E01FFE82F400AE1EF4 /* Debug */,
-				7D89C9E11FFE82F400AE1EF4 /* Release */,
+				233B6175220C990A008A0E27 /* Develop */,
+				7D89C9E11FFE82F400AE1EF4 /* Sprint */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Sprint;
 		};
 		7D89C9E21FFE82F400AE1EF4 /* Build configuration list for PBXNativeTarget "BankApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D89C9E31FFE82F400AE1EF4 /* Debug */,
-				7D89C9E41FFE82F400AE1EF4 /* Release */,
+				233B6176220C990A008A0E27 /* Develop */,
+				7D89C9E41FFE82F400AE1EF4 /* Sprint */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Sprint;
 		};
 /* End XCConfigurationList section */
 	};

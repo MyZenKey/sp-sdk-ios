@@ -1,0 +1,22 @@
+//
+//  Debug.xcconfig
+//  PRODUCTNAME
+//
+//  Created by LEADDEVELOPER on 11/1/16.
+//  Copyright © 2017 ORGANIZATION. All rights reserved.
+//
+
+// #include "PRODUCTNAME/Resources/xcconfig/Raizlabs-Account.xcconfig"
+
+DEVELOPMENT_TEAM = 336S848KQ4
+CODE_SIGN_IDENTITY_DEMO_APPS = iPhone Developer
+
+// PROVISIONING_PROFILE_PRODUCTNAME = xxxxx
+// CODE_SIGN_ENTITLEMENTS = PRODUCTNAME/debug-PRODUCTNAME.entitlements // Enable to allow custom debug entitlements
+
+FABRIC_API_KEY = $(INTERNAL_FABRIC_API_KEY)
+FABRIC_BUILD_SECRET = $(INTERNAL_BUILD_SECRET)
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+
+// This file must be included last to properly resolve the offical Xcode variables.
+#include "./Global.xcconfig"
