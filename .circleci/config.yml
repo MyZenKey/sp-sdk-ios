@@ -53,7 +53,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: 
+          keys: 
             - 4-gems-{{ checksum "Gemfile.lock" }}
           # Fall back to a previous cache if exact match cannot be found
             - 4-gems-
