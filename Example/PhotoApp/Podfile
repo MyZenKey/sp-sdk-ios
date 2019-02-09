@@ -1,0 +1,11 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'PhotoApp' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic   
+  use_frameworks!
+
+  # Pods for PhotoApp
+  pod 'AppAuth', :git => 'https://github.com/openid/AppAuth-iOS', :tag => '0.95.0'
+  pod 'CarriersSharedAPI', :path => '../../'
+end
