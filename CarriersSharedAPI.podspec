@@ -28,16 +28,21 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/Raizlabs/XCI-ProviderSDK-iOS.git', :tag => s.version.to_s }
   s.swift_version    = '4.2'
 
-  s.ios.deployment_target = '9.0'
+  # s.module_name = 'CarriersSharedAPI'
+  s.ios.deployment_target = '10.0'
 
-  s.source_files = 'CarriersSharedAPI/Classes/**/*'
-  
+  s.source_files = 'CarriersSharedAPI/Sources/**/*'
+  s.public_header_files = 'CarriersSharedAPI/**/*.h'
   # s.resource_bundles = {
   #   'CarriersSharedAPI' => ['CarriersSharedAPI/Assets/*.png']
-  # } 
+  # }   
 
-  s.public_header_files = 'CarriersSharedAPI/**/*.h'
-  s.module_name = 'CarriersSharedAPI'
-  # s.frameworks = 'UIKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.frameworks = 'UIKit'
+  s.dependency 'AppAuth', '~> 0.95.0'
+
+  s.test_spec 'Tests' do |test_spec|
+    test_spec.source_files = 'CarriersSharedAPI/Tests/**/*.swift'
+#    test_spec.resources = 'CarriersSharedAPI/Tests/Resources/**/*'
+    test_spec.frameworks = 'XCTest'
+  end
 end

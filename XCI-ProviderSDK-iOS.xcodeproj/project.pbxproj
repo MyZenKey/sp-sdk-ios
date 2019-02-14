@@ -7,32 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		233AF95D220A3B080023059C /* CarriersSharedAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 233AF954220A3B080023059C /* CarriersSharedAPI.framework */; };
-		233AF962220A3B080023059C /* CarriersSharedAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233AF961220A3B080023059C /* CarriersSharedAPITests.swift */; };
 		233AF964220A3B080023059C /* CarriersSharedAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 233AF956220A3B080023059C /* CarriersSharedAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233AF96D220A3B750023059C /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233AF96B220A3B750023059C /* JsonDocument.swift */; };
 		233AF96E220A3B750023059C /* SharedAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233AF96C220A3B750023059C /* SharedAPI.swift */; };
+		23B524ED22152129002124D4 /* ProjectVerify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B524EC22152129002124D4 /* ProjectVerify.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		233AF95E220A3B080023059C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 56BCE47B2203755D00196A17 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 233AF953220A3B080023059C;
-			remoteInfo = CarriersSharedAPI;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		233AF954220A3B080023059C /* CarriersSharedAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CarriersSharedAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		233AF956220A3B080023059C /* CarriersSharedAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarriersSharedAPI.h; sourceTree = "<group>"; };
 		233AF957220A3B080023059C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		233AF95C220A3B080023059C /* CarriersSharedAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CarriersSharedAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		233AF961220A3B080023059C /* CarriersSharedAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarriersSharedAPITests.swift; sourceTree = "<group>"; };
-		233AF963220A3B080023059C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		233AF96B220A3B750023059C /* JsonDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonDocument.swift; sourceTree = "<group>"; };
 		233AF96C220A3B750023059C /* SharedAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedAPI.swift; sourceTree = "<group>"; };
+		23B524EC22152129002124D4 /* ProjectVerify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerify.swift; sourceTree = "<group>"; };
+		23B52505221539E5002124D4 /* CarriersSharedAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarriersSharedAPITests.swift; sourceTree = "<group>"; };
+		23B52507221539E5002124D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,50 +32,43 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		233AF959220A3B080023059C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				233AF95D220A3B080023059C /* CarriersSharedAPI.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		233AF955220A3B080023059C /* CarriersSharedAPI */ = {
 			isa = PBXGroup;
 			children = (
-				233AF970220A44AD0023059C /* Classes */,
+				23B5250E22153AAA002124D4 /* Tests */,
+				233AF970220A44AD0023059C /* Sources */,
 				233AF957220A3B080023059C /* Info.plist */,
 			);
 			path = CarriersSharedAPI;
 			sourceTree = "<group>";
 		};
-		233AF960220A3B080023059C /* CarriersSharedAPITests */ = {
-			isa = PBXGroup;
-			children = (
-				233AF961220A3B080023059C /* CarriersSharedAPITests.swift */,
-				233AF963220A3B080023059C /* Info.plist */,
-			);
-			path = CarriersSharedAPITests;
-			sourceTree = "<group>";
-		};
-		233AF970220A44AD0023059C /* Classes */ = {
+		233AF970220A44AD0023059C /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				233AF956220A3B080023059C /* CarriersSharedAPI.h */,
 				233AF96B220A3B750023059C /* JsonDocument.swift */,
 				233AF96C220A3B750023059C /* SharedAPI.swift */,
+				23B524EC22152129002124D4 /* ProjectVerify.swift */,
 			);
-			path = Classes;
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		23B5250E22153AAA002124D4 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				23B52505221539E5002124D4 /* CarriersSharedAPITests.swift */,
+				23B52507221539E5002124D4 /* Info.plist */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		56BCE47A2203755D00196A17 = {
 			isa = PBXGroup;
 			children = (
 				233AF955220A3B080023059C /* CarriersSharedAPI */,
-				233AF960220A3B080023059C /* CarriersSharedAPITests */,
 				56BCE4842203755D00196A17 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -95,7 +77,6 @@
 			isa = PBXGroup;
 			children = (
 				233AF954220A3B080023059C /* CarriersSharedAPI.framework */,
-				233AF95C220A3B080023059C /* CarriersSharedAPITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -132,30 +113,13 @@
 			productReference = 233AF954220A3B080023059C /* CarriersSharedAPI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		233AF95B220A3B080023059C /* CarriersSharedAPITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 233AF968220A3B080023059C /* Build configuration list for PBXNativeTarget "CarriersSharedAPITests" */;
-			buildPhases = (
-				233AF958220A3B080023059C /* Sources */,
-				233AF959220A3B080023059C /* Frameworks */,
-				233AF95A220A3B080023059C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				233AF95F220A3B080023059C /* PBXTargetDependency */,
-			);
-			name = CarriersSharedAPITests;
-			productName = CarriersSharedAPITests;
-			productReference = 233AF95C220A3B080023059C /* CarriersSharedAPITests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		56BCE47B2203755D00196A17 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				DefaultBuildSystemTypeForWorkspace = Original;
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = Rightpoint;
@@ -163,9 +127,6 @@
 					233AF953220A3B080023059C = {
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1010;
-					};
-					233AF95B220A3B080023059C = {
-						CreatedOnToolsVersion = 10.1;
 					};
 				};
 			};
@@ -183,20 +144,12 @@
 			projectRoot = "";
 			targets = (
 				233AF953220A3B080023059C /* CarriersSharedAPI */,
-				233AF95B220A3B080023059C /* CarriersSharedAPITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		233AF952220A3B080023059C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		233AF95A220A3B080023059C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -211,27 +164,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				233AF96D220A3B750023059C /* JsonDocument.swift in Sources */,
+				23B524ED22152129002124D4 /* ProjectVerify.swift in Sources */,
 				233AF96E220A3B750023059C /* SharedAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		233AF958220A3B080023059C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				233AF962220A3B080023059C /* CarriersSharedAPITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		233AF95F220A3B080023059C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 233AF953220A3B080023059C /* CarriersSharedAPI */;
-			targetProxy = 233AF95E220A3B080023059C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		233AF966220A3B080023059C /* Debug */ = {
@@ -248,7 +186,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CarriersSharedAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -280,7 +218,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CarriersSharedAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -294,48 +232,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		233AF969220A3B080023059C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = XRTVVR644Y;
-				INFOPLIST_FILE = CarriersSharedAPITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.raizlabs.CarriersSharedAPITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		233AF96A220A3B080023059C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = XRTVVR644Y;
-				INFOPLIST_FILE = CarriersSharedAPITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.raizlabs.CarriersSharedAPITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -463,15 +359,6 @@
 			buildConfigurations = (
 				233AF966220A3B080023059C /* Debug */,
 				233AF967220A3B080023059C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		233AF968220A3B080023059C /* Build configuration list for PBXNativeTarget "CarriersSharedAPITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				233AF969220A3B080023059C /* Debug */,
-				233AF96A220A3B080023059C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

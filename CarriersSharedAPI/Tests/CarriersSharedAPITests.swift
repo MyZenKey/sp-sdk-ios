@@ -2,7 +2,7 @@
 //  CarriersSharedAPITests.swift
 //  CarriersSharedAPITests
 //
-//  Created by Adam Tierney on 2/5/19.
+//  Created by Adam Tierney on 2/13/19.
 //  Copyright © 2019 Rightpoint. All rights reserved.
 //
 
@@ -13,6 +13,7 @@ class CarriersSharedAPITests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        ProjectVerify.testFunc()
     }
 
     override func tearDown() {

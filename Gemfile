@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'fastlane', "~> 2.115.0"
-gem 'cocoapods'
+gem 'cocoapods', "~> 1.6"
 gem "dotenv", "~> 2.6"
 gem "circleci_artifact", "~> 0.1.0"
 
