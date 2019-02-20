@@ -7,19 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */; };
+		231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */; };
+		231FFB9C221C6DE500E2B1BA /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */; };
 		233AF964220A3B080023059C /* CarriersSharedAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 233AF956220A3B080023059C /* CarriersSharedAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233AF96D220A3B750023059C /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233AF96B220A3B750023059C /* JsonDocument.swift */; };
 		233AF96E220A3B750023059C /* SharedAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233AF96C220A3B750023059C /* SharedAPI.swift */; };
-		23B524ED22152129002124D4 /* ProjectVerify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B524EC22152129002124D4 /* ProjectVerify.swift */; };
+		23B524ED22152129002124D4 /* ProjectVerifyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryUrlQuery.swift; sourceTree = "<group>"; };
+		231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationService.swift; sourceTree = "<group>"; };
+		231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKConfig.swift; sourceTree = "<group>"; };
 		233AF954220A3B080023059C /* CarriersSharedAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CarriersSharedAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		233AF956220A3B080023059C /* CarriersSharedAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarriersSharedAPI.h; sourceTree = "<group>"; };
 		233AF957220A3B080023059C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		233AF96B220A3B750023059C /* JsonDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonDocument.swift; sourceTree = "<group>"; };
 		233AF96C220A3B750023059C /* SharedAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedAPI.swift; sourceTree = "<group>"; };
-		23B524EC22152129002124D4 /* ProjectVerify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerify.swift; sourceTree = "<group>"; };
+		23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerifyAppDelegate.swift; sourceTree = "<group>"; };
 		23B52505221539E5002124D4 /* CarriersSharedAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarriersSharedAPITests.swift; sourceTree = "<group>"; };
 		23B52507221539E5002124D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -48,10 +54,13 @@
 		233AF970220A44AD0023059C /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */,
 				233AF956220A3B080023059C /* CarriersSharedAPI.h */,
 				233AF96B220A3B750023059C /* JsonDocument.swift */,
 				233AF96C220A3B750023059C /* SharedAPI.swift */,
-				23B524EC22152129002124D4 /* ProjectVerify.swift */,
+				23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */,
+				231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */,
+				231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -164,7 +173,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				233AF96D220A3B750023059C /* JsonDocument.swift in Sources */,
-				23B524ED22152129002124D4 /* ProjectVerify.swift in Sources */,
+				231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */,
+				231FFB9C221C6DE500E2B1BA /* SDKConfig.swift in Sources */,
+				23B524ED22152129002124D4 /* ProjectVerifyAppDelegate.swift in Sources */,
+				231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */,
 				233AF96E220A3B750023059C /* SharedAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

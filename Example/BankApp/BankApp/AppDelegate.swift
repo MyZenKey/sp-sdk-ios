@@ -6,6 +6,7 @@
 
 import UIKit
 import AppAuth
+import CarriersSharedAPI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -13,9 +14,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var navigationController: UINavigationController?
     var launchMapViewFlag: Bool = true
-    var currentAuthorizationFlow:OIDExternalUserAgentSession?
+    var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+
+        ProjectVerifyAppDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
+
         // Override point for customization after application launch.
         let _ = launchTransferCompleteScreenIfNeeded()
         
