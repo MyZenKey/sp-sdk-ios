@@ -38,7 +38,7 @@ jobs:
             bundle exec fastlane test
   develop:
     macos:
-      xcode: "10.0.0"
+      xcode: "10.1.0"
     environment:
       FL_OUTPUT_DIR: /Users/distiller/project/output
       LC_ALL: en_US.UTF-8
@@ -73,7 +73,7 @@ jobs:
             bundle exec fastlane develop
   sprint:
     macos:
-      xcode: "10.0.0"
+      xcode: "10.1.0"
     environment:
       FL_OUTPUT_DIR: /Users/distiller/project/output
       LC_ALL: en_US.UTF-8
