@@ -10,7 +10,7 @@ import AppAuth
 import UIKit
 
 public struct AuthorizationResult {
-    let code: String?
+    public let code: String?
 
     init(code: String?) {
         self.code = code

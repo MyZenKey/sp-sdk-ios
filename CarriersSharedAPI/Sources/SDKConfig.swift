@@ -16,6 +16,7 @@ class SDKConfig {
 
     // MARK: - static properties
     // these should be loaded at app launch and not be mutated for the lifetime of the application
+    public var isLoaded: Bool = false
     public private(set) var clientId: String!
     public private(set) var clientSecret: String!
     private(set) var redirectURI: URL!
@@ -23,17 +24,20 @@ class SDKConfig {
     // MARK: - dynamic properties
     // these are volitale based on the sim state and network and should be fetched just in time
     // for up-to-date requests:
-    let sharedAPI = SharedAPI()
-    private(set) var carrierName: String?
+    private let sharedAPI = SharedAPI()
 
-    lazy var carrierConfig: [String: Any]? = {
+    var carrierName: String? {
+        assertConfigHasLoaded()
+        return sharedAPI.carrierName
+    }
+
+    var carrierConfig: [String: Any]? {
+        assertConfigHasLoaded()
         return sharedAPI.discoverCarrierConfiguration()
-    }()
+    }
 
     func loadFromBundle(bundle: Bundle) {
-
-        print(Bundle.main.infoDictionary!)
-
+        defer { isLoaded = true }
         guard
             let clientId = bundle.object(forInfoDictionaryKey: PlistKeys.ClientId) as? String,
             let clientSecret = bundle.object(forInfoDictionaryKey: PlistKeys.ClientSecret) as? String else {
@@ -55,7 +59,12 @@ class SDKConfig {
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.redirectURI = redirectURI
+    }
 
+    private func assertConfigHasLoaded() {
+        guard isLoaded else {
+            fatalError("attempting to access Project Verify SDK config before loading")
+        }
     }
 
     private func urlSchemesFromBundle(bundle: Bundle) -> [String] {

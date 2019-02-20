@@ -95,6 +95,15 @@ class EnableVerifyViewController: UIViewController {
     @objc func enableVerify(_ sender: Any) {
         authService.connectWithProjectVerify(fromViewController: self) { result, error in
             // TODO: login + fetch user
+            // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
+            let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+            if let code = result?.code {
+                print("AuthZ_Code value from is: \(code)\n")
+                UserDefaults.standard.set(code,forKey: "AuthZCode")
+                appDelegate.launchHomeScreen()
+            } else {
+                appDelegate.launchLoginScreen()
+            }
         }
     }
 
