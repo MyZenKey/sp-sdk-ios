@@ -6,6 +6,5 @@ target 'SocialApp' do
   use_frameworks!
 
   # Pods for SocialApp
-  pod 'AppAuth', :git => 'https://github.com/openid/AppAuth-iOS', :tag => '0.95.0'
-  pod 'CarriersSharedAPI', :path => '../../'
+  pod 'CarriersSharedAPI', path: '../../CarriersSharedAPI.podspec', testspecs: ['Tests']
 end

@@ -110,6 +110,8 @@
 		812FD49E2189FB3600EE86DD /* Carrier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Carrier.swift; sourceTree = "<group>"; };
 		8C103E7B210787E600E232EE /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		8CC5A0D721431ABE006D6735 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
+		943617697099C03414AD4013 /* Pods-SocialApp.sprint.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialApp.sprint.xcconfig"; path = "Pods/Target Support Files/Pods-SocialApp/Pods-SocialApp.sprint.xcconfig"; sourceTree = "<group>"; };
+		D457B38B6C5C54BB560D7C1C /* Pods-SocialApp.develop.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SocialApp.develop.xcconfig"; path = "Pods/Target Support Files/Pods-SocialApp/Pods-SocialApp.develop.xcconfig"; sourceTree = "<group>"; };
 		E2ED5582F1EF07ECAEAACAAB /* Pods_SocialApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SocialApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -248,6 +250,8 @@
 			children = (
 				10DCC86E0E782FD56D276F75 /* Pods-SocialApp.debug.xcconfig */,
 				8124EC2D7861ECCCCE6E4ADC /* Pods-SocialApp.release.xcconfig */,
+				D457B38B6C5C54BB560D7C1C /* Pods-SocialApp.develop.xcconfig */,
+				943617697099C03414AD4013 /* Pods-SocialApp.sprint.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -348,7 +352,6 @@
 				2D100F06212E0B7C00B02260 /* SFCompactDisplay-Semibold.otf in Resources */,
 				2D100F0F212E0B7C00B02260 /* SFCompactText-Bold.otf in Resources */,
 				233B615C220B57C1008A0E27 /* Debug.xcconfig in Resources */,
-				7D89C9D91FFE82F400AE1EF4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,7 +388,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-SocialApp/Pods-SocialApp-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-SocialApp/Pods-SocialApp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/CarriersSharedAPI/CarriersSharedAPI.framework",
 			);
@@ -398,7 +401,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SocialApp/Pods-SocialApp-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SocialApp/Pods-SocialApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -501,7 +504,7 @@
 		};
 		233B6160220B60B8008A0E27 /* Develop */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8124EC2D7861ECCCCE6E4ADC /* Pods-SocialApp.release.xcconfig */;
+			baseConfigurationReference = D457B38B6C5C54BB560D7C1C /* Pods-SocialApp.develop.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -672,7 +675,7 @@
 		};
 		7D89C9E41FFE82F400AE1EF4 /* Sprint */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8124EC2D7861ECCCCE6E4ADC /* Pods-SocialApp.release.xcconfig */;
+			baseConfigurationReference = 943617697099C03414AD4013 /* Pods-SocialApp.sprint.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";

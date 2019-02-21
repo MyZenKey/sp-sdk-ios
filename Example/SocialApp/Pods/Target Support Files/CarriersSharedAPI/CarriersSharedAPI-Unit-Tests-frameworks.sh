@@ -153,16 +153,16 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/CarriersSharedAPI/CarriersSharedAPI.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
 fi
 if [[ "$CONFIGURATION" == "Develop" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/CarriersSharedAPI/CarriersSharedAPI.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
 fi
 if [[ "$CONFIGURATION" == "Sprint" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/CarriersSharedAPI/CarriersSharedAPI.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait
