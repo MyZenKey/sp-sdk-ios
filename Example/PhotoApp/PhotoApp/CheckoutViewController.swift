@@ -107,7 +107,6 @@ class CheckoutViewController: UIViewController {
     var userInfo: String?
     let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: Foundation.OperationQueue.main)
     var dataTask: URLSessionDataTask?
-    var url: URL?
     var window: UIWindow?
 
     var carrier: String? = "TODO: Carrier"
@@ -135,15 +134,11 @@ class CheckoutViewController: UIViewController {
         }
         
         print("Checking for non-null url passed from app delegate")
-        if let url = url {
-            print("Found url")
-            let urlComp = URLComponents(url: url, resolvingAgainstBaseURL: false)
-            if let code = urlComp?.queryItems?.filter({ $0.name == "code" }).first?.value {
-                print("Found code - " + code)
-                self.authzCode = code
-                self.login(with: code)
-            }
+
+        if let code = authzCode {
+            self.login(with: code)
         }
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -160,6 +155,7 @@ class CheckoutViewController: UIViewController {
                 self.authzCode = code
                 print("AuthZ_Code value from is: \(code)\n")
                 UserDefaults.standard.set(code,forKey: "AuthZCode")
+                appDelegate.launchCheckOutScreen(code: code)
             } else {
                 appDelegate.launchLoginScreen()
             }

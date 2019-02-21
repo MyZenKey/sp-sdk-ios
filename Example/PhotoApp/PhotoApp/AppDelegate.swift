@@ -79,10 +79,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = loginVC
     }
 
-    func launchCheckOutScreen(url: URL) {
+    func launchCheckOutScreen(code: String) {
         
         let checkOutNavVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CheckoutNavViewController") as! UINavigationController
         let checkOutVC = checkOutNavVC.topViewController as! CheckoutViewController
+        checkOutVC.authzCode = code
 
         UIApplication.shared.keyWindow?.rootViewController?.present(checkOutNavVC, animated: true, completion: nil)
     }
