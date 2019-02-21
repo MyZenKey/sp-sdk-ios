@@ -5,17 +5,20 @@
 //
 
 import UIKit
-import AppAuth
+import CarriersSharedAPI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var navigationController: UINavigationController?
-    var currentAuthorizationFlow: OIDExternalUserAgentSession?
-    
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+
+        ProjectVerifyAppDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
         window = UIWindow(frame: UIScreen.main.bounds)
         
         if let window = window {
@@ -53,23 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         print("App opening with contextual deep link: URL -> \(url)")
-        
-        if let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            if let AuthZ_Code = (components.queryItems?.filter({ (item) in item.name == "code" }).first?.value) {
-                
-                print("AuthZ_Code value from \(String(describing: url.scheme)) scheme is: \(AuthZ_Code)\n")
-       
-                UserDefaults.standard.set(AuthZ_Code,forKey: "AuthZCode")
-                UserDefaults.standard.synchronize();
-                
-                launchCheckOutScreen(url: url)
-                
-            } else {
-              launchLoginScreen()
-            }
-        }
-        return true
-        
+        return ProjectVerifyAppDelegate.shared.application(app, open: url, options: options)
     }
     
     func logout() {
@@ -91,15 +78,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let loginVC = storyboard.instantiateInitialViewController()
         self.window?.rootViewController = loginVC
     }
+
     func launchCheckOutScreen(url: URL) {
         
         let checkOutNavVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CheckoutNavViewController") as! UINavigationController
         let checkOutVC = checkOutNavVC.topViewController as! CheckoutViewController
-        checkOutVC.url = url
-        
-        UIApplication.shared.keyWindow?.rootViewController?.present(checkOutNavVC, animated: true, completion: nil)
 
+        UIApplication.shared.keyWindow?.rootViewController?.present(checkOutNavVC, animated: true, completion: nil)
     }
-    
 }
 

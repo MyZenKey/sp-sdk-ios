@@ -1,27 +1,26 @@
 PODS:
   - AppAuth (0.95.0)
-  - CarriersSharedAPI (0.1.0)
+  - CarriersSharedAPI (0.1.0):
+    - AppAuth (~> 0.95.0)
+  - CarriersSharedAPI/Tests (0.1.0):
+    - AppAuth (~> 0.95.0)
 
 DEPENDENCIES:
-  - AppAuth (from `https://github.com/openid/AppAuth-iOS`, tag `0.95.0`)
-  - CarriersSharedAPI (from `../../`)
+  - CarriersSharedAPI (from `../../CarriersSharedAPI.podspec`)
+  - CarriersSharedAPI/Tests (from `../../CarriersSharedAPI.podspec`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AppAuth
 
 EXTERNAL SOURCES:
-  AppAuth:
-    :git: https://github.com/openid/AppAuth-iOS
-    :tag: 0.95.0
   CarriersSharedAPI:
-    :path: "../../"
-
-CHECKOUT OPTIONS:
-  AppAuth:
-    :git: https://github.com/openid/AppAuth-iOS
-    :tag: 0.95.0
+    :path: "../../CarriersSharedAPI.podspec"
 
 SPEC CHECKSUMS:
   AppAuth: 137f6bb6fc9dfbaf2cf9f6fcff1d336ff0163bc6
-  CarriersSharedAPI: 384b74e61b7de44ab5fdfc3ce9c09f57d8fc5f4e
+  CarriersSharedAPI: 674e5a6f95a0632c6cfdb1163f986681a90ff5fe
 
-PODFILE CHECKSUM: 3ab9df5d1d2a158b3f8d4c13681a9d8a005f9dee
+PODFILE CHECKSUM: 67d5de5ebe12fde73299de7512894055e656beec
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0
