@@ -93,7 +93,6 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
     }()
     
     var selectedPinMapItem: MKMapItem?
-    var url: URL?
     var tokenInfo: String?
     var userInfo: String?
     var userInfoJson: JsonDocument?
@@ -110,36 +109,29 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
             self.displayUserInfo(from: info)
         }
         else {
-            if let url = url {
-                if(url.absoluteString != "mock") {
-                    let urlComp = URLComponents(url: url, resolvingAgainstBaseURL: false)
-                    if let code = urlComp?.queryItems?.filter({ $0.name == "code" }).first?.value {
-                        let serviceAPIObject = ServiceAPI()
-                        
-                        serviceAPIObject.login(with: code, completionHandler: { (result) in
-                            if let accessToken = result["access_token"].toString {
-                                
-                                UserDefaults.standard.set(accessToken,forKey: "AccessToken")
-                                UserDefaults.standard.synchronize();
-                                
-                                self.tokenInfo = result.description
-                                serviceAPIObject.getUserInfo(with: accessToken, completionHandler: {(userInfoResponse) in
-                                    
-                                    UserDefaults.standard.set(result.description,forKey: "UserInfoJSON")
-                                    UserDefaults.standard.synchronize();
-                                    self.code = "AuthZ: \(code)"
-                                    self.userInfo = userInfoResponse.description
-                                    self.displayUserInfo(from: userInfoResponse)
-                                })
-                            }
-                        } )
-                    }
-                }else{
-                    let json = JsonDocument(string: "")
-                    
-                    displayUserInfo(from: json)
-                }
+            guard let code = code else {
+                return
             }
+            let serviceAPIObject = ServiceAPI()
+            serviceAPIObject.login(with: code, completionHandler: { (result) in
+
+                guard let accessToken = result["access_token"].toString else {
+                    return
+                }
+
+                UserDefaults.standard.set(accessToken,forKey: "AccessToken")
+                UserDefaults.standard.synchronize();
+
+                self.tokenInfo = result.description
+                serviceAPIObject.getUserInfo(with: accessToken, completionHandler: {(userInfoResponse) in
+
+                    UserDefaults.standard.set(result.description,forKey: "UserInfoJSON")
+                    UserDefaults.standard.synchronize();
+                    self.code = "AuthZ: \(code)"
+                    self.userInfo = userInfoResponse.description
+                    self.displayUserInfo(from: userInfoResponse)
+                })
+            } )
         }
     }
 

@@ -5,7 +5,7 @@
 //
 
 import UIKit
-import AppAuth
+import CarriersSharedAPI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -13,9 +13,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var navigationController: UINavigationController?
     var launchMapViewFlag: Bool = true
-    var currentAuthorizationFlow:OIDExternalUserAgentSession?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+
+        ProjectVerifyAppDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
+
         // Override point for customization after application launch.
         let _ = launchTransferCompleteScreenIfNeeded()
         
@@ -82,7 +87,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
-        
+
+        guard !ProjectVerifyAppDelegate.shared.application(app, open: url, options: options) else {
+            return true
+        }
+
         if let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
             if components.host == "transaction_completed" {
                 // Show the transaction completed screen
@@ -91,25 +100,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Log out to login screen
                 UserDefaults.standard.set(true, forKey: "transaction_denied");
                 UserDefaults.standard.synchronize();
-                
+
                 launchLoginScreen()
-            } else if let AuthZ_Code = (components.queryItems?.filter({ (item) in item.name == "code" }).first?.value) {
-                
-                print("AuthZ_Code value from \(String(describing: url.scheme)) scheme is: \(AuthZ_Code)\n")
-                
-                UserDefaults.standard.set(AuthZ_Code,forKey: "AuthZCode")
-                UserDefaults.standard.synchronize();
-                
-                // Launching Correct Screen based on previous call using launchMapViewFlag (Need to comeup with better idea later)
-                
-                launchHomeScreen()
             } else if !launchTransferCompleteScreenIfNeeded() {
                 launchLoginScreen()
             }
         } else if !launchTransferCompleteScreenIfNeeded() {
             launchLoginScreen()
         }
-        
+
         return true
     }
 

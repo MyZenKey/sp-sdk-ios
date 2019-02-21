@@ -146,7 +146,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         return label
     }()
     
-    var url: URL?
+    var code: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -170,19 +170,17 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             poweredByLabel.text = "Powered by \(carrier.name)"
         }
         
-        if let url = url {
-            let urlComp = URLComponents(url: url, resolvingAgainstBaseURL: false)
-            if let code = urlComp?.queryItems?.filter({ $0.name == "code" }).first?.value {
-                let serviceAPIObject = ServiceAPI()
-                serviceAPIObject.login(with: code, completionHandler: { (result) in
-                    if let accessToken = result["access_token"].toString {
-                        serviceAPIObject.getUserInfo(with: accessToken, completionHandler: {(userInfoResponse) in
-                            self.displayUserInfo(from: userInfoResponse)
-                        })
-                    }
-                } )
-            }
+        if let code = code {
+            let serviceAPIObject = ServiceAPI()
+            serviceAPIObject.login(with: code, completionHandler: { (result) in
+                if let accessToken = result["access_token"].toString {
+                    serviceAPIObject.getUserInfo(with: accessToken, completionHandler: {(userInfoResponse) in
+                        self.displayUserInfo(from: userInfoResponse)
+                    })
+                }
+            })
         }
+
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonAction(sender:)))
         self.navigationItem.leftBarButtonItem?.tintColor = UIColor.white

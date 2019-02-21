@@ -5,20 +5,22 @@
 //
 
 import UIKit
-import AppAuth
-
+import CarriersSharedAPI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var navigationController: UINavigationController?
-    var currentAuthorizationFlow:OIDExternalUserAgentSession?
     var launchMapViewFlag: Bool = true
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+
+        ProjectVerifyAppDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
+
         window = UIWindow(frame: UIScreen.main.bounds)
         
         if let window = window {
@@ -40,48 +42,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ///   - restorationHandler: A block to execute if your app creates objects to perform the task. Calling this block is optional.
     /// - Returns: true to indicate that your app handled the activity or false to let iOS know that your app did not handle the activity.
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Swift.Void) -> Bool {
-        
-        print("Universal link attempt detected: \(String(describing: userActivity.webpageURL))")
 
-        if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
-            guard let url = userActivity.webpageURL else { return false }
-
-            let vc = UserInfoViewController()
-            vc.url = url
-            
-            navigationController = UINavigationController(rootViewController: vc)
-            navigationController?.isNavigationBarHidden = true
-            window?.rootViewController = navigationController
-            window?.makeKeyAndVisible()
-
-            return true
-        }
+        // TODO: There isn't a use case for this yet – re-enable this if one emerges
+//        print("Universal link attempt detected: \(String(describing: userActivity.webpageURL))")
+//
+//        if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
+//            guard let url = userActivity.webpageURL else { return false }
+//
+//            let vc = UserInfoViewController()
+//            vc.url = url
+//
+//            navigationController = UINavigationController(rootViewController: vc)
+//            navigationController?.isNavigationBarHidden = true
+//            window?.rootViewController = navigationController
+//            window?.makeKeyAndVisible()
+//
+//            return true
+//        }
 
         return false
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
         print("Launching application from universal link")
-        if let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            if let AuthZ_Code = (components.queryItems?.filter({ (item) in item.name == "code" }).first?.value) {
-                
-                print("AuthZ_Code value from \(String(describing: url.scheme)) scheme is: \(AuthZ_Code)\n")
-                
-                UserDefaults.standard.set(AuthZ_Code,forKey: "AuthZCode")
-                UserDefaults.standard.synchronize();
-                
-                // Launching Correct Screen based on previous call using launchMapViewFlag (Need to comeup with better idea later)
-                
-                if(launchMapViewFlag){
-                    launchMapScreen(url: url)
-                }else{
-                    launchSignUpScreen(url: url)
-                }
-            }
-        } else {
-            launchLoginScreen()
-        }
-        return true
+        return ProjectVerifyAppDelegate.shared.application(app, open: url, options: options)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -109,9 +93,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    func launchMapScreen(url: URL) {
+    func launchMapScreen(code: String) {
         let vc = UserInfoViewController()
-        vc.url = url
+        vc.code = code
         
         navigationController = UINavigationController(rootViewController: vc)
         navigationController?.isNavigationBarHidden = true
@@ -119,10 +103,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
     }
     
-    func launchSignUpScreen(url: URL) {
+    func launchSignUpScreen(code: String) {
         print("Launching signup screen")
         let vc = SignUpViewController()
-        vc.url = url
+        vc.code = code
         navigationController = UINavigationController(rootViewController: vc)
         navigationController?.isNavigationBarHidden = true
         window?.rootViewController = navigationController

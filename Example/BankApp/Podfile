@@ -1,11 +1,8 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+ platform :ios, '11.0'
 
 target 'BankApp' do
   use_frameworks!
-
   # Pods for BankApp
-  pod 'AppAuth', :git => 'https://github.com/openid/AppAuth-iOS', :tag => '0.95.0'
-  pod 'CarriersSharedAPI', :path => '../../'
-
+  pod 'CarriersSharedAPI', path: '../../CarriersSharedAPI.podspec', testspecs: ['Tests']
 end

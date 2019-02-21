@@ -17,9 +17,22 @@
   },
   "swift_version": "4.2",
   "platforms": {
-    "ios": "9.0"
+    "ios": "10.0"
   },
-  "source_files": "CarriersSharedAPI/Classes/**/*",
+  "source_files": "CarriersSharedAPI/Sources/**/*",
   "public_header_files": "CarriersSharedAPI/**/*.h",
-  "module_name": "CarriersSharedAPI"
+  "frameworks": "UIKit",
+  "dependencies": {
+    "AppAuth": [
+      "~> 0.95.0"
+    ]
+  },
+  "testspecs": [
+    {
+      "name": "Tests",
+      "test_type": "unit",
+      "source_files": "CarriersSharedAPI/Tests/**/*.swift",
+      "frameworks": "XCTest"
+    }
+  ]
 }

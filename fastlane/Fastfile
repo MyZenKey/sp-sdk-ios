@@ -37,7 +37,7 @@ ENV['CI_BUILD'] = 'yes'
 ENV['FL_HOCKEY_NOTIFY'] = '0'
 
 DERIVED_DATA_PATH = "#{ENV['RZ_TEST_REPORTS']}/derived_data"
-TEST_SCHEME = "CarriersSharedAPITests"
+TEST_SCHEME = "CarriersSharedAPI-Unit-Tests"
 
 # lanes
 
@@ -53,6 +53,7 @@ platform :ios do
   lane :test do
     unlock_keychain(path: './Signing/Raizlabs-DemoApps.keychain', password: ENV['RZ_KEYCHAIN_PASSWORD'] )
     scan(
+      workspace: './Example/BankApp/BankApp.xcworkspace',
       output_types: 'junit,html',
       scheme: TEST_SCHEME,
       output_directory: "#{ENV['RZ_TEST_REPORTS']}/scan",
