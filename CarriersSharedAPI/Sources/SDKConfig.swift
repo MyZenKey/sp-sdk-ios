@@ -22,7 +22,7 @@ class SDKConfig {
     private(set) var redirectURI: URL!
 
     // MARK: - dynamic properties
-    // these are volitale based on the sim state and network and should be fetched just in time
+    // these are volatile based on the sim state and network and should be fetched just in time
     // for up-to-date requests:
     private let sharedAPI = SharedAPI()
 
@@ -74,9 +74,9 @@ class SDKConfig {
         }
         // extract schems from each url type and flatten them into a single array:
         return urlTypes.compactMap() { type in
-            return type["CFBundleURLSchemes"] as? [String];
-            }.reduce(into: [String]()) { acc, cur in
-                acc.append(contentsOf: cur)
+            return type["CFBundleURLSchemes"] as? [String]
+        }.reduce(into: [String]()) { acc, cur in
+            acc.append(contentsOf: cur)
         }
     }
 }

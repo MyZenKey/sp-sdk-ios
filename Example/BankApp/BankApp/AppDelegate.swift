@@ -87,23 +87,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
-        if !ProjectVerifyAppDelegate.shared.application(app, open: url, options: options) {
-            if let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-                if components.host == "transaction_completed" {
-                    // Show the transaction completed screen
-                    launchTransferCompleteScreen()
-                } else if components.host == "transaction_denied" {
-                    // Log out to login screen
-                    UserDefaults.standard.set(true, forKey: "transaction_denied");
-                    UserDefaults.standard.synchronize();
 
-                    launchLoginScreen()
-                } else if !launchTransferCompleteScreenIfNeeded() {
-                    launchLoginScreen()
-                }
+        guard !ProjectVerifyAppDelegate.shared.application(app, open: url, options: options) else {
+            return true
+        }
+
+        if let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+            if components.host == "transaction_completed" {
+                // Show the transaction completed screen
+                launchTransferCompleteScreen()
+            } else if components.host == "transaction_denied" {
+                // Log out to login screen
+                UserDefaults.standard.set(true, forKey: "transaction_denied");
+                UserDefaults.standard.synchronize();
+
+                launchLoginScreen()
             } else if !launchTransferCompleteScreenIfNeeded() {
                 launchLoginScreen()
             }
+        } else if !launchTransferCompleteScreenIfNeeded() {
+            launchLoginScreen()
         }
 
         return true

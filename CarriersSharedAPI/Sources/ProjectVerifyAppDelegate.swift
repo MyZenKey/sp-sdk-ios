@@ -54,14 +54,6 @@ public class ProjectVerifyAppDelegate: AuthorizationStateManager {
         // TODO: - We don't have a spec for other states that might be resolved via this url.
         // add those here when we do
 
-        // TODO: this is a placeholder for the demo functionality in BankApp and not production
-        // bound
-        if urlComponents.host == "transaction_completed" {
-
-        } else if urlComponents.host == "transaction_denied" {
-
-        }
-
         // unhandled
         return false
     }

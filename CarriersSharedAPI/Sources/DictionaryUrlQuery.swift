@@ -6,20 +6,6 @@
 
 import Foundation
 
-extension Dictionary {
-
-    /// Convert a dictionary of URL name/value pairs into a "&" separated string of with correct name/value encodings.
-    ///
-    /// - Returns: An "&" separated string of encoded parameters
-    func encodeAsUrlParams() -> String {
-        var parts = [String]()
-        for (name, value) in self {
-            parts += ["\((name as! String).urlEncode())=\((value as! String).urlEncode())"]
-        }
-        return parts.joined(separator: "&")
-    }
-}
-
 extension String {
 
     /// Returns a url encoded version of self.
