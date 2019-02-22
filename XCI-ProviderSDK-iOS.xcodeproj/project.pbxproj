@@ -12,8 +12,13 @@
 		231FFB9C221C6DE500E2B1BA /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */; };
 		233AF964220A3B080023059C /* CarriersSharedAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 233AF956220A3B080023059C /* CarriersSharedAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233AF96D220A3B750023059C /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233AF96B220A3B750023059C /* JsonDocument.swift */; };
-		233AF96E220A3B750023059C /* SharedAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233AF96C220A3B750023059C /* SharedAPI.swift */; };
 		23B524ED22152129002124D4 /* ProjectVerifyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */; };
+		23F88F38221F2B0E00A5F5D9 /* SIMInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F37221F2B0E00A5F5D9 /* SIMInfo.swift */; };
+		23F88F3C221F31B800A5F5D9 /* Carrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F3B221F31B800A5F5D9 /* Carrier.swift */; };
+		23F88F3E221F433900A5F5D9 /* MobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F3D221F433900A5F5D9 /* MobileNetworkInfoProvider.swift */; };
+		23F88F422220803500A5F5D9 /* CarrierInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F412220803500A5F5D9 /* CarrierInfoTests.swift */; };
+		23F88F44222080C800A5F5D9 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F43222080C800A5F5D9 /* DiscoveryService.swift */; };
+		23F88F46222089F200A5F5D9 /* CarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F45222089F100A5F5D9 /* CarrierInfoService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,10 +29,15 @@
 		233AF956220A3B080023059C /* CarriersSharedAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarriersSharedAPI.h; sourceTree = "<group>"; };
 		233AF957220A3B080023059C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		233AF96B220A3B750023059C /* JsonDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonDocument.swift; sourceTree = "<group>"; };
-		233AF96C220A3B750023059C /* SharedAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedAPI.swift; sourceTree = "<group>"; };
 		23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerifyAppDelegate.swift; sourceTree = "<group>"; };
 		23B52505221539E5002124D4 /* CarriersSharedAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarriersSharedAPITests.swift; sourceTree = "<group>"; };
 		23B52507221539E5002124D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		23F88F37221F2B0E00A5F5D9 /* SIMInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIMInfo.swift; sourceTree = "<group>"; };
+		23F88F3B221F31B800A5F5D9 /* Carrier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carrier.swift; sourceTree = "<group>"; };
+		23F88F3D221F433900A5F5D9 /* MobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
+		23F88F412220803500A5F5D9 /* CarrierInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarrierInfoTests.swift; sourceTree = "<group>"; };
+		23F88F43222080C800A5F5D9 /* DiscoveryService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryService.swift; sourceTree = "<group>"; };
+		23F88F45222089F100A5F5D9 /* CarrierInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarrierInfoService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,13 +64,17 @@
 		233AF970220A44AD0023059C /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				23F88F45222089F100A5F5D9 /* CarrierInfoService.swift */,
+				23F88F43222080C800A5F5D9 /* DiscoveryService.swift */,
 				231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */,
 				233AF956220A3B080023059C /* CarriersSharedAPI.h */,
 				233AF96B220A3B750023059C /* JsonDocument.swift */,
-				233AF96C220A3B750023059C /* SharedAPI.swift */,
 				23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */,
 				231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */,
 				231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */,
+				23F88F37221F2B0E00A5F5D9 /* SIMInfo.swift */,
+				23F88F3B221F31B800A5F5D9 /* Carrier.swift */,
+				23F88F3D221F433900A5F5D9 /* MobileNetworkInfoProvider.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -70,6 +84,7 @@
 			children = (
 				23B52505221539E5002124D4 /* CarriersSharedAPITests.swift */,
 				23B52507221539E5002124D4 /* Info.plist */,
+				23F88F412220803500A5F5D9 /* CarrierInfoTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -131,7 +146,7 @@
 				DefaultBuildSystemTypeForWorkspace = Original;
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
-				ORGANIZATIONNAME = Rightpoint;
+				ORGANIZATIONNAME = "XCI JV, LLC.";
 				TargetAttributes = {
 					233AF953220A3B080023059C = {
 						CreatedOnToolsVersion = 10.1;
@@ -172,12 +187,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23F88F38221F2B0E00A5F5D9 /* SIMInfo.swift in Sources */,
+				23F88F3E221F433900A5F5D9 /* MobileNetworkInfoProvider.swift in Sources */,
 				233AF96D220A3B750023059C /* JsonDocument.swift in Sources */,
 				231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */,
+				23F88F3C221F31B800A5F5D9 /* Carrier.swift in Sources */,
+				23F88F422220803500A5F5D9 /* CarrierInfoTests.swift in Sources */,
+				23F88F44222080C800A5F5D9 /* DiscoveryService.swift in Sources */,
 				231FFB9C221C6DE500E2B1BA /* SDKConfig.swift in Sources */,
 				23B524ED22152129002124D4 /* ProjectVerifyAppDelegate.swift in Sources */,
 				231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */,
-				233AF96E220A3B750023059C /* SharedAPI.swift in Sources */,
+				23F88F46222089F200A5F5D9 /* CarrierInfoService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
