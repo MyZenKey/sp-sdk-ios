@@ -10,13 +10,16 @@ import Foundation
 import CoreTelephony
 
 protocol MobileNetworkInfoProvider: class {
-    var carriersForCurrentSIMs: [CTCarrier] { get }
 
-    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: (() -> Void)?)
+    typealias NetworkInfoUpdateHanlder = ([SIMInfo]) -> Void
+
+    var currentSIMs: [SIMInfo] { get }
+
+    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?)
 }
 
 extension CTTelephonyNetworkInfo: MobileNetworkInfoProvider {
-    var carriersForCurrentSIMs: [CTCarrier] {
+    var currentSIMs: [SIMInfo] {
         var simCarriers: [CTCarrier] = []
         if #available(iOS 12.0, *) {
             if let cellProviders = serviceSubscriberCellularProviders {
@@ -27,17 +30,25 @@ extension CTTelephonyNetworkInfo: MobileNetworkInfoProvider {
                 simCarriers = [providerInfo]
             }
         }
-        return simCarriers
+
+        return simCarriers.compactMap() { carrier in
+            guard
+                let mcc = carrier.mobileCountryCode,
+                let mnc = carrier.mobileNetworkCode else {
+                    return nil
+            }
+            return SIMInfo(mcc: mcc, mnc: mnc)
+        }
     }
 
-    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: (() -> Void)?) {
+    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?) {
         if #available(iOS 12.0, *) {
-            serviceSubscriberCellularProvidersDidUpdateNotifier = { _ in
-                onNetworkInfoDidUpdate?()
+            serviceSubscriberCellularProvidersDidUpdateNotifier = { [weak self] _ in
+                onNetworkInfoDidUpdate?(self?.currentSIMs ?? [])
             }
         } else {
-            subscriberCellularProviderDidUpdateNotifier = { _ in
-                onNetworkInfoDidUpdate?()
+            subscriberCellularProviderDidUpdateNotifier = { [weak self] _ in
+                onNetworkInfoDidUpdate?(self?.currentSIMs ?? [])
             }
         }
     }

@@ -32,24 +32,13 @@ class CarrierInfoService: CarrierInfoServiceProtocol {
 
     init(mobileNetworkInfoProvder: MobileNetworkInfoProvider) {
         self.mobileNetworkInfoProvder = mobileNetworkInfoProvder
-        self.sims = CarrierInfoService.current(fromNetworkInfo: mobileNetworkInfoProvder)
-        mobileNetworkInfoProvder.subscribeToNetworkInfoChanges() { [weak self] in
-            self?.updateCarrierInfo()
+        self.sims = mobileNetworkInfoProvder.currentSIMs
+        mobileNetworkInfoProvder.subscribeToNetworkInfoChanges() { [weak self] newSIMs in
+            self?.sims = newSIMs
         }
     }
 
-    private func updateCarrierInfo() {
-        self.sims = CarrierInfoService.current(fromNetworkInfo: mobileNetworkInfoProvder)
-    }
-
-    static func current(fromNetworkInfo mobileNetworkInfo: MobileNetworkInfoProvider) -> [SIMInfo] {
-        return mobileNetworkInfo.carriersForCurrentSIMs.compactMap() { carrier in
-            guard
-                let mcc = carrier.mobileCountryCode,
-                let mnc = carrier.mobileNetworkCode else {
-                    return nil
-            }
-            return SIMInfo(mcc: mcc, mnc: mnc)
-        }
+    func refreshSIMs() {
+        self.sims = mobileNetworkInfoProvder.currentSIMs
     }
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Carrier {
+enum Carrier: Equatable {
     enum ShortName: String {
         case att = "att"
         case tmobile = "tmo"
@@ -60,11 +60,11 @@ enum Carrier {
         }
     }
 
-    static let carriers: [Carrier] = [.att, .tmobile, .verizon, .unknown]
+    static let carriers: [Carrier] = [.att, .tmobile, .verizon, .sprint, .unknown]
 
     private static let attCodes = NetworkIdentifiers([
         "310": [
-            "070", "560", "410", "380", "170", "150", "680", "980"
+            "007", "560", "680", "150", "170", "380", "410"
         ],
     ])
 

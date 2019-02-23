@@ -9,8 +9,8 @@
 import Foundation
 import CoreTelephony
 
- struct SIMInfo {
-    struct IDPair {
+struct SIMInfo: Equatable {
+    struct IDPair: Equatable {
         let mcc: String
         let mnc: String
     }
