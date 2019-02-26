@@ -3,10 +3,11 @@
 //  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 2/19/19.
-//  Copyright © 2019 Rightpoint. All rights reserved.
+//  Copyright © 2018 XCI JV, LLC. ALL RIGHTS RESERVED.
 //
 
 import Foundation
+import CoreTelephony
 
 class SDKConfig {
     enum PlistKeys {
@@ -21,20 +22,18 @@ class SDKConfig {
     public private(set) var clientSecret: String!
     private(set) var redirectURI: URL!
 
+    private let carrierInfoService: CarrierInfoServiceProtocol = CarrierInfoService(
+        mobileNetworkInfoProvder: CTTelephonyNetworkInfo()
+    )
+
     // MARK: - dynamic properties
     // these are volatile based on the sim state and network and should be fetched just in time
     // for up-to-date requests:
-    private let sharedAPI = SharedAPI()
 
-    var carrierName: String? {
-        assertConfigHasLoaded()
-        return sharedAPI.carrierName
-    }
-
-    var carrierConfig: [String: Any]? {
-        assertConfigHasLoaded()
-        return sharedAPI.discoverCarrierConfiguration()
-    }
+    private(set) lazy var discoveryService: DiscoveryServiceProtocol = DiscoveryService(
+        networkService: NetworkService(),
+        carrierInfoService: carrierInfoService
+    )
 
     func loadFromBundle(bundle: Bundle) {
         defer { isLoaded = true }

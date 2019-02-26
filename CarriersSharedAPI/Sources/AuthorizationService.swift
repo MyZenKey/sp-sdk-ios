@@ -3,7 +3,7 @@
 //  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 2/19/19.
-//  Copyright © 2019 Rightpoint. All rights reserved.
+//  Copyright © 2018 XCI JV, LLC. ALL RIGHTS RESERVED.
 //
 
 import AppAuth
@@ -22,45 +22,78 @@ public class AuthorizationService {
     public typealias AuthorizationCompletion = (AuthorizationResult?, Error?) -> Void
 
     let sdkConfig: SDKConfig
+    let discoveryService: DiscoveryServiceProtocol
     let authorizationStateManager: AuthorizationStateManager
 
-    let scopes: [String]
-    var responseTypes: [String]
     var openidconfiguration: OIDServiceConfiguration?
 
     var state: String? = ""
 
     init(authorizationStateManager: AuthorizationStateManager,
          sdkConfig: SDKConfig) {
-
         self.authorizationStateManager = authorizationStateManager
         self.sdkConfig = sdkConfig
-
-        // TODO: remove all the force unwrapping here once we have a clear picture of failure states:
-        // TODO: typed scopes
-        // TODO: permit client to request scopes and omit scopes which are unsupported
-        self.scopes = (sdkConfig.carrierConfig!["scopes_supported"] as! String).components(separatedBy: " ")
-        // TODO: should this ever not just be code?
-        self.responseTypes = [sdkConfig.carrierConfig!["response_types_supported"]! as! String]
+        self.discoveryService = sdkConfig.discoveryService
     }
 
     public func connectWithProjectVerify(
         fromViewController viewController: UIViewController,
         completion: AuthorizationCompletion?) {
-        // NOTE: we're force casting above so this will never not be present (we'll have crashed) we should
-        // follow a secondary device flow in the future once we've cleaned this up:
-        guard let carrierConfig = sdkConfig.carrierConfig else {
-            fatalError("no carrier configuration found")
+
+        discoveryService.discoverConfig() { [weak self] (result) in
+            switch result {
+            case .knownMobileNetwork(let config):
+                self?.connectWithProjectVerify(
+                    usingConfig: config,
+                    fromViewController: viewController,
+                    completion: completion
+                )
+            case .unknownMobileNetwork:
+                // TODO: -
+                self?.showConsolation("sim not recognized during discovery", on: viewController)
+                break
+            case .noMobileNetwork:
+                // TODO: -
+                self?.showConsolation("no sim set up to use for discovery", on: viewController)
+                break
+            case .error(let error):
+                // TODO: -
+                self?.showConsolation("an error occurred during discovery \(error)", on: viewController)
+                break
+            }
         }
+    }
+}
+
+private extension AuthorizationService {
+    // TODO: Remove this, just for qa
+    func showConsolation(_ text: String, on viewController: UIViewController) {
+        let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)
+        controller.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
+        viewController.present(controller, animated: true, completion: nil)
+    }
+
+    func connectWithProjectVerify(
+        usingConfig carrierConfig: CarrierConfig,
+        fromViewController viewController: UIViewController,
+        completion: AuthorizationCompletion?) {
 
         // TODO: enforce carrier configuration integrity upstream so we don't need to fabricate all this inline.
         guard
-            let authorizationUrlString: String = carrierConfig["authorization_endpoint"] as? String,
-            let tokenUrlString: String = carrierConfig["token_endpoint"] as? String,
+            let authorizationUrlString: String = carrierConfig.openIdConfig["authorization_endpoint"],
+            let tokenUrlString: String = carrierConfig.openIdConfig["token_endpoint"],
             let authorizationURL: URL = URL(string: authorizationUrlString),
             let tokenURL: URL = URL(string: tokenUrlString) else {
                 fatalError("no carrier configuration found")
         }
+
+        // TODO: remove all the force unwrapping here once we have a clear picture of failure states:
+        // TODO: typed scopes
+        // TODO: permit client to request scopes and omit scopes which are unsupported
+        let carrierScopes = (carrierConfig.openIdConfig["scopes_supported"]!).components(separatedBy: " ")
+        // TODO: should this ever not just be code?
+        let carrierResponseType = carrierConfig.openIdConfig["response_types_supported"]!
+
 
         self.openidconfiguration = OIDServiceConfiguration(
             authorizationEndpoint: authorizationURL,
@@ -69,8 +102,9 @@ public class AuthorizationService {
 
         //create the authorization request
         guard let authorizationRequest: OIDAuthorizationRequest = self.createAuthorizationRequest(
-            scopes: scopes,
-            responseType: responseTypes) else {
+            usingConfig: carrierConfig,
+            scopes: carrierScopes,
+            responseType: [carrierResponseType]) else {
                 // TODO: sample code force unwraps this, handle more gracefully
                 fatalError("unable to create authorization request")
         }
@@ -85,7 +119,9 @@ public class AuthorizationService {
         ) { success in
             if success {
                 print("This url can be opened in an app. Launching app...")
-                self.performCCIDAuthorization(request: authorizationRequest)
+                self.performCCIDAuthorization(
+                    usingConfig: carrierConfig,
+                    withRequest: authorizationRequest)
             }
             else {
                 print("Launching default safari controller process...")
@@ -98,12 +134,11 @@ public class AuthorizationService {
         }
     }
 
-    //this function will initialize the authorization request
-    func createAuthorizationRequest(scopes: [String], responseType: [String]) -> OIDAuthorizationRequest? {
-
-        // dead code connected to commented out code below?
-        //        //init extra params
-        //        let extraParams:[String:String] = [String:String]()
+    // this function will initialize the authorization request
+    func createAuthorizationRequest(
+        usingConfig carrierConfig: CarrierConfig,
+        scopes: [String],
+        responseType: [String]) -> OIDAuthorizationRequest? {
 
         let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
             configuration: self.openidconfiguration!,
@@ -112,31 +147,29 @@ public class AuthorizationService {
             scope: "openid email profile",
             redirectURL: sdkConfig.redirectURI,
             responseType: responseType[0],
-            state: "",
+            state: carrierConfig.carrier.shortName,
             nonce: nil,
             codeVerifier: nil,
             codeChallenge: nil,
             codeChallengeMethod: nil,
             additionalParameters: nil
         )
-        /*let request:OIDAuthorizationRequest =  OIDAuthorizationRequest(configuration: self.openidconfiguration!, clientId: self.clientId!, scopes: self.scopes, redirectURL: redirectUrl!, responseType: responseType[0], additionalParameters: extraParams as! [String : String])*/
-        request.setValue(sdkConfig.carrierName, forKeyPath: "state")
+
         return request
     }
 
-    //this function will initialize the authorization request via Project Verify
-    func performCCIDAuthorization(request: OIDAuthorizationRequest) {
+    // this function will initialize the authorization request via Project Verify
+    func performCCIDAuthorization(usingConfig carrierConfig: CarrierConfig,
+                                          withRequest request: OIDAuthorizationRequest) {
         //init app delegate and set the authorization flow
-
-        guard let carrierConfig = sdkConfig.carrierConfig else {
-            fatalError("TOOD: fix guarantee here")
-        }
 
         let redirectURI: URL = sdkConfig.redirectURI
         let clientId: String = sdkConfig.clientId
 
-        let url: String = carrierConfig["authorization_endpoint"] as! String
-        let scopes = carrierConfig["scopes_supported"] as! String
+        // TODO: guarnatee these upstream and remove force cast
+        let url: String = carrierConfig.openIdConfig["authorization_endpoint"]!
+        let scopes = carrierConfig.openIdConfig["scopes_supported"]!
+
         let consentUrlString = "\(url)?client_id=\(clientId.urlEncode())&response_type=code&redirect_uri=\(redirectURI.absoluteString.urlEncode())&scope=\(scopes.urlEncode())"
         print("Checking if " + consentUrlString + " is part of a universal link")
         let urlTransformation = OIDExternalUserAgentIOSCustomBrowser.urlTransformationSchemeConcatPrefix(consentUrlString)
@@ -165,11 +198,6 @@ public class AuthorizationService {
         fromViewController viewController: UIViewController,
         completion: AuthorizationCompletion?) {
         print("Making Authorization Request")
-
-        guard sdkConfig.carrierConfig != nil else {
-            fatalError("TOOD: fix guarantee here")
-        }
-
         authorizationStateManager.currentAuthorizationFlow = OIDAuthState.authState(
             byPresenting: request,
             presenting: viewController,

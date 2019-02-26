@@ -42,7 +42,7 @@ TODO: Add long description of the pod here.
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'CarriersSharedAPI/Tests/**/*.swift'
-#    test_spec.resources = 'CarriersSharedAPI/Tests/Resources/**/*'
+    # test_spec.resources = 'CarriersSharedAPI/Tests/Resources/**/*'
     test_spec.frameworks = 'XCTest'
   end
 end
