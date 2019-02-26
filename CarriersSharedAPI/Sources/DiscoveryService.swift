@@ -101,7 +101,37 @@ class DiscoveryService: DiscoveryServiceProtocol {
         }
     }
 
-    private func openIdConfig(forSIMInfo simInfo: SIMInfo,
+    // TODO: this data should be pulled from a cache and updated according to some schedule
+    private let discoveryData = [
+        "tmo": [
+            "scopes_supported": "openid email profile",
+            "response_types_supported": "code",
+            "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
+            "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
+            "authorization_endpoint": "https://account.t-mobile.com/oauth2/v1/auth",
+            "issuer": "https://ppd.account.t-mobile.com"
+        ],
+        "vzw": [
+            "scopes_supported": "openid email profile",
+            "response_types_supported": "code",
+            "userinfo_endpoint": "https://api.yourmobileid.com:22790/userinfo",
+            "token_endpoint": "https://auth.svcs.verizon.com:22790/vzconnect/token",
+            "authorization_endpoint": "https://auth.svcs.verizon.com:22790/vzconnect/authorize",
+            "issuer": "https://auth.svcs.verizon.com"
+        ],
+        "att": [
+            "scopes_supported": "email zipcode name phone",
+            "response_types_supported": "code",
+            "userinfo_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/userinfo",
+            "token_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/token",
+            "authorization_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize",
+            "issuer": "https://oidc.test.xlogin.att.com"
+        ]
+    ]
+}
+
+private extension DiscoveryService {
+    func openIdConfig(forSIMInfo simInfo: SIMInfo,
                               completion: @escaping (OpenIdResult) -> Void ) {
 
         // TODO: business rules about what takes precedence here
@@ -122,8 +152,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
         // last resort – go over the network again:
         performDiscovery(forSIMInfo: simInfo, completion: completion)
     }
-
-    private func recoverFromCache(carrier: Carrier,
+    func recoverFromCache(carrier: Carrier,
                                   allowStaleRecords: Bool = false) -> OpenIdConfig? {
 
         guard allowStaleRecords else {
@@ -133,7 +162,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
         return discoveryData[carrier.shortName]
     }
 
-    private func performDiscovery(forSIMInfo simInfo: SIMInfo,
+    func performDiscovery(forSIMInfo simInfo: SIMInfo,
                                   completion: ((OpenIdResult) -> Void)?) {
 
         let endpointString = discoveryEndpoint(forSIMInfo: simInfo)
@@ -177,39 +206,11 @@ class DiscoveryService: DiscoveryServiceProtocol {
         }
     }
 
-    private func discoveryEndpoint(forSIMInfo simInfo: SIMInfo) -> String {
+    func discoveryEndpoint(forSIMInfo simInfo: SIMInfo) -> String {
         return String(
             format: discoveryEndpointFormat,
             simInfo.identifiers.mcc,
             simInfo.identifiers.mnc
         )
     }
-
-    // TODO: this data should be pulled from a cache and updated according to some schedule
-    private let discoveryData = [
-        "tmo": [
-            "scopes_supported": "openid email profile",
-            "response_types_supported": "code",
-            "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
-            "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
-            "authorization_endpoint": "https://account.t-mobile.com/oauth2/v1/auth",
-            "issuer": "https://ppd.account.t-mobile.com"
-        ],
-        "vzw": [
-            "scopes_supported": "openid email profile",
-            "response_types_supported": "code",
-            "userinfo_endpoint": "https://api.yourmobileid.com:22790/userinfo",
-            "token_endpoint": "https://auth.svcs.verizon.com:22790/vzconnect/token",
-            "authorization_endpoint": "https://auth.svcs.verizon.com:22790/vzconnect/authorize",
-            "issuer": "https://auth.svcs.verizon.com"
-        ],
-        "att": [
-            "scopes_supported": "email zipcode name phone",
-            "response_types_supported": "code",
-            "userinfo_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/userinfo",
-            "token_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/token",
-            "authorization_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize",
-            "issuer": "https://oidc.test.xlogin.att.com"
-        ]
-    ]
 }
