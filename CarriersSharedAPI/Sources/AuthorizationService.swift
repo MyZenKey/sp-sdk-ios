@@ -58,7 +58,7 @@ public class AuthorizationService {
                 break
             case .error(let error):
                 // TODO: -
-                self?.showConsolation("an error occurred during discovery", on: viewController)
+                self?.showConsolation("an error occurred during discovery \(error)", on: viewController)
                 break
             }
         }
@@ -132,7 +132,7 @@ public class AuthorizationService {
         }
     }
 
-    //this function will initialize the authorization request
+    // this function will initialize the authorization request
     private func createAuthorizationRequest(
         usingConfig carrierConfig: CarrierConfig,
         scopes: [String],
@@ -161,7 +161,7 @@ public class AuthorizationService {
         return request
     }
 
-    //this function will initialize the authorization request via Project Verify
+    // this function will initialize the authorization request via Project Verify
     private func performCCIDAuthorization(usingConfig carrierConfig: CarrierConfig,
                                           withRequest request: OIDAuthorizationRequest) {
         //init app delegate and set the authorization flow

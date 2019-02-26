@@ -63,10 +63,6 @@ class DiscoveryService: DiscoveryServiceProtocol {
 //    IP – https://23.20.110.44
 //    FQDN – https://app.xcijv.com/ui
     private let discoveryEndpointFormat = "https://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
-    private var discoveryEndpoint: String? {
-        guard let sim = carrierInfoService.primarySIM else { return nil }
-        return String(format: discoveryEndpointFormat, sim.identifiers.mcc, sim.identifiers.mnc)
-    }
 
     private var configuration: OpenIdConfig?
 
@@ -82,7 +78,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
             return
         }
 
-        openIdConfig(forCarrier: sim.carrier) { [weak self] openIdConfig, error in
+        openIdConfig(forSIMInfo: sim) { [weak self] openIdConfig, error in
             guard error == nil else {
                 if let fallBackConfig = self?.recoverFromCache(carrier: sim.carrier,
                                                                allowStaleRecords: true) {
@@ -105,7 +101,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
         }
     }
 
-    private func openIdConfig(forCarrier carrier: Carrier,
+    private func openIdConfig(forSIMInfo simInfo: SIMInfo,
                               completion: @escaping (OpenIdConfig?, Error?) -> Void ) {
 
         // TODO: business rules about what takes precedence here
@@ -118,14 +114,14 @@ class DiscoveryService: DiscoveryServiceProtocol {
 
 
         // if not, check the hard coded values (future will be a more robust cache):
-        let cachedConfig = recoverFromCache(carrier: carrier)
+        let cachedConfig = recoverFromCache(carrier: simInfo.carrier)
         guard cachedConfig == nil else {
             completion(cachedConfig!, nil)
             return
         }
 
         // last resort – go over the network again:
-        performDiscovery(completion: completion)
+        performDiscovery(forSIMInfo: simInfo, completion: completion)
     }
 
     private func recoverFromCache(carrier: Carrier,
@@ -138,13 +134,12 @@ class DiscoveryService: DiscoveryServiceProtocol {
         return discoveryData[carrier.shortName.rawValue]
     }
 
-    //this function will perform a backup discovery
-    private func performDiscovery(completion: ((OpenIdConfig?, Error?) -> Void)?) {
+    private func performDiscovery(forSIMInfo simInfo: SIMInfo,
+                                  completion: ((OpenIdConfig?, Error?) -> Void)?) {
 
-        guard
-            let discoveryURLString = discoveryEndpoint,
-            let discoveryURL = URL(string: discoveryURLString) else {
-            return
+        let endpointString = discoveryEndpoint(forSIMInfo: simInfo)
+        guard let discoveryURL = URL(string: endpointString) else {
+            fatalError("disocvery endpoint is returning an invalid url: \(endpointString)")
         }
 
         print("Performing primary discovery lookup")
@@ -181,6 +176,14 @@ class DiscoveryService: DiscoveryServiceProtocol {
             self?.configuration = config
             completion?(config, nil)
         }
+    }
+
+    private func discoveryEndpoint(forSIMInfo simInfo: SIMInfo) -> String {
+        return String(
+            format: discoveryEndpointFormat,
+            simInfo.identifiers.mcc,
+            simInfo.identifiers.mnc
+        )
     }
 
     // TODO: this data should be pulled from a cache and updated according to some schedule
