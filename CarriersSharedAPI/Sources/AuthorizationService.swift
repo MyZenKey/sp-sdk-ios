@@ -50,15 +50,25 @@ public class AuthorizationService {
                 )
             case .unknownMobileNetwork:
                 // TODO: -
+                self?.showConsolation("sim not recognized during discovery", on: viewController)
                 break
             case .noMobileNetwork:
                 // TODO: -
+                self?.showConsolation("no sim set up to use for discovery", on: viewController)
                 break
             case .error(let error):
                 // TODO: -
+                self?.showConsolation("an error occurred during discovery", on: viewController)
                 break
             }
         }
+    }
+
+    // TODO: Remove this, just for qa
+    private func showConsolation(_ text: String, on viewController: UIViewController) {
+        let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)
+        controller.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
+        viewController.present(controller, animated: true, completion: nil)
     }
 
     private func connectWithProjectVerify(

@@ -16,11 +16,10 @@
 		23F88F38221F2B0E00A5F5D9 /* SIMInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F37221F2B0E00A5F5D9 /* SIMInfo.swift */; };
 		23F88F3C221F31B800A5F5D9 /* Carrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F3B221F31B800A5F5D9 /* Carrier.swift */; };
 		23F88F3E221F433900A5F5D9 /* MobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F3D221F433900A5F5D9 /* MobileNetworkInfoProvider.swift */; };
-		23F88F422220803500A5F5D9 /* CarrierInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F412220803500A5F5D9 /* CarrierInfoTests.swift */; };
 		23F88F44222080C800A5F5D9 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F43222080C800A5F5D9 /* DiscoveryService.swift */; };
-		23F88F46222089F200A5F5D9 /* CarrierInfoServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F45222089F100A5F5D9 /* CarrierInfoServiceTests.swift */; };
-		23F88F482220B83700A5F5D9 /* DiscoveryServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F472220B83700A5F5D9 /* DiscoveryServiceTests.swift */; };
-		23F88F4B2220C23600A5F5D9 /* SIMInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F4A2220C23600A5F5D9 /* SIMInfoTests.swift */; };
+		23F88F4D2224579900A5F5D9 /* CarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F4C2224579900A5F5D9 /* CarrierInfoService.swift */; };
+		23F88F542224738A00A5F5D9 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F532224738A00A5F5D9 /* NetworkService.swift */; };
+		23F88F5A22247E2E00A5F5D9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5922247E2E00A5F5D9 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,11 +36,16 @@
 		23F88F37221F2B0E00A5F5D9 /* SIMInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIMInfo.swift; sourceTree = "<group>"; };
 		23F88F3B221F31B800A5F5D9 /* Carrier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carrier.swift; sourceTree = "<group>"; };
 		23F88F3D221F433900A5F5D9 /* MobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
-		23F88F412220803500A5F5D9 /* CarrierInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarrierInfoTests.swift; sourceTree = "<group>"; };
+		23F88F412220803500A5F5D9 /* CarrierInfoServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarrierInfoServiceTests.swift; sourceTree = "<group>"; };
 		23F88F43222080C800A5F5D9 /* DiscoveryService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryService.swift; sourceTree = "<group>"; };
-		23F88F45222089F100A5F5D9 /* CarrierInfoServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarrierInfoServiceTests.swift; sourceTree = "<group>"; };
 		23F88F472220B83700A5F5D9 /* DiscoveryServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryServiceTests.swift; sourceTree = "<group>"; };
 		23F88F4A2220C23600A5F5D9 /* SIMInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIMInfoTests.swift; sourceTree = "<group>"; };
+		23F88F4C2224579900A5F5D9 /* CarrierInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarrierInfoService.swift; sourceTree = "<group>"; };
+		23F88F5122246EC100A5F5D9 /* DisocoveryConfigMockPayloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisocoveryConfigMockPayloads.swift; sourceTree = "<group>"; };
+		23F88F532224738A00A5F5D9 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		23F88F5522247A3500A5F5D9 /* MockNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
+		23F88F5722247A4600A5F5D9 /* MockMobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
+		23F88F5922247E2E00A5F5D9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +72,7 @@
 		233AF970220A44AD0023059C /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				23F88F45222089F100A5F5D9 /* CarrierInfoServiceTests.swift */,
+				23F88F4C2224579900A5F5D9 /* CarrierInfoService.swift */,
 				23F88F43222080C800A5F5D9 /* DiscoveryService.swift */,
 				231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */,
 				233AF956220A3B080023059C /* CarriersSharedAPI.h */,
@@ -79,6 +83,7 @@
 				23F88F37221F2B0E00A5F5D9 /* SIMInfo.swift */,
 				23F88F3B221F31B800A5F5D9 /* Carrier.swift */,
 				23F88F3D221F433900A5F5D9 /* MobileNetworkInfoProvider.swift */,
+				23F88F532224738A00A5F5D9 /* NetworkService.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -86,13 +91,25 @@
 		23B5250E22153AAA002124D4 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				23F88F5022246EA500A5F5D9 /* Mocks */,
 				23B52505221539E5002124D4 /* CarriersSharedAPITests.swift */,
 				23B52507221539E5002124D4 /* Info.plist */,
-				23F88F412220803500A5F5D9 /* CarrierInfoTests.swift */,
+				23F88F412220803500A5F5D9 /* CarrierInfoServiceTests.swift */,
 				23F88F472220B83700A5F5D9 /* DiscoveryServiceTests.swift */,
 				23F88F4A2220C23600A5F5D9 /* SIMInfoTests.swift */,
+				23F88F5922247E2E00A5F5D9 /* Constants.swift */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		23F88F5022246EA500A5F5D9 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				23F88F5122246EC100A5F5D9 /* DisocoveryConfigMockPayloads.swift */,
+				23F88F5522247A3500A5F5D9 /* MockNetworkService.swift */,
+				23F88F5722247A4600A5F5D9 /* MockMobileNetworkInfoProvider.swift */,
+			);
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 		56BCE47A2203755D00196A17 = {
@@ -196,16 +213,15 @@
 				23F88F38221F2B0E00A5F5D9 /* SIMInfo.swift in Sources */,
 				23F88F3E221F433900A5F5D9 /* MobileNetworkInfoProvider.swift in Sources */,
 				233AF96D220A3B750023059C /* JsonDocument.swift in Sources */,
+				23F88F4D2224579900A5F5D9 /* CarrierInfoService.swift in Sources */,
 				231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */,
 				23F88F3C221F31B800A5F5D9 /* Carrier.swift in Sources */,
-				23F88F422220803500A5F5D9 /* CarrierInfoTests.swift in Sources */,
-				23F88F482220B83700A5F5D9 /* DiscoveryServiceTests.swift in Sources */,
 				23F88F44222080C800A5F5D9 /* DiscoveryService.swift in Sources */,
+				23F88F542224738A00A5F5D9 /* NetworkService.swift in Sources */,
 				231FFB9C221C6DE500E2B1BA /* SDKConfig.swift in Sources */,
 				23B524ED22152129002124D4 /* ProjectVerifyAppDelegate.swift in Sources */,
 				231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */,
-				23F88F4B2220C23600A5F5D9 /* SIMInfoTests.swift in Sources */,
-				23F88F46222089F200A5F5D9 /* CarrierInfoServiceTests.swift in Sources */,
+				23F88F5A22247E2E00A5F5D9 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

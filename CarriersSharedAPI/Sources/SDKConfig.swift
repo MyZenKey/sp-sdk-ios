@@ -31,6 +31,7 @@ class SDKConfig {
     // for up-to-date requests:
 
     private(set) lazy var discoveryService: DiscoveryServiceProtocol = DiscoveryService(
+        networkService: NetworkService(),
         carrierInfoService: carrierInfoService
     )
 

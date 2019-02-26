@@ -24,12 +24,44 @@ enum DiscoveryServiceResult {
     case error(Error)
 }
 
+extension DiscoveryServiceResult {
+    var carrierConfig: CarrierConfig? {
+        switch self {
+        case .knownMobileNetwork(let config):
+            return config
+        default:
+            return nil
+        }
+    }
+
+    var errorValue: Error? {
+        switch self {
+        case .error(let error):
+            return error
+        default:
+            return nil
+        }
+    }
+}
+
+struct DiscoveryEndpointError: Error {
+    let errorString: String
+}
+
 protocol DiscoveryServiceProtocol {
     func discoverConfig(completion: @escaping (DiscoveryServiceResult) -> Void)
 }
 
 class DiscoveryService: DiscoveryServiceProtocol {
     private let carrierInfoService: CarrierInfoServiceProtocol
+    private let networkService: NetworkServiceProtocol
+
+//    Issuer –
+//    IP - https://100.25.175.177/.well-known/openid_configuration
+//    FQDN - https://app.xcijv.com/.well-known/openid_configuration
+//    UI –
+//    IP – https://23.20.110.44
+//    FQDN – https://app.xcijv.com/ui
     private let discoveryEndpointFormat = "https://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
     private var discoveryEndpoint: String? {
         guard let sim = carrierInfoService.primarySIM else { return nil }
@@ -38,7 +70,9 @@ class DiscoveryService: DiscoveryServiceProtocol {
 
     private var configuration: OpenIdConfig?
 
-    init(carrierInfoService: CarrierInfoServiceProtocol) {
+    init(networkService: NetworkServiceProtocol,
+         carrierInfoService: CarrierInfoServiceProtocol) {
+        self.networkService = networkService
         self.carrierInfoService = carrierInfoService
     }
 
@@ -48,9 +82,16 @@ class DiscoveryService: DiscoveryServiceProtocol {
             return
         }
 
-        openIdConfig(forCarrier: sim.carrier) { openIdConfig, error in
+        openIdConfig(forCarrier: sim.carrier) { [weak self] openIdConfig, error in
             guard error == nil else {
-                completion(.error(error!))
+                if let fallBackConfig = self?.recoverFromCache(carrier: sim.carrier,
+                                                               allowStaleRecords: true) {
+                    let config = CarrierConfig(carrier: sim.carrier,
+                                               openIdConfig: fallBackConfig)
+                    completion(.knownMobileNetwork(config))
+                } else {
+                    completion(.error(error!))
+                }
                 return
             }
 
@@ -58,7 +99,6 @@ class DiscoveryService: DiscoveryServiceProtocol {
                 completion(.unknownMobileNetwork)
                 return
             }
-
 
             let config = CarrierConfig(carrier: sim.carrier, openIdConfig: openIdConfig)
             completion(.knownMobileNetwork(config))
@@ -76,16 +116,26 @@ class DiscoveryService: DiscoveryServiceProtocol {
             return
         }
 
+
         // if not, check the hard coded values (future will be a more robust cache):
-        let shortName = carrier.shortName.rawValue
-        guard discoveryData[shortName] == nil else {
-            completion(discoveryData[shortName], nil)
+        let cachedConfig = recoverFromCache(carrier: carrier)
+        guard cachedConfig == nil else {
+            completion(cachedConfig!, nil)
             return
         }
 
         // last resort – go over the network again:
-
         performDiscovery(completion: completion)
+    }
+
+    private func recoverFromCache(carrier: Carrier,
+                                  allowStaleRecords: Bool = false) -> OpenIdConfig? {
+
+        guard allowStaleRecords else {
+            return nil
+        }
+        // TODO: real caching service
+        return discoveryData[carrier.shortName.rawValue]
     }
 
     //this function will perform a backup discovery
@@ -100,22 +150,25 @@ class DiscoveryService: DiscoveryServiceProtocol {
         print("Performing primary discovery lookup")
         var request = URLRequest(url: discoveryURL)
         request.httpMethod = "GET"
-        let task = URLSession.shared.dataTask(with: request) { [weak self] (data, rawResponse, error) in
-            print("Discovery Information has returned")
 
-            guard let sself = self else { return }
+        networkService.requestJSON(request: request) { [weak self] jsonDocument, error in
             guard
                 error == nil,
-                let data = data,
-                let responseString = String(data: data, encoding:String.Encoding.utf8),
-                let json = responseString.data(using: String.Encoding.utf8) else {
-                sself.configuration = nil
+                let jsonDocument = jsonDocument else {
+                self?.configuration = nil
                 completion?(nil, error)
                 return
             }
 
-            print(responseString)
-            let jsonDocument:JsonDocument = JsonDocument(data: json)
+
+            // TODO: currently a query for unknown mcc/mnc returns an error. we may want to parse
+            // this out further in the case we want to follow the returned redirect, etc.
+            guard !jsonDocument["error"].exists else {
+                let errorString = jsonDocument["error"].toString!
+                completion?(nil, DiscoveryEndpointError(errorString: errorString))
+                return
+            }
+
             let config = [
                 "scopes_supported": "openid email profile",
                 "response_types_supported": "code",
@@ -125,12 +178,9 @@ class DiscoveryService: DiscoveryServiceProtocol {
                 "issuer": jsonDocument["issuer"].toString!
             ]
 
-            sself.configuration = config
-
+            self?.configuration = config
             completion?(config, nil)
-
         }
-        task.resume()
     }
 
     // TODO: this data should be pulled from a cache and updated according to some schedule

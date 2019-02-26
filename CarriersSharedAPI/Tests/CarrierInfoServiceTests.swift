@@ -7,22 +7,7 @@
 //
 
 import XCTest
-import CoreTelephony
 @testable import CarriersSharedAPI
-
-class MockMobileNetworkInfoProvider: MobileNetworkInfoProvider {
-    var onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?
-    var currentSIMs: [SIMInfo] = []
-
-    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?) {
-        self.onNetworkInfoDidUpdate = onNetworkInfoDidUpdate
-    }
-
-    func clear() {
-        currentSIMs = []
-        onNetworkInfoDidUpdate = nil
-    }
-}
 
 class CarriersInfoServiceTests: XCTestCase {
 
