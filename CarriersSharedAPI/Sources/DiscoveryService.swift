@@ -21,7 +21,7 @@ enum DiscoveryServiceResult {
     case knownMobileNetwork(CarrierConfig)
     case unknownMobileNetwork
     case noMobileNetwork
-    case error(Error)
+    case error(DiscoveryServiceError)
 }
 
 extension DiscoveryServiceResult {
@@ -34,7 +34,7 @@ extension DiscoveryServiceResult {
         }
     }
 
-    var errorValue: Error? {
+    var errorValue: DiscoveryServiceError? {
         switch self {
         case .error(let error):
             return error
@@ -44,8 +44,9 @@ extension DiscoveryServiceResult {
     }
 }
 
-struct DiscoveryEndpointError: Error {
-    let errorString: String
+enum DiscoveryServiceError: Error {
+    case issuerError(String)
+    case networkError(Error)
 }
 
 protocol DiscoveryServiceProtocol {
@@ -53,6 +54,9 @@ protocol DiscoveryServiceProtocol {
 }
 
 class DiscoveryService: DiscoveryServiceProtocol {
+
+    typealias OpenIdResult = Result<OpenIdConfig, DiscoveryServiceError>
+
     private let carrierInfoService: CarrierInfoServiceProtocol
     private let networkService: NetworkServiceProtocol
 
@@ -78,45 +82,40 @@ class DiscoveryService: DiscoveryServiceProtocol {
             return
         }
 
-        openIdConfig(forSIMInfo: sim) { [weak self] openIdConfig, error in
-            guard error == nil else {
+        openIdConfig(forSIMInfo: sim) { [weak self] result in
+
+            switch result {
+            case .error(let error):
                 if let fallBackConfig = self?.recoverFromCache(carrier: sim.carrier,
                                                                allowStaleRecords: true) {
                     let config = CarrierConfig(carrier: sim.carrier,
                                                openIdConfig: fallBackConfig)
                     completion(.knownMobileNetwork(config))
                 } else {
-                    completion(.error(error!))
+                    completion(.error(error))
                 }
-                return
+            case .value(let openIdConfig):
+                let config = CarrierConfig(carrier: sim.carrier, openIdConfig: openIdConfig)
+                completion(.knownMobileNetwork(config))
             }
-
-            guard let openIdConfig = openIdConfig else {
-                completion(.unknownMobileNetwork)
-                return
-            }
-
-            let config = CarrierConfig(carrier: sim.carrier, openIdConfig: openIdConfig)
-            completion(.knownMobileNetwork(config))
         }
     }
 
     private func openIdConfig(forSIMInfo simInfo: SIMInfo,
-                              completion: @escaping (OpenIdConfig?, Error?) -> Void ) {
+                              completion: @escaping (OpenIdResult) -> Void ) {
 
         // TODO: business rules about what takes precedence here
 
         // if we have a configuration locally, return that:
         guard configuration == nil else {
-            completion(configuration, nil)
+            completion(OpenIdResult.value(configuration!))
             return
         }
-
 
         // if not, check the hard coded values (future will be a more robust cache):
         let cachedConfig = recoverFromCache(carrier: simInfo.carrier)
         guard cachedConfig == nil else {
-            completion(cachedConfig!, nil)
+            completion(OpenIdResult.value(cachedConfig!))
             return
         }
 
@@ -131,11 +130,11 @@ class DiscoveryService: DiscoveryServiceProtocol {
             return nil
         }
         // TODO: real caching service
-        return discoveryData[carrier.shortName.rawValue]
+        return discoveryData[carrier.shortName]
     }
 
     private func performDiscovery(forSIMInfo simInfo: SIMInfo,
-                                  completion: ((OpenIdConfig?, Error?) -> Void)?) {
+                                  completion: ((OpenIdResult) -> Void)?) {
 
         let endpointString = discoveryEndpoint(forSIMInfo: simInfo)
         guard let discoveryURL = URL(string: endpointString) else {
@@ -151,7 +150,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
                 error == nil,
                 let jsonDocument = jsonDocument else {
                 self?.configuration = nil
-                completion?(nil, error)
+                completion?(OpenIdResult.error(DiscoveryServiceError.networkError(error!)))
                 return
             }
 
@@ -160,7 +159,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
             // this out further in the case we want to follow the returned redirect, etc.
             guard !jsonDocument["error"].exists else {
                 let errorString = jsonDocument["error"].toString!
-                completion?(nil, DiscoveryEndpointError(errorString: errorString))
+                completion?(OpenIdResult.error(DiscoveryServiceError.issuerError(errorString)))
                 return
             }
 
@@ -174,7 +173,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
             ]
 
             self?.configuration = config
-            completion?(config, nil)
+            completion?(OpenIdResult.value(config))
         }
     }
 

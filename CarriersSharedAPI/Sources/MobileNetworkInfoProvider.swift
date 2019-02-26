@@ -42,14 +42,14 @@ extension CTTelephonyNetworkInfo: MobileNetworkInfoProvider {
     }
 
     func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?) {
+        let notifer: () -> Void = { [weak self] in
+            onNetworkInfoDidUpdate?(self?.currentSIMs ?? [])
+        }
+
         if #available(iOS 12.0, *) {
-            serviceSubscriberCellularProvidersDidUpdateNotifier = { [weak self] _ in
-                onNetworkInfoDidUpdate?(self?.currentSIMs ?? [])
-            }
+            serviceSubscriberCellularProvidersDidUpdateNotifier = { _ in notifer() }
         } else {
-            subscriberCellularProviderDidUpdateNotifier = { [weak self] _ in
-                onNetworkInfoDidUpdate?(self?.currentSIMs ?? [])
-            }
+            subscriberCellularProviderDidUpdateNotifier = { _ in notifer() }
         }
     }
 }

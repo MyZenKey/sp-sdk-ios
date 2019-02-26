@@ -8,15 +8,7 @@
 
 import Foundation
 
-enum Carrier: Equatable {
-    enum ShortName: String {
-        case att = "att"
-        case tmobile = "tmo"
-        case verizon = "vzn"
-        case sprint = "spt"
-        case unknown
-    }
-
+enum Carrier: Equatable, CaseIterable {
     struct NetworkIdentifiers {
         private let mccToMNCMap: [String: [String]]
         init(_ mccToMNCMap: [String: [String]]) {
@@ -35,18 +27,13 @@ enum Carrier: Equatable {
 
     case att, tmobile, verizon, sprint, unknown
 
-    var shortName: ShortName {
+    var shortName: String {
         switch self {
-        case .att:
-            return ShortName.att
-        case .tmobile:
-            return ShortName.tmobile
-        case .verizon:
-            return ShortName.verizon
-        case .sprint:
-            return ShortName.sprint
-        case .unknown:
-            return ShortName.unknown
+        case .att: return "att"
+        case .tmobile: return "tmo"
+        case .verizon: return "vzn"
+        case .sprint: return "spt"
+        case .unknown: return "unknown"
         }
     }
 
@@ -59,8 +46,6 @@ enum Carrier: Equatable {
         case .unknown: return NetworkIdentifiers([:])
         }
     }
-
-    static let carriers: [Carrier] = [.att, .tmobile, .verizon, .sprint, .unknown]
 
     private static let attCodes = NetworkIdentifiers([
         "310": [

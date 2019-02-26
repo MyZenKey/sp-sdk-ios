@@ -30,7 +30,7 @@ struct SIMInfo: Equatable {
 
 private extension SIMInfo {
     static func carrier(fromIDPair identifiers: SIMInfo.IDPair) -> Carrier {
-        let carrier = Carrier.carriers.first() { carrier in
+        let carrier = Carrier.allCases.first() { carrier in
             carrier.networkIdentifiers.has(mcc: identifiers.mcc, mnc: identifiers.mnc)
         }
         return carrier ?? .unknown

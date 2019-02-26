@@ -33,10 +33,11 @@ class DiscoveryServiceTests: XCTestCase {
         mockCarrierInfo.primarySIM = nil
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
+            let assertionDescription = "config expected to return noMobileNetwork"
             if case .noMobileNetwork = result {
-                XCTAssertTrue(true)
+                XCTAssertTrue(true, assertionDescription)
             } else {
-                XCTAssertTrue(false)
+                XCTAssertTrue(false, assertionDescription)
             }
 
             expectation.fulfill()
@@ -78,7 +79,13 @@ class DiscoveryServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
             let resultingError = try! UnwrapAndAssertNotNil(result.errorValue)
-            XCTAssertEqual(error, resultingError as NSError)
+            let assertionDescription = "result expected to be networkError"
+            if case DiscoveryServiceError.networkError = resultingError {
+                XCTAssertTrue(true, assertionDescription)
+            } else {
+                XCTAssertTrue(false, assertionDescription)
+            }
+
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
@@ -116,7 +123,14 @@ class DiscoveryServiceTests: XCTestCase {
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.carrierNotFound)
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
-            XCTAssertTrue(result.errorValue is DiscoveryEndpointError)
+            let resultingError = try! UnwrapAndAssertNotNil(result.errorValue)
+            let assertionDescription = "result expected to be issuerError"
+            if case DiscoveryServiceError.issuerError = resultingError {
+                XCTAssertTrue(true, assertionDescription)
+            } else {
+                XCTAssertTrue(false, assertionDescription)
+            }
+
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)

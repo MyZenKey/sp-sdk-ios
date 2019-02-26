@@ -63,15 +63,17 @@ public class AuthorizationService {
             }
         }
     }
+}
 
+private extension AuthorizationService {
     // TODO: Remove this, just for qa
-    private func showConsolation(_ text: String, on viewController: UIViewController) {
+    func showConsolation(_ text: String, on viewController: UIViewController) {
         let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
         viewController.present(controller, animated: true, completion: nil)
     }
 
-    private func connectWithProjectVerify(
+    func connectWithProjectVerify(
         usingConfig carrierConfig: CarrierConfig,
         fromViewController viewController: UIViewController,
         completion: AuthorizationCompletion?) {
@@ -133,14 +135,10 @@ public class AuthorizationService {
     }
 
     // this function will initialize the authorization request
-    private func createAuthorizationRequest(
+    func createAuthorizationRequest(
         usingConfig carrierConfig: CarrierConfig,
         scopes: [String],
         responseType: [String]) -> OIDAuthorizationRequest? {
-
-        // dead code connected to commented out code below?
-        //        //init extra params
-        //        let extraParams:[String:String] = [String:String]()
 
         let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
             configuration: self.openidconfiguration!,
@@ -149,20 +147,19 @@ public class AuthorizationService {
             scope: "openid email profile",
             redirectURL: sdkConfig.redirectURI,
             responseType: responseType[0],
-            state: "",
+            state: carrierConfig.carrier.shortName,
             nonce: nil,
             codeVerifier: nil,
             codeChallenge: nil,
             codeChallengeMethod: nil,
             additionalParameters: nil
         )
-        /*let request:OIDAuthorizationRequest =  OIDAuthorizationRequest(configuration: self.openidconfiguration!, clientId: self.clientId!, scopes: self.scopes, redirectURL: redirectUrl!, responseType: responseType[0], additionalParameters: extraParams as! [String : String])*/
-        request.setValue(carrierConfig.carrier.shortName.rawValue, forKeyPath: "state")
+
         return request
     }
 
     // this function will initialize the authorization request via Project Verify
-    private func performCCIDAuthorization(usingConfig carrierConfig: CarrierConfig,
+    func performCCIDAuthorization(usingConfig carrierConfig: CarrierConfig,
                                           withRequest request: OIDAuthorizationRequest) {
         //init app delegate and set the authorization flow
 
@@ -196,7 +193,7 @@ public class AuthorizationService {
     }
 
     //this function will init the authstate object
-    private func performSafariAuthorization(
+    func performSafariAuthorization(
         request: OIDAuthorizationRequest,
         fromViewController viewController: UIViewController,
         completion: AuthorizationCompletion?) {
