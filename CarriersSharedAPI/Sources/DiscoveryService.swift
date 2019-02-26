@@ -152,6 +152,7 @@ private extension DiscoveryService {
         // last resort – go over the network again:
         performDiscovery(forSIMInfo: simInfo, completion: completion)
     }
+    
     func recoverFromCache(carrier: Carrier,
                                   allowStaleRecords: Bool = false) -> OpenIdConfig? {
 

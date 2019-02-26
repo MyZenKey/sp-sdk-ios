@@ -33,13 +33,10 @@ class DiscoveryServiceTests: XCTestCase {
         mockCarrierInfo.primarySIM = nil
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
-            let assertionDescription = "config expected to return noMobileNetwork"
-            if case .noMobileNetwork = result {
-                XCTAssertTrue(true, assertionDescription)
-            } else {
-                XCTAssertTrue(false, assertionDescription)
+            guard case .noMobileNetwork = result else {
+                XCTFail("config expected to return noMobileNetwork")
+                return
             }
-
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
@@ -79,11 +76,9 @@ class DiscoveryServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
             let resultingError = try! UnwrapAndAssertNotNil(result.errorValue)
-            let assertionDescription = "result expected to be networkError"
-            if case DiscoveryServiceError.networkError = resultingError {
-                XCTAssertTrue(true, assertionDescription)
-            } else {
-                XCTAssertTrue(false, assertionDescription)
+            guard case DiscoveryServiceError.networkError = resultingError else {
+                XCTFail("result expected to be networkError")
+                return
             }
 
             expectation.fulfill()
