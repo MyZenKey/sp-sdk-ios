@@ -21,7 +21,7 @@ public class AuthorizationService {
          openIdService: OpenIdServiceProtocol) {
         self.authorizationStateManager = authorizationStateManager
         self.sdkConfig = sdkConfig
-        self.discoveryService = sdkConfig.discoveryService
+        self.discoveryService = discoveryService
         self.openIdService = openIdService
     }
 
@@ -43,7 +43,7 @@ public class AuthorizationService {
                     authorizationEndpoint: URL(string: config.openIdConfig["authorization_endpoint"]!)!,
                     tokenEndpoint: URL(string: config.openIdConfig["token_endpoint"]!)!,
                     formattedScopes: scopes.networkFormattedScopes,
-                    redirectURL: sdkConfig.redirectURI,
+                    redirectURL: sdkConfig.redirectURL,
                     state: config.carrier.shortName
                 )
 
@@ -83,11 +83,12 @@ public extension AuthorizationService {
     convenience init() {
         // use AppDelegate as a dependency container until we have a clearer idea of what we want
         let appDelegate = ProjectVerifyAppDelegate.shared
+        let dependencies = appDelegate.dependencies
         self.init(
             authorizationStateManager: appDelegate,
             sdkConfig: appDelegate.sdkConfig,
-            discoveryService: appDelegate.sdkConfig.discoveryService,
-            openIdService: appDelegate.sdkConfig.openIdService
+            discoveryService: dependencies.discoveryService,
+            openIdService: dependencies.openIdService
         )
     }
 }

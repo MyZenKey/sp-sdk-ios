@@ -19,13 +19,15 @@ public class ProjectVerifyAppDelegate: AuthorizationStateManager {
 
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
-    let sdkConfig = SDKConfig()
+    let dependencies: DependenciesProtocol = Dependencies()
+
+    private(set) var sdkConfig = SDKConfig()
 
     public func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         // initialize sdk config
-        sdkConfig.loadFromBundle(bundle: Bundle.main)
+        self.sdkConfig = SDKConfigLoader.loadFromBundle(bundle: Bundle.main)
     }
 
     public func application(

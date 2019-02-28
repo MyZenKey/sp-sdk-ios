@@ -10,6 +10,8 @@
 		231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */; };
 		231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */; };
 		231FFB9C221C6DE500E2B1BA /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */; };
+		233A502F22287DD10089BA0D /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233A502E22287DD10089BA0D /* Dependencies.swift */; };
+		233A50312228831A0089BA0D /* MockCarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233A50302228831A0089BA0D /* MockCarrierInfoService.swift */; };
 		233AF964220A3B080023059C /* CarriersSharedAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 233AF956220A3B080023059C /* CarriersSharedAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233AF96D220A3B750023059C /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233AF96B220A3B750023059C /* JsonDocument.swift */; };
 		236AC636222714F200E7C900 /* AuthorizationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236AC635222714F100E7C900 /* AuthorizationServiceTests.swift */; };
@@ -32,6 +34,8 @@
 		231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryUrlQuery.swift; sourceTree = "<group>"; };
 		231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationService.swift; sourceTree = "<group>"; };
 		231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKConfig.swift; sourceTree = "<group>"; };
+		233A502E22287DD10089BA0D /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		233A50302228831A0089BA0D /* MockCarrierInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCarrierInfoService.swift; sourceTree = "<group>"; };
 		233AF954220A3B080023059C /* CarriersSharedAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CarriersSharedAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		233AF956220A3B080023059C /* CarriersSharedAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarriersSharedAPI.h; sourceTree = "<group>"; };
 		233AF957220A3B080023059C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -100,6 +104,7 @@
 				23F88F5F2226086600A5F5D9 /* Scope.swift */,
 				236AC637222720E600E7C900 /* OpenIdService.swift */,
 				2399F3F82227702A007D3613 /* Error.swift */,
+				233A502E22287DD10089BA0D /* Dependencies.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -126,6 +131,7 @@
 				23F88F5122246EC100A5F5D9 /* DisocoveryConfigMockPayloads.swift */,
 				23F88F5522247A3500A5F5D9 /* MockNetworkService.swift */,
 				23F88F5722247A4600A5F5D9 /* MockMobileNetworkInfoProvider.swift */,
+				233A50302228831A0089BA0D /* MockCarrierInfoService.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -228,6 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				233A502F22287DD10089BA0D /* Dependencies.swift in Sources */,
 				23F88F38221F2B0E00A5F5D9 /* SIMInfo.swift in Sources */,
 				23F88F5E2225AD6600A5F5D9 /* Result.swift in Sources */,
 				23F88F3E221F433900A5F5D9 /* MobileNetworkInfoProvider.swift in Sources */,
@@ -245,6 +252,7 @@
 				23F88F5A22247E2E00A5F5D9 /* Constants.swift in Sources */,
 				236AC638222720E600E7C900 /* OpenIdService.swift in Sources */,
 				2399F3F92227702A007D3613 /* Error.swift in Sources */,
+				233A50312228831A0089BA0D /* MockCarrierInfoService.swift in Sources */,
 				236AC636222714F200E7C900 /* AuthorizationServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
