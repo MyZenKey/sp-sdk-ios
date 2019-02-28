@@ -14,7 +14,12 @@ class ScopeTests: XCTestCase {
         return scopes
     }()
 
-    func testDeDupedSortedNetworkString() {
-        XCTAssertEqual(dupeScopes.networkFormattedScopes, "authorize match score")
+    func testDedupedSortedOpenIdScopeString() {
+        XCTAssertEqual(dupeScopes.toOpenIdScopes, "authorize match score")
+    }
+
+    func testPrependRequiredOpenIdScope() {
+        let formattedString = OpenIdScopes(requestedScopes: dupeScopes).networkFormattedString
+        XCTAssertEqual(formattedString, "openid authorize match score")
     }
 }

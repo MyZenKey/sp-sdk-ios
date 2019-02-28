@@ -29,14 +29,14 @@ class MockOpenIdService: OpenIdServiceProtocol {
         fromViewController viewController: UIViewController,
         stateManager: AuthorizationStateManager,
         authorizationConifg: OpenIdAuthorizationConfig,
-        completion: AuthorizationCompletion?) {
+        completion: @escaping AuthorizationCompletion) {
 
         self.lastViewController = viewController
         self.lastStateManager = stateManager
         self.lastConfig = authorizationConifg
 
         DispatchQueue.main.async {
-            completion?(self.mockResponse)
+            completion(self.mockResponse)
         }
     }
 }
@@ -110,7 +110,7 @@ class AuthorizationServiceTests: XCTestCase {
         authorizationService.connectWithProjectVerify(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
-                XCTAssertEqual(self.mockOpenIdService.lastConfig?.formattedScopes, "address email")
+                XCTAssertEqual(self.mockOpenIdService.lastConfig?.formattedScopes, "openid address email")
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)

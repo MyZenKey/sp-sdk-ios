@@ -16,6 +16,10 @@ public enum AuthorizationResult {
 
 public typealias AuthorizationCompletion = (AuthorizationResult) -> Void
 
+enum ResponseType: String {
+    case code = "code"
+}
+
 struct OpenIdAuthorizationConfig {
     let clientId: String
     let authorizationEndpoint: URL
@@ -25,12 +29,23 @@ struct OpenIdAuthorizationConfig {
     let state: String
 }
 
+private extension OpenIdAuthorizationConfig {
+    var consentURLString: String {
+        // NOTE: copy+past from sample code
+        // I'm not certain that this is correct...
+        // a) do we need this url tansformation? it seems to be for adding a custom scheme
+        // when we probably want to use universal links
+        // b) passing the authorization url to the app store link might make sense but I'm not sure
+        return "\(authorizationEndpoint)?client_id=\(clientId.urlEncode())&response_type=code&redirect_uri=\(redirectURL.absoluteString.urlEncode())&scope=\(formattedScopes.urlEncode())"
+    }
+}
+
 protocol OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
         stateManager: AuthorizationStateManager,
         authorizationConifg: OpenIdAuthorizationConfig,
-        completion: AuthorizationCompletion?
+        completion: @escaping AuthorizationCompletion
     )
 }
 
@@ -39,7 +54,7 @@ class OpenIdService: OpenIdServiceProtocol {
         fromViewController viewController: UIViewController,
         stateManager manager: AuthorizationStateManager,
         authorizationConifg: OpenIdAuthorizationConfig,
-        completion: AuthorizationCompletion?
+        completion: @escaping AuthorizationCompletion
         ) {
 
         let openIdConfiguration = OIDServiceConfiguration(
@@ -78,7 +93,6 @@ class OpenIdService: OpenIdServiceProtocol {
         }
     }
 
-    // this function will initialize the authorization request
     func createAuthorizationRequest(
         openIdServiceConfiguration: OIDServiceConfiguration,
         authorizationConifg: OpenIdAuthorizationConfig) -> OIDAuthorizationRequest {
@@ -89,7 +103,7 @@ class OpenIdService: OpenIdServiceProtocol {
             clientSecret: nil,
             scope: authorizationConifg.formattedScopes,
             redirectURL: authorizationConifg.redirectURL,
-            responseType: "code", // this will always be code for the client
+            responseType: ResponseType.code.rawValue,
             state: authorizationConifg.state,
             nonce: nil,
             codeVerifier: nil,
@@ -107,24 +121,14 @@ class OpenIdService: OpenIdServiceProtocol {
         manager: AuthorizationStateManager,
         authorizationConifg: OpenIdAuthorizationConfig ) {
 
-        let clientId = authorizationConifg.clientId
-        let authorizationEndpoint = authorizationConifg.authorizationEndpoint
-        let redirectURL = authorizationConifg.redirectURL
-        let formattedScopes = authorizationConifg.formattedScopes
-
-        // NOTE: copy+past from sample code
-        // I'm not certain that this is correct...
-        // a) do we need this url tansformation? it seems to be for adding a custom scheme
-        // when we probably want to use universal links
-        // b) passing the authorization url to the app store link might make sense but I'm not sure
-        let consentUrlString = "\(authorizationEndpoint)?client_id=\(clientId.urlEncode())&response_type=code&redirect_uri=\(redirectURL.absoluteString.urlEncode())&scope=\(formattedScopes.urlEncode())"
-        print("Checking if " + consentUrlString + " is part of a universal link")
-        let urlTransformation = OIDExternalUserAgentIOSCustomBrowser.urlTransformationSchemeConcatPrefix(consentUrlString)
-        let externalUserAgent: OIDExternalUserAgentIOSCustomBrowser = OIDExternalUserAgentIOSCustomBrowser(
+        let consentURLString = authorizationConifg.consentURLString
+        print("Checking if " + consentURLString + " is part of a universal link")
+        let urlTransformation = OIDExternalUserAgentIOSCustomBrowser.urlTransformationSchemeConcatPrefix(consentURLString)
+        let externalUserAgent = OIDExternalUserAgentIOSCustomBrowser(
             urlTransformation: urlTransformation,
             canOpenURLScheme: nil,
-            appStore: URL(string: consentUrlString)
-            )!
+            appStore: URL(string: consentURLString)
+        )!
 
         manager.currentAuthorizationFlow = OIDAuthState.authState(
             byPresenting: request,
@@ -143,7 +147,7 @@ class OpenIdService: OpenIdServiceProtocol {
         request: OIDAuthorizationRequest,
         manager: AuthorizationStateManager,
         fromViewController viewController: UIViewController,
-        completion: AuthorizationCompletion?) {
+        completion: @escaping AuthorizationCompletion) {
         manager.currentAuthorizationFlow = OIDAuthState.authState(
             byPresenting: request,
             presenting: viewController,
@@ -152,11 +156,11 @@ class OpenIdService: OpenIdServiceProtocol {
                     error == nil,
                     let authState = authState,
                     let authCode = authState.lastAuthorizationResponse.authorizationCode else {
-                    completion?(AuthorizationResult.error(error ?? UnknownError()))
+                    completion(AuthorizationResult.error(error ?? UnknownError()))
                     return
                 }
 
-                completion?(AuthorizationResult.code(authCode))
+                completion(AuthorizationResult.code(authCode))
         })
     }
 }

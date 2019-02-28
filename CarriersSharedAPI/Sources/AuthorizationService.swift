@@ -28,7 +28,7 @@ public class AuthorizationService {
     public func connectWithProjectVerify(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
-        completion: AuthorizationCompletion?) {
+        completion: @escaping AuthorizationCompletion) {
 
         let sdkConfig = self.sdkConfig
         let authorizationStateManager = self.authorizationStateManager
@@ -42,7 +42,7 @@ public class AuthorizationService {
                     // TODO: fix these forcing optionals here and strongly type upstream
                     authorizationEndpoint: URL(string: config.openIdConfig["authorization_endpoint"]!)!,
                     tokenEndpoint: URL(string: config.openIdConfig["token_endpoint"]!)!,
-                    formattedScopes: scopes.networkFormattedScopes,
+                    formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
                     redirectURL: sdkConfig.redirectURL,
                     state: config.carrier.shortName
                 )

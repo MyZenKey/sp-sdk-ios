@@ -87,23 +87,28 @@ class EnableVerifyViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     @objc func cancelVerify(_ sender: Any) {
         navigationController?.popToRootViewController(animated: true)
     }
     
     @objc func enableVerify(_ sender: Any) {
-        authService.connectWithProjectVerify(fromViewController: self) { result, error in
+        let scopes: [Scope] = [.profile, .email]
+        authService.connectWithProjectVerify(
+            scopes: scopes,
+            fromViewController: self) { result in
             // TODO: login + fetch user
             // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-            let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-            if let code = result?.code {
-                print("AuthZ_Code value from is: \(code)\n")
-                UserDefaults.standard.set(code,forKey: "AuthZCode")
-                appDelegate.launchHomeScreen()
-            } else {
-                appDelegate.launchLoginScreen()
-            }
+                let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+                switch result {
+                case .code(let code):
+                    print("AuthZ_Code value from is: \(code)\n")
+                    UserDefaults.standard.set(code,forKey: "AuthZCode")
+                    appDelegate.launchHomeScreen()
+
+                case .error:
+                    appDelegate.launchLoginScreen()
+                }
         }
     }
 
