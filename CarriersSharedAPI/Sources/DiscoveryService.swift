@@ -180,7 +180,9 @@ private extension DiscoveryService {
                 error == nil,
                 let jsonDocument = jsonDocument else {
                 self?.configuration = nil
-                completion?(OpenIdResult.error(DiscoveryServiceError.networkError(error!)))
+                completion?(
+                    OpenIdResult.error(DiscoveryServiceError.networkError(error ?? UnknownError()))
+                )
                 return
             }
 

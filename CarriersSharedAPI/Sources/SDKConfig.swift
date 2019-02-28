@@ -9,17 +9,23 @@
 import Foundation
 import CoreTelephony
 
+protocol SDKConfigProtocol {
+    var clientId: String { get }
+    var redirectURI: String { get }
+    var carrierInfoService: CarrierInfoServiceProtocol { get }
+    var discoveryService: DiscoveryServiceProtocol { get }
+    var openIdService: OpenIdServiceProtocol { get }
+}
+
 class SDKConfig {
     enum PlistKeys {
         static let ClientId = "ProjectVerifyClientId"
-        static let ClientSecret = "ProjectVerifyClientSecret"
     }
 
     // MARK: - static properties
     // these should be loaded at app launch and not be mutated for the lifetime of the application
-    public var isLoaded: Bool = false
+    public private(set) var isLoaded: Bool = false
     public private(set) var clientId: String!
-    public private(set) var clientSecret: String!
     private(set) var redirectURI: URL!
 
     private let carrierInfoService: CarrierInfoServiceProtocol = CarrierInfoService(
@@ -35,14 +41,15 @@ class SDKConfig {
         carrierInfoService: carrierInfoService
     )
 
+    let openIdService: OpenIdServiceProtocol = OpenIdService()
+
     func loadFromBundle(bundle: Bundle) {
         defer { isLoaded = true }
         guard
-            let clientId = bundle.object(forInfoDictionaryKey: PlistKeys.ClientId) as? String,
-            let clientSecret = bundle.object(forInfoDictionaryKey: PlistKeys.ClientSecret) as? String else {
+            let clientId = bundle.object(forInfoDictionaryKey: PlistKeys.ClientId) as? String else {
                 fatalError("""
-                    Please configure the following keys in your App's info plist:
-                    \(PlistKeys.ClientId), \(PlistKeys.ClientSecret)
+                    Please configure the following key in your App's info plist:
+                    \(PlistKeys.ClientId)
                     """)
         }
 
@@ -56,7 +63,6 @@ class SDKConfig {
         }
 
         self.clientId = clientId
-        self.clientSecret = clientSecret
         self.redirectURI = redirectURI
     }
 
