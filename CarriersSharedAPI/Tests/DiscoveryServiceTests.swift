@@ -9,10 +9,6 @@
 import XCTest
 @testable import CarriersSharedAPI
 
-class MockCarrierInfoService: CarrierInfoServiceProtocol {
-    var primarySIM: SIMInfo?
-}
-
 class DiscoveryServiceTests: XCTestCase {
 
     let mockNetworkService = MockNetworkService()

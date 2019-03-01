@@ -147,18 +147,22 @@ class CheckoutViewController: UIViewController {
     }
     
     @IBAction func onUseVerifyKeyAddressTapped(_ sender: Any) {
-        authService.connectWithProjectVerify(fromViewController: self) { result, error in
-            // TODO: login + fetch user
-            // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-            let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-            if let code = result?.code {
-                self.authzCode = code
-                print("AuthZ_Code value from is: \(code)\n")
-                UserDefaults.standard.set(code,forKey: "AuthZCode")
-                appDelegate.launchCheckOutScreen(code: code)
-            } else {
-                appDelegate.launchLoginScreen()
-            }
+        let scopes: [Scope] = [.profile, .email]
+        authService.connectWithProjectVerify(
+            scopes: scopes,
+            fromViewController: self) { result in
+                // TODO: login + fetch user
+                // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
+                let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+                switch result {
+                case .code(let code):
+                    self.authzCode = code
+                    print("AuthZ_Code value from is: \(code)\n")
+                    UserDefaults.standard.set(code,forKey: "AuthZCode")
+                    appDelegate.launchCheckOutScreen(code: code)
+                case .error:
+                    appDelegate.launchLoginScreen()
+                }
         }
     }
 

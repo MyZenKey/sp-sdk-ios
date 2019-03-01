@@ -135,22 +135,27 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
     /// Launches the Verify app.
     @objc func signInWithVerify() {
-        authService.connectWithProjectVerify(fromViewController: self) { result, error in
-            // TODO: login + fetch user
-            // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-            let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-            if let code = result?.code {
-                print("AuthZ_Code value from is: \(code)\n")
-                UserDefaults.standard.set(code,forKey: "AuthZCode")
+        let scopes: [Scope] = [.profile, .email]
+        authService.connectWithProjectVerify(
+            scopes: scopes,
+            fromViewController: self) { result in
+                // TODO: login + fetch user
+                // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
+                let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+                switch result {
+                case .code(let code):
+                    print("AuthZ_Code value from is: \(code)\n")
+                    UserDefaults.standard.set(code,forKey: "AuthZCode")
 
-                if(appDelegate.launchMapViewFlag){
-                    appDelegate.launchMapScreen(code: code)
-                }else{
-                    appDelegate.launchSignUpScreen(code: code)
+                    if(appDelegate.launchMapViewFlag){
+                        appDelegate.launchMapScreen(code: code)
+                    }else{
+                        appDelegate.launchSignUpScreen(code: code)
+                    }
+
+                case .error:
+                    appDelegate.launchLoginScreen()
                 }
-            } else {
-                appDelegate.launchLoginScreen()
-            }
         }
     }
         // TODO: reimplement this once we have a demo backend

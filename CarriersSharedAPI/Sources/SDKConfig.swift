@@ -7,42 +7,32 @@
 //
 
 import Foundation
-import CoreTelephony
 
-class SDKConfig {
-    enum PlistKeys {
+struct SDKConfig {
+    public private(set) var isLoaded: Bool = false
+    public private(set) var clientId: String!
+    private(set) var redirectURL: URL!
+
+    init() {}
+
+    init(clientId: String, redirectURL: URL) {
+        self.clientId = clientId
+        self.redirectURL = redirectURL
+        self.isLoaded = true
+    }
+}
+
+struct SDKConfigLoader {
+    private enum PlistKeys {
         static let ClientId = "ProjectVerifyClientId"
-        static let ClientSecret = "ProjectVerifyClientSecret"
     }
 
-    // MARK: - static properties
-    // these should be loaded at app launch and not be mutated for the lifetime of the application
-    public var isLoaded: Bool = false
-    public private(set) var clientId: String!
-    public private(set) var clientSecret: String!
-    private(set) var redirectURI: URL!
-
-    private let carrierInfoService: CarrierInfoServiceProtocol = CarrierInfoService(
-        mobileNetworkInfoProvder: CTTelephonyNetworkInfo()
-    )
-
-    // MARK: - dynamic properties
-    // these are volatile based on the sim state and network and should be fetched just in time
-    // for up-to-date requests:
-
-    private(set) lazy var discoveryService: DiscoveryServiceProtocol = DiscoveryService(
-        networkService: NetworkService(),
-        carrierInfoService: carrierInfoService
-    )
-
-    func loadFromBundle(bundle: Bundle) {
-        defer { isLoaded = true }
+    static func loadFromBundle(bundle: Bundle) -> SDKConfig {
         guard
-            let clientId = bundle.object(forInfoDictionaryKey: PlistKeys.ClientId) as? String,
-            let clientSecret = bundle.object(forInfoDictionaryKey: PlistKeys.ClientSecret) as? String else {
+            let clientId = bundle.object(forInfoDictionaryKey: PlistKeys.ClientId) as? String else {
                 fatalError("""
-                    Please configure the following keys in your App's info plist:
-                    \(PlistKeys.ClientId), \(PlistKeys.ClientSecret)
+                    Please configure the following key in your App's info plist:
+                    \(PlistKeys.ClientId)
                     """)
         }
 
@@ -50,23 +40,16 @@ class SDKConfig {
         // pull from plist here:
         guard
             // TODO: heuristic for finiding a "correct" url scheme
-            let redirectScheme = urlSchemesFromBundle(bundle: bundle).first,
-            let redirectURI = URL(string: "\(redirectScheme)://code") else {
+            let redirectScheme = SDKConfigLoader.urlSchemesFromBundle(bundle: bundle).first,
+            let redirectURL = URL(string: "\(redirectScheme)://code") else {
                 fatalError("Project Verify Please configure a corr")
         }
 
-        self.clientId = clientId
-        self.clientSecret = clientSecret
-        self.redirectURI = redirectURI
+
+        return SDKConfig(clientId: clientId, redirectURL: redirectURL)
     }
 
-    private func assertConfigHasLoaded() {
-        guard isLoaded else {
-            fatalError("attempting to access Project Verify SDK config before loading")
-        }
-    }
-
-    private func urlSchemesFromBundle(bundle: Bundle) -> [String] {
+    private static func urlSchemesFromBundle(bundle: Bundle) -> [String] {
         guard
             let urlTypes = bundle.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [[String: Any]] else {
                 return []
@@ -74,8 +57,8 @@ class SDKConfig {
         // extract schems from each url type and flatten them into a single array:
         return urlTypes.compactMap() { type in
             return type["CFBundleURLSchemes"] as? [String]
-        }.reduce(into: [String]()) { acc, cur in
-            acc.append(contentsOf: cur)
+            }.reduce(into: [String]()) { acc, cur in
+                acc.append(contentsOf: cur)
         }
     }
 }

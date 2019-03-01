@@ -11,6 +11,7 @@
 		05C7788C3AC8BF8D6420292613569F1E /* OIDExternalUserAgentIOSCustomBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = F7F25A19D63B48B2C8EA66C6A35DAABF /* OIDExternalUserAgentIOSCustomBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0690F48D6450A520440FD67B91854F46 /* AppAuth-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C4477A9AFB6378F9DAC2DC5A80C62736 /* AppAuth-dummy.m */; };
 		086EF13BDC042D991142EDB1A5EEC8B4 /* OIDServiceDiscovery.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F1EB8558056107D3C72B98E14FD9F3 /* OIDServiceDiscovery.m */; };
+		0A19D512AF74DEACC8275A665BCBC416 /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68350F7552FDAA26046EF1FB66BCE1F7 /* JsonDocument.swift */; };
 		0A1A3836E22274780B5E4215DDC8FD77 /* OIDScopeUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 80A96887886A635B0C674D42BA6DDC4B /* OIDScopeUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0A3C8FD101A92A51A6EED90588F83856 /* OIDAuthorizationService+IOS.h in Headers */ = {isa = PBXBuildFile; fileRef = CE00B0F15A0ADFE74DF0A78106C1A1A8 /* OIDAuthorizationService+IOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0CE87FBCED9E61EA08F4E6393E76DB3B /* OIDAuthStateChangeDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = B683380A42229C538E08D77493771D3B /* OIDAuthStateChangeDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -19,91 +20,97 @@
 		13219029A89D6F24B8D81D97D65EF544 /* OIDRegistrationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 73815E8672D0D8F1FCE460EA4BF74BFC /* OIDRegistrationRequest.m */; };
 		161E4386061E7C7A89A04E71C5CE836B /* OIDAuthorizationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F4E4298DA6FC3B177151AFD0612D4AC /* OIDAuthorizationResponse.m */; };
 		16666BD33AB61A068119C685B435957B /* OIDTokenUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DA8FB706F97CB2892A9F6CFCD5075A /* OIDTokenUtilities.m */; };
-		184B9175BBDE33F6BBC7F6DC69CEF93D /* DiscoveryServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078BDE5BC37F39A6413099BBE3690DBB /* DiscoveryServiceTests.swift */; };
-		1A414A3AEE02209B3ACA1209DAE1E84B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119A548C01DC07450BC7CDCF2D97692E /* UIKit.framework */; };
 		1AA7723225A3F13B32105FAE0F6E9ADC /* OIDRegistrationResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = CF13E90ADFE5972D89353AABE1E0B4E8 /* OIDRegistrationResponse.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1D640ADE86B0E91F7777EE26FCF9B792 /* CarriersSharedAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1AA25D4D603C74ED8DFA9C2CB2BAD7 /* CarriersSharedAPI.framework */; };
-		22913BBD3147856E7C12D8C1AA3F7584 /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981F2E61DC765C92E8E99931FAD0B7F7 /* JsonDocument.swift */; };
-		271A13B0F0D0BFDF30422732BDD7807E /* Carrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3889A88F8F4A5D0F4AA993AF5BB0F1BF /* Carrier.swift */; };
 		28F4A53611345ABAC048EA521813E04A /* OIDClientMetadataParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = F30BB37CE5F1D4913F1EFE5112D601C6 /* OIDClientMetadataParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		29354D605FB2028FB65BA4D33180250B /* DisocoveryConfigMockPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5E8368C59C5E5A9FF03C50D853FBE /* DisocoveryConfigMockPayloads.swift */; };
-		2985AE87547BE2EDE2E7D0B880131918 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240A344517C567DE122DE7845BFD0BED /* NetworkService.swift */; };
+		2CE7505FFB4E6DFABA6BD32373A5A285 /* SIMInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29240618285AC012C04D86CC1570DFA8 /* SIMInfo.swift */; };
 		2DD3B7F2D7686247CEB52B8B78E66D1E /* AppAuth.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E1E173D76DCEE537C2807E14311F6E9 /* AppAuth.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E2E62ADC4CD65619D04C3AC376F3EFE /* OIDServiceConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F1E2FE54E9F8581C6860E4695631BC /* OIDServiceConfiguration.m */; };
-		32E020CC08B85C5FAD8250C68A3D34F4 /* CarrierInfoServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF468045F465C70E26EE7AB520D55605 /* CarrierInfoServiceTests.swift */; };
+		306B00FEC39D252A41ED759FC71CB5BA /* DisocoveryConfigMockPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C399DE89BE5AB63A05A33DC3B22A509 /* DisocoveryConfigMockPayloads.swift */; };
 		3347E11B59A7585199797CFCBACA7685 /* OIDTokenResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 8976665F83165CED10E9E76D2A978ABB /* OIDTokenResponse.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		345B8DED47DF7B22BDBFF6F9EAA0FBBC /* OIDAuthorizationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F7978CD2131AE83B7115CCEB44522F /* OIDAuthorizationRequest.m */; };
 		371C66ACA7D6C55F2E31C7C75C2273A6 /* OIDError.h in Headers */ = {isa = PBXBuildFile; fileRef = B16D7A18F892E7BF3E45EF2B15BBADBD /* OIDError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		393928D4FE1F367E755BF2324F3267C2 /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB39554B8CC40F4CA3F63C65DA60C67 /* SDKConfig.swift */; };
 		3BAA9B7356CAD1734DF234B84EA0AC87 /* OIDExternalUserAgentRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 89ED4AEA65A67915597E38B220EE9B88 /* OIDExternalUserAgentRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3C18C18275642254573CBF19E4555D1E /* MobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F8AE1FBE537F7B545FBF692AAC2E36 /* MobileNetworkInfoProvider.swift */; };
+		3E466C495907EE377786C917F59B5A74 /* ProjectVerifyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC45541C491152A4C38E6100F467FE40 /* ProjectVerifyAppDelegate.swift */; };
 		3F6FA0EED173B47E7096F21CB825A7E5 /* OIDTokenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD7FC127785EEFEDF66277C4C62908D /* OIDTokenRequest.m */; };
 		405F17C2E29BD754E50D0060E225BDAF /* OIDAuthorizationService.m in Sources */ = {isa = PBXBuildFile; fileRef = FFDF54C5AEE9166F8824417370DE97EF /* OIDAuthorizationService.m */; };
-		4673A3ACE9D8A7D717B0308B25FDDC58 /* MockMobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B1E8A0C57603AD4E118F56A8CA7FB2 /* MockMobileNetworkInfoProvider.swift */; };
+		47CA1A5FE90E59A1C2551D7175F35444 /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA104B5A193EDF7A084698DE308A292 /* AuthorizationService.swift */; };
 		47CACAA12D78280D307D21CE88DED5DE /* OIDServiceDiscovery.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BF7C0182B1E17DA27FFF1790B1D31F7 /* OIDServiceDiscovery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		487F21089E443C7755E72C94A4286393 /* OIDAuthorizationRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D99F3E5225351E70A8AD17A1FD149B9 /* OIDAuthorizationRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		493F2A1D270FDE4509358C8319DF40A9 /* OIDGrantTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 76ED6106894B26693D5D09283DB2E73A /* OIDGrantTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BF78576A332A6D8BE6492D9197D0AEA /* OIDFieldMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE041CB35A4590DB798D995355F9022 /* OIDFieldMapping.m */; };
+		50AC22933B67B03332832D7A3C47FE1E /* ScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5F0AD6858BECCB658003AFA0360C0 /* ScopeTests.swift */; };
 		51603B63D5A4A9FC626B668B6E387F3D /* Pods-SocialApp-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D7EFD19A357B6656391B2B19213893F8 /* Pods-SocialApp-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		565BE5F085A1CD62AC703D05213A5062 /* OIDExternalUserAgentIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 41A40175AC0C28F88E0B615B42BCC058 /* OIDExternalUserAgentIOS.m */; };
+		565C8BB2179CB717468CE89BB7943623 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C5BEF80D39687BDC25F68627C2EDA3 /* Constants.swift */; };
 		57A7AA3C74AF17F2EFC9E16E2DF8D299 /* OIDAuthState.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE186EB858249BA93F22586982F8BBB /* OIDAuthState.m */; };
 		5A57F5B2445C9D112B6549CB9AF57E56 /* OIDScopes.m in Sources */ = {isa = PBXBuildFile; fileRef = A11A00E41DEC411C320712055796AF4B /* OIDScopes.m */; };
 		5C3D61A157A95F14F0649352D71E78B0 /* OIDAuthState+IOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F14AF4BEED7AC89C219622E957284BF /* OIDAuthState+IOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5D79CB4A324C343B613BFDA7F1646092 /* CarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3998AF28278BA2EB0E043DFC704555C0 /* CarrierInfoService.swift */; };
+		602BB465B059863F978864DC758DE606 /* OpenIdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1089CA8E5BF74803E4F42BC7185FA5B3 /* OpenIdService.swift */; };
 		62375C512D7811B9224B873C38D6EA76 /* OIDDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = DC0044C8E5DE795B34ED9B67CB02DC4C /* OIDDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		652E2061BF4E69D7863E4202F950355F /* OIDAuthorizationResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 3325CBEFA2E9FC4BE3B39164B8B71A87 /* OIDAuthorizationResponse.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6B0B464B1B474C0BB1EC835F0D335FFF /* OIDScopeUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C95FD9D304E5AB860E6D45824D4FF08 /* OIDScopeUtilities.m */; };
-		6DAA9EEB01022C6BC0EE89D4B1A802EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E8B382FC6F011B5B50A5DCA6396B96 /* Foundation.framework */; };
-		71BA0D3D63CF000E943D9C73732938E8 /* CarriersSharedAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4734E2D541825900E3B9F8C5BB9587 /* CarriersSharedAPITests.swift */; };
-		73BF335AB3074BB719D7AE51D6907813 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBE7FF8EF76587D289D091F57EF62EB /* Constants.swift */; };
+		6EA9F7A9503E20330B5A3A71FBA8CC30 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9387BD4F2847B5E18F6A92B6A9A4925C /* AppAuth.framework */; };
 		75C838143CC87E184AD3B93C4EBD463F /* OIDTokenResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 93754D3CFEFE6304C3BFE33C4C830A3C /* OIDTokenResponse.m */; };
-		78C073880ACB0B9B15D5372CE31DFAC0 /* CarriersSharedAPI-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 684806419F8880C904D0976A426B7145 /* CarriersSharedAPI-dummy.m */; };
+		79962EF4281C15F4348242CA0481E6EE /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984747ED6B03E638C395932900F2864 /* NetworkService.swift */; };
+		7D8F14BC0B9825D0C2863E3A0A9C9E4C /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9751ED2071E28710FDD96A5BB0F9D44 /* XCTest.framework */; };
+		80F2C3AE60679D574F691D8AD716FD18 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DDC42BDCAB127EAC09C5C8215C13DB /* DiscoveryService.swift */; };
+		81A56C9BA0AC2092E4779F5BC7894571 /* MobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC4E3C870E21AE78F2D2701B9E66D0C /* MobileNetworkInfoProvider.swift */; };
 		82EEABBC9871308D93CAE9EE2F45D2F2 /* OIDTokenUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 62393C5930A44EF93EDDD84D0801E463 /* OIDTokenUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87B913E8E486DCA3689553678E47A038 /* OIDTokenRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = A90FB4293E8ADF134948C49182D5090E /* OIDTokenRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		883E4B26610ABF118A860B55C924E24C /* OIDURLQueryComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F649B6FA31DBB54D71D6E36D9CA104D /* OIDURLQueryComponent.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		88A0822C73E77C3B86A762B37388462C /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC250C2A3D8E73F6A633AF6F04FF8E7 /* DiscoveryService.swift */; };
-		8A6286F7115BD42FE29625BCBC651AAF /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6802D623AF00AEDF6774B49C9211B6A /* AuthorizationService.swift */; };
+		8B4C25604943B5CB3438A8F33116B1B4 /* MockCarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0EF5A659E5DBDAD9A4489820DEDDF7 /* MockCarrierInfoService.swift */; };
 		8B894E690A62AC5D01671EB9197AADB4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E8B382FC6F011B5B50A5DCA6396B96 /* Foundation.framework */; };
+		8BF14380C02C9CF333F51F5A64164957 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925118AE7002F2866021C502361ACC82 /* Error.swift */; };
+		8CC2B21725D382224E10FDD459A6D470 /* DictionaryUrlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B068F72CF62D9D4676B1F1F10E3CBD /* DictionaryUrlQuery.swift */; };
+		8F9D500FCBDA03D24A212CDB25FB866F /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B93E98361C82774FFFE662313A10A0 /* Scope.swift */; };
 		93F60834624870BFD7D6137060EC89CD /* OIDExternalUserAgentSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D71B41C0E383BE0EA8014D78052E832 /* OIDExternalUserAgentSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		955E01B496268CD6AF21D1C2F5F51F8E /* CarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E990D6E6C196AC6A6892AB31EE46D3 /* CarrierInfoService.swift */; };
 		968CB99F174C427E4AC63E513E4FFDD1 /* OIDClientMetadataParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = D1297FBDEAEFD6E4392DD76DEE63337A /* OIDClientMetadataParameters.m */; };
+		986AF8820D154FC4408EE5B8A08EF32C /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC7F5B8DB6099C06794BCA875DC492F /* Dependencies.swift */; };
+		989471ECA33E9BE7A5EF2EE1546DB9A8 /* CarriersSharedAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59456DC156996921E98C1FCE44A9D2CE /* CarriersSharedAPITests.swift */; };
 		9D0D900CD1B34295ADAE5D350B2952A1 /* OIDExternalUserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F212CC4E8E446F0FEA6B7067DA27052 /* OIDExternalUserAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A148F02B9B421FF60D9225C38DBD7534 /* ProjectVerifyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3125DBE6DAC2153FB28ED2F109FFCF60 /* ProjectVerifyAppDelegate.swift */; };
 		A2342BC8C81143F2E26FA4615792C05A /* AppAuth-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E4A2567C8F13FC28E1D8505EA8A62C9E /* AppAuth-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A4137F666AF2D6F0C9C003D4328D6455 /* OIDResponseTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 9496AEDBF6AC3B909A517FBB16FB0423 /* OIDResponseTypes.m */; };
 		A48D51851F4C687DD9967AE3D23DC50A /* OIDAuthStateErrorDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A272602669C98E10EEB9EDF114554C98 /* OIDAuthStateErrorDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA25E35E8888E914DDAFFF4FE91F9E45 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E8B382FC6F011B5B50A5DCA6396B96 /* Foundation.framework */; };
+		AA908EDDAA6BBE447CE9DBA28F8CEACE /* DiscoveryServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B675AF0F8C7EC56B7922F8FF513555B0 /* DiscoveryServiceTests.swift */; };
 		AB27DD67F05725029019CCAD51111912 /* Pods-SocialApp-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F6A51389A303FCB724C7535C423FA0 /* Pods-SocialApp-dummy.m */; };
 		AB3EEF5353F7EA969F9E69E9D35E606C /* OIDResponseTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = C1F46B9F0293EAB9E785528B68D87ACC /* OIDResponseTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ACCD6C9A56B3890E819AAB6453E2A8C9 /* CarriersSharedAPI-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 336AE74CBC0B9B926D793B87D3A26CCA /* CarriersSharedAPI-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD91F5DBF4BA1227275F5985D13C7AE3 /* OIDURLSessionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = D5E5A64CA240AA1712C2978C90D59F1A /* OIDURLSessionProvider.m */; };
-		B3308AFF7D1C71D68F96D2214905BE37 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119A548C01DC07450BC7CDCF2D97692E /* UIKit.framework */; };
+		AF9C1E6331904EA8561E77A086343BC8 /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6519312907E8FF24F02E333288CFBE /* MockNetworkService.swift */; };
+		B011DD9AE40E5C9D4FBFB73F317565BE /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6B1F8008C5AD4104B2391DA9F42BE2 /* Result.swift */; };
 		B81F83F3DD13CEF09F5A5C15796723B0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E8B382FC6F011B5B50A5DCA6396B96 /* Foundation.framework */; };
-		BF9C856F79CB48A39DB7682CC46FB4D4 /* SIMInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225BE504C694894D057D372FB011840E /* SIMInfoTests.swift */; };
+		B8F61910BB913DFB54D8937782E66A1B /* CarrierInfoServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1371D14A03887404D8385324E20EA45F /* CarrierInfoServiceTests.swift */; };
+		BAE9842098AB0821BB895F50C99425F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E8B382FC6F011B5B50A5DCA6396B96 /* Foundation.framework */; };
 		C02052B20446FF10EC5DA18767B5C922 /* OIDRegistrationRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 17990BACCAE8FF2A1CAC36C959891071 /* OIDRegistrationRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C2DE652C01BBFB79EB595474CA6FE4B2 /* OIDAuthorizationFlowSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DFB92D57462741C85F0D9D07F30C6AA /* OIDAuthorizationFlowSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C35AEA7541C53396D6ACB1CF548F3055 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9387BD4F2847B5E18F6A92B6A9A4925C /* AppAuth.framework */; };
 		C36ACCE7E93A8DA231ABBFB3CE0E939D /* OIDServiceConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 47AE3F9102027717014F5A35BF0C915B /* OIDServiceConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C5153C156D93A002B8FD2D05D2C77B31 /* AuthorizationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3BD5E539828E1D981674C3925FA0B2 /* AuthorizationServiceTests.swift */; };
 		C79EC1026BD5B4716710EC94967EBE8C /* OIDIDToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 6507C30F7B07537379DB65133E423940 /* OIDIDToken.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CD798C1AE1488FA46E94AAADBD390FE6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9751ED2071E28710FDD96A5BB0F9D44 /* XCTest.framework */; };
+		CFB0C3ED6F63572A5A53376FCD7946CC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119A548C01DC07450BC7CDCF2D97692E /* UIKit.framework */; };
 		D13AA636C50E30DB07A32849DC2E4800 /* OIDRegistrationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 39A8D0473C6B204EEF6E61101017AC9F /* OIDRegistrationResponse.m */; };
 		D3B83840BFE915E31FD4C21086BE42A6 /* OIDError.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C5972F45CD5B748A635BB6B80EF3A8C /* OIDError.m */; };
-		D67D30B9BE681C3D83D6A8E47B2DFC38 /* SIMInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCF18A8D44BE1B67634F9214D91A87B /* SIMInfo.swift */; };
-		D8E11C38D4D5FFCA207031A284D11817 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E8B382FC6F011B5B50A5DCA6396B96 /* Foundation.framework */; };
 		D906DCD39F9E2767B3F7BD5C7C928D71 /* OIDFieldMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 6508CD4B4473A39CD471A82735E0F6CC /* OIDFieldMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D90B948D7F405FF65C57670F32FC2A3B /* CarriersSharedAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = C9726945C2FBF5DEB63293CC1400B600 /* CarriersSharedAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9550892B5CB46E03EC3B25B3EF8A878 /* OIDExternalUserAgentIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A672049855B330250B8E2B765F85746 /* OIDExternalUserAgentIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D9B41BC652D69F859C25ED3826B027C7 /* DictionaryUrlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A8241B22ECF7DE4B4BFAD7072D29FF /* DictionaryUrlQuery.swift */; };
+		DE99BBF3668FB0A82A12281CFB7F10B3 /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B987A5FD4318F632A12A0525E836372 /* SDKConfig.swift */; };
 		DEAFF1853D77ED4511D9AD5BA83607FF /* OIDURLQueryComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9216ADF7BF2309E5636E9A905F65064C /* OIDURLQueryComponent.m */; };
+		DF0CA3361BCBDFF96F818B0C199F757A /* SIMInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5932F8AB951D787297C0D1C38616B861 /* SIMInfoTests.swift */; };
+		DF266B62CB620701EFAAA2A84A9C9ABA /* Carrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98CE4552D78AECA06AE77D6485B7E46 /* Carrier.swift */; };
 		E190D93D575C49D10E0C9F362937899C /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4E6360D158F7E07B79B88679168FA7F /* SafariServices.framework */; };
 		E28F05BE285C4BAB5BAF1A7EB8428EFF /* OIDErrorUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E43AA546EC35A869437950242A06291 /* OIDErrorUtilities.m */; };
 		E3AF68E6B354997A0FFEEE9E54BD8C94 /* OIDGrantTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F65DAB88AA86C5628B024285A29A74 /* OIDGrantTypes.m */; };
+		E4486890D56AB887A5E7DFD781052261 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119A548C01DC07450BC7CDCF2D97692E /* UIKit.framework */; };
 		E552494AC9E6C8393EF155F0479B1E69 /* OIDExternalUserAgentIOSCustomBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = A25EACD8B120C74E8F6934F109E04746 /* OIDExternalUserAgentIOSCustomBrowser.m */; };
-		E59CB0CE8AAF64E3BD4C95FAB3B2DFD4 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ED1CB41BC1A3C896CBE5F7CAD59756 /* Result.swift */; };
-		E6970927B3D5942D11100665C3FC5131 /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90208D1136FE0273F77181232FB8CCB8 /* MockNetworkService.swift */; };
+		E7FE7FC7CA2122ED968BF92C3C5ECE5C /* MockMobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB5D25B67AA0093C24E6304A9D2ED4A /* MockMobileNetworkInfoProvider.swift */; };
 		E95A0CCF21082322101CDFD4D13D3004 /* OIDIDToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 5050ECB7F6082C5F34C460DCA34BBA09 /* OIDIDToken.m */; };
 		ECD1B700ADB73A2C90B999CE11C9F613 /* OIDErrorUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = C53609CA2A42E4AAD44B4A13FB0FB6D0 /* OIDErrorUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EEC74B2B8922B3163DA23D763D48AD0A /* CarriersSharedAPI-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D9E84C40F4A8173C93CB9F09488E8820 /* CarriersSharedAPI-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F260D18D5F41EEE8D5731F0F24B1BB9B /* OIDAuthorizationService.h in Headers */ = {isa = PBXBuildFile; fileRef = 5567EC07D9CEC7FFE3634E0B07F22182 /* OIDAuthorizationService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F3CDD35697B5DAA764D6DD878CDF6A49 /* OIDAuthState+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 98BEC8C93DB7262BBE3F64772AA064AB /* OIDAuthState+IOS.m */; };
 		F466E13DF1A0F89FB1CDE3809B974BD1 /* OIDScopes.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CD5692375707D6DCA9B2D97863C2A5E /* OIDScopes.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FD72DFCDC4A953F43C60C58C149E7D09 /* CarriersSharedAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = D913D4BC95367FE11E3F6F55C65C2A9C /* CarriersSharedAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA002FFBB63EC043377278C7755433FF /* CarriersSharedAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E1AA25D4D603C74ED8DFA9C2CB2BAD7 /* CarriersSharedAPI.framework */; };
+		FA8E5DC51B7D6C9498FEB289F92EACAB /* CarriersSharedAPI-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C89AC2BBFB714F3947E34F2B4A290FB8 /* CarriersSharedAPI-dummy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,7 +118,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 685A3729FAF3F836F8257DC9F43B6885;
+			remoteGlobalIDString = C5DF62113B14C5E3011AB4675B1BD551;
 			remoteInfo = CarriersSharedAPI;
 		};
 		3300A2AF7C78AC78E3D8F70C4B4087EB /* PBXContainerItemProxy */ = {
@@ -121,148 +128,166 @@
 			remoteGlobalIDString = 5FF7802CFDAFAE32906201804E3522BE;
 			remoteInfo = AppAuth;
 		};
-		3CD5F47E995359B47056AC64058E0803 /* PBXContainerItemProxy */ = {
+		6755E157016A2C6421C97F787D6315A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C5DF62113B14C5E3011AB4675B1BD551;
+			remoteInfo = CarriersSharedAPI;
+		};
+		B2ADD76D49808EDD54E3DAF5AEBDAF77 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 5FF7802CFDAFAE32906201804E3522BE;
 			remoteInfo = AppAuth;
 		};
-		A60BBCA7BE98878318286BE7D70CA074 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 685A3729FAF3F836F8257DC9F43B6885;
-			remoteInfo = CarriersSharedAPI;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		03E8B382FC6F011B5B50A5DCA6396B96 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		05A953BB8EAE03D0BA8FA7F0713F4ADE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		078BDE5BC37F39A6413099BBE3690DBB /* DiscoveryServiceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiscoveryServiceTests.swift; path = CarriersSharedAPI/Tests/DiscoveryServiceTests.swift; sourceTree = "<group>"; };
 		07F1EB8558056107D3C72B98E14FD9F3 /* OIDServiceDiscovery.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDServiceDiscovery.m; path = Source/OIDServiceDiscovery.m; sourceTree = "<group>"; };
+		0A79E68B401B4009C7F20076895EDE62 /* CarriersSharedAPI-Unit-Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "CarriersSharedAPI-Unit-Tests-Info.plist"; sourceTree = "<group>"; };
 		0AD7FC127785EEFEDF66277C4C62908D /* OIDTokenRequest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDTokenRequest.m; path = Source/OIDTokenRequest.m; sourceTree = "<group>"; };
 		0C5972F45CD5B748A635BB6B80EF3A8C /* OIDError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDError.m; path = Source/OIDError.m; sourceTree = "<group>"; };
 		0C734649F7375DCBA65443885C12A59B /* Pods-SocialApp-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SocialApp-Info.plist"; sourceTree = "<group>"; };
 		0D8CF2A533D3CAF2C04EF1114B2EA788 /* CarriersSharedAPI-Unit-Tests */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "CarriersSharedAPI-Unit-Tests"; path = "CarriersSharedAPI-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1089CA8E5BF74803E4F42BC7185FA5B3 /* OpenIdService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OpenIdService.swift; path = CarriersSharedAPI/Sources/OpenIdService.swift; sourceTree = "<group>"; };
 		119A548C01DC07450BC7CDCF2D97692E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		1371D14A03887404D8385324E20EA45F /* CarrierInfoServiceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CarrierInfoServiceTests.swift; path = CarriersSharedAPI/Tests/CarrierInfoServiceTests.swift; sourceTree = "<group>"; };
 		15F65DAB88AA86C5628B024285A29A74 /* OIDGrantTypes.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDGrantTypes.m; path = Source/OIDGrantTypes.m; sourceTree = "<group>"; };
-		16B1E8A0C57603AD4E118F56A8CA7FB2 /* MockMobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockMobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
 		17990BACCAE8FF2A1CAC36C959891071 /* OIDRegistrationRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDRegistrationRequest.h; path = Source/OIDRegistrationRequest.h; sourceTree = "<group>"; };
 		1C95FD9D304E5AB860E6D45824D4FF08 /* OIDScopeUtilities.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDScopeUtilities.m; path = Source/OIDScopeUtilities.m; sourceTree = "<group>"; };
+		1CEE11A23CD7CC0B06DC8BD7A2CD5166 /* CarriersSharedAPI-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CarriersSharedAPI-prefix.pch"; sourceTree = "<group>"; };
+		1D3BD5E539828E1D981674C3925FA0B2 /* AuthorizationServiceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthorizationServiceTests.swift; path = CarriersSharedAPI/Tests/AuthorizationServiceTests.swift; sourceTree = "<group>"; };
 		1E43AA546EC35A869437950242A06291 /* OIDErrorUtilities.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDErrorUtilities.m; path = Source/OIDErrorUtilities.m; sourceTree = "<group>"; };
-		1E84C45FCD212FD084F65DE57CCDFEC2 /* CarriersSharedAPI-Unit-Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "CarriersSharedAPI-Unit-Tests-Info.plist"; sourceTree = "<group>"; };
 		1F212CC4E8E446F0FEA6B7067DA27052 /* OIDExternalUserAgent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDExternalUserAgent.h; path = Source/OIDExternalUserAgent.h; sourceTree = "<group>"; };
-		225BE504C694894D057D372FB011840E /* SIMInfoTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SIMInfoTests.swift; path = CarriersSharedAPI/Tests/SIMInfoTests.swift; sourceTree = "<group>"; };
-		240A344517C567DE122DE7845BFD0BED /* NetworkService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NetworkService.swift; path = CarriersSharedAPI/Sources/NetworkService.swift; sourceTree = "<group>"; };
 		248A21224473C51A39B0F33B247C3FF5 /* OIDAuthState.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDAuthState.h; path = Source/OIDAuthState.h; sourceTree = "<group>"; };
-		25255CCAC7720C3BEBE3CC41D7D6A807 /* CarriersSharedAPI.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = CarriersSharedAPI.modulemap; sourceTree = "<group>"; };
+		29240618285AC012C04D86CC1570DFA8 /* SIMInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SIMInfo.swift; path = CarriersSharedAPI/Sources/SIMInfo.swift; sourceTree = "<group>"; };
 		2994BA30A95ACADC25E44BF2F430D45A /* AppAuth.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = AppAuth.modulemap; sourceTree = "<group>"; };
 		2D99F3E5225351E70A8AD17A1FD149B9 /* OIDAuthorizationRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDAuthorizationRequest.h; path = Source/OIDAuthorizationRequest.h; sourceTree = "<group>"; };
-		3125DBE6DAC2153FB28ED2F109FFCF60 /* ProjectVerifyAppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProjectVerifyAppDelegate.swift; path = CarriersSharedAPI/Sources/ProjectVerifyAppDelegate.swift; sourceTree = "<group>"; };
 		31341E8501BA7438B7E03FDAFA55417D /* AppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = AppAuth.framework; path = AppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3325CBEFA2E9FC4BE3B39164B8B71A87 /* OIDAuthorizationResponse.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDAuthorizationResponse.h; path = Source/OIDAuthorizationResponse.h; sourceTree = "<group>"; };
-		3889A88F8F4A5D0F4AA993AF5BB0F1BF /* Carrier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Carrier.swift; path = CarriersSharedAPI/Sources/Carrier.swift; sourceTree = "<group>"; };
-		3998AF28278BA2EB0E043DFC704555C0 /* CarrierInfoService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CarrierInfoService.swift; path = CarriersSharedAPI/Sources/CarrierInfoService.swift; sourceTree = "<group>"; };
+		336AE74CBC0B9B926D793B87D3A26CCA /* CarriersSharedAPI-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CarriersSharedAPI-umbrella.h"; sourceTree = "<group>"; };
+		34091204B090A65C29A87A60E6A1A487 /* CarriersSharedAPI.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CarriersSharedAPI.xcconfig; sourceTree = "<group>"; };
 		39A8D0473C6B204EEF6E61101017AC9F /* OIDRegistrationResponse.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDRegistrationResponse.m; path = Source/OIDRegistrationResponse.m; sourceTree = "<group>"; };
 		3CB464C99DD3C25BBCEC737F2196ABBB /* AppAuth.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AppAuth.xcconfig; sourceTree = "<group>"; };
+		3DB5D25B67AA0093C24E6304A9D2ED4A /* MockMobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockMobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
 		3E1AA25D4D603C74ED8DFA9C2CB2BAD7 /* CarriersSharedAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CarriersSharedAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3FCF18A8D44BE1B67634F9214D91A87B /* SIMInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SIMInfo.swift; path = CarriersSharedAPI/Sources/SIMInfo.swift; sourceTree = "<group>"; };
 		41A40175AC0C28F88E0B615B42BCC058 /* OIDExternalUserAgentIOS.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDExternalUserAgentIOS.m; path = Source/iOS/OIDExternalUserAgentIOS.m; sourceTree = "<group>"; };
 		47AE3F9102027717014F5A35BF0C915B /* OIDServiceConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDServiceConfiguration.h; path = Source/OIDServiceConfiguration.h; sourceTree = "<group>"; };
 		4A672049855B330250B8E2B765F85746 /* OIDExternalUserAgentIOS.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDExternalUserAgentIOS.h; path = Source/iOS/OIDExternalUserAgentIOS.h; sourceTree = "<group>"; };
-		4AC250C2A3D8E73F6A633AF6F04FF8E7 /* DiscoveryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiscoveryService.swift; path = CarriersSharedAPI/Sources/DiscoveryService.swift; sourceTree = "<group>"; };
 		4AE041CB35A4590DB798D995355F9022 /* OIDFieldMapping.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDFieldMapping.m; path = Source/OIDFieldMapping.m; sourceTree = "<group>"; };
+		4C4B5848331DFC6A16B21FC65CE58FAF /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		4D9BF5A8DF3F6B67E63D28C9EF9FB5ED /* CarriersSharedAPI-Unit-Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "CarriersSharedAPI-Unit-Tests-frameworks.sh"; sourceTree = "<group>"; };
+		4EDEE1C2A7BB5742E7863942AADD9C2C /* CarriersSharedAPI.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = CarriersSharedAPI.modulemap; sourceTree = "<group>"; };
 		5050ECB7F6082C5F34C460DCA34BBA09 /* OIDIDToken.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDIDToken.m; path = Source/OIDIDToken.m; sourceTree = "<group>"; };
 		51B23F15784A6173BB3B7B8E996B79C4 /* Pods-SocialApp.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-SocialApp.modulemap"; sourceTree = "<group>"; };
+		52B068F72CF62D9D4676B1F1F10E3CBD /* DictionaryUrlQuery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DictionaryUrlQuery.swift; path = CarriersSharedAPI/Sources/DictionaryUrlQuery.swift; sourceTree = "<group>"; };
 		5567EC07D9CEC7FFE3634E0B07F22182 /* OIDAuthorizationService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDAuthorizationService.h; path = Source/OIDAuthorizationService.h; sourceTree = "<group>"; };
 		563E579939DF562DAC8E0B688D1941DE /* AppAuth-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "AppAuth-Info.plist"; sourceTree = "<group>"; };
+		5932F8AB951D787297C0D1C38616B861 /* SIMInfoTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SIMInfoTests.swift; path = CarriersSharedAPI/Tests/SIMInfoTests.swift; sourceTree = "<group>"; };
+		59456DC156996921E98C1FCE44A9D2CE /* CarriersSharedAPITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CarriersSharedAPITests.swift; path = CarriersSharedAPI/Tests/CarriersSharedAPITests.swift; sourceTree = "<group>"; };
 		59F6A51389A303FCB724C7535C423FA0 /* Pods-SocialApp-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SocialApp-dummy.m"; sourceTree = "<group>"; };
 		5DFB92D57462741C85F0D9D07F30C6AA /* OIDAuthorizationFlowSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDAuthorizationFlowSession.h; path = Source/OIDAuthorizationFlowSession.h; sourceTree = "<group>"; };
 		5E1E173D76DCEE537C2807E14311F6E9 /* AppAuth.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AppAuth.h; path = Source/AppAuth.h; sourceTree = "<group>"; };
 		5F14AF4BEED7AC89C219622E957284BF /* OIDAuthState+IOS.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "OIDAuthState+IOS.h"; path = "Source/iOS/OIDAuthState+IOS.h"; sourceTree = "<group>"; };
 		5F4E4298DA6FC3B177151AFD0612D4AC /* OIDAuthorizationResponse.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDAuthorizationResponse.m; path = Source/OIDAuthorizationResponse.m; sourceTree = "<group>"; };
+		5FB5F0AD6858BECCB658003AFA0360C0 /* ScopeTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ScopeTests.swift; path = CarriersSharedAPI/Tests/ScopeTests.swift; sourceTree = "<group>"; };
 		62393C5930A44EF93EDDD84D0801E463 /* OIDTokenUtilities.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDTokenUtilities.h; path = Source/OIDTokenUtilities.h; sourceTree = "<group>"; };
 		6507C30F7B07537379DB65133E423940 /* OIDIDToken.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDIDToken.h; path = Source/OIDIDToken.h; sourceTree = "<group>"; };
 		6508CD4B4473A39CD471A82735E0F6CC /* OIDFieldMapping.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDFieldMapping.h; path = Source/OIDFieldMapping.h; sourceTree = "<group>"; };
 		652AE7F6161C02CA7747356F393438A5 /* Pods-SocialApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SocialApp.debug.xcconfig"; sourceTree = "<group>"; };
-		684806419F8880C904D0976A426B7145 /* CarriersSharedAPI-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CarriersSharedAPI-dummy.m"; sourceTree = "<group>"; };
+		68350F7552FDAA26046EF1FB66BCE1F7 /* JsonDocument.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JsonDocument.swift; path = CarriersSharedAPI/Sources/JsonDocument.swift; sourceTree = "<group>"; };
+		6A0EF5A659E5DBDAD9A4489820DEDDF7 /* MockCarrierInfoService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockCarrierInfoService.swift; sourceTree = "<group>"; };
 		6F649B6FA31DBB54D71D6E36D9CA104D /* OIDURLQueryComponent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDURLQueryComponent.h; path = Source/OIDURLQueryComponent.h; sourceTree = "<group>"; };
-		70ED1CB41BC1A3C896CBE5F7CAD59756 /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = CarriersSharedAPI/Sources/Result.swift; sourceTree = "<group>"; };
-		72F107F3B77A09CAF176D988F49AB92F /* CarriersSharedAPI-Unit-Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "CarriersSharedAPI-Unit-Tests-resources.sh"; sourceTree = "<group>"; };
 		73815E8672D0D8F1FCE460EA4BF74BFC /* OIDRegistrationRequest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDRegistrationRequest.m; path = Source/OIDRegistrationRequest.m; sourceTree = "<group>"; };
 		76ED6106894B26693D5D09283DB2E73A /* OIDGrantTypes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDGrantTypes.h; path = Source/OIDGrantTypes.h; sourceTree = "<group>"; };
 		774C56BF2526E1DF58C5A03B06E9094F /* Pods-SocialApp.sprint.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SocialApp.sprint.xcconfig"; sourceTree = "<group>"; };
-		7AA5E8368C59C5E5A9FF03C50D853FBE /* DisocoveryConfigMockPayloads.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DisocoveryConfigMockPayloads.swift; sourceTree = "<group>"; };
 		7BF7C0182B1E17DA27FFF1790B1D31F7 /* OIDServiceDiscovery.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDServiceDiscovery.h; path = Source/OIDServiceDiscovery.h; sourceTree = "<group>"; };
 		7CD5692375707D6DCA9B2D97863C2A5E /* OIDScopes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDScopes.h; path = Source/OIDScopes.h; sourceTree = "<group>"; };
+		7E1B57E846F94FA8563EE092F28025CC /* CarriersSharedAPI-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "CarriersSharedAPI-Info.plist"; sourceTree = "<group>"; };
+		7F4808B6F74A27C80CF51C5B2A6B5E64 /* CarriersSharedAPI-Unit-Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "CarriersSharedAPI-Unit-Tests-resources.sh"; sourceTree = "<group>"; };
 		80A96887886A635B0C674D42BA6DDC4B /* OIDScopeUtilities.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDScopeUtilities.h; path = Source/OIDScopeUtilities.h; sourceTree = "<group>"; };
-		87D915814294BD4629AEF21AFCC0E874 /* CarriersSharedAPI-Unit-Tests-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CarriersSharedAPI-Unit-Tests-prefix.pch"; sourceTree = "<group>"; };
+		83883AD6DBC67F4F891936068CF7A1B4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		8976665F83165CED10E9E76D2A978ABB /* OIDTokenResponse.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDTokenResponse.h; path = Source/OIDTokenResponse.h; sourceTree = "<group>"; };
 		89ED4AEA65A67915597E38B220EE9B88 /* OIDExternalUserAgentRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDExternalUserAgentRequest.h; path = Source/OIDExternalUserAgentRequest.h; sourceTree = "<group>"; };
-		8A4734E2D541825900E3B9F8C5BB9587 /* CarriersSharedAPITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CarriersSharedAPITests.swift; path = CarriersSharedAPI/Tests/CarriersSharedAPITests.swift; sourceTree = "<group>"; };
-		8BB39554B8CC40F4CA3F63C65DA60C67 /* SDKConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SDKConfig.swift; path = CarriersSharedAPI/Sources/SDKConfig.swift; sourceTree = "<group>"; };
-		8D0D6BD502FB11A166B40336D3D8769C /* CarriersSharedAPI-Unit-Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "CarriersSharedAPI-Unit-Tests-frameworks.sh"; sourceTree = "<group>"; };
+		8B987A5FD4318F632A12A0525E836372 /* SDKConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SDKConfig.swift; path = CarriersSharedAPI/Sources/SDKConfig.swift; sourceTree = "<group>"; };
 		8D71B41C0E383BE0EA8014D78052E832 /* OIDExternalUserAgentSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDExternalUserAgentSession.h; path = Source/OIDExternalUserAgentSession.h; sourceTree = "<group>"; };
-		90208D1136FE0273F77181232FB8CCB8 /* MockNetworkService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
 		9216ADF7BF2309E5636E9A905F65064C /* OIDURLQueryComponent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDURLQueryComponent.m; path = Source/OIDURLQueryComponent.m; sourceTree = "<group>"; };
+		925118AE7002F2866021C502361ACC82 /* Error.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Error.swift; path = CarriersSharedAPI/Sources/Error.swift; sourceTree = "<group>"; };
 		93754D3CFEFE6304C3BFE33C4C830A3C /* OIDTokenResponse.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDTokenResponse.m; path = Source/OIDTokenResponse.m; sourceTree = "<group>"; };
 		9387BD4F2847B5E18F6A92B6A9A4925C /* AppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9496AEDBF6AC3B909A517FBB16FB0423 /* OIDResponseTypes.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDResponseTypes.m; path = Source/OIDResponseTypes.m; sourceTree = "<group>"; };
-		981F2E61DC765C92E8E99931FAD0B7F7 /* JsonDocument.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JsonDocument.swift; path = CarriersSharedAPI/Sources/JsonDocument.swift; sourceTree = "<group>"; };
 		98BEC8C93DB7262BBE3F64772AA064AB /* OIDAuthState+IOS.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "OIDAuthState+IOS.m"; path = "Source/iOS/OIDAuthState+IOS.m"; sourceTree = "<group>"; };
+		9984747ED6B03E638C395932900F2864 /* NetworkService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NetworkService.swift; path = CarriersSharedAPI/Sources/NetworkService.swift; sourceTree = "<group>"; };
+		9C399DE89BE5AB63A05A33DC3B22A509 /* DisocoveryConfigMockPayloads.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DisocoveryConfigMockPayloads.swift; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9F6F2300131220378B85225A62993F6D /* CarriersSharedAPI-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CarriersSharedAPI-prefix.pch"; sourceTree = "<group>"; };
 		A11A00E41DEC411C320712055796AF4B /* OIDScopes.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDScopes.m; path = Source/OIDScopes.m; sourceTree = "<group>"; };
 		A17E410A5929A36B29ACED0212CFBD4B /* OIDURLSessionProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDURLSessionProvider.h; path = Source/OIDURLSessionProvider.h; sourceTree = "<group>"; };
 		A25EACD8B120C74E8F6934F109E04746 /* OIDExternalUserAgentIOSCustomBrowser.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDExternalUserAgentIOSCustomBrowser.m; path = Source/iOS/OIDExternalUserAgentIOSCustomBrowser.m; sourceTree = "<group>"; };
 		A272602669C98E10EEB9EDF114554C98 /* OIDAuthStateErrorDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDAuthStateErrorDelegate.h; path = Source/OIDAuthStateErrorDelegate.h; sourceTree = "<group>"; };
 		A5ADB6E9D96278C58D749F4665B2EE0E /* Pods-SocialApp-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SocialApp-frameworks.sh"; sourceTree = "<group>"; };
+		A6E990D6E6C196AC6A6892AB31EE46D3 /* CarrierInfoService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CarrierInfoService.swift; path = CarriersSharedAPI/Sources/CarrierInfoService.swift; sourceTree = "<group>"; };
 		A90FB4293E8ADF134948C49182D5090E /* OIDTokenRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDTokenRequest.h; path = Source/OIDTokenRequest.h; sourceTree = "<group>"; };
 		AAE186EB858249BA93F22586982F8BBB /* OIDAuthState.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDAuthState.m; path = Source/OIDAuthState.m; sourceTree = "<group>"; };
 		B16D7A18F892E7BF3E45EF2B15BBADBD /* OIDError.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDError.h; path = Source/OIDError.h; sourceTree = "<group>"; };
-		B1F8AE1FBE537F7B545FBF692AAC2E36 /* MobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MobileNetworkInfoProvider.swift; path = CarriersSharedAPI/Sources/MobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
 		B4E6360D158F7E07B79B88679168FA7F /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/SafariServices.framework; sourceTree = DEVELOPER_DIR; };
+		B675AF0F8C7EC56B7922F8FF513555B0 /* DiscoveryServiceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiscoveryServiceTests.swift; path = CarriersSharedAPI/Tests/DiscoveryServiceTests.swift; sourceTree = "<group>"; };
 		B683380A42229C538E08D77493771D3B /* OIDAuthStateChangeDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDAuthStateChangeDelegate.h; path = Source/OIDAuthStateChangeDelegate.h; sourceTree = "<group>"; };
-		BBCC66F30AB4FFD0359AC072330E1B00 /* CarriersSharedAPI.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = CarriersSharedAPI.xcconfig; sourceTree = "<group>"; };
+		BCA104B5A193EDF7A084698DE308A292 /* AuthorizationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthorizationService.swift; path = CarriersSharedAPI/Sources/AuthorizationService.swift; sourceTree = "<group>"; };
+		BEC4E3C870E21AE78F2D2701B9E66D0C /* MobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MobileNetworkInfoProvider.swift; path = CarriersSharedAPI/Sources/MobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
+		C0B93E98361C82774FFFE662313A10A0 /* Scope.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Scope.swift; path = CarriersSharedAPI/Sources/Scope.swift; sourceTree = "<group>"; };
 		C1F46B9F0293EAB9E785528B68D87ACC /* OIDResponseTypes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDResponseTypes.h; path = Source/OIDResponseTypes.h; sourceTree = "<group>"; };
 		C4477A9AFB6378F9DAC2DC5A80C62736 /* AppAuth-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AppAuth-dummy.m"; sourceTree = "<group>"; };
 		C4F1E2FE54E9F8581C6860E4695631BC /* OIDServiceConfiguration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDServiceConfiguration.m; path = Source/OIDServiceConfiguration.m; sourceTree = "<group>"; };
 		C53609CA2A42E4AAD44B4A13FB0FB6D0 /* OIDErrorUtilities.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDErrorUtilities.h; path = Source/OIDErrorUtilities.h; sourceTree = "<group>"; };
 		C5DA8FB706F97CB2892A9F6CFCD5075A /* OIDTokenUtilities.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDTokenUtilities.m; path = Source/OIDTokenUtilities.m; sourceTree = "<group>"; };
-		CD7BC04BF1C9A6BF65EA7E38309800F8 /* CarriersSharedAPI-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "CarriersSharedAPI-Info.plist"; sourceTree = "<group>"; };
-		CDAACDE1B518B705AAD34597B431AF41 /* CarriersSharedAPI.unit-tests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "CarriersSharedAPI.unit-tests.xcconfig"; sourceTree = "<group>"; };
+		C89AC2BBFB714F3947E34F2B4A290FB8 /* CarriersSharedAPI-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CarriersSharedAPI-dummy.m"; sourceTree = "<group>"; };
+		C9726945C2FBF5DEB63293CC1400B600 /* CarriersSharedAPI.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CarriersSharedAPI.h; path = CarriersSharedAPI/Sources/CarriersSharedAPI.h; sourceTree = "<group>"; };
 		CE00B0F15A0ADFE74DF0A78106C1A1A8 /* OIDAuthorizationService+IOS.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "OIDAuthorizationService+IOS.h"; path = "Source/iOS/OIDAuthorizationService+IOS.h"; sourceTree = "<group>"; };
 		CF13E90ADFE5972D89353AABE1E0B4E8 /* OIDRegistrationResponse.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDRegistrationResponse.h; path = Source/OIDRegistrationResponse.h; sourceTree = "<group>"; };
 		D0269EA9090EC3CEAA419C1A59DFEB95 /* AppAuth-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AppAuth-prefix.pch"; sourceTree = "<group>"; };
-		D0C6CCE5099A0E9D8F0362A8DE4B0944 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		D1297FBDEAEFD6E4392DD76DEE63337A /* OIDClientMetadataParameters.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDClientMetadataParameters.m; path = Source/OIDClientMetadataParameters.m; sourceTree = "<group>"; };
 		D5CF37120D7CF16671484DC0B98DDAB3 /* Pods-SocialApp.develop.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SocialApp.develop.xcconfig"; sourceTree = "<group>"; };
 		D5E5A64CA240AA1712C2978C90D59F1A /* OIDURLSessionProvider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDURLSessionProvider.m; path = Source/OIDURLSessionProvider.m; sourceTree = "<group>"; };
-		D6802D623AF00AEDF6774B49C9211B6A /* AuthorizationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthorizationService.swift; path = CarriersSharedAPI/Sources/AuthorizationService.swift; sourceTree = "<group>"; };
 		D7EFD19A357B6656391B2B19213893F8 /* Pods-SocialApp-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SocialApp-umbrella.h"; sourceTree = "<group>"; };
-		D913D4BC95367FE11E3F6F55C65C2A9C /* CarriersSharedAPI.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CarriersSharedAPI.h; path = CarriersSharedAPI/Sources/CarriersSharedAPI.h; sourceTree = "<group>"; };
 		D93B8B0CA964ACAF85437E4834D548F5 /* Pods-SocialApp-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SocialApp-acknowledgements.plist"; sourceTree = "<group>"; };
 		D9808AB12BC4DA7808AAB3D9CBEE90DA /* Pods_SocialApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_SocialApp.framework; path = "Pods-SocialApp.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D9E84C40F4A8173C93CB9F09488E8820 /* CarriersSharedAPI-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CarriersSharedAPI-umbrella.h"; sourceTree = "<group>"; };
+		D98CE4552D78AECA06AE77D6485B7E46 /* Carrier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Carrier.swift; path = CarriersSharedAPI/Sources/Carrier.swift; sourceTree = "<group>"; };
 		DC0044C8E5DE795B34ED9B67CB02DC4C /* OIDDefines.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDDefines.h; path = Source/OIDDefines.h; sourceTree = "<group>"; };
-		DF468045F465C70E26EE7AB520D55605 /* CarrierInfoServiceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CarrierInfoServiceTests.swift; path = CarriersSharedAPI/Tests/CarrierInfoServiceTests.swift; sourceTree = "<group>"; };
+		DE6519312907E8FF24F02E333288CFBE /* MockNetworkService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
 		E4A2567C8F13FC28E1D8505EA8A62C9E /* AppAuth-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AppAuth-umbrella.h"; sourceTree = "<group>"; };
-		E4A8241B22ECF7DE4B4BFAD7072D29FF /* DictionaryUrlQuery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DictionaryUrlQuery.swift; path = CarriersSharedAPI/Sources/DictionaryUrlQuery.swift; sourceTree = "<group>"; };
+		E6F58C8E93EE738C26700FAF847618FE /* CarriersSharedAPI.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = CarriersSharedAPI.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		E8DDC42BDCAB127EAC09C5C8215C13DB /* DiscoveryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DiscoveryService.swift; path = CarriersSharedAPI/Sources/DiscoveryService.swift; sourceTree = "<group>"; };
 		E8F7978CD2131AE83B7115CCEB44522F /* OIDAuthorizationRequest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDAuthorizationRequest.m; path = Source/OIDAuthorizationRequest.m; sourceTree = "<group>"; };
 		E9751ED2071E28710FDD96A5BB0F9D44 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		EE24470D155CA04257B595961707A6EE /* CarriersSharedAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CarriersSharedAPI.framework; path = CarriersSharedAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EEBE7FF8EF76587D289D091F57EF62EB /* Constants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = CarriersSharedAPI/Tests/Constants.swift; sourceTree = "<group>"; };
+		EFC7F5B8DB6099C06794BCA875DC492F /* Dependencies.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Dependencies.swift; path = CarriersSharedAPI/Sources/Dependencies.swift; sourceTree = "<group>"; };
 		F30BB37CE5F1D4913F1EFE5112D601C6 /* OIDClientMetadataParameters.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDClientMetadataParameters.h; path = Source/OIDClientMetadataParameters.h; sourceTree = "<group>"; };
 		F7F25A19D63B48B2C8EA66C6A35DAABF /* OIDExternalUserAgentIOSCustomBrowser.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDExternalUserAgentIOSCustomBrowser.h; path = Source/iOS/OIDExternalUserAgentIOSCustomBrowser.h; sourceTree = "<group>"; };
-		FAD538252C269886480CB3B6BA8DD490 /* CarriersSharedAPI.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = CarriersSharedAPI.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		F89D67E6BC0ABD439B13EA6E52B03E52 /* CarriersSharedAPI-Unit-Tests-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "CarriersSharedAPI-Unit-Tests-prefix.pch"; sourceTree = "<group>"; };
+		F8C5BEF80D39687BDC25F68627C2EDA3 /* Constants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = CarriersSharedAPI/Tests/Constants.swift; sourceTree = "<group>"; };
 		FBC3317CE28C83A17D449C59DCD786CD /* Pods-SocialApp-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SocialApp-acknowledgements.markdown"; sourceTree = "<group>"; };
 		FBCE00BB33A30EE8C2F503AE7E037017 /* OIDAuthorizationService+IOS.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "OIDAuthorizationService+IOS.m"; path = "Source/iOS/OIDAuthorizationService+IOS.m"; sourceTree = "<group>"; };
+		FC45541C491152A4C38E6100F467FE40 /* ProjectVerifyAppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProjectVerifyAppDelegate.swift; path = CarriersSharedAPI/Sources/ProjectVerifyAppDelegate.swift; sourceTree = "<group>"; };
+		FD6B1F8008C5AD4104B2391DA9F42BE2 /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = CarriersSharedAPI/Sources/Result.swift; sourceTree = "<group>"; };
+		FF6EAE764E259A3F80D5369EE5F8C0E9 /* CarriersSharedAPI.unit-tests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "CarriersSharedAPI.unit-tests.xcconfig"; sourceTree = "<group>"; };
 		FFDF54C5AEE9166F8824417370DE97EF /* OIDAuthorizationService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDAuthorizationService.m; path = Source/OIDAuthorizationService.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		25EE2D9D3CFF172E0ABD3732811CB7C4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA002FFBB63EC043377278C7755433FF /* CarriersSharedAPI.framework in Frameworks */,
+				BAE9842098AB0821BB895F50C99425F2 /* Foundation.framework in Frameworks */,
+				CFB0C3ED6F63572A5A53376FCD7946CC /* UIKit.framework in Frameworks */,
+				7D8F14BC0B9825D0C2863E3A0A9C9E4C /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4113400F5394E008C25B34219E5DD8F6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -280,24 +305,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A7D96FF7D34D50AE90AAB0CCB81A23C6 /* Frameworks */ = {
+		8FC1169BA8485243E53D1F951729DF07 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C35AEA7541C53396D6ACB1CF548F3055 /* AppAuth.framework in Frameworks */,
-				D8E11C38D4D5FFCA207031A284D11817 /* Foundation.framework in Frameworks */,
-				1A414A3AEE02209B3ACA1209DAE1E84B /* UIKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D7366276649BA639DD0ED5972480B1B4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1D640ADE86B0E91F7777EE26FCF9B792 /* CarriersSharedAPI.framework in Frameworks */,
-				6DAA9EEB01022C6BC0EE89D4B1A802EE /* Foundation.framework in Frameworks */,
-				B3308AFF7D1C71D68F96D2214905BE37 /* UIKit.framework in Frameworks */,
-				CD798C1AE1488FA46E94AAADBD390FE6 /* XCTest.framework in Frameworks */,
+				6EA9F7A9503E20330B5A3A71FBA8CC30 /* AppAuth.framework in Frameworks */,
+				AA25E35E8888E914DDAFFF4FE91F9E45 /* Foundation.framework in Frameworks */,
+				E4486890D56AB887A5E7DFD781052261 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,14 +324,6 @@
 				FDF1173C3A50C3297092EDEAABA75C46 /* AppAuth */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		0C0CDB031E6FD4153976B1D55ABF8413 /* Development Pods */ = {
-			isa = PBXGroup;
-			children = (
-				FC76800218730A98FAE6459B9E04B931 /* CarriersSharedAPI */,
-			);
-			name = "Development Pods";
 			sourceTree = "<group>";
 		};
 		28D9C6D9D7FA7C56C9092ABEDF336181 /* iOS */ = {
@@ -342,23 +348,40 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		55BC63309288E33AE8E4389ADB33586D /* Support Files */ = {
+		4DBBB9DC90C31726C0C5ED81FE150414 /* CarriersSharedAPI */ = {
 			isa = PBXGroup;
 			children = (
-				25255CCAC7720C3BEBE3CC41D7D6A807 /* CarriersSharedAPI.modulemap */,
-				BBCC66F30AB4FFD0359AC072330E1B00 /* CarriersSharedAPI.xcconfig */,
-				684806419F8880C904D0976A426B7145 /* CarriersSharedAPI-dummy.m */,
-				CD7BC04BF1C9A6BF65EA7E38309800F8 /* CarriersSharedAPI-Info.plist */,
-				9F6F2300131220378B85225A62993F6D /* CarriersSharedAPI-prefix.pch */,
-				D9E84C40F4A8173C93CB9F09488E8820 /* CarriersSharedAPI-umbrella.h */,
-				8D0D6BD502FB11A166B40336D3D8769C /* CarriersSharedAPI-Unit-Tests-frameworks.sh */,
-				1E84C45FCD212FD084F65DE57CCDFEC2 /* CarriersSharedAPI-Unit-Tests-Info.plist */,
-				87D915814294BD4629AEF21AFCC0E874 /* CarriersSharedAPI-Unit-Tests-prefix.pch */,
-				72F107F3B77A09CAF176D988F49AB92F /* CarriersSharedAPI-Unit-Tests-resources.sh */,
-				CDAACDE1B518B705AAD34597B431AF41 /* CarriersSharedAPI.unit-tests.xcconfig */,
+				BCA104B5A193EDF7A084698DE308A292 /* AuthorizationService.swift */,
+				D98CE4552D78AECA06AE77D6485B7E46 /* Carrier.swift */,
+				A6E990D6E6C196AC6A6892AB31EE46D3 /* CarrierInfoService.swift */,
+				C9726945C2FBF5DEB63293CC1400B600 /* CarriersSharedAPI.h */,
+				EFC7F5B8DB6099C06794BCA875DC492F /* Dependencies.swift */,
+				52B068F72CF62D9D4676B1F1F10E3CBD /* DictionaryUrlQuery.swift */,
+				E8DDC42BDCAB127EAC09C5C8215C13DB /* DiscoveryService.swift */,
+				925118AE7002F2866021C502361ACC82 /* Error.swift */,
+				68350F7552FDAA26046EF1FB66BCE1F7 /* JsonDocument.swift */,
+				BEC4E3C870E21AE78F2D2701B9E66D0C /* MobileNetworkInfoProvider.swift */,
+				9984747ED6B03E638C395932900F2864 /* NetworkService.swift */,
+				1089CA8E5BF74803E4F42BC7185FA5B3 /* OpenIdService.swift */,
+				FC45541C491152A4C38E6100F467FE40 /* ProjectVerifyAppDelegate.swift */,
+				FD6B1F8008C5AD4104B2391DA9F42BE2 /* Result.swift */,
+				C0B93E98361C82774FFFE662313A10A0 /* Scope.swift */,
+				8B987A5FD4318F632A12A0525E836372 /* SDKConfig.swift */,
+				29240618285AC012C04D86CC1570DFA8 /* SIMInfo.swift */,
+				BD12BEFB8334A393F342C517711F2B72 /* Pod */,
+				B704B9E535994D41953D824282C22E5B /* Support Files */,
+				AC7FE306E300541E984240A0C42DD76C /* Tests */,
 			);
-			name = "Support Files";
-			path = "Example/SocialApp/Pods/Target Support Files/CarriersSharedAPI";
+			name = CarriersSharedAPI;
+			path = ../../..;
+			sourceTree = "<group>";
+		};
+		4E93C547E959DDB64DB438D162234D98 /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4DBBB9DC90C31726C0C5ED81FE150414 /* CarriersSharedAPI */,
+			);
+			name = "Development Pods";
 			sourceTree = "<group>";
 		};
 		5C01DDA236A4D3A9BDC785562B989884 /* Targets Support Files */ = {
@@ -369,17 +392,16 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		7989F6AA8B4B2D7617E7B965DAF1474F /* Tests */ = {
+		707D613CC7FB161A2D1EDDC953575823 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
-				DF468045F465C70E26EE7AB520D55605 /* CarrierInfoServiceTests.swift */,
-				8A4734E2D541825900E3B9F8C5BB9587 /* CarriersSharedAPITests.swift */,
-				EEBE7FF8EF76587D289D091F57EF62EB /* Constants.swift */,
-				078BDE5BC37F39A6413099BBE3690DBB /* DiscoveryServiceTests.swift */,
-				225BE504C694894D057D372FB011840E /* SIMInfoTests.swift */,
-				8B1977A06FA1CF1010F3BB3B77DBA142 /* Mocks */,
+				9C399DE89BE5AB63A05A33DC3B22A509 /* DisocoveryConfigMockPayloads.swift */,
+				6A0EF5A659E5DBDAD9A4489820DEDDF7 /* MockCarrierInfoService.swift */,
+				3DB5D25B67AA0093C24E6304A9D2ED4A /* MockMobileNetworkInfoProvider.swift */,
+				DE6519312907E8FF24F02E333288CFBE /* MockNetworkService.swift */,
 			);
-			name = Tests;
+			name = Mocks;
+			path = CarriersSharedAPI/Tests/Mocks;
 			sourceTree = "<group>";
 		};
 		79C12B2FA11D6801BB234DF32136B9FF /* Support Files */ = {
@@ -396,17 +418,6 @@
 			path = "../Target Support Files/AppAuth";
 			sourceTree = "<group>";
 		};
-		8B1977A06FA1CF1010F3BB3B77DBA142 /* Mocks */ = {
-			isa = PBXGroup;
-			children = (
-				7AA5E8368C59C5E5A9FF03C50D853FBE /* DisocoveryConfigMockPayloads.swift */,
-				16B1E8A0C57603AD4E118F56A8CA7FB2 /* MockMobileNetworkInfoProvider.swift */,
-				90208D1136FE0273F77181232FB8CCB8 /* MockNetworkService.swift */,
-			);
-			name = Mocks;
-			path = CarriersSharedAPI/Tests/Mocks;
-			sourceTree = "<group>";
-		};
 		9C3CB831910DBC20735D302429EC8269 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -417,11 +428,55 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		AC7FE306E300541E984240A0C42DD76C /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				1D3BD5E539828E1D981674C3925FA0B2 /* AuthorizationServiceTests.swift */,
+				1371D14A03887404D8385324E20EA45F /* CarrierInfoServiceTests.swift */,
+				59456DC156996921E98C1FCE44A9D2CE /* CarriersSharedAPITests.swift */,
+				F8C5BEF80D39687BDC25F68627C2EDA3 /* Constants.swift */,
+				B675AF0F8C7EC56B7922F8FF513555B0 /* DiscoveryServiceTests.swift */,
+				5FB5F0AD6858BECCB658003AFA0360C0 /* ScopeTests.swift */,
+				5932F8AB951D787297C0D1C38616B861 /* SIMInfoTests.swift */,
+				707D613CC7FB161A2D1EDDC953575823 /* Mocks */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		B704B9E535994D41953D824282C22E5B /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				4EDEE1C2A7BB5742E7863942AADD9C2C /* CarriersSharedAPI.modulemap */,
+				34091204B090A65C29A87A60E6A1A487 /* CarriersSharedAPI.xcconfig */,
+				C89AC2BBFB714F3947E34F2B4A290FB8 /* CarriersSharedAPI-dummy.m */,
+				7E1B57E846F94FA8563EE092F28025CC /* CarriersSharedAPI-Info.plist */,
+				1CEE11A23CD7CC0B06DC8BD7A2CD5166 /* CarriersSharedAPI-prefix.pch */,
+				336AE74CBC0B9B926D793B87D3A26CCA /* CarriersSharedAPI-umbrella.h */,
+				4D9BF5A8DF3F6B67E63D28C9EF9FB5ED /* CarriersSharedAPI-Unit-Tests-frameworks.sh */,
+				0A79E68B401B4009C7F20076895EDE62 /* CarriersSharedAPI-Unit-Tests-Info.plist */,
+				F89D67E6BC0ABD439B13EA6E52B03E52 /* CarriersSharedAPI-Unit-Tests-prefix.pch */,
+				7F4808B6F74A27C80CF51C5B2A6B5E64 /* CarriersSharedAPI-Unit-Tests-resources.sh */,
+				FF6EAE764E259A3F80D5369EE5F8C0E9 /* CarriersSharedAPI.unit-tests.xcconfig */,
+			);
+			name = "Support Files";
+			path = "Example/SocialApp/Pods/Target Support Files/CarriersSharedAPI";
+			sourceTree = "<group>";
+		};
+		BD12BEFB8334A393F342C517711F2B72 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				E6F58C8E93EE738C26700FAF847618FE /* CarriersSharedAPI.podspec */,
+				4C4B5848331DFC6A16B21FC65CE58FAF /* LICENSE */,
+				83883AD6DBC67F4F891936068CF7A1B4 /* README.md */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
 		CF1408CF629C7361332E53B88F7BD30C = {
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
-				0C0CDB031E6FD4153976B1D55ABF8413 /* Development Pods */,
+				4E93C547E959DDB64DB438D162234D98 /* Development Pods */,
 				9C3CB831910DBC20735D302429EC8269 /* Frameworks */,
 				0484AE32406D14540A7317F8F7BEF4FA /* Pods */,
 				2E67621BD07D92C8B63E7B2EFAE9FD4D /* Products */,
@@ -445,30 +500,6 @@
 			);
 			name = "Pods-SocialApp";
 			path = "Target Support Files/Pods-SocialApp";
-			sourceTree = "<group>";
-		};
-		FC76800218730A98FAE6459B9E04B931 /* CarriersSharedAPI */ = {
-			isa = PBXGroup;
-			children = (
-				D6802D623AF00AEDF6774B49C9211B6A /* AuthorizationService.swift */,
-				3889A88F8F4A5D0F4AA993AF5BB0F1BF /* Carrier.swift */,
-				3998AF28278BA2EB0E043DFC704555C0 /* CarrierInfoService.swift */,
-				D913D4BC95367FE11E3F6F55C65C2A9C /* CarriersSharedAPI.h */,
-				E4A8241B22ECF7DE4B4BFAD7072D29FF /* DictionaryUrlQuery.swift */,
-				4AC250C2A3D8E73F6A633AF6F04FF8E7 /* DiscoveryService.swift */,
-				981F2E61DC765C92E8E99931FAD0B7F7 /* JsonDocument.swift */,
-				B1F8AE1FBE537F7B545FBF692AAC2E36 /* MobileNetworkInfoProvider.swift */,
-				240A344517C567DE122DE7845BFD0BED /* NetworkService.swift */,
-				3125DBE6DAC2153FB28ED2F109FFCF60 /* ProjectVerifyAppDelegate.swift */,
-				70ED1CB41BC1A3C896CBE5F7CAD59756 /* Result.swift */,
-				8BB39554B8CC40F4CA3F63C65DA60C67 /* SDKConfig.swift */,
-				3FCF18A8D44BE1B67634F9214D91A87B /* SIMInfo.swift */,
-				FF8676D4BFF58058EF45D2218642F06C /* Pod */,
-				55BC63309288E33AE8E4389ADB33586D /* Support Files */,
-				7989F6AA8B4B2D7617E7B965DAF1474F /* Tests */,
-			);
-			name = CarriersSharedAPI;
-			path = ../../..;
 			sourceTree = "<group>";
 		};
 		FDF1173C3A50C3297092EDEAABA75C46 /* AppAuth */ = {
@@ -540,19 +571,18 @@
 			path = AppAuth;
 			sourceTree = "<group>";
 		};
-		FF8676D4BFF58058EF45D2218642F06C /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				FAD538252C269886480CB3B6BA8DD490 /* CarriersSharedAPI.podspec */,
-				D0C6CCE5099A0E9D8F0362A8DE4B0944 /* LICENSE */,
-				05A953BB8EAE03D0BA8FA7F0713F4ADE /* README.md */,
-			);
-			name = Pod;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		0F4D031A1D7AF357635333960AC6D11B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ACCD6C9A56B3890E819AAB6453E2A8C9 /* CarriersSharedAPI-umbrella.h in Headers */,
+				D90B948D7F405FF65C57670F32FC2A3B /* CarriersSharedAPI.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5509DB00D890FB8C191AC71ACEB7868E /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -603,38 +633,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B2926FB15B786CC7C7901648900FBC09 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EEC74B2B8922B3163DA23D763D48AD0A /* CarriersSharedAPI-umbrella.h in Headers */,
-				FD72DFCDC4A953F43C60C58C149E7D09 /* CarriersSharedAPI.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		0EFD4A047E6EA0E912740B3F17BE874E /* CarriersSharedAPI-Unit-Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 05C14209D935D731780A237753858079 /* Build configuration list for PBXNativeTarget "CarriersSharedAPI-Unit-Tests" */;
-			buildPhases = (
-				CF58EAD84FBF8CAA960D4B6753029895 /* Sources */,
-				D7366276649BA639DD0ED5972480B1B4 /* Frameworks */,
-				4D4980AB51265A89E3F23A86D0363BD4 /* Resources */,
-				F989238CE72382667C4B594CDB8C8AB4 /* [CP] Embed Pods Frameworks */,
-				4A583BF4455B2DB152CED4EBAE3C732C /* [CP] Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4BB92811829A678098D6A1A84349CDE8 /* PBXTargetDependency */,
-			);
-			name = "CarriersSharedAPI-Unit-Tests";
-			productName = "CarriersSharedAPI-Unit-Tests";
-			productReference = 0D8CF2A533D3CAF2C04EF1114B2EA788 /* CarriersSharedAPI-Unit-Tests */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		5FF7802CFDAFAE32906201804E3522BE /* AppAuth */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A0FAB01DA1BE5AAD25518103211171DC /* Build configuration list for PBXNativeTarget "AppAuth" */;
@@ -653,24 +654,25 @@
 			productReference = 31341E8501BA7438B7E03FDAFA55417D /* AppAuth.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		685A3729FAF3F836F8257DC9F43B6885 /* CarriersSharedAPI */ = {
+		6FBA8F76CDF4D1DE01C57AC9BFDB294F /* CarriersSharedAPI-Unit-Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 082EEB663C4212DD7AEC591797BFEF3C /* Build configuration list for PBXNativeTarget "CarriersSharedAPI" */;
+			buildConfigurationList = C53B96EFE47BF51B9F184830F590C016 /* Build configuration list for PBXNativeTarget "CarriersSharedAPI-Unit-Tests" */;
 			buildPhases = (
-				B2926FB15B786CC7C7901648900FBC09 /* Headers */,
-				C341071785AFF75A69BFB43E4FFC024C /* Sources */,
-				A7D96FF7D34D50AE90AAB0CCB81A23C6 /* Frameworks */,
-				C7577976C0DE449AA6C2EEB8FD832DF0 /* Resources */,
+				2A195E8D626BD1B88575A54F8AEDB708 /* Sources */,
+				25EE2D9D3CFF172E0ABD3732811CB7C4 /* Frameworks */,
+				893E6B4AC66A3644809A67AFBFD73BE0 /* Resources */,
+				622909F608DC030662BA5F48781DA0F2 /* [CP] Embed Pods Frameworks */,
+				AD513B13358E3F67B05000C8B632FB91 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				D2C454D02CA6566FCD216899F883DD1B /* PBXTargetDependency */,
+				E73563D797A021823B1ACD7A8C17E05F /* PBXTargetDependency */,
 			);
-			name = CarriersSharedAPI;
-			productName = CarriersSharedAPI;
-			productReference = EE24470D155CA04257B595961707A6EE /* CarriersSharedAPI.framework */;
-			productType = "com.apple.product-type.framework";
+			name = "CarriersSharedAPI-Unit-Tests";
+			productName = "CarriersSharedAPI-Unit-Tests";
+			productReference = 0D8CF2A533D3CAF2C04EF1114B2EA788 /* CarriersSharedAPI-Unit-Tests */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		833D9F4B7F7F2F7B101316060A78C8F4 /* Pods-SocialApp */ = {
 			isa = PBXNativeTarget;
@@ -690,6 +692,25 @@
 			name = "Pods-SocialApp";
 			productName = "Pods-SocialApp";
 			productReference = D9808AB12BC4DA7808AAB3D9CBEE90DA /* Pods_SocialApp.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		C5DF62113B14C5E3011AB4675B1BD551 /* CarriersSharedAPI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8D94F32B6EB01D7E15185AF3B43F241 /* Build configuration list for PBXNativeTarget "CarriersSharedAPI" */;
+			buildPhases = (
+				0F4D031A1D7AF357635333960AC6D11B /* Headers */,
+				44779C9E8060C719BBA2EDEE2898AEDC /* Sources */,
+				8FC1169BA8485243E53D1F951729DF07 /* Frameworks */,
+				E5474E7DC2D84117A8A0A6471F161DFA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				61C805E99C28D770271DED3690404269 /* PBXTargetDependency */,
+			);
+			name = CarriersSharedAPI;
+			productName = CarriersSharedAPI;
+			productReference = EE24470D155CA04257B595961707A6EE /* CarriersSharedAPI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -714,8 +735,8 @@
 			projectRoot = "";
 			targets = (
 				5FF7802CFDAFAE32906201804E3522BE /* AppAuth */,
-				685A3729FAF3F836F8257DC9F43B6885 /* CarriersSharedAPI */,
-				0EFD4A047E6EA0E912740B3F17BE874E /* CarriersSharedAPI-Unit-Tests */,
+				C5DF62113B14C5E3011AB4675B1BD551 /* CarriersSharedAPI */,
+				6FBA8F76CDF4D1DE01C57AC9BFDB294F /* CarriersSharedAPI-Unit-Tests */,
 				833D9F4B7F7F2F7B101316060A78C8F4 /* Pods-SocialApp */,
 			);
 		};
@@ -729,14 +750,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4D4980AB51265A89E3F23A86D0363BD4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C7577976C0DE449AA6C2EEB8FD832DF0 /* Resources */ = {
+		893E6B4AC66A3644809A67AFBFD73BE0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -750,29 +764,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		4A583BF4455B2DB152CED4EBAE3C732C /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
+		E5474E7DC2D84117A8A0A6471F161DFA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
-		F989238CE72382667C4B594CDB8C8AB4 /* [CP] Embed Pods Frameworks */ = {
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		622909F608DC030662BA5F48781DA0F2 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -794,6 +796,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AD513B13358E3F67B05000C8B632FB91 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -833,6 +854,48 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2A195E8D626BD1B88575A54F8AEDB708 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C5153C156D93A002B8FD2D05D2C77B31 /* AuthorizationServiceTests.swift in Sources */,
+				B8F61910BB913DFB54D8937782E66A1B /* CarrierInfoServiceTests.swift in Sources */,
+				989471ECA33E9BE7A5EF2EE1546DB9A8 /* CarriersSharedAPITests.swift in Sources */,
+				565C8BB2179CB717468CE89BB7943623 /* Constants.swift in Sources */,
+				AA908EDDAA6BBE447CE9DBA28F8CEACE /* DiscoveryServiceTests.swift in Sources */,
+				306B00FEC39D252A41ED759FC71CB5BA /* DisocoveryConfigMockPayloads.swift in Sources */,
+				8B4C25604943B5CB3438A8F33116B1B4 /* MockCarrierInfoService.swift in Sources */,
+				E7FE7FC7CA2122ED968BF92C3C5ECE5C /* MockMobileNetworkInfoProvider.swift in Sources */,
+				AF9C1E6331904EA8561E77A086343BC8 /* MockNetworkService.swift in Sources */,
+				50AC22933B67B03332832D7A3C47FE1E /* ScopeTests.swift in Sources */,
+				DF0CA3361BCBDFF96F818B0C199F757A /* SIMInfoTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44779C9E8060C719BBA2EDEE2898AEDC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				47CA1A5FE90E59A1C2551D7175F35444 /* AuthorizationService.swift in Sources */,
+				DF266B62CB620701EFAAA2A84A9C9ABA /* Carrier.swift in Sources */,
+				955E01B496268CD6AF21D1C2F5F51F8E /* CarrierInfoService.swift in Sources */,
+				FA8E5DC51B7D6C9498FEB289F92EACAB /* CarriersSharedAPI-dummy.m in Sources */,
+				986AF8820D154FC4408EE5B8A08EF32C /* Dependencies.swift in Sources */,
+				8CC2B21725D382224E10FDD459A6D470 /* DictionaryUrlQuery.swift in Sources */,
+				80F2C3AE60679D574F691D8AD716FD18 /* DiscoveryService.swift in Sources */,
+				8BF14380C02C9CF333F51F5A64164957 /* Error.swift in Sources */,
+				0A19D512AF74DEACC8275A665BCBC416 /* JsonDocument.swift in Sources */,
+				81A56C9BA0AC2092E4779F5BC7894571 /* MobileNetworkInfoProvider.swift in Sources */,
+				79962EF4281C15F4348242CA0481E6EE /* NetworkService.swift in Sources */,
+				602BB465B059863F978864DC758DE606 /* OpenIdService.swift in Sources */,
+				3E466C495907EE377786C917F59B5A74 /* ProjectVerifyAppDelegate.swift in Sources */,
+				B011DD9AE40E5C9D4FBFB73F317565BE /* Result.swift in Sources */,
+				8F9D500FCBDA03D24A212CDB25FB866F /* Scope.swift in Sources */,
+				DE99BBF3668FB0A82A12281CFB7F10B3 /* SDKConfig.swift in Sources */,
+				2CE7505FFB4E6DFABA6BD32373A5A285 /* SIMInfo.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9E567967100AAC8BA55934B1579BEB02 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -841,49 +904,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C341071785AFF75A69BFB43E4FFC024C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8A6286F7115BD42FE29625BCBC651AAF /* AuthorizationService.swift in Sources */,
-				271A13B0F0D0BFDF30422732BDD7807E /* Carrier.swift in Sources */,
-				5D79CB4A324C343B613BFDA7F1646092 /* CarrierInfoService.swift in Sources */,
-				78C073880ACB0B9B15D5372CE31DFAC0 /* CarriersSharedAPI-dummy.m in Sources */,
-				D9B41BC652D69F859C25ED3826B027C7 /* DictionaryUrlQuery.swift in Sources */,
-				88A0822C73E77C3B86A762B37388462C /* DiscoveryService.swift in Sources */,
-				22913BBD3147856E7C12D8C1AA3F7584 /* JsonDocument.swift in Sources */,
-				3C18C18275642254573CBF19E4555D1E /* MobileNetworkInfoProvider.swift in Sources */,
-				2985AE87547BE2EDE2E7D0B880131918 /* NetworkService.swift in Sources */,
-				A148F02B9B421FF60D9225C38DBD7534 /* ProjectVerifyAppDelegate.swift in Sources */,
-				E59CB0CE8AAF64E3BD4C95FAB3B2DFD4 /* Result.swift in Sources */,
-				393928D4FE1F367E755BF2324F3267C2 /* SDKConfig.swift in Sources */,
-				D67D30B9BE681C3D83D6A8E47B2DFC38 /* SIMInfo.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CF58EAD84FBF8CAA960D4B6753029895 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				32E020CC08B85C5FAD8250C68A3D34F4 /* CarrierInfoServiceTests.swift in Sources */,
-				71BA0D3D63CF000E943D9C73732938E8 /* CarriersSharedAPITests.swift in Sources */,
-				73BF335AB3074BB719D7AE51D6907813 /* Constants.swift in Sources */,
-				184B9175BBDE33F6BBC7F6DC69CEF93D /* DiscoveryServiceTests.swift in Sources */,
-				29354D605FB2028FB65BA4D33180250B /* DisocoveryConfigMockPayloads.swift in Sources */,
-				4673A3ACE9D8A7D717B0308B25FDDC58 /* MockMobileNetworkInfoProvider.swift in Sources */,
-				E6970927B3D5942D11100665C3FC5131 /* MockNetworkService.swift in Sources */,
-				BF9C856F79CB48A39DB7682CC46FB4D4 /* SIMInfoTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4BB92811829A678098D6A1A84349CDE8 /* PBXTargetDependency */ = {
+		61C805E99C28D770271DED3690404269 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = CarriersSharedAPI;
-			target = 685A3729FAF3F836F8257DC9F43B6885 /* CarriersSharedAPI */;
-			targetProxy = A60BBCA7BE98878318286BE7D70CA074 /* PBXContainerItemProxy */;
+			name = AppAuth;
+			target = 5FF7802CFDAFAE32906201804E3522BE /* AppAuth */;
+			targetProxy = B2ADD76D49808EDD54E3DAF5AEBDAF77 /* PBXContainerItemProxy */;
 		};
 		A9CFB915B64E34E0386B783E748C473A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -894,21 +922,21 @@
 		D104A621341BEC3F349D484B4F9FD515 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = CarriersSharedAPI;
-			target = 685A3729FAF3F836F8257DC9F43B6885 /* CarriersSharedAPI */;
+			target = C5DF62113B14C5E3011AB4675B1BD551 /* CarriersSharedAPI */;
 			targetProxy = 0772F5073439949DEB411F4F13D17886 /* PBXContainerItemProxy */;
 		};
-		D2C454D02CA6566FCD216899F883DD1B /* PBXTargetDependency */ = {
+		E73563D797A021823B1ACD7A8C17E05F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = AppAuth;
-			target = 5FF7802CFDAFAE32906201804E3522BE /* AppAuth */;
-			targetProxy = 3CD5F47E995359B47056AC64058E0803 /* PBXContainerItemProxy */;
+			name = CarriersSharedAPI;
+			target = C5DF62113B14C5E3011AB4675B1BD551 /* CarriersSharedAPI */;
+			targetProxy = 6755E157016A2C6421C97F787D6315A1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		191E0A0DD6CE5CA637E64DAAEA7B3935 /* Debug */ = {
+		06F82E1EFA2277506346A89E9C61F047 /* Develop */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CDAACDE1B518B705AAD34597B431AF41 /* CarriersSharedAPI.unit-tests.xcconfig */;
+			baseConfigurationReference = FF6EAE764E259A3F80D5369EE5F8C0E9 /* CarriersSharedAPI.unit-tests.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -921,14 +949,78 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-lswiftSwiftOnoneSupport",
-				);
 				PRODUCT_NAME = "CarriersSharedAPI-Unit-Tests";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 4.2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Develop;
+		};
+		086817D9F763FAAF88B49D41E5065E1C /* Sprint */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34091204B090A65C29A87A60E6A1A487 /* CarriersSharedAPI.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI.modulemap";
+				PRODUCT_MODULE_NAME = CarriersSharedAPI;
+				PRODUCT_NAME = CarriersSharedAPI;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Sprint;
+		};
+		1D1B5571FD790816F4949056E91FCD43 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34091204B090A65C29A87A60E6A1A487 /* CarriersSharedAPI.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI.modulemap";
+				PRODUCT_MODULE_NAME = CarriersSharedAPI;
+				PRODUCT_NAME = CarriersSharedAPI;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
@@ -1117,6 +1209,40 @@
 			};
 			name = Release;
 		};
+		575D47D29EFB61B046897F41EA547648 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34091204B090A65C29A87A60E6A1A487 /* CarriersSharedAPI.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI.modulemap";
+				PRODUCT_MODULE_NAME = CarriersSharedAPI;
+				PRODUCT_NAME = CarriersSharedAPI;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		6DFA1578582149B7E24AD55CBA30F07A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1181,29 +1307,6 @@
 			};
 			name = Debug;
 		};
-		77AA286FF6093816DF3A865DF8F69AC0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = CDAACDE1B518B705AAD34597B431AF41 /* CarriersSharedAPI.unit-tests.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGNING_ALLOWED = YES;
-				CODE_SIGNING_REQUIRED = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				PRODUCT_NAME = "CarriersSharedAPI-Unit-Tests";
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		7E097CE81F719E0ED9094F18EBE4A5DF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1238,6 +1341,32 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
+		};
+		8B6353F4509A1780C6151D780BB50015 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF6EAE764E259A3F80D5369EE5F8C0E9 /* CarriersSharedAPI.unit-tests.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lswiftSwiftOnoneSupport",
+				);
+				PRODUCT_NAME = "CarriersSharedAPI-Unit-Tests";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
 		};
 		8D997CBFDAA2695488DABF73CA445316 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -1308,9 +1437,9 @@
 			};
 			name = Sprint;
 		};
-		A4AAC909DA555C97750B3A72DC407D2B /* Develop */ = {
+		D1A29E2ECA334AA9E575F57D0FCDB9DC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CDAACDE1B518B705AAD34597B431AF41 /* CarriersSharedAPI.unit-tests.xcconfig */;
+			baseConfigurationReference = FF6EAE764E259A3F80D5369EE5F8C0E9 /* CarriersSharedAPI.unit-tests.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -1329,108 +1458,7 @@
 				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Develop;
-		};
-		B3378FF588794A45592CD348E0282692 /* Develop */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = BBCC66F30AB4FFD0359AC072330E1B00 /* CarriersSharedAPI.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI.modulemap";
-				PRODUCT_MODULE_NAME = CarriersSharedAPI;
-				PRODUCT_NAME = CarriersSharedAPI;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Develop;
-		};
-		C646C4542F17A58D82528F7BEAA2EBF2 /* Sprint */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = BBCC66F30AB4FFD0359AC072330E1B00 /* CarriersSharedAPI.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI.modulemap";
-				PRODUCT_MODULE_NAME = CarriersSharedAPI;
-				PRODUCT_NAME = CarriersSharedAPI;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Sprint;
-		};
-		C9AC4AF4C7B0D6566FD4A8AA883DA72A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = BBCC66F30AB4FFD0359AC072330E1B00 /* CarriersSharedAPI.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI.modulemap";
-				PRODUCT_MODULE_NAME = CarriersSharedAPI;
-				PRODUCT_NAME = CarriersSharedAPI;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
+			name = Release;
 		};
 		D49E9F10DF79ED1D340B4C4ACCBC83AE /* Sprint */ = {
 			isa = XCBuildConfiguration;
@@ -1525,40 +1553,6 @@
 			};
 			name = Develop;
 		};
-		EDB7CE7E44131BEAA3CF67793660AC79 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = BBCC66F30AB4FFD0359AC072330E1B00 /* CarriersSharedAPI.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI.modulemap";
-				PRODUCT_MODULE_NAME = CarriersSharedAPI;
-				PRODUCT_NAME = CarriersSharedAPI;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		EE7F3813B925E22FDCE7E05F80363621 /* Develop */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D5CF37120D7CF16671484DC0B98DDAB3 /* Pods-SocialApp.develop.xcconfig */;
@@ -1595,6 +1589,63 @@
 			};
 			name = Develop;
 		};
+		EFC276D3618EAB3FA020F1FA1F4C95BF /* Develop */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34091204B090A65C29A87A60E6A1A487 /* CarriersSharedAPI.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI.modulemap";
+				PRODUCT_MODULE_NAME = CarriersSharedAPI;
+				PRODUCT_NAME = CarriersSharedAPI;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Develop;
+		};
+		F69E476C13BED2633C7DE63F2BECD434 /* Sprint */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF6EAE764E259A3F80D5369EE5F8C0E9 /* CarriersSharedAPI.unit-tests.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				PRODUCT_NAME = "CarriersSharedAPI-Unit-Tests";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Sprint;
+		};
 		FA82CE715CFAE0425690D1A3CD92EE8B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 652AE7F6161C02CA7747356F393438A5 /* Pods-SocialApp.debug.xcconfig */;
@@ -1630,54 +1681,9 @@
 			};
 			name = Debug;
 		};
-		FADA44F08DA5F9FF9BF8543C104C9A9F /* Sprint */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = CDAACDE1B518B705AAD34597B431AF41 /* CarriersSharedAPI.unit-tests.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGNING_ALLOWED = YES;
-				CODE_SIGNING_REQUIRED = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/CarriersSharedAPI/CarriersSharedAPI-Unit-Tests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				PRODUCT_NAME = "CarriersSharedAPI-Unit-Tests";
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Sprint;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		05C14209D935D731780A237753858079 /* Build configuration list for PBXNativeTarget "CarriersSharedAPI-Unit-Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				191E0A0DD6CE5CA637E64DAAEA7B3935 /* Debug */,
-				A4AAC909DA555C97750B3A72DC407D2B /* Develop */,
-				77AA286FF6093816DF3A865DF8F69AC0 /* Release */,
-				FADA44F08DA5F9FF9BF8543C104C9A9F /* Sprint */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		082EEB663C4212DD7AEC591797BFEF3C /* Build configuration list for PBXNativeTarget "CarriersSharedAPI" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C9AC4AF4C7B0D6566FD4A8AA883DA72A /* Debug */,
-				B3378FF588794A45592CD348E0282692 /* Develop */,
-				EDB7CE7E44131BEAA3CF67793660AC79 /* Release */,
-				C646C4542F17A58D82528F7BEAA2EBF2 /* Sprint */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		2738CB1DBAB82AE4BDB9B8F972345BC8 /* Build configuration list for PBXNativeTarget "Pods-SocialApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1707,6 +1713,28 @@
 				DA21B4431002CD27385CB54425BF8868 /* Develop */,
 				8D997CBFDAA2695488DABF73CA445316 /* Release */,
 				21C28292983B65849EBD2114B1375C72 /* Sprint */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C53B96EFE47BF51B9F184830F590C016 /* Build configuration list for PBXNativeTarget "CarriersSharedAPI-Unit-Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B6353F4509A1780C6151D780BB50015 /* Debug */,
+				06F82E1EFA2277506346A89E9C61F047 /* Develop */,
+				D1A29E2ECA334AA9E575F57D0FCDB9DC /* Release */,
+				F69E476C13BED2633C7DE63F2BECD434 /* Sprint */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8D94F32B6EB01D7E15185AF3B43F241 /* Build configuration list for PBXNativeTarget "CarriersSharedAPI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D1B5571FD790816F4949056E91FCD43 /* Debug */,
+				EFC276D3618EAB3FA020F1FA1F4C95BF /* Develop */,
+				575D47D29EFB61B046897F41EA547648 /* Release */,
+				086817D9F763FAAF88B49D41E5065E1C /* Sprint */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
