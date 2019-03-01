@@ -83,26 +83,29 @@ class DiscoveryService: DiscoveryServiceProtocol {
             return
         }
 
-        openIdConfig(forSIMInfo: sim) { [weak self] result in
+        let carrier = sim.carrier(usingCarrierLookUp: NetworkIdentifierCache.bundledCarrierLookup)
+
+        openIdConfig(forSIMInfo: sim, carrier: carrier) { [weak self] result in
 
             switch result {
+            case .value(let openIdConfig):
+                let config = CarrierConfig(
+                    simInfo: sim,
+                    carrier: carrier,
+                    openIdConfig: openIdConfig)
+                completion(.knownMobileNetwork(config))
+
             case .error(let error):
-                if let fallBackConfig = self?.recoverFromCache(carrier: sim.carrier,
+                if let fallBackConfig = self?.recoverFromCache(carrier: carrier,
                                                                allowStaleRecords: true) {
                     let config = CarrierConfig(
                         simInfo: sim,
-                        carrier: sim.carrier,
+                        carrier: carrier,
                         openIdConfig: fallBackConfig)
                     completion(.knownMobileNetwork(config))
                 } else {
                     completion(.error(error))
                 }
-            case .value(let openIdConfig):
-                let config = CarrierConfig(
-                    simInfo: sim,
-                    carrier: sim.carrier,
-                    openIdConfig: openIdConfig)
-                completion(.knownMobileNetwork(config))
             }
         }
     }
@@ -138,7 +141,8 @@ class DiscoveryService: DiscoveryServiceProtocol {
 
 private extension DiscoveryService {
     func openIdConfig(forSIMInfo simInfo: SIMInfo,
-                              completion: @escaping (OpenIdResult) -> Void ) {
+                      carrier: Carrier,
+                      completion: @escaping (OpenIdResult) -> Void ) {
 
         // TODO: business rules about what takes precedence here
 
@@ -149,7 +153,7 @@ private extension DiscoveryService {
         }
 
         // if not, check the hard coded values (future will be a more robust cache):
-        let cachedConfig = recoverFromCache(carrier: simInfo.carrier)
+        let cachedConfig = recoverFromCache(carrier: carrier)
         guard cachedConfig == nil else {
             completion(OpenIdResult.value(cachedConfig!))
             return
@@ -218,8 +222,8 @@ private extension DiscoveryService {
     func discoveryEndpoint(forSIMInfo simInfo: SIMInfo) -> String {
         return String(
             format: discoveryEndpointFormat,
-            simInfo.identifiers.mcc,
-            simInfo.identifiers.mnc
+            simInfo.mcc,
+            simInfo.mnc
         )
     }
 }

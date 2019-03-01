@@ -170,8 +170,8 @@ class OpenIdService: OpenIdServiceProtocol {
                 }
                 let authorizedResponse = AuthorizedResponse(
                     code: authCode,
-                    mcc: simInfo.identifiers.mcc,
-                    mnc: simInfo.identifiers.mnc
+                    mcc: simInfo.mcc,
+                    mnc: simInfo.mnc
                 )
                 completion(AuthorizationResult.code(authorizedResponse))
         })
