@@ -38,6 +38,7 @@ public class AuthorizationService {
             case .knownMobileNetwork(let config):
 
                 let authorizationConfig = OpenIdAuthorizationConfig(
+                    simInfo: config.simInfo,
                     clientId: sdkConfig.clientId,
                     // TODO: fix these forcing optionals here and strongly type upstream
                     authorizationEndpoint: URL(string: config.openIdConfig["authorization_endpoint"]!)!,

@@ -9,8 +9,14 @@
 import Foundation
 import AppAuth
 
+public struct AuthorizedResponse {
+    public let code: String
+    public let mcc: String
+    public let mnc: String
+}
+
 public enum AuthorizationResult {
-    case code(String)
+    case code(AuthorizedResponse)
     case error(Error)
 }
 
@@ -21,6 +27,7 @@ enum ResponseType: String {
 }
 
 struct OpenIdAuthorizationConfig {
+    let simInfo: SIMInfo
     let clientId: String
     let authorizationEndpoint: URL
     let tokenEndpoint: URL
@@ -85,6 +92,7 @@ class OpenIdService: OpenIdServiceProtocol {
                 print("Launching default safari controller process...")
                 self.performSafariAuthorization(
                     request: authorizationRequest,
+                    simInfo: authorizationConifg.simInfo,
                     manager: manager,
                     fromViewController: viewController,
                     completion: completion
@@ -119,7 +127,7 @@ class OpenIdService: OpenIdServiceProtocol {
     func performCCIDAuthorization(
         request: OIDAuthorizationRequest,
         manager: AuthorizationStateManager,
-        authorizationConifg: OpenIdAuthorizationConfig ) {
+        authorizationConifg: OpenIdAuthorizationConfig) {
 
         let consentURLString = authorizationConifg.consentURLString
         print("Checking if " + consentURLString + " is part of a universal link")
@@ -145,6 +153,7 @@ class OpenIdService: OpenIdServiceProtocol {
     //this function will init the authstate object
     func performSafariAuthorization(
         request: OIDAuthorizationRequest,
+        simInfo: SIMInfo,
         manager: AuthorizationStateManager,
         fromViewController viewController: UIViewController,
         completion: @escaping AuthorizationCompletion) {
@@ -159,8 +168,12 @@ class OpenIdService: OpenIdServiceProtocol {
                     completion(AuthorizationResult.error(error ?? UnknownError()))
                     return
                 }
-
-                completion(AuthorizationResult.code(authCode))
+                let authorizedResponse = AuthorizedResponse(
+                    code: authCode,
+                    mcc: simInfo.identifiers.mcc,
+                    mnc: simInfo.identifiers.mnc
+                )
+                completion(AuthorizationResult.code(authorizedResponse))
         })
     }
 }

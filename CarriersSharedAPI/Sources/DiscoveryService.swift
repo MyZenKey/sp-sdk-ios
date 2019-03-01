@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 
 struct CarrierConfig {
+    let simInfo: SIMInfo
     let carrier: Carrier
     let openIdConfig: OpenIdConfig
 }
@@ -88,14 +89,19 @@ class DiscoveryService: DiscoveryServiceProtocol {
             case .error(let error):
                 if let fallBackConfig = self?.recoverFromCache(carrier: sim.carrier,
                                                                allowStaleRecords: true) {
-                    let config = CarrierConfig(carrier: sim.carrier,
-                                               openIdConfig: fallBackConfig)
+                    let config = CarrierConfig(
+                        simInfo: sim,
+                        carrier: sim.carrier,
+                        openIdConfig: fallBackConfig)
                     completion(.knownMobileNetwork(config))
                 } else {
                     completion(.error(error))
                 }
             case .value(let openIdConfig):
-                let config = CarrierConfig(carrier: sim.carrier, openIdConfig: openIdConfig)
+                let config = CarrierConfig(
+                    simInfo: sim,
+                    carrier: sim.carrier,
+                    openIdConfig: openIdConfig)
                 completion(.knownMobileNetwork(config))
             }
         }

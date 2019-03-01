@@ -17,7 +17,9 @@ class MockOpenIdService: OpenIdServiceProtocol {
     var lastConfig: OpenIdAuthorizationConfig?
     var lastViewController: UIViewController?
     var lastStateManager: AuthorizationStateManager?
-    var mockResponse: AuthorizationResult = AuthorizationResult.code("abc123")
+    var mockResponse: AuthorizationResult = AuthorizationResult.code(
+        AuthorizedResponse(code: "abc123", mcc: "123", mnc: "456")
+    )
 
     func clear() {
         lastConfig = nil
