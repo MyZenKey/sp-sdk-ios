@@ -33,7 +33,7 @@ public class AuthorizationService {
         let sdkConfig = self.sdkConfig
         let authorizationStateManager = self.authorizationStateManager
 
-        discoveryService.discoverConfig() { [weak self] (result) in
+        discoveryService.discoverConfig() { [weak self] result in
             switch result {
             case .knownMobileNetwork(let config):
 

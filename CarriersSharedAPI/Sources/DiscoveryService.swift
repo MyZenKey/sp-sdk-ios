@@ -67,7 +67,8 @@ class DiscoveryService: DiscoveryServiceProtocol {
 //    UI –
 //    IP – https://23.20.110.44
 //    FQDN – https://app.xcijv.com/ui
-    private let discoveryEndpointFormat = "https://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
+    private let discoveryEndpointFormat = "http://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
+//    private let discoveryEndpointFormat = "https://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
 
     private var configuration: OpenIdConfig?
 
@@ -189,13 +190,12 @@ private extension DiscoveryService {
             guard
                 error == nil,
                 let jsonDocument = jsonDocument else {
-                self?.configuration = nil
-                completion?(
-                    OpenIdResult.error(DiscoveryServiceError.networkError(error ?? UnknownError()))
-                )
-                return
+                    self?.configuration = nil
+                    completion?(
+                        OpenIdResult.error(DiscoveryServiceError.networkError(error ?? UnknownError()))
+                    )
+                    return
             }
-
 
             // TODO: currently a query for unknown mcc/mnc returns an error. we may want to parse
             // this out further in the case we want to follow the returned redirect, etc.
@@ -205,13 +205,15 @@ private extension DiscoveryService {
                 return
             }
 
+            // NOTE: adding this nested config key becuase that's the way the response is structured
+            // at the moment – from my understanding it will be removed at some future point
             let config = [
                 "scopes_supported": "openid email profile",
                 "response_types_supported": "code",
-                "userinfo_endpoint": jsonDocument["userinfo_endpoint"].toString!,
-                "token_endpoint": jsonDocument["token_endpoint"].toString!,
-                "authorization_endpoint": jsonDocument["authorization_endpoint"].toString!,
-                "issuer": jsonDocument["issuer"].toString!
+                "userinfo_endpoint": jsonDocument["config"]["userinfo_endpoint"].toString!,
+                "token_endpoint": jsonDocument["config"]["token_endpoint"].toString!,
+                "authorization_endpoint": jsonDocument["config"]["authorization_endpoint"].toString!,
+                "issuer": jsonDocument["config"]["issuer"].toString!
             ]
 
             self?.configuration = config

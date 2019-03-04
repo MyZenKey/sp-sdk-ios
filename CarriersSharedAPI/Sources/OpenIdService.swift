@@ -38,7 +38,7 @@ struct OpenIdAuthorizationConfig {
 
 private extension OpenIdAuthorizationConfig {
     var consentURLString: String {
-        // NOTE: copy+past from sample code
+        // NOTE: copy+paste from sample code
         // I'm not certain that this is correct...
         // a) do we need this url tansformation? it seems to be for adding a custom scheme
         // when we probably want to use universal links
