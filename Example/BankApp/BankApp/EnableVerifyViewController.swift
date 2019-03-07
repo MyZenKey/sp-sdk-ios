@@ -77,6 +77,7 @@ class EnableVerifyViewController: UIViewController {
     }()
 
     let authService = AuthorizationService()
+    let serviceAPI = ServiceAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,12 +102,23 @@ class EnableVerifyViewController: UIViewController {
             // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
                 let appDelegate = UIApplication.shared.delegate! as! AppDelegate
                 switch result {
-                case .code(let code):
-                    print("AuthZ_Code value from is: \(code)\n")
-                    UserDefaults.standard.set(code,forKey: "AuthZCode")
-                    appDelegate.launchHomeScreen()
+                case .code(let authorizedResponse):
+                    let code = authorizedResponse.code
+
+                    UserDefaults.standard.set(code, forKey: "AuthZCode")
+                    self.serviceAPI.login(
+                        withAuthCode: code,
+                        mcc: authorizedResponse.mcc,
+                        mnc: authorizedResponse.mnc,
+                        completionHandler: { json, error in
+//                            guard error == nil else { return }
+                            print("AuthZ_Code value from is: \(code)\n")
+                            appDelegate.launchHomeScreen()
+                    })
 
                 case .error:
+                    appDelegate.launchLoginScreen()
+                case .cancelled:
                     appDelegate.launchLoginScreen()
                 }
         }

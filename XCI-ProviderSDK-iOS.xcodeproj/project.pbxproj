@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23196D9122306E29005393AB /* OpenIdServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23196D9022306E29005393AB /* OpenIdServiceTests.swift */; };
+		23196D9322309173005393AB /* OpenIdURLResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23196D9222309173005393AB /* OpenIdURLResolver.swift */; };
 		231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */; };
 		231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */; };
 		231FFB9C221C6DE500E2B1BA /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */; };
@@ -31,6 +33,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		23196D9022306E29005393AB /* OpenIdServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdServiceTests.swift; sourceTree = "<group>"; };
+		23196D9222309173005393AB /* OpenIdURLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdURLResolver.swift; sourceTree = "<group>"; };
 		231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryUrlQuery.swift; sourceTree = "<group>"; };
 		231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationService.swift; sourceTree = "<group>"; };
 		231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKConfig.swift; sourceTree = "<group>"; };
@@ -105,6 +109,7 @@
 				236AC637222720E600E7C900 /* OpenIdService.swift */,
 				2399F3F82227702A007D3613 /* Error.swift */,
 				233A502E22287DD10089BA0D /* Dependencies.swift */,
+				23196D9222309173005393AB /* OpenIdURLResolver.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -121,6 +126,7 @@
 				23F88F472220B83700A5F5D9 /* DiscoveryServiceTests.swift */,
 				23F88F4A2220C23600A5F5D9 /* SIMInfoTests.swift */,
 				23F88F5922247E2E00A5F5D9 /* Constants.swift */,
+				23196D9022306E29005393AB /* OpenIdServiceTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -238,9 +244,11 @@
 				23F88F38221F2B0E00A5F5D9 /* SIMInfo.swift in Sources */,
 				23F88F5E2225AD6600A5F5D9 /* Result.swift in Sources */,
 				23F88F3E221F433900A5F5D9 /* MobileNetworkInfoProvider.swift in Sources */,
+				23196D9322309173005393AB /* OpenIdURLResolver.swift in Sources */,
 				233AF96D220A3B750023059C /* JsonDocument.swift in Sources */,
 				23F88F4D2224579900A5F5D9 /* CarrierInfoService.swift in Sources */,
 				231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */,
+				23196D9122306E29005393AB /* OpenIdServiceTests.swift in Sources */,
 				237B7BF522261A4500E29992 /* ScopeTests.swift in Sources */,
 				23F88F3C221F31B800A5F5D9 /* Carrier.swift in Sources */,
 				23F88F44222080C800A5F5D9 /* DiscoveryService.swift in Sources */,

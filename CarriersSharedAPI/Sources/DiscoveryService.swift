@@ -134,7 +134,8 @@ class DiscoveryService: DiscoveryServiceProtocol {
             "response_types_supported": "code",
             "userinfo_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/userinfo",
             "token_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/token",
-            "authorization_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize",
+            "authorization_endpoint": "xci://authorize",
+//            "authorization_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize",
             "issuer": "https://oidc.test.xlogin.att.com"
         ]
     ]
@@ -212,7 +213,8 @@ private extension DiscoveryService {
                 "response_types_supported": "code",
                 "userinfo_endpoint": jsonDocument["config"]["userinfo_endpoint"].toString!,
                 "token_endpoint": jsonDocument["config"]["token_endpoint"].toString!,
-                "authorization_endpoint": jsonDocument["config"]["authorization_endpoint"].toString!,
+                "authorization_endpoint": "xci://authorize",
+//                "authorization_endpoint": jsonDocument["config"]["authorization_endpoint"].toString!,
                 "issuer": jsonDocument["config"]["issuer"].toString!
             ]
 

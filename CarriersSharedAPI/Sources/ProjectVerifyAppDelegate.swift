@@ -9,15 +9,9 @@
 import AppAuth
 import UIKit
 
-protocol AuthorizationStateManager: AnyObject {
-    var currentAuthorizationFlow: OIDExternalUserAgentSession? { get set }
-}
-
-public class ProjectVerifyAppDelegate: AuthorizationStateManager {
+public class ProjectVerifyAppDelegate {
 
     public static let shared = ProjectVerifyAppDelegate()
-
-    var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
     let dependencies: DependenciesProtocol = Dependencies()
 
@@ -35,23 +29,14 @@ public class ProjectVerifyAppDelegate: AuthorizationStateManager {
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 
-        guard
-            let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false),
-            let queryItems = urlComponents.queryItems else {
-                return false
+        // This scheme is project verify specifc and any requests sent to this scheme should be
+        // handled by us.
+        guard url.scheme == sdkConfig.redirectURL.scheme else {
+            return false
         }
 
         // concluding an auth flow:
-        if queryItems.first(where: { $0.name == "code" }) != nil {
-            // NOTE: this parsing, using `resumeExternalUserAgentFlow` is not the initial
-            // implementation from the example apps but seems to be the
-            // correct implementation from the AppAuth docs. need to figure out why this was not
-            // the case initially
-            if currentAuthorizationFlow?.resumeExternalUserAgentFlow(with: url) ?? false {
-                currentAuthorizationFlow = nil
-                return true
-            }
-        }
+        dependencies.openIdService.concludeAuthorizationFlow(url: url)
 
         // TODO: - We don't have a spec for other states that might be resolved via this url.
         // add those here when we do

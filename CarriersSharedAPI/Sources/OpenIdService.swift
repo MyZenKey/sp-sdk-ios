@@ -9,6 +9,10 @@
 import Foundation
 import AppAuth
 
+enum ResponseType: String {
+    case code = "code"
+}
+
 public struct AuthorizedResponse {
     public let code: String
     public let mcc: String
@@ -18,15 +22,17 @@ public struct AuthorizedResponse {
 public enum AuthorizationResult {
     case code(AuthorizedResponse)
     case error(Error)
+    case cancelled
 }
 
 public typealias AuthorizationCompletion = (AuthorizationResult) -> Void
 
-enum ResponseType: String {
-    case code = "code"
+public enum OpenIdError: Error {
+    case stateMismatch
+    case missingAuthCode
 }
 
-struct OpenIdAuthorizationConfig {
+struct OpenIdAuthorizationConfig: Equatable {
     let simInfo: SIMInfo
     let clientId: String
     let authorizationEndpoint: URL
@@ -36,30 +42,54 @@ struct OpenIdAuthorizationConfig {
     let state: String
 }
 
-private extension OpenIdAuthorizationConfig {
-    var consentURLString: String {
-        // NOTE: copy+paste from sample code
-        // I'm not certain that this is correct...
-        // a) do we need this url tansformation? it seems to be for adding a custom scheme
-        // when we probably want to use universal links
-        // b) passing the authorization url to the app store link might make sense but I'm not sure
-        return "\(authorizationEndpoint)?client_id=\(clientId.urlEncode())&response_type=code&redirect_uri=\(redirectURL.absoluteString.urlEncode())&scope=\(formattedScopes.urlEncode())"
-    }
-}
-
 protocol OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
-        stateManager: AuthorizationStateManager,
         authorizationConifg: OpenIdAuthorizationConfig,
         completion: @escaping AuthorizationCompletion
     )
+
+    var authorizationInProgress: Bool { get }
+
+    func cancelCurrentAuthorizationSession()
+
+    func concludeAuthorizationFlow(url: URL)
 }
 
-class OpenIdService: OpenIdServiceProtocol {
+class OpenIdService {
+    enum ResponseKeys: String {
+        case state
+        case code
+        case error
+        case errorDescription = "error_description"
+    }
+
+    enum State {
+        case idle
+        case inProgress(OIDAuthorizationRequest, SIMInfo, AuthorizationCompletion)
+    }
+
+    var state: State = .idle
+
+    var authorizationInProgress: Bool {
+        switch state {
+        case .idle:
+            return false
+        case .inProgress:
+            return true
+        }
+    }
+
+    let urlResolver: OpenIdURLResolverProtocol
+
+    init(urlResolver: OpenIdURLResolverProtocol) {
+        self.urlResolver = urlResolver
+    }
+}
+
+extension OpenIdService: OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
-        stateManager manager: AuthorizationStateManager,
         authorizationConifg: OpenIdAuthorizationConfig,
         completion: @escaping AuthorizationCompletion
         ) {
@@ -75,30 +105,29 @@ class OpenIdService: OpenIdServiceProtocol {
             authorizationConifg: authorizationConifg
         )
 
-        // TODO: should this be `canOpenUrl` ?
-        //check to see if the authorization url is set as a universal app link
-        UIApplication.shared.open(
-            authorizationConifg.authorizationEndpoint,
-            options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true]
-        ) { success in
-            if success {
-                self.performCCIDAuthorization(
-                    request: authorizationRequest,
-                    manager: manager,
-                    authorizationConifg: authorizationConifg
+        let simInfo = authorizationConifg.simInfo
+        urlResolver.resolve(
+            withRequest: authorizationRequest,
+            fromViewController: viewController,
+            authorizationConfig: authorizationConifg) { [weak self] (authState, error) in
+                guard
+                    error == nil,
+                    let authState = authState,
+                    let authCode = authState.lastAuthorizationResponse.authorizationCode else {
+                        self?.concludeAuthorizationFlow(result: .error(error ?? UnknownError()))
+                        return
+                }
+
+                let authorizedResponse = AuthorizedResponse(
+                    code: authCode,
+                    mcc: simInfo.mcc,
+                    mnc: simInfo.mnc
                 )
-            }
-            else {
-                print("Launching default safari controller process...")
-                self.performSafariAuthorization(
-                    request: authorizationRequest,
-                    simInfo: authorizationConifg.simInfo,
-                    manager: manager,
-                    fromViewController: viewController,
-                    completion: completion
-                )
-            }
+
+                self?.concludeAuthorizationFlow(result: .code(authorizedResponse))
         }
+
+        state = .inProgress(authorizationRequest, simInfo, completion)
     }
 
     func createAuthorizationRequest(
@@ -123,57 +152,73 @@ class OpenIdService: OpenIdServiceProtocol {
         return request
     }
 
-    // this function will initialize the authorization request via Project Verify
-    func performCCIDAuthorization(
-        request: OIDAuthorizationRequest,
-        manager: AuthorizationStateManager,
-        authorizationConifg: OpenIdAuthorizationConfig) {
-
-        let consentURLString = authorizationConifg.consentURLString
-        print("Checking if " + consentURLString + " is part of a universal link")
-        let urlTransformation = OIDExternalUserAgentIOSCustomBrowser.urlTransformationSchemeConcatPrefix(consentURLString)
-        let externalUserAgent = OIDExternalUserAgentIOSCustomBrowser(
-            urlTransformation: urlTransformation,
-            canOpenURLScheme: nil,
-            appStore: URL(string: consentURLString)
-        )!
-
-        manager.currentAuthorizationFlow = OIDAuthState.authState(
-            byPresenting: request,
-            externalUserAgent: externalUserAgent,
-            callback: { (authState, error) in
-                // TODO: it seems like we're currently swallowing completion events here and
-                // omiting a symetrical completion contract. I think this could follow a single
-                // flow if we trigger completion via the URL when the redirect round trips into the
-                // app.
-                print("authorization handed off to application")
-        })
+    func cancelCurrentAuthorizationSession() {
+        concludeAuthorizationFlow(result: .cancelled)
     }
 
-    //this function will init the authstate object
-    func performSafariAuthorization(
-        request: OIDAuthorizationRequest,
-        simInfo: SIMInfo,
-        manager: AuthorizationStateManager,
-        fromViewController viewController: UIViewController,
-        completion: @escaping AuthorizationCompletion) {
-        manager.currentAuthorizationFlow = OIDAuthState.authState(
-            byPresenting: request,
-            presenting: viewController,
-            callback: { (authState, error) in
-                guard
-                    error == nil,
-                    let authState = authState,
-                    let authCode = authState.lastAuthorizationResponse.authorizationCode else {
-                    completion(AuthorizationResult.error(error ?? UnknownError()))
-                    return
+    func concludeAuthorizationFlow(url: URL) {
+
+        // NOTE: this logic replicates the functionality in OIDAuthorizationService.m
+        // - (BOOL)resumeExternalUserAgentFlowWithURL:(NSURL *)URL
+        // the above is the method we would use but it goes directly into the token flow
+        // as this is treated as one flow by AppAuth. Here we'll short circut the token flow and
+        // hand that off to the SP:
+
+        // ensure valid state:
+        guard case .inProgress(let request, let simInfo, _) = state else {
+            // there is no request, return
+            return
+        }
+
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+
+        // duplicate keys are unsupported, let's reduce to a dictionary:
+        let queryDictionary: [String: String] = (components?.queryItems ?? [])
+            .reduce([:]) { accumulator, item in
+                var accumulator = accumulator
+                if let value = item.value {
+                    accumulator[item.name] = value
                 }
-                let authorizedResponse = AuthorizedResponse(
-                    code: authCode,
-                    mcc: simInfo.mcc,
-                    mnc: simInfo.mnc
-                )
-                completion(AuthorizationResult.code(authorizedResponse))
-        })
+                return accumulator
+        }
+
+        // checks for an OAuth error response as per RFC6749 Section 4.1.2.1
+        guard queryDictionary[ResponseKeys.error.rawValue] == nil else {
+                // TODO: handle errors as specified in section 4.5 of the api spec
+                concludeAuthorizationFlow(result: .error(UnknownError()))
+                return
+        }
+
+        // no error, should be a valid OAuth 2.0 response
+        guard
+            let inboundState = queryDictionary[ResponseKeys.state.rawValue],
+            inboundState == request.state else {
+                concludeAuthorizationFlow(result: .error(OpenIdError.stateMismatch))
+                return
+        }
+
+        // extract the code
+        guard let code = queryDictionary[ResponseKeys.code.rawValue] else {
+                concludeAuthorizationFlow(result: .error(OpenIdError.missingAuthCode))
+                return
+        }
+
+        // success:
+        concludeAuthorizationFlow(result: .code(
+                AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
+            )
+        )
+    }
+
+    func concludeAuthorizationFlow(result: AuthorizationResult) {
+        defer {
+            state = .idle
+        }
+
+        guard case .inProgress(_, _, let completion) = state else {
+            return
+        }
+
+        completion(result)
     }
 }
