@@ -93,9 +93,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    func launchMapScreen(code: String) {
+    func launchMapScreen(token: String) {
         let vc = UserInfoViewController()
-        vc.code = code
+        vc.token = token
         
         navigationController = UINavigationController(rootViewController: vc)
         navigationController?.isNavigationBarHidden = true
@@ -103,10 +103,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
     }
     
-    func launchSignUpScreen(code: String) {
+    func launchSignUpScreen(token: String) {
         print("Launching signup screen")
         let vc = SignUpViewController()
-        vc.code = code
+        vc.token = token
         navigationController = UINavigationController(rootViewController: vc)
         navigationController?.isNavigationBarHidden = true
         window?.rootViewController = navigationController

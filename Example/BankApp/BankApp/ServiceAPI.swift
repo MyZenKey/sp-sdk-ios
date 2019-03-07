@@ -21,7 +21,7 @@ class ServiceAPI: NSObject {
         mnc: String,
         completionHandler tokenResponse: @escaping ((JsonDocument?, Error?) -> Void)) {
 
-        var request = URLRequest(url: URL(string: "https://xci-demoapp-node.raizlabs.xyz/api/token")!)
+        var request = URLRequest(url: URL(string: "https://xci-demoapp-node.raizlabs.xyz/api/auth")!)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try! JSONSerialization.data(withJSONObject: [

@@ -5,74 +5,65 @@
 //
 
 import UIKit
-import CarriersSharedAPI
 
 class ServiceAPI: NSObject {
-    
-    
-//    let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: Foundation.OperationQueue.main)
-//    var dataTask: URLSessionDataTask?
-//    var sharedAPI: SharedAPI?
-//    var carrierConfig:[String:Any]? = nil
-//
-//
-//    override init() {
-//        //init shared api
-//        self.sharedAPI = SharedAPI()
-//    }
-
+    let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: Foundation.OperationQueue.main)
+    var dataTask: URLSessionDataTask?
 
     /// Log in.
     ///
-    /// - Parameter code: The code to log in with.
-    func login(with code: String, completionHandler tokenResponse: @escaping ((JsonDocument) -> Void)) {
-        
-        //get the configuration data
-//        self.carrierConfig = sharedAPI!.discoverCarrierConfiguration()
-//
-//        // call /token
-//        var request = URLRequest(url: URL(string: self.carrierConfig!["token_endpoint"] as! String)!)
-//        request.httpMethod = "POST"
-//        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-//        let authorizationCode = "\(AppConfig.clientID):\(AppConfig.clientSecret)".data(using: .utf8)?.base64EncodedString() ?? ""
-//        request.setValue("BASIC \(authorizationCode)", forHTTPHeaderField: "Authorization")
-//        //request.httpBody = [].encodeAsUrlParams().data(using: .utf8)
-//
-//        let dataTask = session.dataTask(with: request) { (data, response, error) in
-//
-//              guard error == nil else {return}
-//
-//                if let data = data {
-//                let json = JsonDocument(data: data)
-//
-//                if let accessToken = json["access_token"].toString {
-//                    tokenResponse(json)
-//                    print(accessToken)
-//                } else {
-//                    // error, just save json for debug purposes
-//                   tokenResponse(json)
-//                }
-//            }
-//        }
-//        self.dataTask = dataTask
-//        dataTask.resume()
+    /// - Parameter code: The auth code returned by by `connectWithProjectVerify`.
+    /// - Parameter mcc: The mcc returned by by `connectWithProjectVerify`
+    /// - Parameter mnc: The mnc returned by by `connectWithProjectVerify`
+    func login(
+        withAuthCode code: String,
+        mcc: String,
+        mnc: String,
+        completionHandler tokenResponse: @escaping ((JsonDocument?, Error?) -> Void)) {
+
+        var request = URLRequest(url: URL(string: "https://xci-demoapp-node.raizlabs.xyz/api/auth")!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try! JSONSerialization.data(withJSONObject: [
+            "code": code,
+            "mcc": mcc,
+            "mnc": mnc,
+            ], options: [])
+
+        let dataTask = session.dataTask(with: request) { (data, response, error) in
+            guard error == nil, let data = data else {
+                tokenResponse(nil, error)
+                return
+            }
+
+            let json = JsonDocument(data: data)
+            tokenResponse(json, nil)
+        }
+
+        self.dataTask = dataTask
+        dataTask.resume()
     }
-    
+
     func getUserInfo(with accessToken: String, completionHandler userInfoResponse: @escaping ((JsonDocument) -> Void)) {
-//        var request = URLRequest(url: URL(string: self.carrierConfig!["userinfo_endpoint"] as! String)!)
-//        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-//        
-//        let dataTask = session.dataTask(with: request) { (data, response, error) in
-//            
-//            let errorJson = JsonDocument(string: "{\"Error\":\(String(describing: error?.localizedDescription))\"}")
-//            guard error == nil else {return userInfoResponse(errorJson)}
-//            
-//            if let data = data {
-//                let json = JsonDocument(data: data)
-//                userInfoResponse(json)
-//            }
-//        }
-//        self.dataTask = dataTask
-//        dataTask.resume()
+        //get carrier data
+        //        self.carrierConfig = sharedAPI!.discoverCarrierConfiguration()
+        //        self.scopes = (carrierConfig!["scopes_supported"] as! String).components(separatedBy: " ")
+        //        self.responseTypes = [carrierConfig!["response_types_supported"]! as! String]
+        //
+        //        var request = URLRequest(url: URL(string: self.carrierConfig!["userinfo_endpoint"] as! String)!)
+        //        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        //
+        //        let dataTask = session.dataTask(with: request) { (data, response, error) in
+        //
+        //            let errorJson = JsonDocument(string: "{\"Error\":\(String(describing: error?.localizedDescription))\"}")
+        //            guard error == nil else {return userInfoResponse(errorJson)}
+        //
+        //            if let data = data {
+        //                let json = JsonDocument(data: data)
+        //                userInfoResponse(json)
+        //            }
+        //        }
+        //        self.dataTask = dataTask
+        //        dataTask.resume()
     }
 }
