@@ -41,16 +41,6 @@ struct SDKConfig: Equatable {
     }
 }
 
-struct SDKConfigLoader {
-    static func loadFromBundle(bundle: ProjectVerifyBundleProtocol) -> SDKConfig {
-        do {
-            return try SDKConfig.load(fromBundle: bundle)
-        } catch {
-            fatalError("Bundle configuration error: \(error)")
-        }
-    }
-}
-
 protocol ProjectVerifyBundleProtocol {
     var clientId: String? { get }
     var urlSchemes: [String] { get }
@@ -63,12 +53,12 @@ private enum PlistKeys {
 
 extension Bundle: ProjectVerifyBundleProtocol {
     var clientId: String? {
-        return self.object(forInfoDictionaryKey: PlistKeys.ClientId) as? String
+        return object(forInfoDictionaryKey: PlistKeys.ClientId) as? String
     }
 
     var urlSchemes: [String] {
         guard
-            let urlTypes = self.object(forInfoDictionaryKey: PlistKeys.BundleURLTypes) as? [[String: Any]] else {
+            let urlTypes = object(forInfoDictionaryKey: PlistKeys.BundleURLTypes) as? [[String: Any]] else {
                 return []
         }
 
