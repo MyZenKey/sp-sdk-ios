@@ -41,6 +41,8 @@ extension OpenIdURLResolverProtocol {
         completion: @escaping OpenIdURLResolverCompletion) {
 
         // TODO: clean up /cancel existing session semantics:
+        // since we don't rejoin via resumeExternalUserAgentFlowWithURL, we don't need to store the
+        // sesssion
         OIDAuthState.authState(
             byPresenting: request,
             presenting: viewController,
@@ -94,6 +96,8 @@ class XCISchemeOpenIdURLResolver: OpenIdURLResolverProtocol {
             appStore: URL(string: consentURLString)
         )!
 
+        // since we don't rejoin via resumeExternalUserAgentFlowWithURL, we don't need to store the
+        // sesssion
         OIDAuthState.authState(
             byPresenting: request,
             externalUserAgent: externalUserAgent,
@@ -161,6 +165,8 @@ class OpenIdURLResolver: OpenIdURLResolverProtocol {
             appStore: URL(string: consentURLString)
         )!
 
+        // since we don't rejoin via resumeExternalUserAgentFlowWithURL, we don't need to store the
+        // sesssion
         OIDAuthState.authState(
             byPresenting: request,
             externalUserAgent: externalUserAgent,

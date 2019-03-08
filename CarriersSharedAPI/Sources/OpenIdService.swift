@@ -157,11 +157,13 @@ extension OpenIdService: OpenIdServiceProtocol {
     }
 
     func concludeAuthorizationFlow(url: URL) {
-
         // NOTE: this logic replicates the functionality in OIDAuthorizationService.m
         // - (BOOL)resumeExternalUserAgentFlowWithURL:(NSURL *)URL
-        // the above is the method we would use but it goes directly into the token flow
-        // as this is treated as one flow by AppAuth. Here we'll short circut the token flow and
+        // Because AppAuth is designed around the OAuth 2.0 spec for native apps
+        // (https://tools.ietf.org/html/rfc8252)
+        // it is designed for apps implementing a public client authorization+token flow
+        // we would use the above is the method if we wanted to also request a token but it
+        // doen't support only requesting authorization. Here we'll short circut the token flow and
         // hand that off to the SP:
 
         // ensure valid state:
