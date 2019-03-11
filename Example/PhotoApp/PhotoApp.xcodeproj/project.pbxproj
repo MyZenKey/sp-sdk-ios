@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		04E9583DB4AE55586B5A2237 /* Pods_PhotoApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA8624BA9434A1B5AFA1C6E /* Pods_PhotoApp.framework */; };
+		23196D8F2230583D005393AB /* ServiceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23196D8E2230583D005393AB /* ServiceAPI.swift */; };
 		233B6168220BAADB008A0E27 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B6165220BAADB008A0E27 /* Debug.xcconfig */; };
 		233B6169220BAADB008A0E27 /* Develop.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B6166220BAADB008A0E27 /* Develop.xcconfig */; };
 		233B616A220BAADB008A0E27 /* Sprint.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B6167220BAADB008A0E27 /* Sprint.xcconfig */; };
@@ -42,6 +43,7 @@
 /* Begin PBXFileReference section */
 		10191382DE46337BBF70ACBD /* Pods-PhotoApp.develop.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoApp.develop.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoApp/Pods-PhotoApp.develop.xcconfig"; sourceTree = "<group>"; };
 		1C217446F201884E0A30CB75 /* Pods-PhotoApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoApp/Pods-PhotoApp.release.xcconfig"; sourceTree = "<group>"; };
+		23196D8E2230583D005393AB /* ServiceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAPI.swift; sourceTree = "<group>"; };
 		233B6165220BAADB008A0E27 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		233B6166220BAADB008A0E27 /* Develop.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Develop.xcconfig; sourceTree = "<group>"; };
 		233B6167220BAADB008A0E27 /* Sprint.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Sprint.xcconfig; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				7D073C2A202A673300E163E4 /* Utilities */,
 				8C103E7D21078EC200E232EE /* AppConfig.swift */,
 				56ECBCFE220BA6E300AEC6CE /* AppTheme.swift */,
+				23196D8E2230583D005393AB /* ServiceAPI.swift */,
 			);
 			path = PhotoApp;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				7D073C17202A640500E163E4 /* AppDelegate.swift in Sources */,
 				7D073C2E202A674C00E163E4 /* JsonDocument.swift in Sources */,
 				8C94CE1720F3135000805089 /* CheckoutViewController.swift in Sources */,
+				23196D8F2230583D005393AB /* ServiceAPI.swift in Sources */,
 				662387E2212FCF9000494A81 /* ProjectVerifyController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -546,7 +550,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "${PROVISIONING_PROFILE_DEMO_APPS}";
+				PROVISIONING_PROFILE_SPECIFIER = "Raizlabs Wildcard App ID";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

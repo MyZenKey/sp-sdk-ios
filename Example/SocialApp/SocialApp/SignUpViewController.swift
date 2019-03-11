@@ -145,8 +145,9 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         label.textAlignment = .center
         return label
     }()
-    
-    var code: String?
+
+    let serviceAPI = ServiceAPI()
+    var token: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -170,14 +171,9 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             poweredByLabel.text = "Powered by \(carrier.name)"
         }
         
-        if let code = code {
-            let serviceAPIObject = ServiceAPI()
-            serviceAPIObject.login(with: code, completionHandler: { (result) in
-                if let accessToken = result["access_token"].toString {
-                    serviceAPIObject.getUserInfo(with: accessToken, completionHandler: {(userInfoResponse) in
-                        self.displayUserInfo(from: userInfoResponse)
-                    })
-                }
+        if let token = token {
+            serviceAPI.getUserInfo(with: token, completionHandler: { (userInfoResponse) in
+                self.displayUserInfo(from: userInfoResponse)
             })
         }
 

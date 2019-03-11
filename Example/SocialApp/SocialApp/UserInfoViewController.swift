@@ -93,10 +93,10 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
     }()
     
     var selectedPinMapItem: MKMapItem?
-    var tokenInfo: String?
     var userInfo: String?
     var userInfoJson: JsonDocument?
-    var code: String?
+    var token: String?
+    let serviceAPI = ServiceAPI()
 
     /// Do any additional setup after loading the view.
     override func viewDidLoad() {
@@ -109,35 +109,23 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
             self.displayUserInfo(from: info)
         }
         else {
-            guard let code = code else {
+            guard let token = token else {
                 return
             }
-            let serviceAPIObject = ServiceAPI()
-            serviceAPIObject.login(with: code, completionHandler: { (result) in
 
-                guard let accessToken = result["access_token"].toString else {
-                    return
-                }
-
-                UserDefaults.standard.set(accessToken,forKey: "AccessToken")
-                UserDefaults.standard.synchronize();
-
-                self.tokenInfo = result.description
-                serviceAPIObject.getUserInfo(with: accessToken, completionHandler: {(userInfoResponse) in
-
-                    UserDefaults.standard.set(result.description,forKey: "UserInfoJSON")
-                    UserDefaults.standard.synchronize();
-                    self.code = "AuthZ: \(code)"
-                    self.userInfo = userInfoResponse.description
-                    self.displayUserInfo(from: userInfoResponse)
-                })
-            } )
+            serviceAPI.getUserInfo(with: token, completionHandler: { (userInfoResponse) in
+                // TODO: enble this once we have a user info endpoint
+//                UserDefaults.standard.set(user.description,forKey: "UserInfoJSON")
+//                UserDefaults.standard.synchronize();
+//                self.userInfo = userInfoResponse.description
+//                self.displayUserInfo(from: userInfoResponse)
+            })
         }
     }
 
     @IBAction func debug() {
         let vc = DebugViewController()
-        vc.finalInit(with: DebugViewController.Info(token: self.tokenInfo, userInfo: self.userInfo, code: self.code))
+        vc.finalInit(with: DebugViewController.Info(token: self.token, userInfo: self.userInfo, code: nil))
         present(vc, animated: true, completion: nil)
     }
 

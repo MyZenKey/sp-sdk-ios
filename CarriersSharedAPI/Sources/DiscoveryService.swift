@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 
 struct CarrierConfig {
+    let simInfo: SIMInfo
     let carrier: Carrier
     let openIdConfig: OpenIdConfig
 }
@@ -66,7 +67,8 @@ class DiscoveryService: DiscoveryServiceProtocol {
 //    UI –
 //    IP – https://23.20.110.44
 //    FQDN – https://app.xcijv.com/ui
-    private let discoveryEndpointFormat = "https://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
+    private let discoveryEndpointFormat = "http://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
+//    private let discoveryEndpointFormat = "https://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
 
     private var configuration: OpenIdConfig?
 
@@ -82,21 +84,29 @@ class DiscoveryService: DiscoveryServiceProtocol {
             return
         }
 
-        openIdConfig(forSIMInfo: sim) { [weak self] result in
+        let carrier = sim.carrier(usingCarrierLookUp: NetworkIdentifierCache.bundledCarrierLookup)
+
+        openIdConfig(forSIMInfo: sim, carrier: carrier) { [weak self] result in
 
             switch result {
+            case .value(let openIdConfig):
+                let config = CarrierConfig(
+                    simInfo: sim,
+                    carrier: carrier,
+                    openIdConfig: openIdConfig)
+                completion(.knownMobileNetwork(config))
+
             case .error(let error):
-                if let fallBackConfig = self?.recoverFromCache(carrier: sim.carrier,
+                if let fallBackConfig = self?.recoverFromCache(carrier: carrier,
                                                                allowStaleRecords: true) {
-                    let config = CarrierConfig(carrier: sim.carrier,
-                                               openIdConfig: fallBackConfig)
+                    let config = CarrierConfig(
+                        simInfo: sim,
+                        carrier: carrier,
+                        openIdConfig: fallBackConfig)
                     completion(.knownMobileNetwork(config))
                 } else {
                     completion(.error(error))
                 }
-            case .value(let openIdConfig):
-                let config = CarrierConfig(carrier: sim.carrier, openIdConfig: openIdConfig)
-                completion(.knownMobileNetwork(config))
             }
         }
     }
@@ -124,7 +134,8 @@ class DiscoveryService: DiscoveryServiceProtocol {
             "response_types_supported": "code",
             "userinfo_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/userinfo",
             "token_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/token",
-            "authorization_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize",
+            "authorization_endpoint": "xci://authorize",
+//            "authorization_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize",
             "issuer": "https://oidc.test.xlogin.att.com"
         ]
     ]
@@ -132,7 +143,8 @@ class DiscoveryService: DiscoveryServiceProtocol {
 
 private extension DiscoveryService {
     func openIdConfig(forSIMInfo simInfo: SIMInfo,
-                              completion: @escaping (OpenIdResult) -> Void ) {
+                      carrier: Carrier,
+                      completion: @escaping (OpenIdResult) -> Void ) {
 
         // TODO: business rules about what takes precedence here
 
@@ -143,7 +155,7 @@ private extension DiscoveryService {
         }
 
         // if not, check the hard coded values (future will be a more robust cache):
-        let cachedConfig = recoverFromCache(carrier: simInfo.carrier)
+        let cachedConfig = recoverFromCache(carrier: carrier)
         guard cachedConfig == nil else {
             completion(OpenIdResult.value(cachedConfig!))
             return
@@ -179,13 +191,12 @@ private extension DiscoveryService {
             guard
                 error == nil,
                 let jsonDocument = jsonDocument else {
-                self?.configuration = nil
-                completion?(
-                    OpenIdResult.error(DiscoveryServiceError.networkError(error ?? UnknownError()))
-                )
-                return
+                    self?.configuration = nil
+                    completion?(
+                        OpenIdResult.error(DiscoveryServiceError.networkError(error ?? UnknownError()))
+                    )
+                    return
             }
-
 
             // TODO: currently a query for unknown mcc/mnc returns an error. we may want to parse
             // this out further in the case we want to follow the returned redirect, etc.
@@ -195,13 +206,16 @@ private extension DiscoveryService {
                 return
             }
 
+            // NOTE: adding this nested config key becuase that's the way the response is structured
+            // at the moment – from my understanding it will be removed at some future point
             let config = [
                 "scopes_supported": "openid email profile",
                 "response_types_supported": "code",
-                "userinfo_endpoint": jsonDocument["userinfo_endpoint"].toString!,
-                "token_endpoint": jsonDocument["token_endpoint"].toString!,
-                "authorization_endpoint": jsonDocument["authorization_endpoint"].toString!,
-                "issuer": jsonDocument["issuer"].toString!
+                "userinfo_endpoint": jsonDocument["config"]["userinfo_endpoint"].toString!,
+                "token_endpoint": jsonDocument["config"]["token_endpoint"].toString!,
+                "authorization_endpoint": "xci://authorize",
+//                "authorization_endpoint": jsonDocument["config"]["authorization_endpoint"].toString!,
+                "issuer": jsonDocument["config"]["issuer"].toString!
             ]
 
             self?.configuration = config
@@ -212,8 +226,8 @@ private extension DiscoveryService {
     func discoveryEndpoint(forSIMInfo simInfo: SIMInfo) -> String {
         return String(
             format: discoveryEndpointFormat,
-            simInfo.identifiers.mcc,
-            simInfo.identifiers.mnc
+            simInfo.mcc,
+            simInfo.mnc
         )
     }
 }

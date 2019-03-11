@@ -98,6 +98,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     var window: UIWindow?
     let authService = AuthorizationService()
+    let serviceAPI = ServiceAPI()
 
     /// Do any additional setup after loading the view, typically from a nib.
     override func viewDidLoad() {
@@ -143,17 +144,33 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
                 let appDelegate = UIApplication.shared.delegate! as! AppDelegate
                 switch result {
-                case .code(let code):
-                    print("AuthZ_Code value from is: \(code)\n")
-                    UserDefaults.standard.set(code,forKey: "AuthZCode")
+                case .code(let authorizedResponse):
+                    let code = authorizedResponse.code
 
-                    if(appDelegate.launchMapViewFlag){
-                        appDelegate.launchMapScreen(code: code)
-                    }else{
-                        appDelegate.launchSignUpScreen(code: code)
-                    }
+                    UserDefaults.standard.set(code, forKey: "AuthZCode")
+                    self.serviceAPI.login(
+                        withAuthCode: code,
+                        mcc: authorizedResponse.mcc,
+                        mnc: authorizedResponse.mnc,
+                        completionHandler: { json, error in
+                            print("AuthZ_Code value from is: \(code)\n")
+                            UserDefaults.standard.set(code,forKey: "AuthZCode")
+                            guard let token = json?["token"].toString else {
+                                print("expected token returned")
+                                return
+                            }
+
+                            if (appDelegate.launchMapViewFlag) {
+                                appDelegate.launchMapScreen(token: token)
+                            } else {
+                                appDelegate.launchSignUpScreen(token: token)
+                            }
+
+                    })
 
                 case .error:
+                    appDelegate.launchLoginScreen()
+                case .cancelled:
                     appDelegate.launchLoginScreen()
                 }
         }

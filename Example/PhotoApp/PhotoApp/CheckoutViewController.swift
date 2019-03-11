@@ -111,6 +111,7 @@ class CheckoutViewController: UIViewController {
 
     var carrier: String? = "TODO: Carrier"
     let authService = AuthorizationService()
+    let serviceAPI = ServiceAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -134,11 +135,6 @@ class CheckoutViewController: UIViewController {
         }
         
         print("Checking for non-null url passed from app delegate")
-
-        if let code = authzCode {
-            self.login(with: code)
-        }
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -155,12 +151,28 @@ class CheckoutViewController: UIViewController {
                 // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
                 let appDelegate = UIApplication.shared.delegate! as! AppDelegate
                 switch result {
-                case .code(let code):
-                    self.authzCode = code
-                    print("AuthZ_Code value from is: \(code)\n")
-                    UserDefaults.standard.set(code,forKey: "AuthZCode")
-                    appDelegate.launchCheckOutScreen(code: code)
+                case .code(let authorizedResponse):
+                    let code = authorizedResponse.code
+
+                    UserDefaults.standard.set(code, forKey: "AuthZCode")
+                    self.serviceAPI.login(
+                        withAuthCode: code,
+                        mcc: authorizedResponse.mcc,
+                        mnc: authorizedResponse.mnc,
+                        completionHandler: { json, error in
+                            guard
+                                let accessToken = json?["access_token"],
+                                let tokenString = accessToken.toString else {
+                                print("error no token returned")
+                                return
+                            }
+                            UserDefaults.standard.set(tokenString, forKey: "AccessToken")
+                            self.getUserInfo(with: tokenString)
+                    })
+
                 case .error:
+                    appDelegate.launchLoginScreen()
+                case .cancelled:
                     appDelegate.launchLoginScreen()
                 }
         }
@@ -171,39 +183,11 @@ class CheckoutViewController: UIViewController {
         vc.finalInit(with: DebugViewController.Info(token: tokenInfo, userInfo: userInfo, code: authzCode))
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    
-    func login(with code: String) {
-        // TODO: re-enable once we have our demo server
 
-//        var request = URLRequest(url: URL(string: self.carrierConfig!["token_endpoint"] as! String)!)
-//        request.httpMethod = "POST"
-//        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-//        let authorizationCode = "\(self.clientId):\(self.secret)".data(using: .utf8)?.base64EncodedString() ?? ""
-//        request.setValue("BASIC \(authorizationCode)", forHTTPHeaderField: "Authorization")
-//        //request.httpBody = [].encodeAsUrlParams().data(using: .utf8)
-//
-//        print("url: \(request)")
-//        let dataTask = session.dataTask(with: request) { (data, response, error) in
-//            guard error == nil else {return}
-//            if let data = data {
-//                let json = JsonDocument(data: data)
-//                self.tokenInfo = json.description
-//                if let accessToken = json["access_token"].toString {
-//                    print(accessToken)
-//                    UserDefaults.standard.set(accessToken,forKey: "AccessToken")
-//                    UserDefaults.standard.synchronize();
-//                    self.getUserInfo(with: accessToken)
-//                }
-//            }
-//
-//        }
-//        self.dataTask = dataTask
-//        dataTask.resume()
-    }
-    
     func getUserInfo(with accessToken: String) {
         // TODO: re-enable once we have our demo server
+
+        self.nameField.text = "TODO: incorporate mock SP user endpoint"
 
 //        var request = URLRequest(url: URL(string: self.carrierConfig!["userinfo_endpoint"] as! String)!)
 //        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")

@@ -12,14 +12,11 @@ import UIKit
 public class AuthorizationService {
     let sdkConfig: SDKConfig
     let discoveryService: DiscoveryServiceProtocol
-    let authorizationStateManager: AuthorizationStateManager
     let openIdService: OpenIdServiceProtocol
 
-    init(authorizationStateManager: AuthorizationStateManager,
-         sdkConfig: SDKConfig,
+    init(sdkConfig: SDKConfig,
          discoveryService: DiscoveryServiceProtocol,
          openIdService: OpenIdServiceProtocol) {
-        self.authorizationStateManager = authorizationStateManager
         self.sdkConfig = sdkConfig
         self.discoveryService = discoveryService
         self.openIdService = openIdService
@@ -31,13 +28,13 @@ public class AuthorizationService {
         completion: @escaping AuthorizationCompletion) {
 
         let sdkConfig = self.sdkConfig
-        let authorizationStateManager = self.authorizationStateManager
 
-        discoveryService.discoverConfig() { [weak self] (result) in
+        discoveryService.discoverConfig() { [weak self] result in
             switch result {
             case .knownMobileNetwork(let config):
 
                 let authorizationConfig = OpenIdAuthorizationConfig(
+                    simInfo: config.simInfo,
                     clientId: sdkConfig.clientId,
                     // TODO: fix these forcing optionals here and strongly type upstream
                     authorizationEndpoint: URL(string: config.openIdConfig["authorization_endpoint"]!)!,
@@ -49,7 +46,6 @@ public class AuthorizationService {
 
                 self?.openIdService.authorize(
                     fromViewController: viewController,
-                    stateManager: authorizationStateManager,
                     authorizationConifg: authorizationConfig,
                     completion: completion
                 )
@@ -85,7 +81,6 @@ public extension AuthorizationService {
         let appDelegate = ProjectVerifyAppDelegate.shared
         let dependencies = appDelegate.dependencies
         self.init(
-            authorizationStateManager: appDelegate,
             sdkConfig: appDelegate.sdkConfig,
             discoveryService: dependencies.discoveryService,
             openIdService: dependencies.openIdService

@@ -43,7 +43,9 @@ extension CTTelephonyNetworkInfo: MobileNetworkInfoProvider {
 
     func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?) {
         let notifer: () -> Void = { [weak self] in
-            onNetworkInfoDidUpdate?(self?.currentSIMs ?? [])
+            DispatchQueue.main.async {
+                onNetworkInfoDidUpdate?(self?.currentSIMs ?? [])
+            }
         }
 
         if #available(iOS 12.0, *) {

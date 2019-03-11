@@ -25,5 +25,7 @@ class Dependencies: DependenciesProtocol {
         carrierInfoService: carrierInfoService
     )
 
-    let openIdService: OpenIdServiceProtocol = OpenIdService()
+    let openIdService: OpenIdServiceProtocol = OpenIdService(
+        urlResolver: XCISchemeOpenIdURLResolver()
+    )
 }

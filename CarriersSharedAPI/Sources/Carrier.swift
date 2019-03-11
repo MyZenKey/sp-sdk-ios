@@ -8,23 +8,7 @@
 
 import Foundation
 
-enum Carrier: Equatable, CaseIterable {
-    struct NetworkIdentifiers {
-        private let mccToMNCMap: [String: [String]]
-        init(_ mccToMNCMap: [String: [String]]) {
-            self.mccToMNCMap = mccToMNCMap
-        }
-
-        func has(mcc: String, mnc: String) -> Bool {
-            guard
-                let mncs = mccToMNCMap[mcc],
-                mncs.contains(mnc) else {
-                return false
-            }
-            return true
-        }
-    }
-
+enum Carrier: Equatable {
     case att, tmobile, verizon, sprint, unknown
 
     var shortName: String {
@@ -36,15 +20,41 @@ enum Carrier: Equatable, CaseIterable {
         case .unknown: return "unknown"
         }
     }
+}
 
-    var networkIdentifiers: NetworkIdentifiers {
-        switch self {
-        case .att: return Carrier.attCodes
-        case .tmobile: return Carrier.tmobileCodes
-        case .verizon: return Carrier.verizonCodes
-        case .sprint: return Carrier.sprintCodes
-        case .unknown: return NetworkIdentifiers([:])
+struct NetworkIdentifierCache {
+    struct NetworkIdentifiers {
+        private let mccToMNCMap: [String: [String]]
+        init(_ mccToMNCMap: [String: [String]]) {
+            self.mccToMNCMap = mccToMNCMap
         }
+
+        func has(mcc: String, mnc: String) -> Bool {
+            guard
+                let mncs = mccToMNCMap[mcc],
+                mncs.contains(mnc) else {
+                    return false
+            }
+            return true
+        }
+    }
+
+    private var identifiersByCarrier: [Carrier: NetworkIdentifiers]
+    private init(identifiersByCarrier: [Carrier: NetworkIdentifiers]) {
+        self.identifiersByCarrier = identifiersByCarrier
+    }
+
+    func carrier(forMcc mcc: String, mnc: String) -> Carrier {
+        var matchedCarrier: Carrier = .unknown
+        for (_, element) in identifiersByCarrier.enumerated() {
+            let identifiers = element.value
+            if identifiers.has(mcc: mcc, mnc: mnc) {
+                let carrier = element.key
+                matchedCarrier = carrier
+                break
+            }
+        }
+        return matchedCarrier
     }
 
     private static let attCodes = NetworkIdentifiers([
@@ -72,4 +82,13 @@ enum Carrier: Equatable, CaseIterable {
         "310": ["120"],
         "312": ["530"],
     ])
+
+    static let bundledCarrierLookup = NetworkIdentifierCache(
+        identifiersByCarrier: [
+            Carrier.tmobile: tmobileCodes,
+            Carrier.att: attCodes,
+            Carrier.verizon: verizonCodes,
+            Carrier.sprint: sprintCodes,
+        ]
+    )
 }

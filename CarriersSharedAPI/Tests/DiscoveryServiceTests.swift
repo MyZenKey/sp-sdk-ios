@@ -141,7 +141,9 @@ class DiscoveryServiceTests: XCTestCase {
                     "response_types_supported": "code",
                     "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
                     "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
-                    "authorization_endpoint": "https://xcid.t-mobile.com/verify/authorize",
+                    "authorization_endpoint": "xci://authorize",
+                    // TODO: re-enable this when we correct it
+//                    "authorization_endpoint": "https://xcid.t-mobile.com/verify/authorize",
                     "issuer": "https://brass.account.t-mobile.com",
                 ]
             )

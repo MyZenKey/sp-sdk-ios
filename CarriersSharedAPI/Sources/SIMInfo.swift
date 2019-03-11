@@ -10,29 +10,17 @@ import Foundation
 import CoreTelephony
 
 struct SIMInfo: Equatable {
-    struct IDPair: Equatable {
-        let mcc: String
-        let mnc: String
-    }
-
-    let identifiers: IDPair
-    let carrier: Carrier
-
-    init(identifiers: IDPair) {
-        self.identifiers = identifiers
-        self.carrier = SIMInfo.carrier(fromIDPair: identifiers)
-    }
+    let mcc: String
+    let mnc: String
 
     init(mcc: String, mnc: String) {
-        self.init(identifiers: IDPair(mcc: mcc, mnc: mnc))
+        self.mcc = mcc
+        self.mnc = mnc
     }
 }
 
-private extension SIMInfo {
-    static func carrier(fromIDPair identifiers: SIMInfo.IDPair) -> Carrier {
-        let carrier = Carrier.allCases.first() { carrier in
-            carrier.networkIdentifiers.has(mcc: identifiers.mcc, mnc: identifiers.mnc)
-        }
-        return carrier ?? .unknown
+extension SIMInfo {
+    func carrier(usingCarrierLookUp cache: NetworkIdentifierCache) -> Carrier {
+        return cache.carrier(forMcc: mcc, mnc: mnc)
     }
 }

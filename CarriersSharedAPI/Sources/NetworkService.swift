@@ -29,18 +29,20 @@ class NetworkService: NetworkServiceProtocol {
                      completion: ((JsonDocument?, Error?) -> Void)?) {
 
         let task = URLSession.shared.dataTask(with: request) { (data, rawResponse, error) in
-            guard error == nil else {
-                completion?(nil, error)
-                return
-            }
+            DispatchQueue.main.async {
+                guard error == nil else {
+                    completion?(nil, error)
+                    return
+                }
 
-            guard let data = data else {
-                completion?(nil, NetworkServiceErrors.invalidResponseBody(request: request))
-                return
+                guard let data = data else {
+                    completion?(nil, NetworkServiceErrors.invalidResponseBody(request: request))
+                    return
+                }
+                // TODO: factor out custom att's JSON parser and use codable models
+                let document = JsonDocument(data: data)
+                completion?(document, nil)
             }
-            // TODO: factor out custom att's JSON parser and use codable models
-            let document = JsonDocument(data: data)
-            completion?(document, nil)
         }
 
         task.resume()

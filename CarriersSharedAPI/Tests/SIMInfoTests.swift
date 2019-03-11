@@ -24,42 +24,41 @@ struct MockCodes {
 }
 
 class SIMInfoTests: XCTestCase {
-    func testCreatesSIMInfoWithPassedIdentifiers() {
-        let info = SIMInfo(mcc: MockCodes.MCC.us, mnc: MockCodes.MNC.tmobile)
-        XCTAssertEqual(info.identifiers.mcc, MockCodes.MCC.us)
-        XCTAssertEqual(info.identifiers.mnc, MockCodes.MNC.tmobile)
+
+    func carrierUsingBundledLookup(_ simInfo: SIMInfo) -> Carrier {
+        return simInfo.carrier(usingCarrierLookUp: NetworkIdentifierCache.bundledCarrierLookup)
     }
 
     func testCreatesTMobileInfo() {
         let info = SIMInfo(mcc: MockCodes.MCC.us, mnc: MockCodes.MNC.tmobile)
-        XCTAssertEqual(info.carrier, .tmobile)
+        XCTAssertEqual(carrierUsingBundledLookup(info), .tmobile)
     }
 
     func testCreatesATTInfo() {
         let info = SIMInfo(mcc: MockCodes.MCC.us, mnc: MockCodes.MNC.att)
-        XCTAssertEqual(info.carrier, .att)
+        XCTAssertEqual(carrierUsingBundledLookup(info), .att)
     }
 
     func testCreatesVerizonInfo() {
         let info = SIMInfo(mcc: MockCodes.MCC.us, mnc: MockCodes.MNC.verizon)
-        XCTAssertEqual(info.carrier, .verizon)
+        XCTAssertEqual(carrierUsingBundledLookup(info), .verizon)
     }
 
     func testCreatesSprintInfo() {
         let info = SIMInfo(mcc: MockCodes.MCC.us, mnc: MockCodes.MNC.sprint)
-        XCTAssertEqual(info.carrier, .sprint)
+        XCTAssertEqual(carrierUsingBundledLookup(info), .sprint)
     }
 
     func testCreatesUnknownCode() {
         let info = SIMInfo(mcc: "999", mnc: "333")
-        XCTAssertEqual(info.carrier, .unknown)
+        XCTAssertEqual(carrierUsingBundledLookup(info), .unknown)
     }
 
     func testDoesntRecognizeInvalidComboInfo() {
         let incorrectInfo = SIMInfo(mcc: MockCodes.MCC.secondaryUS, mnc: MockCodes.MNC.verizon)
-        XCTAssertEqual(incorrectInfo.carrier, .unknown)
+        XCTAssertEqual(carrierUsingBundledLookup(incorrectInfo), .unknown)
 
         let correctInfo = SIMInfo(mcc: MockCodes.MCC.secondaryUS, mnc: MockCodes.MNC.secondaryVerizon)
-        XCTAssertEqual(correctInfo.carrier, .verizon)
+        XCTAssertEqual(carrierUsingBundledLookup(correctInfo), .verizon)
     }
 }
