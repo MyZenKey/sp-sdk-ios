@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>ProjectVerifyClientSecret</key>
-	<string>SocialApp</string>
-	<key>ProjectVerifyClientId</key>
-	<string>socialapp_client_secret</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -31,8 +27,7 @@
 			<string>com.att.ent.cso.haloc.socialapp</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.att.ent.cso.haloc.socialapp</string>
-				<string></string>
+				<string>xciSocialApp</string>
 			</array>
 		</dict>
 	</array>
@@ -50,6 +45,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>ProjectVerifyClientId</key>
+	<string>SocialApp</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Fonts/SF Compact/SFCompactText/*.otf</string>

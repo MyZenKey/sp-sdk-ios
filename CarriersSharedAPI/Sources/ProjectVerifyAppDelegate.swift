@@ -21,7 +21,11 @@ public class ProjectVerifyAppDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         // initialize sdk config
-        self.sdkConfig = SDKConfigLoader.loadFromBundle(bundle: Bundle.main)
+        do {
+            self.sdkConfig = try SDKConfig.load(fromBundle: Bundle.main)
+        } catch {
+            fatalError("Bundle configuration error: \(error)")
+        }
     }
 
     public func application(
