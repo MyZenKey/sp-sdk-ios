@@ -27,11 +27,6 @@ public enum AuthorizationResult {
 
 public typealias AuthorizationCompletion = (AuthorizationResult) -> Void
 
-public enum OpenIdError: Error {
-    case stateMismatch
-    case missingAuthCode
-}
-
 struct OpenIdAuthorizationConfig: Equatable {
     let simInfo: SIMInfo
     let clientId: String
@@ -185,23 +180,29 @@ extension OpenIdService: OpenIdServiceProtocol {
         }
 
         // checks for an OAuth error response as per RFC6749 Section 4.1.2.1
-        guard queryDictionary[ResponseKeys.error.rawValue] == nil else {
-                // TODO: handle errors as specified in section 4.5 of the api spec
-                concludeAuthorizationFlow(result: .error(UnknownError()))
-                return
+        let errorId = queryDictionary[ResponseKeys.error.rawValue]
+        guard errorId == nil else {
+            let errorId = errorId!
+            let errorDescription = queryDictionary[ResponseKeys.errorDescription.rawValue]
+            let errorValue = OpenIdService.errorValue(
+                fromIdentifier: errorId,
+                description: errorDescription
+            )
+            concludeAuthorizationFlow(result: .error(errorValue))
+            return
         }
 
         // no error, should be a valid OAuth 2.0 response
         guard
             let inboundState = queryDictionary[ResponseKeys.state.rawValue],
             inboundState == request.state else {
-                concludeAuthorizationFlow(result: .error(OpenIdError.stateMismatch))
+                concludeAuthorizationFlow(result: .error(AuthorizationError.stateMismatch))
                 return
         }
 
         // extract the code
         guard let code = queryDictionary[ResponseKeys.code.rawValue] else {
-                concludeAuthorizationFlow(result: .error(OpenIdError.missingAuthCode))
+                concludeAuthorizationFlow(result: .error(AuthorizationError.missingAuthCode))
                 return
         }
 
@@ -223,4 +224,18 @@ extension OpenIdService: OpenIdServiceProtocol {
 
         completion(result)
     }
+}
+
+extension OpenIdService {
+    static func errorValue(fromIdentifier identifier: String, description: String?) -> AuthorizationError {
+        if let errorCode = OAuthErrorCode(rawValue: identifier) {
+            return .oauth(errorCode, description)
+        } else if let errorCode = OpenIdErrorCode(rawValue: identifier) {
+            return .openId(errorCode, description)
+        } else if let errorCode = ProjectVerifyErrorCode(rawValue: identifier) {
+            return .projectVerify(errorCode, description)
+        }
+        return .unknown(identifier, description)
+    }
+
 }
