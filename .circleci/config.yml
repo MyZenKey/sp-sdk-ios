@@ -102,17 +102,17 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - docs
-        # requires:
-        #   - develop
-        # filters:
-        #   branches: 
-        #     only: develop
       - develop:
           requires:
             - test
           filters:
             branches:
+              only: develop
+      - docs:
+          requires:
+            - develop
+          filters:
+            branches: 
               only: develop
       - sprint:
           requires:
