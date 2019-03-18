@@ -9,11 +9,15 @@ default_platform :ios
 # RZ_KEYCHAIN_PASSWORD
 # SLACK_URL - set the hook URL in the CircleCI environment
 
+# defined in config
+# JAZZY_OUTPUT
+# JAZZY_ARTIFACTS
+
 BANK_APP = 'BankApp'
 SOCIAL_APP = 'SocialApp'
 PHOTO_APP = 'PhotoApp'
 
-PRODUCT_NAMES = [ SOCIAL_APP, BANK_APP, PHOTO_APP]
+PRODUCT_NAMES = [SOCIAL_APP, BANK_APP, PHOTO_APP]
 
 # hockey app id hashes
 DEVELOP_IDS = {
@@ -30,7 +34,7 @@ SPRINT_IDS = {
 
 # env
 
-ENV['RZ_ARTIFACTS'] ||= ENV['CIRCLE_ARTIFACTS'] || './build'
+ENV['RZ_ARTIFACTS'] = './build'
 ENV['RZ_TEST_REPORTS'] ||= ENV['CIRCLE_TEST_REPORTS'] || './build'
 ENV['FASTLANE_XCODE_LIST_TIMEOUT'] = '120'
 ENV['CI_BUILD'] = 'yes'
@@ -70,6 +74,14 @@ platform :ios do
       puts "Fixing JUnit report name"
       sh "cp #{ENV['RZ_TEST_REPORTS']}/scan/report.junit #{ENV['RZ_TEST_REPORTS']}/scan/report.xml"
     end
+  end
+
+  desc "Generates Docs"
+  lane :generate_docs do
+    Dir.chdir('../') do
+      sh "jazzy --output #{ENV['JAZZY_OUTPUT']}"
+    end
+    zip(path: ENV['JAZZY_OUTPUT'], output_path: ENV['JAZZY_ARTIFACTS'])
   end
 
   # desc "Runs Code Coverage"
