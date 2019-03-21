@@ -57,7 +57,8 @@ class AuthorizationServiceTests: XCTestCase {
 
     lazy var discoveryService = DiscoveryService(
         networkService: mockNetworkService,
-        carrierInfoService: mockCarrierInfo
+        carrierInfoService: mockCarrierInfo,
+        configCacheService: ConfigCacheService()
     )
 
     lazy var authorizationService = AuthorizationService(

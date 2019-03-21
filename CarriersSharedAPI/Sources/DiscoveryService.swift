@@ -60,6 +60,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
 
     private let carrierInfoService: CarrierInfoServiceProtocol
     private let networkService: NetworkServiceProtocol
+    private let configCacheService: ConfigCacheServiceProtocol
 
 //    Issuer –
 //    IP - https://100.25.175.177/.well-known/openid_configuration
@@ -69,13 +70,15 @@ class DiscoveryService: DiscoveryServiceProtocol {
 //    FQDN – https://app.xcijv.com/ui
     private let discoveryEndpointFormat = "http://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
 //    private let discoveryEndpointFormat = "https://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
-
-    private var configuration: OpenIdConfig?
+    
+    private let networkIdentifierCache = NetworkIdentifierCache.bundledCarrierLookup
 
     init(networkService: NetworkServiceProtocol,
-         carrierInfoService: CarrierInfoServiceProtocol) {
+         carrierInfoService: CarrierInfoServiceProtocol,
+         configCacheService: ConfigCacheServiceProtocol) {
         self.networkService = networkService
         self.carrierInfoService = carrierInfoService
+        self.configCacheService = configCacheService
     }
 
     func discoverConfig(completion: @escaping (DiscoveryServiceResult) -> Void) {
@@ -84,7 +87,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
             return
         }
 
-        let carrier = sim.carrier(usingCarrierLookUp: NetworkIdentifierCache.bundledCarrierLookup)
+        let carrier = sim.carrier(usingCarrierLookUp: networkIdentifierCache)
 
         openIdConfig(forSIMInfo: sim, carrier: carrier) { [weak self] result in
 
@@ -110,35 +113,6 @@ class DiscoveryService: DiscoveryServiceProtocol {
             }
         }
     }
-
-    // TODO: this data should be pulled from a cache and updated according to some schedule
-    private let discoveryData = [
-        "tmo": [
-            "scopes_supported": "openid email profile",
-            "response_types_supported": "code",
-            "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
-            "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
-            "authorization_endpoint": "https://account.t-mobile.com/oauth2/v1/auth",
-            "issuer": "https://ppd.account.t-mobile.com"
-        ],
-        "vzw": [
-            "scopes_supported": "openid email profile",
-            "response_types_supported": "code",
-            "userinfo_endpoint": "https://api.yourmobileid.com:22790/userinfo",
-            "token_endpoint": "https://auth.svcs.verizon.com:22790/vzconnect/token",
-            "authorization_endpoint": "https://auth.svcs.verizon.com:22790/vzconnect/authorize",
-            "issuer": "https://auth.svcs.verizon.com"
-        ],
-        "att": [
-            "scopes_supported": "email zipcode name phone",
-            "response_types_supported": "code",
-            "userinfo_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/userinfo",
-            "token_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/token",
-            "authorization_endpoint": "xci://authorize",
-//            "authorization_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize",
-            "issuer": "https://oidc.test.xlogin.att.com"
-        ]
-    ]
 }
 
 private extension DiscoveryService {
@@ -146,15 +120,6 @@ private extension DiscoveryService {
                       carrier: Carrier,
                       completion: @escaping (OpenIdResult) -> Void ) {
 
-        // TODO: business rules about what takes precedence here
-
-        // if we have a configuration locally, return that:
-        guard configuration == nil else {
-            completion(OpenIdResult.value(configuration!))
-            return
-        }
-
-        // if not, check the hard coded values (future will be a more robust cache):
         let cachedConfig = recoverFromCache(carrier: carrier)
         guard cachedConfig == nil else {
             completion(OpenIdResult.value(cachedConfig!))
@@ -166,13 +131,9 @@ private extension DiscoveryService {
     }
     
     func recoverFromCache(carrier: Carrier,
-                                  allowStaleRecords: Bool = false) -> OpenIdConfig? {
-
-        guard allowStaleRecords else {
-            return nil
-        }
-        // TODO: real caching service
-        return discoveryData[carrier.shortName]
+                          allowStaleRecords: Bool = false) -> OpenIdConfig? {
+        return configCacheService.config(forIdentifier: carrier.shortName,
+                                         allowStaleRecords: allowStaleRecords)
     }
 
     func performDiscovery(forSIMInfo simInfo: SIMInfo,
@@ -191,7 +152,6 @@ private extension DiscoveryService {
             guard
                 error == nil,
                 let jsonDocument = jsonDocument else {
-                    self?.configuration = nil
                     completion?(
                         OpenIdResult.error(DiscoveryServiceError.networkError(error ?? UnknownError()))
                     )
@@ -218,8 +178,17 @@ private extension DiscoveryService {
                 "issuer": jsonDocument["config"]["issuer"].toString!
             ]
 
-            self?.configuration = config
-            completion?(OpenIdResult.value(config))
+
+            defer { completion?(OpenIdResult.value(config)) }
+            guard let sself = self else {
+                return
+            }
+            
+            let shortName = simInfo.carrier(usingCarrierLookUp: sself.networkIdentifierCache).shortName
+            sself.configCacheService.cacheConfig(
+                config,
+                forIdentifier: shortName
+            )
         }
     }
 
