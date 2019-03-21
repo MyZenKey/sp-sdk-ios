@@ -31,5 +31,7 @@ class Dependencies: DependenciesProtocol {
         urlResolver: XCISchemeOpenIdURLResolver()
     )
     
-    let configCacheService: ConfigCacheServiceProtocol = ConfigCacheService()
+    let configCacheService: ConfigCacheServiceProtocol = ConfigCacheService(
+        networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
+    )
 }

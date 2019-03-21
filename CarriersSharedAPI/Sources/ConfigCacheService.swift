@@ -14,12 +14,12 @@ protocol ConfigCacheServiceProtocol {
     /// older than the TTL will be treated as stale. They may still be retrieved by passing
     /// `allowStaleRecords` to `config(forIdentifier:allowStaleRecords)`
     var cacheTTL: TimeInterval { get set }
-    /// Sets a config in the cache for the provided identifier. The record in the cache recieves
+    /// Sets a config in the cache for the provided SIM Identifers. The record in the cache recieves
     /// the current time as a timestamp
-    func cacheConfig(_ config: OpenIdConfig, forIdentifier identifier: String)
+    func cacheConfig(_ config: OpenIdConfig, forSIMInfo simInfo: SIMInfo)
     /// Retrieves a record for the provided identifier or nil fromt the cache. If `allowStaleRecords`
     /// is passed the cache will ignore the `cacheTTL` value and return the most recent record it has.
-    func config(forIdentifier identifier: String, allowStaleRecords: Bool) -> OpenIdConfig?
+    func config(forSIMInfo simInfo: SIMInfo, allowStaleRecords: Bool) -> OpenIdConfig?
 }
 
 class ConfigCacheService: ConfigCacheServiceProtocol {
@@ -28,24 +28,52 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
 
     private var cacheTimeStamps: [String: Date] = [:]
 
-    private var cache: [String: OpenIdConfig] = ConfigCacheService.bundledDiscoveryData
+    private var cache: [String: OpenIdConfig] = [:]
     
-    func cacheConfig(_ config: OpenIdConfig, forIdentifier identifier: String) {
+    private let networkIdentifierCache: NetworkIdentifierCache
+    
+    init(networkIdentifierCache: NetworkIdentifierCache) {
+        self.networkIdentifierCache = networkIdentifierCache
+    }
+    
+    func cacheConfig(_ config: OpenIdConfig, forSIMInfo simInfo: SIMInfo) {
+        let identifier = identifer(forSIMInfo: simInfo)
         cacheTimeStamps[identifier] = Date()
         cache[identifier] = config
     }
     
-    func config(forIdentifier identifier: String,
+    func config(forSIMInfo simInfo: SIMInfo,
                 allowStaleRecords: Bool) -> OpenIdConfig? {
         
+        let identifier = identifer(forSIMInfo: simInfo)
         let cachedTimeStamp = cacheTimeStamps[identifier] ?? Date.distantPast
-        guard
-            let cachedValue = cache[identifier],
-            (allowStaleRecords || (abs(cachedTimeStamp.timeIntervalSinceNow) < cacheTTL)) else {
-                return nil
-        }
+        let cachedValue = cache[identifier]
+        let cachedRecordIsValid = (abs(cachedTimeStamp.timeIntervalSinceNow) < cacheTTL)
 
-        return cachedValue
+        // record must be valid or we must permit stale records
+        guard cachedRecordIsValid || allowStaleRecords else {
+            return nil
+        }
+        
+        // if there is no record, fallback on bundled record
+        guard let record = cachedValue else {
+            return fallbackToBundle(forSIMInfo: simInfo)
+        }
+        
+        return record
+    }
+    
+    private func fallbackToBundle(forSIMInfo simInfo: SIMInfo) -> OpenIdConfig? {
+        // fall back on bundled data if known mno:
+        let carrier = self.networkIdentifierCache.carrier(
+            forMcc: simInfo.mcc,
+            mnc: simInfo.mnc
+        )
+        return ConfigCacheService.bundledDiscoveryData[carrier.shortName]
+    }
+    
+    private func identifer(forSIMInfo simInfo: SIMInfo) -> String {
+        return "\(simInfo.mcc)\(simInfo.mnc)"
     }
 }
 

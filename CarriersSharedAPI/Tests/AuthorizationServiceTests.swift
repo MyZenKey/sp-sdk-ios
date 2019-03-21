@@ -55,10 +55,11 @@ class AuthorizationServiceTests: XCTestCase {
         redirectURL: URL(string: "pvmockCLient://")!
     )
 
+    let networkIdentifierCache =  NetworkIdentifierCache.bundledCarrierLookup
     lazy var discoveryService = DiscoveryService(
         networkService: mockNetworkService,
         carrierInfoService: mockCarrierInfo,
-        configCacheService: ConfigCacheService()
+        configCacheService: ConfigCacheService(networkIdentifierCache: networkIdentifierCache)
     )
 
     lazy var authorizationService = AuthorizationService(

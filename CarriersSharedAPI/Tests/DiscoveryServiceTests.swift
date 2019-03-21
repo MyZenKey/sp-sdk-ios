@@ -10,11 +10,10 @@ import XCTest
 @testable import CarriersSharedAPI
 
 class MockConfigCacheService: ConfigCacheServiceProtocol {
+    var implementation = MockConfigCacheService.newImplementation()
     
-    var implementation = ConfigCacheService()
-    
-    var lastCacheParms: (OpenIdConfig, String)?
-    var lastConfigForParameters: (String, Bool)?
+    var lastCacheParams: (OpenIdConfig, SIMInfo)?
+    var lastConfigForParams: (SIMInfo, Bool)?
 
     var cacheTTL: TimeInterval {
         get { return implementation.cacheTTL }
@@ -22,19 +21,25 @@ class MockConfigCacheService: ConfigCacheServiceProtocol {
     }
     
     func clear() {
-        implementation = ConfigCacheService()
-        lastCacheParms = nil
-        lastConfigForParameters = nil
+        implementation = MockConfigCacheService.newImplementation()
+        lastCacheParams = nil
+        lastConfigForParams = nil
+    }
+    
+    func cacheConfig(_ config: OpenIdConfig, forSIMInfo simInfo: SIMInfo) {
+        lastCacheParams = (config, simInfo)
+        implementation.cacheConfig(config, forSIMInfo: simInfo)
     }
 
-    func cacheConfig(_ config: OpenIdConfig, forIdentifier identifier: String) {
-        lastCacheParms = (config, identifier)
-        implementation.cacheConfig(config, forIdentifier: identifier)
+    func config(forSIMInfo simInfo: SIMInfo, allowStaleRecords: Bool) -> OpenIdConfig? {
+        lastConfigForParams = (simInfo, allowStaleRecords)
+        return implementation.config(forSIMInfo: simInfo, allowStaleRecords: allowStaleRecords)
     }
-
-    func config(forIdentifier identifier: String, allowStaleRecords: Bool) -> OpenIdConfig? {
-        lastConfigForParameters = (identifier, allowStaleRecords)
-        return implementation.config(forIdentifier: identifier, allowStaleRecords: allowStaleRecords)
+    
+    private static func newImplementation() -> ConfigCacheService {
+        return ConfigCacheService(
+            networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
+        )
     }
 }
 
@@ -122,8 +127,6 @@ class DiscoveryServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
             let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
-
-            XCTAssertEqual(config.carrier, Carrier.tmobile)
             XCTAssertEqual(
                 config.openIdConfig,
                 [
@@ -166,7 +169,6 @@ class DiscoveryServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
             let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
-            XCTAssertEqual(config.carrier, Carrier.tmobile)
             let expectedResult = [
                 "scopes_supported": "openid email profile",
                 "response_types_supported": "code",
@@ -183,7 +185,7 @@ class DiscoveryServiceTests: XCTestCase {
                 expectedResult
             )
             
-            let lastParams = try! UnwrapAndAssertNotNil(self.mockConfigCacheService.lastCacheParms)
+            let lastParams = try! UnwrapAndAssertNotNil(self.mockConfigCacheService.lastCacheParams)
             XCTAssertEqual(
                 lastParams.0,
                 expectedResult
@@ -191,7 +193,7 @@ class DiscoveryServiceTests: XCTestCase {
             
             XCTAssertEqual(
                 lastParams.1,
-                "tmo"
+                self.tmoSIMInfo
             )
             
             expectation.fulfill()
@@ -211,7 +213,6 @@ class DiscoveryServiceTests: XCTestCase {
             self.discoveryService.discoverConfig() { result in
                 let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
                 
-                XCTAssertEqual(config.carrier, Carrier.tmobile)
                 XCTAssertEqual(
                     config.openIdConfig,
                     [

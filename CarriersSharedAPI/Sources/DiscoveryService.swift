@@ -11,7 +11,6 @@ import Foundation
 
 struct CarrierConfig {
     let simInfo: SIMInfo
-    let carrier: Carrier
     let openIdConfig: OpenIdConfig
 }
 
@@ -71,8 +70,6 @@ class DiscoveryService: DiscoveryServiceProtocol {
     private let discoveryEndpointFormat = "http://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
 //    private let discoveryEndpointFormat = "https://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
     
-    private let networkIdentifierCache = NetworkIdentifierCache.bundledCarrierLookup
-
     init(networkService: NetworkServiceProtocol,
          carrierInfoService: CarrierInfoServiceProtocol,
          configCacheService: ConfigCacheServiceProtocol) {
@@ -87,24 +84,21 @@ class DiscoveryService: DiscoveryServiceProtocol {
             return
         }
 
-        let carrier = sim.carrier(usingCarrierLookUp: networkIdentifierCache)
 
-        openIdConfig(forSIMInfo: sim, carrier: carrier) { [weak self] result in
+        openIdConfig(forSIMInfo: sim) { [weak self] result in
 
             switch result {
             case .value(let openIdConfig):
                 let config = CarrierConfig(
                     simInfo: sim,
-                    carrier: carrier,
                     openIdConfig: openIdConfig)
                 completion(.knownMobileNetwork(config))
 
             case .error(let error):
-                if let fallBackConfig = self?.recoverFromCache(carrier: carrier,
+                if let fallBackConfig = self?.recoverFromCache(simInfo: sim,
                                                                allowStaleRecords: true) {
                     let config = CarrierConfig(
                         simInfo: sim,
-                        carrier: carrier,
                         openIdConfig: fallBackConfig)
                     completion(.knownMobileNetwork(config))
                 } else {
@@ -117,10 +111,9 @@ class DiscoveryService: DiscoveryServiceProtocol {
 
 private extension DiscoveryService {
     func openIdConfig(forSIMInfo simInfo: SIMInfo,
-                      carrier: Carrier,
                       completion: @escaping (OpenIdResult) -> Void ) {
 
-        let cachedConfig = recoverFromCache(carrier: carrier)
+        let cachedConfig = recoverFromCache(simInfo: simInfo)
         guard cachedConfig == nil else {
             completion(OpenIdResult.value(cachedConfig!))
             return
@@ -130,9 +123,9 @@ private extension DiscoveryService {
         performDiscovery(forSIMInfo: simInfo, completion: completion)
     }
     
-    func recoverFromCache(carrier: Carrier,
+    func recoverFromCache(simInfo: SIMInfo,
                           allowStaleRecords: Bool = false) -> OpenIdConfig? {
-        return configCacheService.config(forIdentifier: carrier.shortName,
+        return configCacheService.config(forSIMInfo: simInfo,
                                          allowStaleRecords: allowStaleRecords)
     }
 
@@ -184,10 +177,9 @@ private extension DiscoveryService {
                 return
             }
             
-            let shortName = simInfo.carrier(usingCarrierLookUp: sself.networkIdentifierCache).shortName
             sself.configCacheService.cacheConfig(
                 config,
-                forIdentifier: shortName
+                forSIMInfo: simInfo
             )
         }
     }
