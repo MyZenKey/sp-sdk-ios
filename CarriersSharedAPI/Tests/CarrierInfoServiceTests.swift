@@ -11,8 +11,8 @@ import XCTest
 
 class CarriersInfoServiceTests: XCTestCase {
 
-    let mockSIMA = SIMInfo(mcc: "310", mnc: "160")
-    let mockSIMB = SIMInfo(mcc: "310", mnc: "410")
+    let mockSIMA = MockSIMs.unknown
+    let mockSIMB = MockSIMs.att
 
     let mockNetworkProvider = MockMobileNetworkInfoProvider()
     lazy var carrerInfoService: CarrierInfoService =  CarrierInfoService(mobileNetworkInfoProvder: self.mockNetworkProvider)

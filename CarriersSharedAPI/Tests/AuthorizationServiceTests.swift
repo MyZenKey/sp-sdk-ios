@@ -76,7 +76,7 @@ class AuthorizationServiceTests: XCTestCase {
     }
 
     func testPassesViewControllerToOpenIdService() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "123", mnc: "456")
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
 
         let expectedController = UIViewController()
@@ -92,7 +92,7 @@ class AuthorizationServiceTests: XCTestCase {
     }
 
     func testPassesCorrectScopeStringsToOpenIdService() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "123", mnc: "456")
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
 
         let expectation = XCTestExpectation(description: "async authorization")

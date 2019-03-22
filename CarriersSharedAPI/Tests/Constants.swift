@@ -29,4 +29,5 @@ func UnwrapAndAssertNotNil<T>(_ variable: T?,
 struct MockSIMs {
     static let unknown = SIMInfo(mcc: "123", mnc: "456")
     static let tmobile = SIMInfo(mcc: "310", mnc: "210")
+    static let att = SIMInfo(mcc: "310", mnc: "410")
 }

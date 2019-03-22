@@ -45,7 +45,6 @@ class MockConfigCacheService: ConfigCacheServiceProtocol {
 
 class DiscoveryServiceTests: XCTestCase {
 
-    let tmoSIMInfo = SIMInfo(mcc: "310", mnc: "160")
     let mockNetworkService = MockNetworkService()
     let mockCarrierInfo = MockCarrierInfoService()
     let mockConfigCacheService = MockConfigCacheService()
@@ -87,7 +86,7 @@ class DiscoveryServiceTests: XCTestCase {
     }
 
     func testCorrectlyFormatsURL() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "123", mnc: "456")
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { _ in
             let request = self.mockNetworkService.lastRequest
@@ -104,7 +103,7 @@ class DiscoveryServiceTests: XCTestCase {
     }
 
     func testUnknownCarrierEndpointErrorReturnsError() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "123", mnc: "456")
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
         let error = NSError(domain: "", code: 1, userInfo: [:])
         mockNetworkService.mockError(error)
         let expectation = XCTestExpectation(description: "async discovery")
@@ -121,7 +120,7 @@ class DiscoveryServiceTests: XCTestCase {
     }
 
     func testKnownCarrierEndpointErrorFallbackToBundledConfigByDefault() {
-        mockCarrierInfo.primarySIM = tmoSIMInfo
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
         let error = NSError(domain: "", code: 1, userInfo: [:])
         mockNetworkService.mockError(error)
         let expectation = XCTestExpectation(description: "async discovery")
@@ -146,7 +145,7 @@ class DiscoveryServiceTests: XCTestCase {
     // NOTE: this could be returns testUnknownCarrierEndpointSuccessReturnsUnknownMobileNetwork
     // in the future
     func testUnknownCarrierEndpointSuccessReturnsError() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "123", mnc: "456")
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.carrierNotFound)
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
@@ -164,7 +163,7 @@ class DiscoveryServiceTests: XCTestCase {
     }
 
     func testKnownCarrierEndpointSuccessCachesAndReturnsMockedConfig() {
-        mockCarrierInfo.primarySIM = tmoSIMInfo
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
@@ -193,7 +192,7 @@ class DiscoveryServiceTests: XCTestCase {
             
             XCTAssertEqual(
                 lastParams.1,
-                self.tmoSIMInfo
+                MockSIMs.tmobile
             )
             
             expectation.fulfill()
@@ -202,7 +201,7 @@ class DiscoveryServiceTests: XCTestCase {
     }
     
     func testKnownCarrierEndpointErrorFallbackToLastSuccessfulConfigIfAvailable() {
-        mockCarrierInfo.primarySIM = tmoSIMInfo
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         
         let expectation = XCTestExpectation(description: "async discovery")
