@@ -41,7 +41,7 @@ public class AuthorizationService {
                     tokenEndpoint: URL(string: config.openIdConfig["token_endpoint"]!)!,
                     formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
                     redirectURL: sdkConfig.redirectURL,
-                    state: "foo"
+                    state: "demo-app-state"
                 )
 
                 self?.openIdService.authorize(
