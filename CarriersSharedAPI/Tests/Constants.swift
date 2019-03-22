@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import CarriersSharedAPI
 
 let timeout: TimeInterval = 10.0
 
@@ -22,4 +23,10 @@ func UnwrapAndAssertNotNil<T>(_ variable: T?,
         throw UnexpectedNilVariableError()
     }
     return variable
+}
+
+
+struct MockSIMs {
+    static let unknown = SIMInfo(mcc: "123", mnc: "456")
+    static let tmobile = SIMInfo(mcc: "310", mnc: "210")
 }
