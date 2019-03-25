@@ -9,18 +9,55 @@
 import XCTest
 @testable import CarriersSharedAPI
 
+class MockConfigCacheService: ConfigCacheServiceProtocol {
+    var implementation = MockConfigCacheService.newImplementation()
+    
+    var lastCacheParams: (OpenIdConfig, SIMInfo)?
+    var lastConfigForParams: (SIMInfo, Bool)?
+
+    var cacheTTL: TimeInterval {
+        get { return implementation.cacheTTL }
+        set {}
+    }
+    
+    func clear() {
+        implementation = MockConfigCacheService.newImplementation()
+        lastCacheParams = nil
+        lastConfigForParams = nil
+    }
+    
+    func cacheConfig(_ config: OpenIdConfig, forSIMInfo simInfo: SIMInfo) {
+        lastCacheParams = (config, simInfo)
+        implementation.cacheConfig(config, forSIMInfo: simInfo)
+    }
+
+    func config(forSIMInfo simInfo: SIMInfo, allowStaleRecords: Bool) -> OpenIdConfig? {
+        lastConfigForParams = (simInfo, allowStaleRecords)
+        return implementation.config(forSIMInfo: simInfo, allowStaleRecords: allowStaleRecords)
+    }
+    
+    private static func newImplementation() -> ConfigCacheService {
+        return ConfigCacheService(
+            networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
+        )
+    }
+}
+
 class DiscoveryServiceTests: XCTestCase {
 
     let mockNetworkService = MockNetworkService()
     let mockCarrierInfo = MockCarrierInfoService()
-
+    let mockConfigCacheService = MockConfigCacheService()
+    
     lazy var discoveryService = DiscoveryService(
         networkService: mockNetworkService,
-        carrierInfoService: mockCarrierInfo
+        carrierInfoService: mockCarrierInfo,
+        configCacheService: mockConfigCacheService
     )
 
     override func setUp() {
         super.setUp()
+        mockConfigCacheService.clear()
         mockNetworkService.clear()
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
     }
@@ -49,7 +86,7 @@ class DiscoveryServiceTests: XCTestCase {
     }
 
     func testCorrectlyFormatsURL() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "123", mnc: "456")
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { _ in
             let request = self.mockNetworkService.lastRequest
@@ -66,7 +103,7 @@ class DiscoveryServiceTests: XCTestCase {
     }
 
     func testUnknownCarrierEndpointErrorReturnsError() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "123", mnc: "456")
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
         let error = NSError(domain: "", code: 1, userInfo: [:])
         mockNetworkService.mockError(error)
         let expectation = XCTestExpectation(description: "async discovery")
@@ -82,15 +119,13 @@ class DiscoveryServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    func testKnownCarrierEndpointErrorFallbackToBundledConfig() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "310", mnc: "160")
+    func testKnownCarrierEndpointErrorFallbackToBundledConfigByDefault() {
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
         let error = NSError(domain: "", code: 1, userInfo: [:])
         mockNetworkService.mockError(error)
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
             let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
-
-            XCTAssertEqual(config.carrier, Carrier.tmobile)
             XCTAssertEqual(
                 config.openIdConfig,
                 [
@@ -110,7 +145,7 @@ class DiscoveryServiceTests: XCTestCase {
     // NOTE: this could be returns testUnknownCarrierEndpointSuccessReturnsUnknownMobileNetwork
     // in the future
     func testUnknownCarrierEndpointSuccessReturnsError() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "123", mnc: "456")
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.carrierNotFound)
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
@@ -127,28 +162,74 @@ class DiscoveryServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    func testKnownCarrierEndpointSuccessReturnsMockedConfig() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "310", mnc: "160")
+    func testKnownCarrierEndpointSuccessCachesAndReturnsMockedConfig() {
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
             let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
-            XCTAssertEqual(config.carrier, Carrier.tmobile)
+            let expectedResult = [
+                "scopes_supported": "openid email profile",
+                "response_types_supported": "code",
+                "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
+                "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
+                "authorization_endpoint": "xci://authorize",
+                // TODO: re-enable this when we correct it
+//                    "authorization_endpoint": "https://xcid.t-mobile.com/verify/authorize",
+                "issuer": "https://brass.account.t-mobile.com",
+            ]
+            
             XCTAssertEqual(
                 config.openIdConfig,
-                [
-                    "scopes_supported": "openid email profile",
-                    "response_types_supported": "code",
-                    "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
-                    "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
-                    "authorization_endpoint": "xci://authorize",
-                    // TODO: re-enable this when we correct it
-//                    "authorization_endpoint": "https://xcid.t-mobile.com/verify/authorize",
-                    "issuer": "https://brass.account.t-mobile.com",
-                ]
+                expectedResult
             )
+            
+            let lastParams = try! UnwrapAndAssertNotNil(self.mockConfigCacheService.lastCacheParams)
+            XCTAssertEqual(
+                lastParams.0,
+                expectedResult
+            )
+            
+            XCTAssertEqual(
+                lastParams.1,
+                MockSIMs.tmobile
+            )
+            
             expectation.fulfill()
         }
+        wait(for: [expectation], timeout: timeout)
+    }
+    
+    func testKnownCarrierEndpointErrorFallbackToLastSuccessfulConfigIfAvailable() {
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
+        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
+        
+        let expectation = XCTestExpectation(description: "async discovery")
+        discoveryService.discoverConfig() { _ in
+
+            let error = NSError(domain: "", code: 1, userInfo: [:])
+            self.mockNetworkService.mockError(error)
+            self.discoveryService.discoverConfig() { result in
+                let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
+                
+                XCTAssertEqual(
+                    config.openIdConfig,
+                    [
+                        "scopes_supported": "openid email profile",
+                        "response_types_supported": "code",
+                        "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
+                        "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
+                        "authorization_endpoint": "xci://authorize",
+                        // TODO: re-enable this when we correct it
+//                    "authorization_endpoint": "https://xcid.t-mobile.com/verify/authorize",
+                        "issuer": "https://brass.account.t-mobile.com",
+                    ]
+                )
+                
+                expectation.fulfill()
+            }
+        }
+        
         wait(for: [expectation], timeout: timeout)
     }
 }

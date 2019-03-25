@@ -32,6 +32,8 @@
 		23F88F5A22247E2E00A5F5D9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5922247E2E00A5F5D9 /* Constants.swift */; };
 		23F88F5E2225AD6600A5F5D9 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5D2225AD6500A5F5D9 /* Result.swift */; };
 		23F88F602226086600A5F5D9 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5F2226086600A5F5D9 /* Scope.swift */; };
+		8A3FAB1C224055DD00767A03 /* ConfigCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */; };
+		8A7ACDBD22444AB90015D031 /* ConfigCacheServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +72,8 @@
 		23F88F5922247E2E00A5F5D9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		23F88F5D2225AD6500A5F5D9 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		23F88F5F2226086600A5F5D9 /* Scope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
+		8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCacheService.swift; sourceTree = "<group>"; };
+		8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCacheServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +119,7 @@
 				233A502E22287DD10089BA0D /* Dependencies.swift */,
 				23196D9222309173005393AB /* OpenIdURLResolver.swift */,
 				2365C04C2236D31F00E0ED4A /* AuthorizationError.swift */,
+				8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -133,6 +138,7 @@
 				23F88F5922247E2E00A5F5D9 /* Constants.swift */,
 				23196D9022306E29005393AB /* OpenIdServiceTests.swift */,
 				2340CAAB2231D253009556FE /* SDKConfigTests.swift */,
+				8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -249,6 +255,7 @@
 				233A502F22287DD10089BA0D /* Dependencies.swift in Sources */,
 				23F88F38221F2B0E00A5F5D9 /* SIMInfo.swift in Sources */,
 				23F88F5E2225AD6600A5F5D9 /* Result.swift in Sources */,
+				8A3FAB1C224055DD00767A03 /* ConfigCacheService.swift in Sources */,
 				23F88F3E221F433900A5F5D9 /* MobileNetworkInfoProvider.swift in Sources */,
 				23196D9322309173005393AB /* OpenIdURLResolver.swift in Sources */,
 				233AF96D220A3B750023059C /* JsonDocument.swift in Sources */,
@@ -257,6 +264,7 @@
 				2340CAAC2231D253009556FE /* SDKConfigTests.swift in Sources */,
 				231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */,
 				23196D9122306E29005393AB /* OpenIdServiceTests.swift in Sources */,
+				8A7ACDBD22444AB90015D031 /* ConfigCacheServiceTests.swift in Sources */,
 				237B7BF522261A4500E29992 /* ScopeTests.swift in Sources */,
 				23F88F3C221F31B800A5F5D9 /* Carrier.swift in Sources */,
 				23F88F44222080C800A5F5D9 /* DiscoveryService.swift in Sources */,

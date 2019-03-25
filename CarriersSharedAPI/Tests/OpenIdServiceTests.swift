@@ -47,7 +47,7 @@ class MockURLResolver: OpenIdURLResolverProtocol {
 class OpenIdServiceTests: XCTestCase {
 
     static let mockConfig = OpenIdAuthorizationConfig(
-        simInfo: SIMInfo(mcc: "123", mnc: "456"),
+        simInfo: MockSIMs.unknown,
         clientId: "foo",
         authorizationEndpoint: URL(string: "http://rightpoint.com")!,
         tokenEndpoint: URL(string: "http://rightpoint.com")!,

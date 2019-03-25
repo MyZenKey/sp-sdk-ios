@@ -55,9 +55,11 @@ class AuthorizationServiceTests: XCTestCase {
         redirectURL: URL(string: "pvmockCLient://")!
     )
 
+    let networkIdentifierCache =  NetworkIdentifierCache.bundledCarrierLookup
     lazy var discoveryService = DiscoveryService(
         networkService: mockNetworkService,
-        carrierInfoService: mockCarrierInfo
+        carrierInfoService: mockCarrierInfo,
+        configCacheService: ConfigCacheService(networkIdentifierCache: networkIdentifierCache)
     )
 
     lazy var authorizationService = AuthorizationService(
@@ -74,7 +76,7 @@ class AuthorizationServiceTests: XCTestCase {
     }
 
     func testPassesViewControllerToOpenIdService() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "123", mnc: "456")
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
 
         let expectedController = UIViewController()
@@ -90,7 +92,7 @@ class AuthorizationServiceTests: XCTestCase {
     }
 
     func testPassesCorrectScopeStringsToOpenIdService() {
-        mockCarrierInfo.primarySIM = SIMInfo(mcc: "123", mnc: "456")
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
 
         let expectation = XCTestExpectation(description: "async authorization")

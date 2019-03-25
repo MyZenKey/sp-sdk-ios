@@ -13,6 +13,7 @@ protocol DependenciesProtocol {
     var carrierInfoService: CarrierInfoServiceProtocol { get }
     var discoveryService: DiscoveryServiceProtocol { get }
     var openIdService: OpenIdServiceProtocol { get }
+    var configCacheService: ConfigCacheServiceProtocol { get }
 }
 
 class Dependencies: DependenciesProtocol {
@@ -22,10 +23,15 @@ class Dependencies: DependenciesProtocol {
 
     private(set) lazy var discoveryService: DiscoveryServiceProtocol = DiscoveryService(
         networkService: NetworkService(),
-        carrierInfoService: carrierInfoService
+        carrierInfoService: carrierInfoService,
+        configCacheService: configCacheService
     )
 
     let openIdService: OpenIdServiceProtocol = OpenIdService(
         urlResolver: XCISchemeOpenIdURLResolver()
+    )
+    
+    let configCacheService: ConfigCacheServiceProtocol = ConfigCacheService(
+        networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
     )
 }
