@@ -25,6 +25,29 @@ For more information about AppAuth, visit the repository [here](https://github.c
 
 # Integration
 
+## Configure your Info.plist
+
+Retrieve your application's client id from the project verify dashboard.
+Add the following keys to your application's Info.plist:
+
+```xml
+	<key>ProjectVerifyClientId</key>
+	<string>{your application's client id}</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>{your bundle id}</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>{your application's client id}</string>
+			</array>
+		</dict>
+	</array>
+```
+
 ## Instantiate Project Verify in your Application Delegate:
 
 First you must configure your application delegate to support project verify:
