@@ -14,10 +14,10 @@ protocol ConfigCacheServiceProtocol {
     /// older than the TTL will be treated as stale. They may still be retrieved by passing
     /// `allowStaleRecords` to `config(forIdentifier:allowStaleRecords)`
     var cacheTTL: TimeInterval { get set }
-    /// Sets a config in the cache for the provided SIM Identifers. The record in the cache recieves
+    /// Sets a config in the cache for the provided SIM Identifers. The record in the cache receives
     /// the current time as a timestamp
     func cacheConfig(_ config: OpenIdConfig, forSIMInfo simInfo: SIMInfo)
-    /// Retrieves a record for the provided identifier or nil fromt the cache. If `allowStaleRecords`
+    /// Retrieves a record for the provided identifier or nil from the cache. If `allowStaleRecords`
     /// is passed the cache will ignore the `cacheTTL` value and return the most recent record it has.
     func config(forSIMInfo simInfo: SIMInfo, allowStaleRecords: Bool) -> OpenIdConfig?
 }
@@ -64,7 +64,7 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
     }
     
     private func fallbackToBundle(forSIMInfo simInfo: SIMInfo) -> OpenIdConfig? {
-        // fall back on bundled data if known mno:
+        // fall back on bundled data if this is a known mobile network operator:
         let carrier = self.networkIdentifierCache.carrier(
             forMcc: simInfo.mcc,
             mnc: simInfo.mnc
