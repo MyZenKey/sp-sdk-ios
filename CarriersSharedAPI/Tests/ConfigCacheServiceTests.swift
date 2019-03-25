@@ -76,7 +76,7 @@ class ConfigCacheServiceTests: XCTestCase {
         XCTAssertEqual(result, expectedFromBundle)
     }
 
-    func testAllowStaleRecordsNothing() {
+    func testAllowStaleRecordsReturnsNothingForUnknownSIM() {
         let unknownSIM = MockSIMs.unknown
         let result = self.configCacheService.config(forSIMInfo: unknownSIM, allowStaleRecords: true)
         XCTAssertNil(result)
