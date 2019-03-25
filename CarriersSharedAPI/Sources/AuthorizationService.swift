@@ -9,6 +9,7 @@
 import AppAuth
 import UIKit
 
+/// This service provides an interface for authorizing an application with Project Verify.
 public class AuthorizationService {
     let sdkConfig: SDKConfig
     let discoveryService: DiscoveryServiceProtocol
@@ -22,6 +23,18 @@ public class AuthorizationService {
         self.openIdService = openIdService
     }
 
+    /// Requests authorization for the specified scopes from Project Verify.
+    /// - Parameter scopes: an array of scopes to be authorized for access. See the predefined
+    /// `Scope` for a list of supported scope types.
+    /// - Parameter viewController: the UI context from which the authorization request originated
+    /// this is used as the presentation view controller if additional ui is required for resolving
+    /// the request.
+    /// - Parameter completion: an escaping block executed asynchronously, on the main thread. This
+    /// block will take one parameter, a result, see `AuthorizationResult` for more information.
+    ///
+    /// - SeeAlso: ScopeProtocol
+    /// - SeeAlso: Scopes
+    /// - SeeAlso: AuthorizationResult
     public func connectWithProjectVerify(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
@@ -76,6 +89,8 @@ private extension AuthorizationService {
 }
 
 public extension AuthorizationService {
+
+    /// creates a new instance of an `AuthorizationService`
     convenience init() {
         // use AppDelegate as a dependency container until we have a clearer idea of what we want
         let appDelegate = ProjectVerifyAppDelegate.shared

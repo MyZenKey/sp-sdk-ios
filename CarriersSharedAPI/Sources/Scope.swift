@@ -8,10 +8,13 @@
 
 import Foundation
 
+/// The protocol any type must conform to to represent a scope request.
 public protocol ScopeProtocol {
+    /// The string which will represent the scope over the network.
     var scopeString: String { get }
 }
 
+/// The predefined scopes supported by Project Verify.
 public enum Scope: String, ScopeProtocol, Equatable {
     /// Service providers that wish to have a combination of all the profile attributes (email,
     /// address, phone, postal_code) can request the single profile Scope. Additional data
