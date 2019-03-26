@@ -31,7 +31,7 @@ struct SDKConfig: Equatable {
             throw BundleLoadingErrors.specifyClientId
         }
 
-        let redirectScheme = "xci\(clientId)"
+        let redirectScheme = "\(clientId)"
         guard bundle.urlSchemes.contains(redirectScheme) else {
             throw BundleLoadingErrors.specifyRedirectURLScheme
         }
