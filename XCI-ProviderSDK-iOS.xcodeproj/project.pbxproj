@@ -7,20 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		23196D9122306E29005393AB /* OpenIdServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23196D9022306E29005393AB /* OpenIdServiceTests.swift */; };
 		23196D9322309173005393AB /* OpenIdURLResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23196D9222309173005393AB /* OpenIdURLResolver.swift */; };
 		231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */; };
 		231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */; };
 		231FFB9C221C6DE500E2B1BA /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */; };
 		233A502F22287DD10089BA0D /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233A502E22287DD10089BA0D /* Dependencies.swift */; };
-		233A50312228831A0089BA0D /* MockCarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233A50302228831A0089BA0D /* MockCarrierInfoService.swift */; };
 		233AF964220A3B080023059C /* CarriersSharedAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 233AF956220A3B080023059C /* CarriersSharedAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233AF96D220A3B750023059C /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233AF96B220A3B750023059C /* JsonDocument.swift */; };
-		2340CAAC2231D253009556FE /* SDKConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2340CAAB2231D253009556FE /* SDKConfigTests.swift */; };
 		2365C04D2236D31F00E0ED4A /* AuthorizationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2365C04C2236D31F00E0ED4A /* AuthorizationError.swift */; };
-		236AC636222714F200E7C900 /* AuthorizationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236AC635222714F100E7C900 /* AuthorizationServiceTests.swift */; };
 		236AC638222720E600E7C900 /* OpenIdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236AC637222720E600E7C900 /* OpenIdService.swift */; };
-		237B7BF522261A4500E29992 /* ScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B7BF422261A4500E29992 /* ScopeTests.swift */; };
 		2399F3F92227702A007D3613 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2399F3F82227702A007D3613 /* Error.swift */; };
 		23B524ED22152129002124D4 /* ProjectVerifyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */; };
 		23F88F38221F2B0E00A5F5D9 /* SIMInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F37221F2B0E00A5F5D9 /* SIMInfo.swift */; };
@@ -29,11 +24,10 @@
 		23F88F44222080C800A5F5D9 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F43222080C800A5F5D9 /* DiscoveryService.swift */; };
 		23F88F4D2224579900A5F5D9 /* CarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F4C2224579900A5F5D9 /* CarrierInfoService.swift */; };
 		23F88F542224738A00A5F5D9 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F532224738A00A5F5D9 /* NetworkService.swift */; };
-		23F88F5A22247E2E00A5F5D9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5922247E2E00A5F5D9 /* Constants.swift */; };
 		23F88F5E2225AD6600A5F5D9 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5D2225AD6500A5F5D9 /* Result.swift */; };
 		23F88F602226086600A5F5D9 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5F2226086600A5F5D9 /* Scope.swift */; };
 		8A3FAB1C224055DD00767A03 /* ConfigCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */; };
-		8A7ACDBD22444AB90015D031 /* ConfigCacheServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */; };
+		8A9DEC42224A9B2A00E010EB /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A9DEC41224A9B2A00E010EB /* AppAuth.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +68,7 @@
 		23F88F5F2226086600A5F5D9 /* Scope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
 		8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCacheService.swift; sourceTree = "<group>"; };
 		8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCacheServiceTests.swift; sourceTree = "<group>"; };
+		8A9DEC41224A9B2A00E010EB /* AppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A9DEC42224A9B2A00E010EB /* AppAuth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +155,7 @@
 			children = (
 				233AF955220A3B080023059C /* CarriersSharedAPI */,
 				56BCE4842203755D00196A17 /* Products */,
+				8A9DEC40224A9B2A00E010EB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -168,6 +165,14 @@
 				233AF954220A3B080023059C /* CarriersSharedAPI.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8A9DEC40224A9B2A00E010EB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8A9DEC41224A9B2A00E010EB /* AppAuth.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,11 +266,7 @@
 				233AF96D220A3B750023059C /* JsonDocument.swift in Sources */,
 				2365C04D2236D31F00E0ED4A /* AuthorizationError.swift in Sources */,
 				23F88F4D2224579900A5F5D9 /* CarrierInfoService.swift in Sources */,
-				2340CAAC2231D253009556FE /* SDKConfigTests.swift in Sources */,
 				231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */,
-				23196D9122306E29005393AB /* OpenIdServiceTests.swift in Sources */,
-				8A7ACDBD22444AB90015D031 /* ConfigCacheServiceTests.swift in Sources */,
-				237B7BF522261A4500E29992 /* ScopeTests.swift in Sources */,
 				23F88F3C221F31B800A5F5D9 /* Carrier.swift in Sources */,
 				23F88F44222080C800A5F5D9 /* DiscoveryService.swift in Sources */,
 				23F88F542224738A00A5F5D9 /* NetworkService.swift in Sources */,
@@ -273,11 +274,8 @@
 				23B524ED22152129002124D4 /* ProjectVerifyAppDelegate.swift in Sources */,
 				231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */,
 				23F88F602226086600A5F5D9 /* Scope.swift in Sources */,
-				23F88F5A22247E2E00A5F5D9 /* Constants.swift in Sources */,
 				236AC638222720E600E7C900 /* OpenIdService.swift in Sources */,
 				2399F3F92227702A007D3613 /* Error.swift in Sources */,
-				233A50312228831A0089BA0D /* MockCarrierInfoService.swift in Sources */,
-				236AC636222714F200E7C900 /* AuthorizationServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
