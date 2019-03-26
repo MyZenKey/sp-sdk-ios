@@ -24,13 +24,14 @@ public class AuthorizationService {
     }
 
     /// Requests authorization for the specified scopes from Project Verify.
-    /// - Parameter scopes: an array of scopes to be authorized for access. See the predefined
-    /// `Scope` for a list of supported scope types.
-    /// - Parameter viewController: the UI context from which the authorization request originated
-    /// this is used as the presentation view controller if additional ui is required for resolving
-    /// the request.
-    /// - Parameter completion: an escaping block executed asynchronously, on the main thread. This
-    /// block will take one parameter, a result, see `AuthorizationResult` for more information.
+    /// - Parameters:
+    ///   - scopes: an array of scopes to be authorized for access. See the predefined
+    ///     `Scope` for a list of supported scope types.
+    ///   - viewController: the UI context from which the authorization request originated
+    ///    this is used as the presentation view controller if additional ui is required for resolving
+    ///    the request.
+    ///   - completion: an escaping block executed asynchronously, on the main thread. This
+    ///    block will take one parameter, a result, see `AuthorizationResult` for more information.
     ///
     /// - SeeAlso: ScopeProtocol
     /// - SeeAlso: Scopes
