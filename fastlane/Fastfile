@@ -79,7 +79,7 @@ platform :ios do
   desc "Generates Docs"
   lane :generate_docs do
     Dir.chdir('../') do
-      sh "jazzy --output #{ENV['JAZZY_OUTPUT']}"
+      sh "jazzy --clean --output #{ENV['JAZZY_OUTPUT']}"
     end
     zip(path: ENV['JAZZY_OUTPUT'], output_path: ENV['JAZZY_ARTIFACTS'])
   end
