@@ -105,13 +105,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication,
-                    open url: URL,
-                    options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 
         guard !ProjectVerifyAppDelegate.shared.application(app, open: url, options: options) else {
             return true
         }
         // Perform any other URL processing your app may need to perform. 
+        return true
     }
 }
 ```
