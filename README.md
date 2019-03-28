@@ -54,7 +54,7 @@ If it is not possible to use git submodules for some reason, download the source
 
 - Having added the two projects, confirm that their deployment targets match your application's deployment target.
 
-- Next, view your project's `Embedded Binaries` under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks here. Be sure to select the corresponding framework for the platform your targeting (ie. the iOS framework for an iOS target).
+- Next, view your project's `Embedded Binaries` under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks here. Be sure to select the corresponding framework for the platform you're targeting (ie. the iOS framework for an iOS target).
 
 - That's it! Build and run to ensure everything is working correctly.
 
