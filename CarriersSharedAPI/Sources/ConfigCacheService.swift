@@ -22,6 +22,7 @@ protocol ConfigCacheServiceProtocol {
     func config(forSIMInfo simInfo: SIMInfo, allowStaleRecords: Bool) -> OpenIdConfig?
 }
 
+/// Note: this class is not thread safe and assumes single threaded access
 class ConfigCacheService: ConfigCacheServiceProtocol {
 
     var cacheTTL: TimeInterval = ConfigCacheService.defaultTTL

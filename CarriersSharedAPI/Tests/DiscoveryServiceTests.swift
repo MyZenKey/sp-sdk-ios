@@ -232,4 +232,29 @@ class DiscoveryServiceTests: XCTestCase {
         
         wait(for: [expectation], timeout: timeout)
     }
+    
+    func testServiceReturnsOnMainThreadFromMainThread() {
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
+        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
+        let expectation = XCTestExpectation(description: "async discovery")
+        discoveryService.discoverConfig() { _ in
+            XCTAssertTrue(Thread.isMainThread)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: timeout)
+    }
+    
+    func testServiceReturnsOnMainThreadFromBackgroundThread() {
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
+        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
+        let expectation = XCTestExpectation(description: "async discovery")
+        DispatchQueue.global().async {
+            self.discoveryService.discoverConfig() { _ in
+                XCTAssertTrue(Thread.isMainThread)
+                expectation.fulfill()
+            }
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
 }

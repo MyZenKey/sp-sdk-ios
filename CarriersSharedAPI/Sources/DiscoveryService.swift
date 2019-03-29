@@ -50,6 +50,11 @@ enum DiscoveryServiceError: Error {
 }
 
 protocol DiscoveryServiceProtocol {
+    /// Perofrms carrier discovery using the `CarrierInfoService` with which the `DiscoveryService`
+    /// was instantiated.
+    ///
+    /// This method must always execute the provide closure on the MainThread.
+    /// - Parameter completion: the closure invoked with the result of the Discovery.
     func discoverConfig(completion: @escaping (DiscoveryServiceResult) -> Void)
 }
 
@@ -78,12 +83,17 @@ class DiscoveryService: DiscoveryServiceProtocol {
         self.configCacheService = configCacheService
     }
 
+    
+    /// Perofrms carrier discovery using the `CarrierInfoService` with which the `DiscoveryService`
+    /// was instantiated.
+    ///
+    /// This method must always execute the provide closure on the MainThread.
+    /// - Parameter completion: the closure invoked with the result of the Discovery.
     func discoverConfig(completion: @escaping (DiscoveryServiceResult) -> Void) {
         guard let sim = carrierInfoService.primarySIM else {
-            completion(.noMobileNetwork)
+            DiscoveryService.outcome(.noMobileNetwork, completion: completion)
             return
         }
-
 
         openIdConfig(forSIMInfo: sim) { [weak self] result in
 
@@ -92,17 +102,17 @@ class DiscoveryService: DiscoveryServiceProtocol {
                 let config = CarrierConfig(
                     simInfo: sim,
                     openIdConfig: openIdConfig)
-                completion(.knownMobileNetwork(config))
-
+                DiscoveryService.outcome(.knownMobileNetwork(config), completion: completion)
+                
             case .error(let error):
                 if let fallBackConfig = self?.recoverFromCache(simInfo: sim,
                                                                allowStaleRecords: true) {
                     let config = CarrierConfig(
                         simInfo: sim,
                         openIdConfig: fallBackConfig)
-                    completion(.knownMobileNetwork(config))
+                    DiscoveryService.outcome(.knownMobileNetwork(config), completion: completion)
                 } else {
-                    completion(.error(error))
+                    DiscoveryService.outcome(.error(error), completion: completion)
                 }
             }
         }
@@ -110,6 +120,21 @@ class DiscoveryService: DiscoveryServiceProtocol {
 }
 
 private extension DiscoveryService {
+    /// performs the discovery outcome on the main thread
+    static func outcome(
+        _ outcome: DiscoveryServiceResult,
+        completion: @escaping (DiscoveryServiceResult) -> Void) {
+        
+        guard !Thread.isMainThread else {
+            completion(outcome)
+            return
+        }
+        
+        DispatchQueue.main.async {
+            completion(outcome)
+        }
+    }
+    
     func openIdConfig(forSIMInfo simInfo: SIMInfo,
                       completion: @escaping (OpenIdResult) -> Void ) {
 

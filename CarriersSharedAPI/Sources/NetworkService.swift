@@ -25,6 +25,12 @@ protocol NetworkServiceProtocol {
 }
 
 class NetworkService: NetworkServiceProtocol {
+    
+    let session: URLSession = {
+        let config = URLSessionConfiguration.default
+        return URLSession(configuration: config)
+    }()
+    
     func requestJSON(request: URLRequest,
                      completion: ((JsonDocument?, Error?) -> Void)?) {
 

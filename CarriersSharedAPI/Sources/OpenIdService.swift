@@ -99,6 +99,11 @@ extension OpenIdService: OpenIdServiceProtocol {
         completion: @escaping AuthorizationCompletion
         ) {
 
+        // issuing a second authorization flow causes the first to be cancelled:
+        if case .inProgress = state {
+            cancelCurrentAuthorizationSession()
+        }
+        
         let openIdConfiguration = OIDServiceConfiguration(
             authorizationEndpoint: authorizationConifg.authorizationEndpoint,
             tokenEndpoint: authorizationConifg.tokenEndpoint
@@ -247,5 +252,4 @@ extension OpenIdService {
         }
         return .unknown(identifier, description)
     }
-
 }
