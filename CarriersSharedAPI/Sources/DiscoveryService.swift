@@ -42,8 +42,8 @@ extension DiscoveryServiceResult {
 }
 
 enum DiscoveryServiceError: Error {
-    case issuerError(String)
-    case networkError(Error)
+    case issuerError(OpenIdIssuerError)
+    case networkError(NetworkServiceError)
 }
 
 protocol DiscoveryServiceProtocol {
@@ -179,16 +179,16 @@ private extension DiscoveryService {
 //                        openIdConfig,
                         forSIMInfo: simInfo
                     )
-                    completion?(OpenIdResult.value(tempConfig)) // FIXME: use next line
+                    completion?(.value(tempConfig)) // FIXME: use next line
 //                    completion?(OpenIdResult.value(openIdConfig))
                     
-                case .error(let errorString):
-                    completion?(OpenIdResult.error(DiscoveryServiceError.issuerError(errorString)))
+                case .error(let issuerError):
+                    completion?(.error(.issuerError(issuerError)))
                 }
                 
             case .error(let error):
                 completion?(
-                    OpenIdResult.error(DiscoveryServiceError.networkError(error))
+                    OpenIdResult.error(.networkError(error))
                 )
             }
         }

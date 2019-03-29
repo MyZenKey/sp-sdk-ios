@@ -37,23 +37,38 @@ extension OpenIdConfig: Decodable {
     }
 }
 
+/// an error originating within the issuer service and returned via a successful HTTP response.
+struct OpenIdIssuerError {
+    let error: String
+    let errorDescription: String?
+}
+
+extension OpenIdIssuerError : Decodable {
+    enum CodingKeys: String, CodingKey {
+        case error
+        case errorDescription = "error_description"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        error = try values.decode(String.self, forKey: .error)
+        errorDescription = try? values.decode(String.self, forKey: .errorDescription)
+    }
+}
+
+/// The result context when retrieving an `OpenIdConfig` from the discovery endpoint. The HTTP body
+/// will contain either a valid configuration or an error string.
 enum OpenIdConfigResult {
     case config(OpenIdConfig)
-    case error(String)
+    case error(OpenIdIssuerError)
 }
 
 extension OpenIdConfigResult: Decodable {
-    enum CodingKeys: String, CodingKey {
-        case error
-    }
-
     init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
         do {
-            let error = try values.decode(String.self, forKey: .error)
-            self = .error(error)
-        } catch {
             self = .config(try OpenIdConfig(from: decoder))
+        } catch {
+            self = .error(try OpenIdIssuerError(from: decoder))
         }
     }
 }
