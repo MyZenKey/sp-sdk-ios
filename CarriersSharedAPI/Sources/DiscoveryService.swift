@@ -14,9 +14,6 @@ struct CarrierConfig {
     let openIdConfig: OpenIdConfig
 }
 
-// TODO: strongly type this
-typealias OpenIdConfig = [String: String]
-
 enum DiscoveryServiceResult {
     case knownMobileNetwork(CarrierConfig)
     case unknownMobileNetwork
@@ -162,50 +159,38 @@ private extension DiscoveryService {
             fatalError("disocvery endpoint is returning an invalid url: \(endpointString)")
         }
 
-        print("Performing primary discovery lookup")
         var request = URLRequest(url: discoveryURL)
         request.httpMethod = "GET"
+        networkService.requestJSON(
+            request: request
+        ) { [weak self] (result: Result<OpenIdConfigResult, NetworkServiceError>) in
 
-        networkService.requestJSON(request: request) { [weak self] jsonDocument, error in
-            guard
-                error == nil,
-                let jsonDocument = jsonDocument else {
-                    completion?(
-                        OpenIdResult.error(DiscoveryServiceError.networkError(error ?? UnknownError()))
+            switch result {
+            case .value(let configResult):
+                // Because the endpoint can return either a config _or_ an error, we need to parse the
+                // "inner" result and flatten the success or error.
+                switch configResult {
+                case .config(let openIdConfig):
+                    
+                    let tempConfig = openIdConfig.withOverwritenAuthURL()
+                    
+                    self?.configCacheService.cacheConfig(
+                        tempConfig, // FIXME: use next line
+//                        openIdConfig,
+                        forSIMInfo: simInfo
                     )
-                    return
+                    completion?(OpenIdResult.value(tempConfig)) // FIXME: use next line
+//                    completion?(OpenIdResult.value(openIdConfig))
+                    
+                case .error(let errorString):
+                    completion?(OpenIdResult.error(DiscoveryServiceError.issuerError(errorString)))
+                }
+                
+            case .error(let error):
+                completion?(
+                    OpenIdResult.error(DiscoveryServiceError.networkError(error))
+                )
             }
-
-            // TODO: currently a query for unknown mcc/mnc returns an error. we may want to parse
-            // this out further in the case we want to follow the returned redirect, etc.
-            guard !jsonDocument["error"].exists else {
-                let errorString = jsonDocument["error"].toString!
-                completion?(OpenIdResult.error(DiscoveryServiceError.issuerError(errorString)))
-                return
-            }
-
-            // NOTE: adding this nested config key becuase that's the way the response is structured
-            // at the moment – from my understanding it will be removed at some future point
-            let config = [
-                "scopes_supported": "openid email profile",
-                "response_types_supported": "code",
-                "userinfo_endpoint": jsonDocument["config"]["userinfo_endpoint"].toString!,
-                "token_endpoint": jsonDocument["config"]["token_endpoint"].toString!,
-                "authorization_endpoint": "xci://authorize",
-//                "authorization_endpoint": jsonDocument["config"]["authorization_endpoint"].toString!,
-                "issuer": jsonDocument["config"]["issuer"].toString!
-            ]
-
-
-            defer { completion?(OpenIdResult.value(config)) }
-            guard let sself = self else {
-                return
-            }
-            
-            sself.configCacheService.cacheConfig(
-                config,
-                forSIMInfo: simInfo
-            )
         }
     }
 
@@ -214,6 +199,18 @@ private extension DiscoveryService {
             format: discoveryEndpointFormat,
             simInfo.mcc,
             simInfo.mnc
+        )
+    }
+}
+
+// FIXME: remove this once we have universal links wired up:
+private extension OpenIdConfig {
+    /// returns an OID config with auth endpoint overwritten to hard code `xci://`
+    func withOverwritenAuthURL() -> OpenIdConfig {
+        return OpenIdConfig(
+            tokenEndpoint: tokenEndpoint,
+            authorizationEndpoint: URL(string: "xci://authorize")!,
+            issuer: issuer
         )
     }
 }

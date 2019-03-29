@@ -8,49 +8,72 @@
 
 import Foundation
 
-enum NetworkServiceErrors: Error {
+enum NetworkServiceError: Error {
+    case networkError(Error)
     case invalidResponseBody(request: URLRequest)
-
-    var errorDescription: String {
-        switch self {
-        case .invalidResponseBody(let request):
-            return "unable to serialize response for \(request) – expected valid JSON"
-        }
-    }
+    case decodingError(DecodingError)
+    case unknownError(Error)
 }
 
 protocol NetworkServiceProtocol {
-    func requestJSON(request: URLRequest,
-                     completion: ((JsonDocument?, Error?) -> Void)?)
+    func requestJSON<T: Decodable>(
+        request: URLRequest,
+        completion: @escaping (Result<T, NetworkServiceError>) -> Void)
 }
 
 class NetworkService: NetworkServiceProtocol {
+    let jsonDecoder = JSONDecoder()
     
     let session: URLSession = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)
     }()
     
-    func requestJSON(request: URLRequest,
-                     completion: ((JsonDocument?, Error?) -> Void)?) {
-
+    func requestJSON<T: Decodable>(
+        request: URLRequest,
+        completion: @escaping (Result<T, NetworkServiceError>) -> Void) {
+        
+        let decoder = self.jsonDecoder
         let task = URLSession.shared.dataTask(with: request) { (data, rawResponse, error) in
             DispatchQueue.main.async {
-                guard error == nil else {
-                    completion?(nil, error)
-                    return
-                }
-
-                guard let data = data else {
-                    completion?(nil, NetworkServiceErrors.invalidResponseBody(request: request))
-                    return
-                }
-                // TODO: factor out custom att's JSON parser and use codable models
-                let document = JsonDocument(data: data)
-                completion?(document, nil)
+                completion(
+                    JSONResponseParser.parseDecodable(
+                        with: decoder,
+                        fromData: data,
+                        request: request,
+                        error: error
+                    )
+                )
             }
         }
-
         task.resume()
+    }
+}
+
+extension NetworkService {
+    struct JSONResponseParser {
+        static func parseDecodable<T: Decodable>(
+            with decoder: JSONDecoder,
+            fromData data: Data?,
+            request: URLRequest,
+            error: Error?) -> Result<T, NetworkServiceError> {
+            
+            guard error == nil else {
+                return .error(.networkError(error!))
+            }
+            
+            guard let data = data else {
+                return .error(NetworkServiceError.invalidResponseBody(request: request))
+            }
+            
+            do {
+                let parsed: T = try decoder.decode(T.self, from: data)
+                return .value(parsed)
+            } catch let decodingError as DecodingError {
+                return .error(.decodingError(decodingError))
+            } catch {
+                return .error(.unknownError(error))
+            }
+        }
     }
 }

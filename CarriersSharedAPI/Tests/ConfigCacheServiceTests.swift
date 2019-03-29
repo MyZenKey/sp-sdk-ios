@@ -65,14 +65,11 @@ class ConfigCacheServiceTests: XCTestCase {
     func testAllowStaleRecordsFallBackToBundled() {
         let tmoSIM = MockSIMs.tmobile
         let result = self.configCacheService.config(forSIMInfo: tmoSIM, allowStaleRecords: true)
-        let expectedFromBundle = [
-            "scopes_supported": "openid email profile",
-            "response_types_supported": "code",
-            "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
-            "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
-            "authorization_endpoint": "https://account.t-mobile.com/oauth2/v1/auth",
-            "issuer": "https://ppd.account.t-mobile.com"
-        ]
+        let expectedFromBundle = OpenIdConfig(
+            tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
+            authorizationEndpoint: URL(string: "https://account.t-mobile.com/oauth2/v1/auth")!,
+            issuer: URL(string: "https://ppd.account.t-mobile.com")!
+        )
         XCTAssertEqual(result, expectedFromBundle)
     }
 
@@ -89,10 +86,11 @@ class ConfigCacheServiceTests: XCTestCase {
     }
     
     private func randomMockOIDConfig() -> OpenIdConfig {
-        let key = Int.random(in: 0..<100)
         let value = Int.random(in: 0..<100)
-        return [
-            "\(key)": "\(value)"
-        ]
+        return OpenIdConfig(
+            tokenEndpoint: URL(string: "xci://?foo=\(value)")!,
+            authorizationEndpoint: URL(string: "xci://?bar=\(value)")!,
+            issuer:  URL(string: "xci://?bah=\(value)")!
+        )
     }
 }
