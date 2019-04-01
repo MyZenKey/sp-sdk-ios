@@ -28,13 +28,6 @@ extension OpenIdConfig: Decodable {
         case authorizationEndpoint = "authorization_endpoint"
         case issuer
     }
-    
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        tokenEndpoint = try values.decode(URL.self, forKey: .tokenEndpoint)
-        authorizationEndpoint = try values.decode(URL.self, forKey: .authorizationEndpoint)
-        issuer = try values.decode(URL.self, forKey: .issuer)
-    }
 }
 
 /// an error originating within the issuer service and returned via a successful HTTP response.
@@ -43,16 +36,10 @@ struct OpenIdIssuerError {
     let errorDescription: String?
 }
 
-extension OpenIdIssuerError : Decodable {
+extension OpenIdIssuerError: Decodable {
     enum CodingKeys: String, CodingKey {
         case error
         case errorDescription = "error_description"
-    }
-    
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        error = try values.decode(String.self, forKey: .error)
-        errorDescription = try? values.decode(String.self, forKey: .errorDescription)
     }
 }
 
