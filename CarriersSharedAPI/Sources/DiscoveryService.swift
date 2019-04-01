@@ -47,16 +47,15 @@ enum DiscoveryServiceError: Error {
 }
 
 protocol DiscoveryServiceProtocol {
-    /// Perofrms carrier discovery using the `CarrierInfoService` with which the `DiscoveryService`
+    /// Performs carrier discovery using the `CarrierInfoService` with which the `DiscoveryService`
     /// was instantiated.
     ///
-    /// This method must always execute the provide closure on the MainThread.
+    /// This method will always execute the provided closure on the MainThread.
     /// - Parameter completion: the closure invoked with the result of the Discovery.
     func discoverConfig(completion: @escaping (DiscoveryServiceResult) -> Void)
 }
 
 class DiscoveryService: DiscoveryServiceProtocol {
-
     typealias OpenIdResult = Result<OpenIdConfig, DiscoveryServiceError>
 
     private let carrierInfoService: CarrierInfoServiceProtocol
@@ -79,13 +78,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
         self.carrierInfoService = carrierInfoService
         self.configCacheService = configCacheService
     }
-
     
-    /// Perofrms carrier discovery using the `CarrierInfoService` with which the `DiscoveryService`
-    /// was instantiated.
-    ///
-    /// This method must always execute the provide closure on the MainThread.
-    /// - Parameter completion: the closure invoked with the result of the Discovery.
     func discoverConfig(completion: @escaping (DiscoveryServiceResult) -> Void) {
         guard let sim = carrierInfoService.primarySIM else {
             DiscoveryService.outcome(.noMobileNetwork, completion: completion)
@@ -100,7 +93,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
                     simInfo: sim,
                     openIdConfig: openIdConfig)
                 DiscoveryService.outcome(.knownMobileNetwork(config), completion: completion)
-                
+
             case .error(let error):
                 if let fallBackConfig = self?.recoverFromCache(simInfo: sim,
                                                                allowStaleRecords: true) {
