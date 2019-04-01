@@ -14,9 +14,6 @@ struct CarrierConfig {
     let openIdConfig: OpenIdConfig
 }
 
-// TODO: strongly type this
-typealias OpenIdConfig = [String: String]
-
 enum DiscoveryServiceResult {
     case knownMobileNetwork(CarrierConfig)
     case unknownMobileNetwork
@@ -45,16 +42,20 @@ extension DiscoveryServiceResult {
 }
 
 enum DiscoveryServiceError: Error {
-    case issuerError(String)
-    case networkError(Error)
+    case issuerError(OpenIdIssuerError)
+    case networkError(NetworkServiceError)
 }
 
 protocol DiscoveryServiceProtocol {
+    /// Performs carrier discovery using the `CarrierInfoService` with which the `DiscoveryService`
+    /// was instantiated.
+    ///
+    /// This method will always execute the provided closure on the MainThread.
+    /// - Parameter completion: the closure invoked with the result of the Discovery.
     func discoverConfig(completion: @escaping (DiscoveryServiceResult) -> Void)
 }
 
 class DiscoveryService: DiscoveryServiceProtocol {
-
     typealias OpenIdResult = Result<OpenIdConfig, DiscoveryServiceError>
 
     private let carrierInfoService: CarrierInfoServiceProtocol
@@ -77,13 +78,12 @@ class DiscoveryService: DiscoveryServiceProtocol {
         self.carrierInfoService = carrierInfoService
         self.configCacheService = configCacheService
     }
-
+    
     func discoverConfig(completion: @escaping (DiscoveryServiceResult) -> Void) {
         guard let sim = carrierInfoService.primarySIM else {
-            completion(.noMobileNetwork)
+            DiscoveryService.outcome(.noMobileNetwork, completion: completion)
             return
         }
-
 
         openIdConfig(forSIMInfo: sim) { [weak self] result in
 
@@ -92,7 +92,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
                 let config = CarrierConfig(
                     simInfo: sim,
                     openIdConfig: openIdConfig)
-                completion(.knownMobileNetwork(config))
+                DiscoveryService.outcome(.knownMobileNetwork(config), completion: completion)
 
             case .error(let error):
                 if let fallBackConfig = self?.recoverFromCache(simInfo: sim,
@@ -100,9 +100,9 @@ class DiscoveryService: DiscoveryServiceProtocol {
                     let config = CarrierConfig(
                         simInfo: sim,
                         openIdConfig: fallBackConfig)
-                    completion(.knownMobileNetwork(config))
+                    DiscoveryService.outcome(.knownMobileNetwork(config), completion: completion)
                 } else {
-                    completion(.error(error))
+                    DiscoveryService.outcome(.error(error), completion: completion)
                 }
             }
         }
@@ -110,6 +110,21 @@ class DiscoveryService: DiscoveryServiceProtocol {
 }
 
 private extension DiscoveryService {
+    /// performs the discovery outcome on the main thread
+    static func outcome(
+        _ outcome: DiscoveryServiceResult,
+        completion: @escaping (DiscoveryServiceResult) -> Void) {
+        
+        guard !Thread.isMainThread else {
+            completion(outcome)
+            return
+        }
+        
+        DispatchQueue.main.async {
+            completion(outcome)
+        }
+    }
+    
     func openIdConfig(forSIMInfo simInfo: SIMInfo,
                       completion: @escaping (OpenIdResult) -> Void ) {
 
@@ -137,50 +152,38 @@ private extension DiscoveryService {
             fatalError("disocvery endpoint is returning an invalid url: \(endpointString)")
         }
 
-        print("Performing primary discovery lookup")
         var request = URLRequest(url: discoveryURL)
         request.httpMethod = "GET"
+        networkService.requestJSON(
+            request: request
+        ) { [weak self] (result: Result<OpenIdConfigResult, NetworkServiceError>) in
 
-        networkService.requestJSON(request: request) { [weak self] jsonDocument, error in
-            guard
-                error == nil,
-                let jsonDocument = jsonDocument else {
-                    completion?(
-                        OpenIdResult.error(DiscoveryServiceError.networkError(error ?? UnknownError()))
+            switch result {
+            case .value(let configResult):
+                // Because the endpoint can return either a config _or_ an error, we need to parse the
+                // "inner" result and flatten the success or error.
+                switch configResult {
+                case .config(let openIdConfig):
+                    
+                    let tempConfig = openIdConfig.withOverwritenAuthURL()
+                    
+                    self?.configCacheService.cacheConfig(
+                        tempConfig, // FIXME: use next line
+//                        openIdConfig,
+                        forSIMInfo: simInfo
                     )
-                    return
+                    completion?(.value(tempConfig)) // FIXME: use next line
+//                    completion?(OpenIdResult.value(openIdConfig))
+                    
+                case .error(let issuerError):
+                    completion?(.error(.issuerError(issuerError)))
+                }
+                
+            case .error(let error):
+                completion?(
+                    OpenIdResult.error(.networkError(error))
+                )
             }
-
-            // TODO: currently a query for unknown mcc/mnc returns an error. we may want to parse
-            // this out further in the case we want to follow the returned redirect, etc.
-            guard !jsonDocument["error"].exists else {
-                let errorString = jsonDocument["error"].toString!
-                completion?(OpenIdResult.error(DiscoveryServiceError.issuerError(errorString)))
-                return
-            }
-
-            // NOTE: adding this nested config key becuase that's the way the response is structured
-            // at the moment – from my understanding it will be removed at some future point
-            let config = [
-                "scopes_supported": "openid email profile",
-                "response_types_supported": "code",
-                "userinfo_endpoint": jsonDocument["config"]["userinfo_endpoint"].toString!,
-                "token_endpoint": jsonDocument["config"]["token_endpoint"].toString!,
-                "authorization_endpoint": "xci://authorize",
-//                "authorization_endpoint": jsonDocument["config"]["authorization_endpoint"].toString!,
-                "issuer": jsonDocument["config"]["issuer"].toString!
-            ]
-
-
-            defer { completion?(OpenIdResult.value(config)) }
-            guard let sself = self else {
-                return
-            }
-            
-            sself.configCacheService.cacheConfig(
-                config,
-                forSIMInfo: simInfo
-            )
         }
     }
 
@@ -189,6 +192,18 @@ private extension DiscoveryService {
             format: discoveryEndpointFormat,
             simInfo.mcc,
             simInfo.mnc
+        )
+    }
+}
+
+// FIXME: remove this once we have universal links wired up:
+private extension OpenIdConfig {
+    /// returns an OID config with auth endpoint overwritten to hard code `xci://`
+    func withOverwritenAuthURL() -> OpenIdConfig {
+        return OpenIdConfig(
+            tokenEndpoint: tokenEndpoint,
+            authorizationEndpoint: URL(string: "xci://authorize")!,
+            issuer: issuer
         )
     }
 }

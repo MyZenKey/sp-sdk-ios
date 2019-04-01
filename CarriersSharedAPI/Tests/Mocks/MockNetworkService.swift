@@ -10,9 +10,8 @@ import Foundation
 @testable import CarriersSharedAPI
 
 class MockNetworkService: NetworkServiceProtocol {
-
     private var mockJSON: [String: Any]?
-    private var mockError: Error?
+    private var mockError: NetworkServiceError?
 
     var lastRequest: URLRequest?
 
@@ -21,7 +20,7 @@ class MockNetworkService: NetworkServiceProtocol {
         mockJSON = json
     }
 
-    func mockError(_ error: Error) {
+    func mockError(_ error: NetworkServiceError) {
         mockJSON = nil
         mockError = error
     }
@@ -31,18 +30,33 @@ class MockNetworkService: NetworkServiceProtocol {
         mockError = nil
         mockJSON = nil
     }
+    
+    let jsonDecoder = JSONDecoder()
 
-    func requestJSON(request: URLRequest, completion: ((JsonDocument?, Error?) -> Void)?) {
+    func requestJSON<T>(
+        request: URLRequest,
+        completion: @escaping (Result<T, NetworkServiceError>) -> Void) where T : Decodable {
+        
         self.lastRequest = request
         let mockJSON = self.mockJSON
         let mockError = self.mockError
+        let decoder = jsonDecoder
         DispatchQueue.main.async {
             if let mockJSON = mockJSON {
-                completion?(JsonDocument(object: mockJSON), nil)
+                let data = try! JSONSerialization.data(withJSONObject: mockJSON, options: [])
+                let parsed: Result<T, NetworkServiceError> = NetworkService.JSONResponseParser
+                    .parseDecodable(
+                        with: decoder,
+                        fromData: data,
+                        request: request,
+                        error: nil
+                )
+                
+                completion(parsed)
             }
-
+            
             if let mockError = mockError {
-                completion?(nil, mockError)
+                completion(.error(mockError))
             }
         }
     }

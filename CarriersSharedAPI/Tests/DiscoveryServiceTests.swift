@@ -105,7 +105,7 @@ class DiscoveryServiceTests: XCTestCase {
     func testUnknownCarrierEndpointErrorReturnsError() {
         mockCarrierInfo.primarySIM = MockSIMs.unknown
         let error = NSError(domain: "", code: 1, userInfo: [:])
-        mockNetworkService.mockError(error)
+        mockNetworkService.mockError(.networkError(error))
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
             let resultingError = try! UnwrapAndAssertNotNil(result.errorValue)
@@ -122,20 +122,17 @@ class DiscoveryServiceTests: XCTestCase {
     func testKnownCarrierEndpointErrorFallbackToBundledConfigByDefault() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
         let error = NSError(domain: "", code: 1, userInfo: [:])
-        mockNetworkService.mockError(error)
+        mockNetworkService.mockError(.networkError(error))
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
             let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
             XCTAssertEqual(
                 config.openIdConfig,
-                [
-                    "scopes_supported": "openid email profile",
-                    "response_types_supported": "code",
-                    "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
-                    "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
-                    "authorization_endpoint": "https://account.t-mobile.com/oauth2/v1/auth",
-                    "issuer": "https://ppd.account.t-mobile.com"
-                ]
+                OpenIdConfig(
+                    tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
+                    authorizationEndpoint: URL(string: "https://account.t-mobile.com/oauth2/v1/auth")!,
+                    issuer: URL(string: "https://ppd.account.t-mobile.com")!
+                )
             )
             expectation.fulfill()
         }
@@ -168,16 +165,13 @@ class DiscoveryServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig() { result in
             let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
-            let expectedResult = [
-                "scopes_supported": "openid email profile",
-                "response_types_supported": "code",
-                "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
-                "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
-                "authorization_endpoint": "xci://authorize",
+            let expectedResult = OpenIdConfig(
+                tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
+                authorizationEndpoint: URL(string: "xci://authorize")!,
                 // TODO: re-enable this when we correct it
 //                    "authorization_endpoint": "https://xcid.t-mobile.com/verify/authorize",
-                "issuer": "https://brass.account.t-mobile.com",
-            ]
+                issuer: URL(string: "https://brass.account.t-mobile.com")!
+            )
             
             XCTAssertEqual(
                 config.openIdConfig,
@@ -208,28 +202,52 @@ class DiscoveryServiceTests: XCTestCase {
         discoveryService.discoverConfig() { _ in
 
             let error = NSError(domain: "", code: 1, userInfo: [:])
-            self.mockNetworkService.mockError(error)
+            self.mockNetworkService.mockError(.networkError(error))
             self.discoveryService.discoverConfig() { result in
                 let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
                 
+                let expectedResult = OpenIdConfig(
+                    tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
+                    authorizationEndpoint: URL(string: "xci://authorize")!,
+                    // TODO: re-enable this when we correct it
+//                    "authorization_endpoint": "https://xcid.t-mobile.com/verify/authorize",
+                    issuer: URL(string: "https://brass.account.t-mobile.com")!
+                )
+                
                 XCTAssertEqual(
                     config.openIdConfig,
-                    [
-                        "scopes_supported": "openid email profile",
-                        "response_types_supported": "code",
-                        "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
-                        "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
-                        "authorization_endpoint": "xci://authorize",
-                        // TODO: re-enable this when we correct it
-//                    "authorization_endpoint": "https://xcid.t-mobile.com/verify/authorize",
-                        "issuer": "https://brass.account.t-mobile.com",
-                    ]
+                    expectedResult
                 )
                 
                 expectation.fulfill()
             }
         }
         
+        wait(for: [expectation], timeout: timeout)
+    }
+    
+    func testServiceReturnsOnMainThreadFromMainThread() {
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
+        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
+        let expectation = XCTestExpectation(description: "async discovery")
+        discoveryService.discoverConfig() { _ in
+            XCTAssertTrue(Thread.isMainThread)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: timeout)
+    }
+    
+    func testServiceReturnsOnMainThreadFromBackgroundThread() {
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
+        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
+        let expectation = XCTestExpectation(description: "async discovery")
+        DispatchQueue.global().async {
+            self.discoveryService.discoverConfig() { _ in
+                XCTAssertTrue(Thread.isMainThread)
+                expectation.fulfill()
+            }
+        }
         wait(for: [expectation], timeout: timeout)
     }
 }

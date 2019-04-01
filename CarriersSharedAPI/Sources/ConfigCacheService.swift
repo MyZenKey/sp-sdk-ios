@@ -22,6 +22,7 @@ protocol ConfigCacheServiceProtocol {
     func config(forSIMInfo simInfo: SIMInfo, allowStaleRecords: Bool) -> OpenIdConfig?
 }
 
+/// Note: this class is not thread safe and assumes single threaded access
 class ConfigCacheService: ConfigCacheServiceProtocol {
 
     var cacheTTL: TimeInterval = ConfigCacheService.defaultTTL
@@ -83,30 +84,21 @@ private extension ConfigCacheService {
     static let defaultTTL: TimeInterval = ( 15 * 60 )
     
     static let bundledDiscoveryData = [
-        "tmo": [
-            "scopes_supported": "openid email profile",
-            "response_types_supported": "code",
-            "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
-            "token_endpoint": "https://brass.account.t-mobile.com/tms/v3/usertoken",
-            "authorization_endpoint": "https://account.t-mobile.com/oauth2/v1/auth",
-            "issuer": "https://ppd.account.t-mobile.com"
-        ],
-        "vzw": [
-            "scopes_supported": "openid email profile",
-            "response_types_supported": "code",
-            "userinfo_endpoint": "https://api.yourmobileid.com:22790/userinfo",
-            "token_endpoint": "https://auth.svcs.verizon.com:22790/vzconnect/token",
-            "authorization_endpoint": "https://auth.svcs.verizon.com:22790/vzconnect/authorize",
-            "issuer": "https://auth.svcs.verizon.com"
-        ],
-        "att": [
-            "scopes_supported": "email zipcode name phone",
-            "response_types_supported": "code",
-            "userinfo_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/userinfo",
-            "token_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/token",
-            "authorization_endpoint": "xci://authorize",
-//            "authorization_endpoint": "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize",
-            "issuer": "https://oidc.test.xlogin.att.com"
-        ]
+        "tmo": OpenIdConfig(
+            tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
+            authorizationEndpoint: URL(string: "https://account.t-mobile.com/oauth2/v1/auth")!,
+            issuer: URL(string: "https://ppd.account.t-mobile.com")!
+        ),
+        "vzw": OpenIdConfig(
+            tokenEndpoint: URL(string: "https://auth.svcs.verizon.com:22790/vzconnect/token")!,
+            authorizationEndpoint: URL(string: "https://auth.svcs.verizon.com:22790/vzconnect/authorize")!,
+            issuer: URL(string: "https://auth.svcs.verizon.com")!
+        ),
+        "att": OpenIdConfig(
+            tokenEndpoint: URL(string: "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/token")!,
+            authorizationEndpoint: URL(string: "xci://authorize")!,
+//            authorizationEndpoint: URL(string: "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize")!,
+            issuer: URL(string: "https://oidc.test.xlogin.att.com")!
+        ),
     ]
 }

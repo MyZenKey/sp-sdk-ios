@@ -107,12 +107,11 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConifg: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
                 guard case .cancelled = result else {
                     XCTFail("expected to be cancelled")
                     return
                 }
-
-                expectation.fulfill()
         }
         openIdService.cancelCurrentAuthorizationSession()
         wait(for: [expectation], timeout: timeout)
@@ -123,6 +122,7 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConifg: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
                 guard case .code(let response) = result else {
                     XCTFail("expected to be cancelled")
                     return
@@ -131,8 +131,6 @@ class OpenIdServiceTests: XCTestCase {
                 XCTAssertEqual(response.code, "TESTCODE")
                 XCTAssertEqual(response.mcc, "123")
                 XCTAssertEqual(response.mnc, "456")
-
-                expectation.fulfill()
         }
 
         let urlString = "testapp://authorize?code=TESTCODE&state=bar"
@@ -367,5 +365,25 @@ class OpenIdServiceTests: XCTestCase {
 
         XCTAssertEqual(code, expectedError)
         XCTAssertEqual(description, expectedDescription)
+    }
+    
+    // MARK: - Redundant Requests
+    
+    func testDuplicateRequestsCancelsFirst() {
+        let expectation = XCTestExpectation(description: "wait")
+        openIdService.authorize(
+            fromViewController: UIViewController(),
+            authorizationConifg: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
+                guard case .cancelled = result else {
+                    XCTFail("expected a cancelled result")
+                    return
+                }
+        }
+        openIdService.authorize(
+            fromViewController: UIViewController(),
+            authorizationConifg: OpenIdServiceTests.mockConfig) { _ in }
+        
+        wait(for: [expectation], timeout: timeout)
     }
 }

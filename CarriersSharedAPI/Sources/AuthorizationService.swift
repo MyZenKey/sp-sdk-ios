@@ -51,8 +51,8 @@ public class AuthorizationService {
                     simInfo: config.simInfo,
                     clientId: sdkConfig.clientId,
                     // TODO: fix these forcing optionals here and strongly type upstream
-                    authorizationEndpoint: URL(string: config.openIdConfig["authorization_endpoint"]!)!,
-                    tokenEndpoint: URL(string: config.openIdConfig["token_endpoint"]!)!,
+                    authorizationEndpoint: config.openIdConfig.authorizationEndpoint,
+                    tokenEndpoint: config.openIdConfig.tokenEndpoint,
                     formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
                     redirectURL: sdkConfig.redirectURL,
                     state: "demo-app-state"
