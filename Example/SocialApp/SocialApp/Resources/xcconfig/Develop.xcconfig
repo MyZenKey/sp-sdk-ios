@@ -4,5 +4,7 @@
 PRODUCT_BUNDLE_IDENTIFIER = com.att.ent.cso.haloc.socialapp.develop
 PRODUCT_NAME = develop-$(TARGET_NAME)
 
+FRAMEWORKS_BUILD_DIR = $(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)
+
 // This file must be included last to properly resolve the offical Xcode variables.
 #include "../../../../Shared/xcconfig/Global.xcconfig"
