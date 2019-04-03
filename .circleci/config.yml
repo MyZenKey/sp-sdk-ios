@@ -21,6 +21,10 @@ _defaults: &_defaults
   working_directory: /Users/distiller/project
 
 _run_steps:
+  _submodules: &_submodules
+    name: 'fetch submodules'
+    command: |
+      git submodule update --init --recursive
   _restore_cache: &_restore_cache
     keys:
       - 5-gems-{{ checksum "Gemfile.lock" }}
@@ -40,6 +44,7 @@ jobs:
     <<: *_defaults
     steps:
       - checkout
+      - run: *_submodules
       - restore_cache: *_restore_cache
       - run: *_restore_gems
       - save_cache: *_save_cache
@@ -53,6 +58,7 @@ jobs:
     <<: *_defaults
     steps:
       - checkout
+      - run: *_submodules
       - restore_cache: *_restore_cache
       - run: *_restore_gems
       - save_cache: *_save_cache
@@ -71,6 +77,7 @@ jobs:
     <<: *_defaults
     steps:
       - checkout
+      - run: *_submodules
       - restore_cache: *_restore_cache
       - run: *_restore_gems
       - save_cache: *_save_cache
@@ -84,6 +91,7 @@ jobs:
     <<: *_defaults
     steps:
       - checkout
+      - run: *_submodules
       - restore_cache: *_restore_cache
       - run: *_restore_gems
       - save_cache: *_save_cache
