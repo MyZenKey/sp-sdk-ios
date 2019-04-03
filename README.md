@@ -44,7 +44,7 @@ Then run `pod install`. This will add the local source as well as `AppAuth` to y
 
 These steps outline how to add ProjectVerifyLogin SDK to your project manually. For an example of a project which links ProjectVerifyLogin manually, see the example [SocialApp](https://github.com/Raizlabs/XCI-ProviderSDK-iOS/tree/develop/Example/SocialApp).
 
-- Begin by retrieving the source for both `ProjectVerifyLogin`. We recommend adding them as a [submodule](Pre-release-Git-Access).
+- Begin by retrieving the source for both `ProjectVerifyLogin`. We recommend adding them as a [submodule](#pre-release-Git-Access).
 
 - If you're able to use submodules, once you've cloned run `git submodule update --init --recursive` to recursively clone `AppAuth`. If you've been unable to use submodules, you must separately clone `AppAuth`.
 
