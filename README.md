@@ -44,9 +44,9 @@ Then run `pod install`. This will add the local source as well as `AppAuth` to y
 
 These steps outline how to add ProjectVerifyLogin SDK to your project manually. For an example of a project which links ProjectVerifyLogin manually, see the example [SocialApp](https://github.com/Raizlabs/XCI-ProviderSDK-iOS/tree/develop/Example/SocialApp).
 
-- Begin by retrieving the source for both `ProjectVerifyLogin`. We recommend adding them as a [submodule](#pre-release-git-Access).
+- Begin by retrieving the source for both `ProjectVerifyLogin`. We recommend adding them as a [submodule](#pre-release-git-access).
 
-- If you're able to use submodules, once you've cloned run `git submodule update --init --recursive` to recursively clone `AppAuth`. If you've been unable to use submodules, you must separately clone `AppAuth`. If you've been unable to use submodules, set the `AppAuth` dependency to the correct release tag you would like to target by setting your working copy to the associated commit. This SDK currently supports version [0.95.0](https://github.com/openid/AppAuth-iOS/releases/tag/0.95.0).
+- Once you've cloned the repository, run `git submodule update --init --recursive` to recursively clone `AppAuth`. If you've been unable to use submodules, you must separately clone `AppAuth` and set your working copy to the release tag you would like to target. This SDK currently supports version [0.95.0](https://github.com/openid/AppAuth-iOS/releases/tag/0.95.0).
 
 - Once you've added the source via submodule or manually, add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
 
