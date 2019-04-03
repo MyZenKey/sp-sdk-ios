@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import CarriersSharedAPI
 
 class SignUpViewController: UIViewController, UITextFieldDelegate {
     
@@ -116,8 +117,21 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         return label
     }()
     
+//    let verifyButton: UIButton = {
+//        let button = UIButton()
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
+//        button.setImage(UIImage(named: "buttonlogo"), for: .normal)
+//        button.setTitle("Sign up with VERIFY", for: .normal)
+//        button.backgroundColor = AppTheme.verifyGreen
+//        button.layer.masksToBounds = true
+//        button.layer.cornerRadius = 22
+//        button.addTarget(self, action: #selector(signUpWithVerify), for: .touchUpInside)
+//        return button
+//    }()
+    
     let verifyButton: UIButton = {
-        let button = UIButton()
+        let button = ProjectVerifyBrandedButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         button.setImage(UIImage(named: "buttonlogo"), for: .normal)
