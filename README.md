@@ -12,7 +12,7 @@ There are three supported ways to integrate ProjectVerify and its dependency `Ap
 This SDK current relies on *AppAuth* as an Open Id Connect client.
 For more information about AppAuth, visit the repository [here](https://github.com/openid/AppAuth-iOS).
 
-## Pre-Release Git Access
+## Pre-release Git Access
 
 ⚠️ *these are pre-release integration steps and will change*
 
@@ -40,19 +40,15 @@ Then run `pod install`. This will add the local source as well as `AppAuth` to y
 
 ## Manual
 
+⚠️ *these are pre-release integration steps and will change*
+
 These steps outline how to add ProjectVerifyLogin SDK to your project manually. For an example of a project which links ProjectVerifyLogin manually, see the example [SocialApp](https://github.com/Raizlabs/XCI-ProviderSDK-iOS/tree/develop/Example/SocialApp).
 
-- Begin by retrieving the source for both `ProjectVerifyLogin` and its dependency `AppAuth`. The recommended way to do this is by adding them both as [git submodules][submodules]:
+- Begin by retrieving the source for both `ProjectVerifyLogin`. We recommend adding them as a [submodule](Pre-release-Git-Access).
 
-```bash
-git submodule add https://github.com/Raizlabs/XCI-ProviderSDK-iOS
-git submodule add https://github.com/openid/AppAuth-iOS
-```
-If it is not possible to use git submodules for some reason, download the source from the respective locations.
+- Once you've added the source via submodule or manually, add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
 
-- Once you've added the source via submodule or manually, add both `CarriersSharedAPI.xcodeproj` and `AppAuth.xcodeproj` to your application's XCode project.
-
-- Having added the two projects, confirm that their deployment targets match your application's deployment target.
+- Having added the project, confirm that their deployment targets are less than or equal to your deployment target.
 
 - Next, view your project's `Embedded Binaries` under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks here. Be sure to select the corresponding framework for the platform you're targeting (ie. the iOS framework for an iOS target).
 
