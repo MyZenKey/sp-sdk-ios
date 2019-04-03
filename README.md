@@ -46,11 +46,15 @@ These steps outline how to add ProjectVerifyLogin SDK to your project manually. 
 
 - Begin by retrieving the source for both `ProjectVerifyLogin`. We recommend adding them as a [submodule](Pre-release-Git-Access).
 
+- If you're able to use submodules, once you've cloned run `git submodule update --init --recursive` to recursively clone `AppAuth`. If you've been unable to use submodules, you must separately clone `AppAuth`.
+
 - Once you've added the source via submodule or manually, add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
 
 - Having added the project, confirm that their deployment targets are less than or equal to your deployment target.
 
-- Next, view your project's `Embedded Binaries` under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks here. Be sure to select the corresponding framework for the platform you're targeting (ie. the iOS framework for an iOS target).
+- Next, ensure that `AppAuth` is linked to to `CarriersSharedAPI` and also included as a "Target Dependency" in the `CarrierSharedAPI` build phases.
+
+- Finally, view your project's `Embedded Binaries` under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks here. Be sure to select the corresponding framework for the platform you're targeting (ie. the iOS framework for an iOS target).
 
 - That's it! Build and run to ensure everything is working correctly.
 
