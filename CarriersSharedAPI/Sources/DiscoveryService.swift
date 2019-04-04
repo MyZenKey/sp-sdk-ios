@@ -68,8 +68,8 @@ class DiscoveryService: DiscoveryServiceProtocol {
 //    UI –
 //    IP – https://23.20.110.44
 //    FQDN – https://app.xcijv.com/ui
-    private let discoveryEndpointFormat = "http://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
-//    private let discoveryEndpointFormat = "https://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
+    private let discoveryEndpointFormat = "https://app.xcijv.com/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
+//    private let discoveryEndpointFormat = "http://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
     
     init(networkService: NetworkServiceProtocol,
          carrierInfoService: CarrierInfoServiceProtocol,
@@ -164,16 +164,11 @@ private extension DiscoveryService {
                 // "inner" result and flatten the success or error.
                 switch configResult {
                 case .config(let openIdConfig):
-                    
-                    let tempConfig = openIdConfig.withOverwritenAuthURL()
-                    
                     self?.configCacheService.cacheConfig(
-                        tempConfig, // FIXME: use next line
-//                        openIdConfig,
+                        openIdConfig,
                         forSIMInfo: simInfo
                     )
-                    completion?(.value(tempConfig)) // FIXME: use next line
-//                    completion?(OpenIdResult.value(openIdConfig))
+                    completion?(OpenIdResult.value(openIdConfig))
                     
                 case .error(let issuerError):
                     completion?(.error(.issuerError(issuerError)))
@@ -192,18 +187,6 @@ private extension DiscoveryService {
             format: discoveryEndpointFormat,
             simInfo.mcc,
             simInfo.mnc
-        )
-    }
-}
-
-// FIXME: remove this once we have universal links wired up:
-private extension OpenIdConfig {
-    /// returns an OID config with auth endpoint overwritten to hard code `xci://`
-    func withOverwritenAuthURL() -> OpenIdConfig {
-        return OpenIdConfig(
-            tokenEndpoint: tokenEndpoint,
-            authorizationEndpoint: URL(string: "xci://authorize")!,
-            issuer: issuer
         )
     }
 }

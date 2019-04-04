@@ -167,9 +167,7 @@ class DiscoveryServiceTests: XCTestCase {
             let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
             let expectedResult = OpenIdConfig(
                 tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
-                authorizationEndpoint: URL(string: "xci://authorize")!,
-                // TODO: re-enable this when we correct it
-//                    "authorization_endpoint": "https://xcid.t-mobile.com/verify/authorize",
+                authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
                 issuer: URL(string: "https://brass.account.t-mobile.com")!
             )
             
@@ -208,9 +206,7 @@ class DiscoveryServiceTests: XCTestCase {
                 
                 let expectedResult = OpenIdConfig(
                     tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
-                    authorizationEndpoint: URL(string: "xci://authorize")!,
-                    // TODO: re-enable this when we correct it
-//                    "authorization_endpoint": "https://xcid.t-mobile.com/verify/authorize",
+                    authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
                     issuer: URL(string: "https://brass.account.t-mobile.com")!
                 )
                 

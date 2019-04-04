@@ -60,7 +60,7 @@ public class AuthorizationService {
 
                 self?.openIdService.authorize(
                     fromViewController: viewController,
-                    authorizationConifg: authorizationConfig,
+                    authorizationConfig: authorizationConfig,
                     completion: completion
                 )
             case .unknownMobileNetwork:

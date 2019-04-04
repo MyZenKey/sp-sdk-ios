@@ -50,7 +50,7 @@ struct OpenIdAuthorizationConfig: Equatable {
 protocol OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
-        authorizationConifg: OpenIdAuthorizationConfig,
+        authorizationConfig: OpenIdAuthorizationConfig,
         completion: @escaping AuthorizationCompletion
     )
 
@@ -59,6 +59,10 @@ protocol OpenIdServiceProtocol {
     func cancelCurrentAuthorizationSession()
 
     func concludeAuthorizationFlow(url: URL)
+}
+
+class PendingSessionStorage: OpenIdExternalSessionStateStorage {
+    var pendingSession: OIDExternalUserAgentSession?
 }
 
 class OpenIdService {
@@ -71,7 +75,7 @@ class OpenIdService {
 
     enum State {
         case idle
-        case inProgress(OIDAuthorizationRequest, SIMInfo, AuthorizationCompletion)
+        case inProgress(OIDAuthorizationRequest, SIMInfo, AuthorizationCompletion, PendingSessionStorage)
     }
 
     var state: State = .idle
@@ -95,7 +99,7 @@ class OpenIdService {
 extension OpenIdService: OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
-        authorizationConifg: OpenIdAuthorizationConfig,
+        authorizationConfig: OpenIdAuthorizationConfig,
         completion: @escaping AuthorizationCompletion
         ) {
 
@@ -105,21 +109,24 @@ extension OpenIdService: OpenIdServiceProtocol {
         }
         
         let openIdConfiguration = OIDServiceConfiguration(
-            authorizationEndpoint: authorizationConifg.authorizationEndpoint,
-            tokenEndpoint: authorizationConifg.tokenEndpoint
+            authorizationEndpoint: authorizationConfig.authorizationEndpoint,
+            tokenEndpoint: authorizationConfig.tokenEndpoint
         )
 
         //create the authorization request
-        let authorizationRequest: OIDAuthorizationRequest = self.createAuthorizationRequest(
+        let authorizationRequest: OIDAuthorizationRequest = OpenIdService.createAuthorizationRequest(
             openIdServiceConfiguration: openIdConfiguration,
-            authorizationConifg: authorizationConifg
+            authorizationConfig: authorizationConfig
         )
 
-        let simInfo = authorizationConifg.simInfo
+        let sessionStorage = PendingSessionStorage()
+        
+        let simInfo = authorizationConfig.simInfo
         urlResolver.resolve(
-            withRequest: authorizationRequest,
+            request: authorizationRequest,
+            usingStorage: sessionStorage,
             fromViewController: viewController,
-            authorizationConfig: authorizationConifg) { [weak self] (authState, error) in
+            authorizationConfig: authorizationConfig) { [weak self] (authState, error) in
                 guard
                     error == nil,
                     let authState = authState,
@@ -137,31 +144,9 @@ extension OpenIdService: OpenIdServiceProtocol {
                 self?.concludeAuthorizationFlow(result: .code(authorizedResponse))
         }
 
-        state = .inProgress(authorizationRequest, simInfo, completion)
+        state = .inProgress(authorizationRequest, simInfo, completion, sessionStorage)
     }
-
-    func createAuthorizationRequest(
-        openIdServiceConfiguration: OIDServiceConfiguration,
-        authorizationConifg: OpenIdAuthorizationConfig) -> OIDAuthorizationRequest {
-
-        let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
-            configuration: openIdServiceConfiguration,
-            clientId: authorizationConifg.clientId,
-            clientSecret: nil,
-            scope: authorizationConifg.formattedScopes,
-            redirectURL: authorizationConifg.redirectURL,
-            responseType: ResponseType.code.rawValue,
-            state: authorizationConifg.state,
-            nonce: nil,
-            codeVerifier: nil,
-            codeChallenge: nil,
-            codeChallengeMethod: nil,
-            additionalParameters: nil
-        )
-
-        return request
-    }
-
+    
     func cancelCurrentAuthorizationSession() {
         concludeAuthorizationFlow(result: .cancelled)
     }
@@ -177,7 +162,7 @@ extension OpenIdService: OpenIdServiceProtocol {
         // hand that off to the SP:
 
         // ensure valid state:
-        guard case .inProgress(let request, let simInfo, _) = state else {
+        guard case .inProgress(let request, let simInfo, _, _) = state else {
             // there is no request, return
             return
         }
@@ -233,7 +218,7 @@ extension OpenIdService: OpenIdServiceProtocol {
             state = .idle
         }
 
-        guard case .inProgress(_, _, let completion) = state else {
+        guard case .inProgress(_, _, let completion, _) = state else {
             return
         }
 
@@ -242,6 +227,30 @@ extension OpenIdService: OpenIdServiceProtocol {
 }
 
 extension OpenIdService {
+    
+    static func createAuthorizationRequest(
+        openIdServiceConfiguration: OIDServiceConfiguration,
+        authorizationConfig: OpenIdAuthorizationConfig) -> OIDAuthorizationRequest {
+        
+        let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
+            configuration: openIdServiceConfiguration,
+            clientId: authorizationConfig.clientId,
+            clientSecret: nil,
+            scope: authorizationConfig.formattedScopes,
+            redirectURL: authorizationConfig.redirectURL,
+            responseType: ResponseType.code.rawValue,
+            state: authorizationConfig.state,
+            nonce: nil,
+            codeVerifier: nil,
+            codeChallenge: nil,
+            codeChallengeMethod: nil,
+            additionalParameters: nil
+        )
+        
+        return request
+    }
+
+    
     static func errorValue(fromIdentifier identifier: String, description: String?) -> AuthorizationError {
         if let errorCode = OAuthErrorCode(rawValue: identifier) {
             return .oauth(errorCode, description)
