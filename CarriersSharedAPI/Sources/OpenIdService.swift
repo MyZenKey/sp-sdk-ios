@@ -119,12 +119,12 @@ extension OpenIdService: OpenIdServiceProtocol {
             authorizationConfig: authorizationConfig
         )
 
-        let sesissonStorage = PendingSessionStorage()
+        let sessionStorage = PendingSessionStorage()
         
         let simInfo = authorizationConfig.simInfo
         urlResolver.resolve(
             request: authorizationRequest,
-            usingStorage: sesissonStorage,
+            usingStorage: sessionStorage,
             fromViewController: viewController,
             authorizationConfig: authorizationConfig) { [weak self] (authState, error) in
                 guard
@@ -144,7 +144,7 @@ extension OpenIdService: OpenIdServiceProtocol {
                 self?.concludeAuthorizationFlow(result: .code(authorizedResponse))
         }
 
-        state = .inProgress(authorizationRequest, simInfo, completion, sesissonStorage)
+        state = .inProgress(authorizationRequest, simInfo, completion, sessionStorage)
     }
     
     func cancelCurrentAuthorizationSession() {

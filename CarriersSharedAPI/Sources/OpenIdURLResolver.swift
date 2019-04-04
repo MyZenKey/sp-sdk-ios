@@ -11,7 +11,7 @@ import AppAuth
 
 typealias OpenIdURLResolverCompletion = (OIDAuthState?, Error?) -> Void
 
-/// holds a reference to an in progress OIDExternalUserAgentSession in memeory
+/// holds a reference to an in progress OIDExternalUserAgentSession in memory
 /// a present session indicates the storage owns an inflights session.
 protocol OpenIdExternalSessionStateStorage: class {
     var pendingSession: OIDExternalUserAgentSession? { get set }
@@ -69,8 +69,8 @@ extension OpenIdURLResolverProtocol {
     }
 }
 
-///// A url resolver which uses a hard coded xci url scheme
-class XCISchemeOpenIdURLResolver: OpenIdURLResolverProtocol {
+/// A url resolver which uses a hard coded xci url scheme
+struct XCISchemeOpenIdURLResolver: OpenIdURLResolverProtocol {
     func resolve(
         request: OIDAuthorizationRequest,
         usingStorage storage: OpenIdExternalSessionStateStorage,
