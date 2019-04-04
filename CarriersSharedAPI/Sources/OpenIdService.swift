@@ -50,7 +50,7 @@ struct OpenIdAuthorizationConfig: Equatable {
 protocol OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
-        authorizationConifg: OpenIdAuthorizationConfig,
+        authorizationConfig: OpenIdAuthorizationConfig,
         completion: @escaping AuthorizationCompletion
     )
 
@@ -99,7 +99,7 @@ class OpenIdService {
 extension OpenIdService: OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
-        authorizationConifg: OpenIdAuthorizationConfig,
+        authorizationConfig: OpenIdAuthorizationConfig,
         completion: @escaping AuthorizationCompletion
         ) {
 
@@ -109,24 +109,24 @@ extension OpenIdService: OpenIdServiceProtocol {
         }
         
         let openIdConfiguration = OIDServiceConfiguration(
-            authorizationEndpoint: authorizationConifg.authorizationEndpoint,
-            tokenEndpoint: authorizationConifg.tokenEndpoint
+            authorizationEndpoint: authorizationConfig.authorizationEndpoint,
+            tokenEndpoint: authorizationConfig.tokenEndpoint
         )
 
         //create the authorization request
-        let authorizationRequest: OIDAuthorizationRequest = self.createAuthorizationRequest(
+        let authorizationRequest: OIDAuthorizationRequest = OpenIdService.createAuthorizationRequest(
             openIdServiceConfiguration: openIdConfiguration,
-            authorizationConifg: authorizationConifg
+            authorizationConfig: authorizationConfig
         )
 
         let sesissonStorage = PendingSessionStorage()
         
-        let simInfo = authorizationConifg.simInfo
+        let simInfo = authorizationConfig.simInfo
         urlResolver.resolve(
             request: authorizationRequest,
             usingStorage: sesissonStorage,
             fromViewController: viewController,
-            authorizationConfig: authorizationConifg) { [weak self] (authState, error) in
+            authorizationConfig: authorizationConfig) { [weak self] (authState, error) in
                 guard
                     error == nil,
                     let authState = authState,
@@ -146,29 +146,7 @@ extension OpenIdService: OpenIdServiceProtocol {
 
         state = .inProgress(authorizationRequest, simInfo, completion, sesissonStorage)
     }
-
-    func createAuthorizationRequest(
-        openIdServiceConfiguration: OIDServiceConfiguration,
-        authorizationConifg: OpenIdAuthorizationConfig) -> OIDAuthorizationRequest {
-
-        let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
-            configuration: openIdServiceConfiguration,
-            clientId: authorizationConifg.clientId,
-            clientSecret: nil,
-            scope: authorizationConifg.formattedScopes,
-            redirectURL: authorizationConifg.redirectURL,
-            responseType: ResponseType.code.rawValue,
-            state: authorizationConifg.state,
-            nonce: nil,
-            codeVerifier: nil,
-            codeChallenge: nil,
-            codeChallengeMethod: nil,
-            additionalParameters: nil
-        )
-
-        return request
-    }
-
+    
     func cancelCurrentAuthorizationSession() {
         concludeAuthorizationFlow(result: .cancelled)
     }
@@ -249,6 +227,30 @@ extension OpenIdService: OpenIdServiceProtocol {
 }
 
 extension OpenIdService {
+    
+    static func createAuthorizationRequest(
+        openIdServiceConfiguration: OIDServiceConfiguration,
+        authorizationConfig: OpenIdAuthorizationConfig) -> OIDAuthorizationRequest {
+        
+        let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
+            configuration: openIdServiceConfiguration,
+            clientId: authorizationConfig.clientId,
+            clientSecret: nil,
+            scope: authorizationConfig.formattedScopes,
+            redirectURL: authorizationConfig.redirectURL,
+            responseType: ResponseType.code.rawValue,
+            state: authorizationConfig.state,
+            nonce: nil,
+            codeVerifier: nil,
+            codeChallenge: nil,
+            codeChallengeMethod: nil,
+            additionalParameters: nil
+        )
+        
+        return request
+    }
+
+    
     static func errorValue(fromIdentifier identifier: String, description: String?) -> AuthorizationError {
         if let errorCode = OAuthErrorCode(rawValue: identifier) {
             return .oauth(errorCode, description)

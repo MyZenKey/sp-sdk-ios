@@ -23,12 +23,12 @@ class MockOpenIdService: OpenIdServiceProtocol {
 
     func authorize(
         fromViewController viewController: UIViewController,
-        authorizationConifg: OpenIdAuthorizationConfig,
+        authorizationConfig: OpenIdAuthorizationConfig,
         completion: @escaping AuthorizationCompletion
     ) {
 
         self.lastViewController = viewController
-        self.lastConfig = authorizationConifg
+        self.lastConfig = authorizationConfig
 
         DispatchQueue.main.async {
             completion(self.mockResponse)

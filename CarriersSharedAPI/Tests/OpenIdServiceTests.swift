@@ -81,7 +81,7 @@ class OpenIdServiceTests: XCTestCase {
         let completion: AuthorizationCompletion = { _ in }
         openIdService.authorize(
             fromViewController: testViewContorller,
-            authorizationConifg: OpenIdServiceTests.mockConfig,
+            authorizationConfig: OpenIdServiceTests.mockConfig,
             completion: completion)
 
         let passedViewController = try? UnwrapAndAssertNotNil(mockURLResolver.lastViewController)
@@ -104,7 +104,7 @@ class OpenIdServiceTests: XCTestCase {
     func testAuthorizationInProgress() {
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConifg: OpenIdServiceTests.mockConfig,
+            authorizationConfig: OpenIdServiceTests.mockConfig,
             completion: { _ in })
         XCTAssertTrue(openIdService.authorizationInProgress)
     }
@@ -113,7 +113,7 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConifg: OpenIdServiceTests.mockConfig) { result in
+            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
                 defer { expectation.fulfill() }
                 guard case .cancelled = result else {
                     XCTFail("expected to be cancelled")
@@ -128,7 +128,7 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConifg: OpenIdServiceTests.mockConfig) { result in
+            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
                 defer { expectation.fulfill() }
                 guard case .code(let response) = result else {
                     XCTFail("expected to be cancelled")
@@ -154,7 +154,7 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConifg: OpenIdServiceTests.mockConfig) { result in
+            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
                 guard
                     case .error(let error) = result,
                     case AuthorizationError.stateMismatch = error else {
@@ -173,7 +173,7 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConifg: OpenIdServiceTests.mockConfig) { result in
+            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
                 guard
                     case .error(let error) = result,
                     case AuthorizationError.missingAuthCode = error else {
@@ -194,7 +194,7 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConifg: OpenIdServiceTests.mockConfig) { result in
+            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
                 guard
                     case .error(let error) = result,
                     case AuthorizationError.oauth(let code, let description) = error else {
@@ -216,7 +216,7 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConifg: OpenIdServiceTests.mockConfig) { result in
+            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
                 guard
                     case .error(let error) = result,
                     case AuthorizationError.oauth(let code, let description) = error else {
@@ -380,7 +380,7 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConifg: OpenIdServiceTests.mockConfig) { result in
+            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
                 defer { expectation.fulfill() }
                 guard case .cancelled = result else {
                     XCTFail("expected a cancelled result")
@@ -389,7 +389,7 @@ class OpenIdServiceTests: XCTestCase {
         }
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConifg: OpenIdServiceTests.mockConfig) { _ in }
+            authorizationConfig: OpenIdServiceTests.mockConfig) { _ in }
         
         wait(for: [expectation], timeout: timeout)
     }

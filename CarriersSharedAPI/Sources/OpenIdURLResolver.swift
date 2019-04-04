@@ -78,9 +78,23 @@ class XCISchemeOpenIdURLResolver: OpenIdURLResolverProtocol {
         authorizationConfig: OpenIdAuthorizationConfig,
         completion: @escaping OpenIdURLResolverCompletion) {
 
-        if UIApplication.shared.canOpenURL(authorizationConfig.authorizationEndpoint) {
+        if UIApplication.shared.canOpenURL(URL(string: "xci://")!) {
+            
+            // restructure resquest to user xci:// scheme for auth point
+            // this reach backward pattern is not ideal and is for QA only!
+            let openIdConfiguration = OIDServiceConfiguration(
+                authorizationEndpoint: URL(string: "xci://authorize")!,
+                tokenEndpoint: authorizationConfig.tokenEndpoint
+            )
+            
+            let authorizationRequest: OIDAuthorizationRequest = OpenIdService
+                .createAuthorizationRequest(
+                    openIdServiceConfiguration: openIdConfiguration,
+                    authorizationConfig: authorizationConfig
+            )
+            
             self.performCCIDAuthorization(
-                request: request,
+                request: authorizationRequest,
                 storage: storage,
                 authorizationConfig: authorizationConfig,
                 completion: completion
