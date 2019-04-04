@@ -61,6 +61,10 @@ protocol OpenIdServiceProtocol {
     func concludeAuthorizationFlow(url: URL)
 }
 
+class PendingSessionStorage: OpenIdExternalSessionStateStorage {
+    var pendingSession: OIDExternalUserAgentSession?
+}
+
 class OpenIdService {
     enum ResponseKeys: String {
         case state
@@ -71,7 +75,7 @@ class OpenIdService {
 
     enum State {
         case idle
-        case inProgress(OIDAuthorizationRequest, SIMInfo, AuthorizationCompletion)
+        case inProgress(OIDAuthorizationRequest, SIMInfo, AuthorizationCompletion, PendingSessionStorage)
     }
 
     var state: State = .idle
@@ -115,9 +119,12 @@ extension OpenIdService: OpenIdServiceProtocol {
             authorizationConifg: authorizationConifg
         )
 
+        let sesissonStorage = PendingSessionStorage()
+        
         let simInfo = authorizationConifg.simInfo
         urlResolver.resolve(
-            withRequest: authorizationRequest,
+            request: authorizationRequest,
+            usingStorage: sesissonStorage,
             fromViewController: viewController,
             authorizationConfig: authorizationConifg) { [weak self] (authState, error) in
                 guard
@@ -137,7 +144,7 @@ extension OpenIdService: OpenIdServiceProtocol {
                 self?.concludeAuthorizationFlow(result: .code(authorizedResponse))
         }
 
-        state = .inProgress(authorizationRequest, simInfo, completion)
+        state = .inProgress(authorizationRequest, simInfo, completion, sesissonStorage)
     }
 
     func createAuthorizationRequest(
@@ -177,7 +184,7 @@ extension OpenIdService: OpenIdServiceProtocol {
         // hand that off to the SP:
 
         // ensure valid state:
-        guard case .inProgress(let request, let simInfo, _) = state else {
+        guard case .inProgress(let request, let simInfo, _, _) = state else {
             // there is no request, return
             return
         }
@@ -233,7 +240,7 @@ extension OpenIdService: OpenIdServiceProtocol {
             state = .idle
         }
 
-        guard case .inProgress(_, _, let completion) = state else {
+        guard case .inProgress(_, _, let completion, _) = state else {
             return
         }
 

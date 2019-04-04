@@ -13,12 +13,14 @@ import AppAuth
 
 class MockURLResolver: OpenIdURLResolverProtocol {
 
+    var lastStorage: OpenIdExternalSessionStateStorage?
     var lastRequest: OIDAuthorizationRequest?
     var lastViewController: UIViewController?
     var lastConfig: OpenIdAuthorizationConfig?
     var lastCompletion: OpenIdURLResolverCompletion?
 
     func clear() {
+        lastStorage = nil
         lastRequest = nil
         lastViewController = nil
         lastConfig = nil
@@ -26,10 +28,12 @@ class MockURLResolver: OpenIdURLResolverProtocol {
     }
 
     func resolve(
-        withRequest request: OIDAuthorizationRequest,
+        request: OIDAuthorizationRequest,
+        usingStorage storage: OpenIdExternalSessionStateStorage,
         fromViewController viewController: UIViewController,
         authorizationConfig: OpenIdAuthorizationConfig,
         completion: @escaping OpenIdURLResolverCompletion) {
+        lastStorage = storage
         lastRequest = request
         lastViewController = viewController
         lastConfig = authorizationConfig
@@ -38,6 +42,7 @@ class MockURLResolver: OpenIdURLResolverProtocol {
 
     func performCCIDAuthorization(
         request: OIDAuthorizationRequest,
+        storage: OpenIdExternalSessionStateStorage,
         authorizationConfig: OpenIdAuthorizationConfig,
         completion: @escaping OpenIdURLResolverCompletion) {
 
@@ -85,13 +90,15 @@ class OpenIdServiceTests: XCTestCase {
         XCTAssertEqual(passedViewController, testViewContorller)
         XCTAssertEqual(passedConfig, OpenIdServiceTests.mockConfig)
 
-        guard case .inProgress(let request, _, _) = openIdService.state else {
+        guard case .inProgress(let request, _, _, let storage) = openIdService.state else {
             XCTFail("expected in progress state")
             return
         }
 
         let passedRequest = try? UnwrapAndAssertNotNil(mockURLResolver.lastRequest)
+        let passedStorage = try? UnwrapAndAssertNotNil(mockURLResolver.lastStorage)
         XCTAssertEqual(passedRequest, request)
+        XCTAssertTrue(passedStorage === storage)
     }
 
     func testAuthorizationInProgress() {
