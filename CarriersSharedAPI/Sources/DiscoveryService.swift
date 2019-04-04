@@ -46,7 +46,6 @@ class DiscoveryService: DiscoveryServiceProtocol {
 
     private let networkService: NetworkServiceProtocol
     private let configCacheService: ConfigCacheServiceProtocol
-
     private let discoveryResource = "https://app.xcijv.com/.well-known/openid_configuration"
     private let discoveryEndpointFormat = "%@?&mccmnc=%@%@"
 

@@ -55,3 +55,13 @@ extension CTTelephonyNetworkInfo: MobileNetworkInfoProvider {
         }
     }
 }
+
+#if DEBUG
+
+class MockATTNetworkInfoProvider: MobileNetworkInfoProvider {
+    var onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?
+    let currentSIMs: [SIMInfo] = [SIMInfo(mcc: "310", mnc: "007")]
+    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?) { }
+}
+
+#endif
