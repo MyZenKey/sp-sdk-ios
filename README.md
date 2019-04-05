@@ -1,5 +1,8 @@
+
+![Project Verify](project_verify.png "Project Verify")
+
 # XCI-Provider SDK
-[![CircleCI](https://circleci.com/gh/Raizlabs/XCI-ProviderSDK-iOS/tree/develop.svg?style=svg&circle-token=0170863b5ec5b1ec6f14c3980c1f4e6e269f2adf)](https://circleci.com/gh/Raizlabs/XCI-ProviderSDK-iOS/tree/develop)
+[![CircleCI](https://circleci.com/gh/Rightpoint/XCI-ProviderSDK-iOS/tree/develop.svg?style=svg&circle-token=0170863b5ec5b1ec6f14c3980c1f4e6e269f2adf)](https://circleci.com/gh/Raizlabs/XCI-ProviderSDK-iOS/tree/develop)
 
 ⚠️ This software is pre-release! This integration process and the SDK's interface are subject to change.
 
