@@ -57,7 +57,7 @@ These steps outline how to add ProjectVerifyLogin SDK to your project manually. 
 
 - Next, ensure that `AppAuth` is linked to to `CarriersSharedAPI` and also included as a "Target Dependency" in the `CarrierSharedAPI` build phases.
 
-- Finally, view your project's `Embedded Binaries` under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks here. Be sure to select the corresponding framework for the platform you're targeting (ie. the iOS framework for an iOS target).
+- Finally, view your project's "Embedded Binaries" under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks here. Be sure to select the corresponding framework for the platform you're targeting (ie. the iOS framework for an iOS target).
 
 - That's it! Build and run to ensure everything is working correctly.
 
@@ -139,7 +139,6 @@ class LoginViewController {
             scopes: scopes,
             fromViewController: self) { result in
 
-            let appDelegate = UIApplication.shared.delegate! as! AppDelegate
             switch result {
             case .code(let authorizedResponse):
                 let code = authorizedResponse.code
