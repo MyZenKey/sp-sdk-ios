@@ -8,89 +8,6 @@
 
 import UIKit
 
-public class ProjectVerifyBrandedButton: UIButton {
-    
-    var branding: Branding = .default {
-        didSet {
-            updateBranding()
-        }
-    }
-    
-    let configCacheService: ConfigCacheServiceProtocol = ProjectVerifyBrandedButton
-        .resolveConfigCacheService()
-    
-    let carrierInfoService: CarrierInfoServiceProtocol = ProjectVerifyBrandedButton
-        .resolveCarrierInfoService()
-    
-    public init() {
-        super.init(frame: .zero)
-        configureButton()
-    }
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        configureButton()
-    }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        configureButton()
-    }
-    
-    private func configureButton() {
-        branding = brandingFromCache()
-        updateBranding()
-    }
-    
-    private func updateBranding() {
-        
-    }
-}
-
-extension ProjectVerifyBrandedButton {
-    enum Branding {
-        case `default`
-    }
-    
-    func brandingFromCache() -> Branding {
-        guard
-            let primarySIM = carrierInfoService.primarySIM,
-            let config = configCacheService.config(
-                forSIMInfo: primarySIM,
-                allowStaleRecords: true) else {
-                    return .default
-        }
-        
-        guard let branding = config.branding else {
-            return .default
-        }
-        
-        return branding
-    }
-}
-
-extension OpenIdConfig {
-    var branding: ProjectVerifyBrandedButton.Branding {
-        return .default
-    }
-}
-
-private extension ProjectVerifyBrandedButton {
-    static func resolveCarrierInfoService() -> CarrierInfoServiceProtocol {
-        return ProjectVerifyAppDelegate
-            .shared
-            .dependencies
-            .carrierInfoService
-    }
-
-    static func resolveConfigCacheService() -> ConfigCacheServiceProtocol {
-        return ProjectVerifyAppDelegate
-            .shared
-            .dependencies
-            .configCacheService
-    }
-}
-
 public protocol ProjectVerifyAuthorizeButtonDelegate: AnyObject {
     
     func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton)
@@ -173,8 +90,3 @@ extension UIViewController {
     }
 }
 
-private extension CGSize {
-    static var projectVerifyButtonSize: CGSize {
-        return CGSize(width: 320, height: 40)
-    }
-}

@@ -8,8 +8,10 @@
 
 import Foundation
 
-enum Buttons {
-    static let signInWithProjectVerify = LocalizationUtils.localizedString("Sign in with Project Verify")
+enum Localization {
+    enum Buttons {
+        static let signInWithProjectVerify = LocalizationUtils.localizedString("Sign in with Project Verify")
+    }
 }
 
 private class LocalizationUtils {
