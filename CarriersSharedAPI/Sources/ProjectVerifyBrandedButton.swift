@@ -25,7 +25,11 @@ public class ProjectVerifyBrandedButton: UIButton {
     /// dark backgrounds may find a light style provides greater contrast.
     ///
     /// - SeeAlso: `ProjectVerifyBrandedButton.Style`
-    public var style: Style = .dark
+    public var style: Style = .dark {
+        didSet {
+            updateBranding()
+        }
+    }
     
     var branding: Branding = .default {
         didSet {
@@ -42,13 +46,25 @@ public class ProjectVerifyBrandedButton: UIButton {
     }
     
     public override init(frame: CGRect) {
-        super.init(frame: frame)
+        let nonZeroFrame = frame.size == CGSize.zero ?
+            CGRect(origin: frame.origin, size: CGSize(width: 1, height: 1)) : frame
+        super.init(frame: nonZeroFrame)
         configureButton()
     }
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         configureButton()
+    }
+    
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+        configureButton()
+    }
+    
+    public override func sizeThatFits(_ size: CGSize) -> CGSize {
+        let fittingSize = super.sizeThatFits(size)
+        return CGSize(width: max(fittingSize.width, size.width), height: Constants.height)
     }
 }
 
@@ -92,6 +108,7 @@ private extension ProjectVerifyBrandedButton {
         
         layer.cornerRadius = Constants.cornerRadius
         
+        contentEdgeInsets = .projectVerifyButtonContentInsets
         titleEdgeInsets = .projectVerifyButtonTitleEdgeInsets
         imageEdgeInsets = .projectVerifyButtonImageEdgeInsets
         
@@ -137,7 +154,6 @@ private extension ProjectVerifyBrandedButton {
     }
 }
 
-
 // MARK: - Geometery exetensions
 
 private extension ProjectVerifyBrandedButton {
@@ -150,20 +166,15 @@ private extension ProjectVerifyBrandedButton {
 private extension UIEdgeInsets {
     static let offset: CGFloat = 5
     
+    static var projectVerifyButtonContentInsets: UIEdgeInsets {
+        return UIEdgeInsets(top: 16, left: 42, bottom: 16, right: 42)
+    }
+    
     static var projectVerifyButtonTitleEdgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: offset, bottom: 0, right: -offset)
     }
     
     static var projectVerifyButtonImageEdgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: -offset, bottom: 0, right: offset)
-    }
-}
-
-private extension CGSize {
-    static var projectVerifyButtonSize: CGSize {
-        return CGSize(
-            width: CGFloat.greatestFiniteMagnitude,
-            height: ProjectVerifyBrandedButton.Constants.height
-        )
     }
 }
