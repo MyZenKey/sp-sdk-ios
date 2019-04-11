@@ -11,12 +11,21 @@ import UIKit
 public class ProjectVerifyBrandedButton: UIButton {
     public override var isHighlighted: Bool {
         didSet {
-            updateBackgroundColor()
+            updateTinting()
         }
     }
     
+    public override var isEnabled: Bool {
+        didSet {
+            updateTinting()
+        }
+    }
+    
+    /// A style for the button to adopt. Light backgrounds should prefer a dark style, while
+    /// dark backgrounds may find a light style provides greater contrast.
     ///
-    public var uiHint: UIHint = .dark
+    /// - SeeAlso: `ProjectVerifyBrandedButton.Style`
+    public var style: Style = .dark
     
     var branding: Branding = .default {
         didSet {
@@ -41,45 +50,9 @@ public class ProjectVerifyBrandedButton: UIButton {
         super.init(coder: aDecoder)
         configureButton()
     }
-    
-    private func configureButton() {
-        branding = brandingFromCache()
-    }
-    
-    private func updateBranding() {
-        
-        layer.cornerRadius = Constants.cornerRadius
-        
-        setTitleColor(colorScheme.foreground, for: .normal)
-        setTitle(branding.primaryText, for: .normal)
-        
-        setAttributedTitle(
-            attributedTitle(forTitle: branding.primaryText),
-            for: .normal
-        )
-        
-        setImage(branding.icon(forUI: uiHint), for: .normal)
-        
-        titleEdgeInsets = .projectVerifyButtonTitleEdgeInsets
-        imageEdgeInsets = .projectVerifyButtonImageEdgeInsets
-        
-        updateBackgroundColor()
-    }
-    
-    private func updateBackgroundColor() {
-        backgroundColor = isHighlighted ?
-            colorScheme.highlight : colorScheme.background
-    }
-    
-    private func attributedTitle(forTitle title: String) -> NSAttributedString {
-        let attributes: [NSAttributedString.Key : Any] = [
-            .foregroundColor: colorScheme.foreground,
-            .font: UIFont.boldSystemFont(ofSize: 17.0),
-        ]
-        let attributedString = NSAttributedString(string: title, attributes: attributes)
-        return attributedString
-    }
 }
+
+// MARK: - sub-types
 
 extension ProjectVerifyBrandedButton {
     enum Branding {
@@ -87,13 +60,83 @@ extension ProjectVerifyBrandedButton {
     }
     
     /// Provide guidance for the button to use a light background button or a dark background button.
-    public enum UIHint {
+    public enum Style {
         /// Suggests the button should prefer using a light background
         case light
         /// Suggests the button should prefer using a dark background
         case dark
     }
+    
+    /// Branded button appearance configuration
+    struct Appearance {
+        struct ColorScheme {
+            let normal: UIColor
+            let highlighted: UIColor
+        }
+        
+        let title: ColorScheme
+        let image: ColorScheme
+        let background: ColorScheme
+    }
 }
+
+// MARK: - private config
+
+private extension ProjectVerifyBrandedButton {
+    func configureButton() {
+        branding = brandingFromCache()
+    }
+    
+    func updateBranding() {
+        adjustsImageWhenHighlighted = false
+        
+        layer.cornerRadius = Constants.cornerRadius
+        
+        titleEdgeInsets = .projectVerifyButtonTitleEdgeInsets
+        imageEdgeInsets = .projectVerifyButtonImageEdgeInsets
+        
+        setAttributedTitle(
+            attributedTitle(
+                forTitle: branding.primaryText,
+                withColor: appearance.title.normal
+            ),
+            for: .normal
+        )
+        
+        setAttributedTitle(
+            attributedTitle(
+                forTitle: branding.primaryText,
+                withColor: appearance.title.highlighted
+            ),
+            for: .highlighted
+        )
+        
+        setImage(branding.icon, for: .normal)
+        
+        updateTinting()
+    }
+    
+    func updateTinting() {
+        if isHighlighted || !isEnabled {
+            tintColor = appearance.image.highlighted
+            backgroundColor = appearance.background.highlighted
+        } else {
+            tintColor = appearance.image.normal
+            backgroundColor = appearance.background.normal
+        }
+    }
+    
+    func attributedTitle(forTitle title: String,
+                         withColor color: UIColor) -> NSAttributedString {
+        let attributes: [NSAttributedString.Key : Any] = [
+            .foregroundColor: color,
+            .font: UIFont.boldSystemFont(ofSize: 17.0),
+        ]
+        let attributedString = NSAttributedString(string: title, attributes: attributes)
+        return attributedString
+    }
+}
+
 
 // MARK: - Geometery exetensions
 

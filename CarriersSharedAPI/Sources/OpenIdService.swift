@@ -13,6 +13,8 @@ enum ResponseType: String {
     case code = "code"
 }
 
+public struct UnsupportedCarrier: Error { }
+
 /// Represents the successful compltion of an autorization request. The code should be used to
 /// retrieve a token from a secure server.
 public struct AuthorizedResponse {

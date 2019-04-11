@@ -22,6 +22,18 @@ extension ProjectVerifyBrandedButton {
     }
 }
 
+extension ProjectVerifyBrandedButton.Branding {
+    /// the buttons title label text.
+    var primaryText: String {
+        return Localization.Buttons.signInWithProjectVerify
+    }
+    
+    /// The button's icon. Icons should be provided as a template image.
+    var icon: UIImage? {
+        return ImageUtils.image(named: "pv-icon-connect")
+    }
+}
+
 // TODO: once we have an idea of how OpenIdConfig will expose branding we can import from the
 // discovery api and support forming a branding type in this extension.
 // NOTE: since config retrieval will need to also support asyc cases for there to be a reasonable
@@ -33,46 +45,36 @@ extension OpenIdConfig {
     }
 }
 
-extension ProjectVerifyBrandedButton.Branding {
-    var primaryText: String {
-        return Localization.Buttons.signInWithProjectVerify
-    }
-    
-    func icon(forUI hint: ProjectVerifyBrandedButton.UIHint) -> UIImage? {
-        return ImageUtils.image(named: "pv-icon-connect-light")
-    }
+extension ProjectVerifyBrandedButton.Appearance {
+    static let darkAppearance = ProjectVerifyBrandedButton.Appearance(
+        title: ColorScheme(normal: .buttonWhite, highlighted: .buttonDimGray),
+        image: ColorScheme(normal: .buttonWhite, highlighted: .buttonDimGray),
+        background: ColorScheme(normal: .buttonGreen, highlighted: .buttonDimGreen)
+    )
+
+    static let lightAppearance = ProjectVerifyBrandedButton.Appearance(
+        title: ColorScheme(normal: .buttonGray, highlighted: .buttonDimGray),
+        image: ColorScheme(normal: .buttonGreen, highlighted: .buttonDimGray),
+        background: ColorScheme(normal: .buttonWhite, highlighted: .buttonDimLightGray)
+    )
 }
 
 extension ProjectVerifyBrandedButton {
-    struct ColorScheme {
-        let foreground: UIColor
-        let background: UIColor
-        let highlight: UIColor
-    }
-    
-    var colorScheme: ColorScheme {
-        switch uiHint {
+    var appearance: Appearance {
+        switch style {
         case .dark:
-            return ColorScheme(
-                foreground: .projectVerifyWhite,
-                background: .projectVerifyGreen,
-                highlight: .projectVerifyDimGreen
-            )
-
+            return .darkAppearance
         case .light:
-            return ColorScheme(
-                foreground: .projectVerifyGray,
-                background: .projectVerifyWhite,
-                highlight: .projectVerifyDimGray
-            )
+            return .lightAppearance
         }
     }
 }
 
 private extension UIColor {
-    static let projectVerifyWhite = UIColor.white
-    static let projectVerifyGreen = UIColor(red: 46/255, green: 173/255, blue: 69/255, alpha: 1)
-    static let projectVerifyDimGreen = UIColor(red: 46/255, green: 173/255, blue: 69/255, alpha: 0.3)
-    static let projectVerifyGray = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 1)
-    static let projectVerifyDimGray = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 0.3)
+    static let buttonWhite = UIColor.white
+    static let buttonGreen = UIColor(red: 46/255, green: 173/255, blue: 69/255, alpha: 1)
+    static let buttonDimGreen = UIColor(red: 46/255, green: 173/255, blue: 69/255, alpha: 0.5)
+    static let buttonGray = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 1)
+    static let buttonDimGray = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 0.5)
+    static let buttonDimLightGray = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 0.2)
 }

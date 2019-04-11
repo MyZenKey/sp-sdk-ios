@@ -21,6 +21,12 @@
   },
   "source_files": "CarriersSharedAPI/Sources/**/*",
   "public_header_files": "CarriersSharedAPI/**/*.h",
+  "resource_bundles": {
+    "CarriersSharedAPI": [
+      "CarriersSharedAPI/Resources/*.xcassets",
+      "CarriersSharedAPI/Resources/*.lproj/*.strings"
+    ]
+  },
   "frameworks": "UIKit",
   "dependencies": {
     "AppAuth": [

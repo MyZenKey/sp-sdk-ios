@@ -64,14 +64,18 @@ public class AuthorizationService {
                     completion: completion
                 )
             case .unknownMobileNetwork:
+                completion(.error(UnsupportedCarrier()))
                 // TODO: -
                 self?.showConsolation("sim not recognized during discovery", on: viewController)
                 break
             case .noMobileNetwork:
                 // TODO: -
+                // secondary device flow
+                completion(.error(UnknownError()))
                 self?.showConsolation("no sim set up to use for discovery", on: viewController)
                 break
             case .error(let error):
+                completion(.error(error))
                 // TODO: -
                 self?.showConsolation("an error occurred during discovery \(error)", on: viewController)
                 break
