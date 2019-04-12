@@ -9,20 +9,7 @@
 import AppAuth
 import UIKit
 
-/// This service provides an interface for authorizing an application with Project Verify.
-public class AuthorizationService {
-    let sdkConfig: SDKConfig
-    let discoveryService: DiscoveryServiceProtocol
-    let openIdService: OpenIdServiceProtocol
-
-    init(sdkConfig: SDKConfig,
-         discoveryService: DiscoveryServiceProtocol,
-         openIdService: OpenIdServiceProtocol) {
-        self.sdkConfig = sdkConfig
-        self.discoveryService = discoveryService
-        self.openIdService = openIdService
-    }
-
+protocol AuthorizationServiceProtocol {
     /// Requests authorization for the specified scopes from Project Verify.
     /// - Parameters:
     ///   - scopes: an array of scopes to be authorized for access. See the predefined
@@ -36,17 +23,39 @@ public class AuthorizationService {
     /// - SeeAlso: ScopeProtocol
     /// - SeeAlso: Scopes
     /// - SeeAlso: AuthorizationResult
+    func connectWithProjectVerify(
+        scopes: [ScopeProtocol],
+        fromViewController viewController: UIViewController,
+        completion: @escaping AuthorizationCompletion)
+}
+
+/// This service provides an interface for authorizing an application with Project Verify.
+public class AuthorizationService {
+    let sdkConfig: SDKConfig
+    let discoveryService: DiscoveryServiceProtocol
+    let openIdService: OpenIdServiceProtocol
+
+    init(sdkConfig: SDKConfig,
+         discoveryService: DiscoveryServiceProtocol,
+         openIdService: OpenIdServiceProtocol) {
+        self.sdkConfig = sdkConfig
+        self.discoveryService = discoveryService
+        self.openIdService = openIdService
+    }
+}
+
+extension AuthorizationService: AuthorizationServiceProtocol {
     public func connectWithProjectVerify(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
         completion: @escaping AuthorizationCompletion) {
-
+        
         let sdkConfig = self.sdkConfig
-
+        
         discoveryService.discoverConfig() { [weak self] result in
             switch result {
             case .knownMobileNetwork(let config):
-
+                
                 let authorizationConfig = OpenIdAuthorizationConfig(
                     simInfo: config.simInfo,
                     clientId: sdkConfig.clientId,
@@ -57,7 +66,7 @@ public class AuthorizationService {
                     redirectURL: sdkConfig.redirectURL,
                     state: "demo-app-state"
                 )
-
+                
                 self?.openIdService.authorize(
                     fromViewController: viewController,
                     authorizationConfig: authorizationConfig,

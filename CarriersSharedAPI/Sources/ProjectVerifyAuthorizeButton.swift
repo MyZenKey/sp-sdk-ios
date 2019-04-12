@@ -22,12 +22,22 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     public var scopes: [ScopeProtocol] = []
     
     public weak var delegate: ProjectVerifyAuthorizeButtonDelegate?
-    
-    fileprivate let authorizationService: AuthorizationService = AuthorizationService()
-    
-    fileprivate var requestState: RequestState = .idle
+
+    fileprivate(set) var requestState: RequestState = .idle
+
+    fileprivate private(set) var authorizationService: AuthorizationServiceProtocol = AuthorizationService()
+    fileprivate private(set) var controllerContextProvider: CurrentControllerContextProvider = DefaultCurrentControllerContextProvider()
     
     public override init() {
+        super.init()
+        configureSelectors()
+    }
+    
+    init(authorizationService: AuthorizationServiceProtocol,
+         controllerContextProvider: CurrentControllerContextProvider) {
+        self.authorizationService = authorizationService
+        self.controllerContextProvider = controllerContextProvider
+        
         super.init()
         configureSelectors()
     }
@@ -47,8 +57,8 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
             return
         }
         
-        guard let currentViewController = UIViewController.currentController else {
-            fatalError("attempting to authroize before the key window has a root view controller")
+        guard let currentViewController = controllerContextProvider.currentController else {
+            fatalError("attempting to authorize before the key window has a root view controller")
         }
         
         delegate?.buttonWillBeginAuthorizing(self)
@@ -63,11 +73,13 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     }
 }
 
-private extension ProjectVerifyAuthorizeButton {
+extension ProjectVerifyAuthorizeButton {
     enum RequestState: Int {
         case idle, authorizing
     }
+}
 
+private extension ProjectVerifyAuthorizeButton {
     func configureSelectors() {
         addTarget(self, action: #selector(handlePress(sender:)), for: .touchUpInside)
     }
@@ -77,17 +89,3 @@ private extension ProjectVerifyAuthorizeButton {
         requestState = .idle
     }
 }
-
-extension UIViewController {
-    static var currentController: UIViewController? {
-        guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
-            return nil
-        }
-        var currentViewController: UIViewController? = rootViewController
-        while let nextController = currentViewController?.presentedViewController {
-            currentViewController = nextController
-        }
-        return currentViewController
-    }
-}
-

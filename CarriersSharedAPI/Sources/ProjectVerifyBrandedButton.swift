@@ -37,10 +37,22 @@ public class ProjectVerifyBrandedButton: UIButton {
         }
     }
     
-    let configCacheService: ConfigCacheServiceProtocol = Dependencies.resolve()
-    let carrierInfoService: CarrierInfoServiceProtocol = Dependencies.resolve()
+    // NOTE: dependncies are resolved automatically for all of the button initalizers.
+    // can use the custom initializer `init(configCacheService:carrierInfoService:)` to pass
+    // specific depenencies.
+    
+    private(set) var configCacheService: ConfigCacheServiceProtocol = Dependencies.resolve()
+    private(set) var carrierInfoService: CarrierInfoServiceProtocol = Dependencies.resolve()
     
     public init() {
+        super.init(frame: .zero)
+        configureButton()
+    }
+    
+    init(configCacheService: ConfigCacheServiceProtocol,
+         carrierInfoService: CarrierInfoServiceProtocol) {
+        self.configCacheService = configCacheService
+        self.carrierInfoService = carrierInfoService
         super.init(frame: .zero)
         configureButton()
     }
