@@ -46,9 +46,7 @@ public class ProjectVerifyBrandedButton: UIButton {
     }
     
     public override init(frame: CGRect) {
-        let nonZeroFrame = frame.size == CGSize.zero ?
-            CGRect(origin: frame.origin, size: CGSize(width: 1, height: 1)) : frame
-        super.init(frame: nonZeroFrame)
+        super.init(frame: frame)
         configureButton()
     }
     
@@ -63,6 +61,8 @@ public class ProjectVerifyBrandedButton: UIButton {
     }
     
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
+        guard !isHidden else { return .zero }
+        
         let fittingSize = super.sizeThatFits(size)
         return CGSize(width: max(fittingSize.width, size.width), height: Constants.height)
     }
@@ -100,18 +100,24 @@ extension ProjectVerifyBrandedButton {
 
 private extension ProjectVerifyBrandedButton {
     func configureButton() {
-        branding = brandingFromCache()
-    }
-    
-    func updateBranding() {
+        
         adjustsImageWhenHighlighted = false
+        adjustsImageWhenDisabled = false
         
         layer.cornerRadius = Constants.cornerRadius
-        
+
         contentEdgeInsets = .projectVerifyButtonContentInsets
         titleEdgeInsets = .projectVerifyButtonTitleEdgeInsets
         imageEdgeInsets = .projectVerifyButtonImageEdgeInsets
+
+        branding = brandingFromCache()
         
+        if bounds.isEmpty {
+            sizeToFit()
+        }
+    }
+    
+    func updateBranding() {
         setAttributedTitle(
             attributedTitle(
                 forTitle: branding.primaryText,
@@ -164,17 +170,17 @@ private extension ProjectVerifyBrandedButton {
 }
 
 private extension UIEdgeInsets {
-    static let offset: CGFloat = 5
+    static let xOffset: CGFloat = 5
     
     static var projectVerifyButtonContentInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 16, left: 42, bottom: 16, right: 42)
     }
     
     static var projectVerifyButtonTitleEdgeInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: offset, bottom: 0, right: -offset)
+        return UIEdgeInsets(top: 0, left: xOffset, bottom: 0, right: -xOffset)
     }
     
     static var projectVerifyButtonImageEdgeInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: -offset, bottom: 0, right: offset)
+        return UIEdgeInsets(top: 0, left: -xOffset, bottom: 0, right: xOffset)
     }
 }

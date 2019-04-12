@@ -19,7 +19,7 @@ class MenuViewController: UIViewController {
 
     let manualButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("manual", for: .normal)
+        button.setTitle("frame layout", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -57,12 +57,12 @@ class MenuViewController: UIViewController {
         ].forEach() { $0.addTarget(self, action: #selector(handlePress(_:)), for: .touchUpInside) }
 
         [
-            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
-            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
-            stackView.leadingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor, constant: 0),
-            stackView.trailingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
-            stackView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stackView.leadingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
+            stackView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor),
         ].forEach( ) { $0.isActive = true }
     }
     
@@ -81,6 +81,11 @@ class MenuViewController: UIViewController {
             )
 
         case interfaceBuilderButton:
+            navigationController?.pushViewController(
+                InterfaceBuilderViewController(),
+                animated: true
+            )
+            
             break
         default:
             fatalError("unknown button")

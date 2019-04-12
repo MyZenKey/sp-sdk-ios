@@ -12,21 +12,21 @@ import CarriersSharedAPI
 class ManualViewController: UIViewController {
     let buttonOne: ProjectVerifyBrandedButton = {
         let button = ProjectVerifyBrandedButton()
-        button.sizeToFit()
         return button
     }()
+
+    // view landscape to see resizing behavior for buttons 2 + 3:
     
-    let buttonTwo: ProjectVerifyBrandedButton = {
+    lazy var buttonTwo: ProjectVerifyBrandedButton = {
         let button = ProjectVerifyBrandedButton()
         button.style = .light
-        button.sizeToFit()
+        button.autoresizingMask = [.flexibleWidth]
         return button
     }()
     
     let buttonThree: ProjectVerifyBrandedButton = {
         let button = ProjectVerifyBrandedButton()
-        button.autoresizingMask = [.flexibleWidth]
-        button.sizeToFit()
+        button.autoresizingMask = [.flexibleRightMargin]
         return button
     }()
 
@@ -49,9 +49,21 @@ class ManualViewController: UIViewController {
     
     func updateButtonAnchors() {
         let center = view.center
-        let yOffset = buttonOne.frame.height + 20.0
-        buttonOne.center = CGPoint(x: center.x, y: center.y - yOffset)
+
+        // center positioning
+        buttonOne.center = CGPoint(
+            x: center.x,
+            y: center.y - buttonOne.frame.height - 20.0
+        )
+            
         buttonTwo.center = center
-        buttonThree.center = CGPoint(x: center.x, y: center.y + yOffset)
+        
+        // frame positioning
+        var frame = buttonThree.frame
+        frame.origin = CGPoint(
+            x: buttonTwo.frame.minX,
+            y: buttonTwo.frame.minY + buttonTwo.frame.height + 20
+        )
+        buttonThree.frame = frame
     }
 }

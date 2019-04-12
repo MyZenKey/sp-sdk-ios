@@ -13,12 +13,17 @@ class InterfaceBuilderViewController: UIViewController {
     
     @IBOutlet var buttonOne: ProjectVerifyBrandedButton!
     @IBOutlet var buttonTwo: ProjectVerifyBrandedButton!
-    @IBOutlet var buttonThree: ProjectVerifyBrandedButton!
 
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//
-//        view.backgroundColor = .lightGray
-//
-//    }
+    init() {
+        super.init(nibName: "InterfaceBuilderViewController", bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        buttonTwo.style = .light
+    }
 }
