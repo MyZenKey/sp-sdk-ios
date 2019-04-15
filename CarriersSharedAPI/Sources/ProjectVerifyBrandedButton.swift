@@ -37,9 +37,9 @@ public class ProjectVerifyBrandedButton: UIButton {
         }
     }
     
-    // NOTE: dependncies are resolved automatically for all of the button initalizers.
+    // NOTE: dependencies are resolved automatically for all of the button initalizers.
     // can use the custom initializer `init(configCacheService:carrierInfoService:)` to pass
-    // specific depenencies.
+    // specific dependencies.
     
     private(set) var configCacheService: ConfigCacheServiceProtocol = Dependencies.resolve()
     private(set) var carrierInfoService: CarrierInfoServiceProtocol = Dependencies.resolve()
@@ -98,13 +98,13 @@ extension ProjectVerifyBrandedButton {
     /// Branded button appearance configuration
     struct Appearance {
         struct ColorScheme {
-            let normal: UIColor
-            let highlighted: UIColor
+            let title: UIColor
+            let image: UIColor
+            let background: UIColor
         }
         
-        let title: ColorScheme
-        let image: ColorScheme
-        let background: ColorScheme
+        let normal: ColorScheme
+        let highlighted: ColorScheme
     }
 }
 
@@ -133,7 +133,7 @@ private extension ProjectVerifyBrandedButton {
         setAttributedTitle(
             attributedTitle(
                 forTitle: branding.primaryText,
-                withColor: appearance.title.normal
+                withColor: appearance.normal.title
             ),
             for: .normal
         )
@@ -141,9 +141,17 @@ private extension ProjectVerifyBrandedButton {
         setAttributedTitle(
             attributedTitle(
                 forTitle: branding.primaryText,
-                withColor: appearance.title.highlighted
+                withColor: appearance.highlighted.title
             ),
             for: .highlighted
+        )
+        
+        setAttributedTitle(
+            attributedTitle(
+                forTitle: branding.primaryText,
+                withColor: appearance.highlighted.title
+            ),
+            for: .disabled
         )
         
         setImage(branding.icon, for: .normal)
@@ -152,13 +160,16 @@ private extension ProjectVerifyBrandedButton {
     }
     
     func updateTinting() {
+        let colorScheme: Appearance.ColorScheme
         if isHighlighted || !isEnabled {
-            tintColor = appearance.image.highlighted
-            backgroundColor = appearance.background.highlighted
+            colorScheme = appearance.highlighted
         } else {
-            tintColor = appearance.image.normal
-            backgroundColor = appearance.background.normal
+            colorScheme = appearance.normal
         }
+        
+        tintColor = colorScheme.image
+        backgroundColor = colorScheme.background
+
     }
     
     func attributedTitle(forTitle title: String,

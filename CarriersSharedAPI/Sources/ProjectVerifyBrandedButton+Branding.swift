@@ -6,7 +6,7 @@
 //  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension ProjectVerifyBrandedButton {
     func brandingFromCache() -> Branding {
@@ -46,16 +46,30 @@ extension OpenIdConfig {
 }
 
 extension ProjectVerifyBrandedButton.Appearance {
-    static let darkAppearance = ProjectVerifyBrandedButton.Appearance(
-        title: ColorScheme(normal: .buttonWhite, highlighted: .buttonDimGray),
-        image: ColorScheme(normal: .buttonWhite, highlighted: .buttonDimGray),
-        background: ColorScheme(normal: .buttonGreen, highlighted: .buttonDimGreen)
+    static let dark = ProjectVerifyBrandedButton.Appearance(
+        normal: ColorScheme(
+            title: .buttonWhite,
+            image: .buttonWhite,
+            background: .buttonGreen
+        ),
+        highlighted: ColorScheme(
+            title: .buttonDimGray,
+            image: .buttonDimGray,
+            background: .buttonDimGreen
+        )
     )
 
-    static let lightAppearance = ProjectVerifyBrandedButton.Appearance(
-        title: ColorScheme(normal: .buttonGray, highlighted: .buttonDimGray),
-        image: ColorScheme(normal: .buttonGreen, highlighted: .buttonDimGray),
-        background: ColorScheme(normal: .buttonWhite, highlighted: .buttonDimLightGray)
+    static let light = ProjectVerifyBrandedButton.Appearance(
+        normal: ColorScheme(
+            title: .buttonGray,
+            image: .buttonGreen,
+            background: .buttonWhite
+        ),
+        highlighted: ColorScheme(
+            title: .buttonDimGray,
+            image: .buttonDimGray,
+            background: .buttonDimLightGray
+        )
     )
 }
 
@@ -63,9 +77,9 @@ extension ProjectVerifyBrandedButton {
     var appearance: Appearance {
         switch style {
         case .dark:
-            return .darkAppearance
+            return .dark
         case .light:
-            return .lightAppearance
+            return .light
         }
     }
 }

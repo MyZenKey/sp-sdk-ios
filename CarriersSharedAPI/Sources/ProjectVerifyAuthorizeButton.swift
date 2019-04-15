@@ -85,7 +85,7 @@ private extension ProjectVerifyAuthorizeButton {
     }
     
     func handle(result: AuthorizationResult) {
-        delegate?.buttonDidFinish(self, withResult: result)
         requestState = .idle
+        delegate?.buttonDidFinish(self, withResult: result)
     }
 }

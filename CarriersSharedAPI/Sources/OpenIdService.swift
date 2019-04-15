@@ -17,7 +17,7 @@ public struct UnsupportedCarrier: Error { }
 
 /// Represents the successful compltion of an autorization request. The code should be used to
 /// retrieve a token from a secure server.
-public struct AuthorizedResponse {
+public struct AuthorizedResponse: Equatable {
     /// Authorization code returned from the issuer.
     public let code: String
     /// The Mobile Country Code used to identify the correct issuer.
