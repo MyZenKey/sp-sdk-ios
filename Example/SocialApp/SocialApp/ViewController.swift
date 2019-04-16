@@ -67,15 +67,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }()
     
     let verifyButton: UIButton = {
-        let button = UIButton()
+        let button = ProjectVerifyAuthorizeButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
-        button.setImage(UIImage(named: "buttonlogo"), for: .normal)
-        button.setTitle("Sign in with VERIFY", for: .normal)
-        button.backgroundColor = AppTheme.verifyGreen
-        button.layer.masksToBounds = true
-        button.layer.cornerRadius = 22
-        button.addTarget(self, action: #selector(signInWithVerify), for: .touchUpInside)
         return button
     }()
     
@@ -134,47 +127,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
 
-    /// Launches the Verify app.
-    @objc func signInWithVerify() {
-        let scopes: [Scope] = [.profile, .email]
-        authService.connectWithProjectVerify(
-            scopes: scopes,
-            fromViewController: self) { result in
-                // TODO: login + fetch user
-                // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-                let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-                switch result {
-                case .code(let authorizedResponse):
-                    let code = authorizedResponse.code
-
-                    UserDefaults.standard.set(code, forKey: "AuthZCode")
-                    self.serviceAPI.login(
-                        withAuthCode: code,
-                        mcc: authorizedResponse.mcc,
-                        mnc: authorizedResponse.mnc,
-                        completionHandler: { json, error in
-                            print("AuthZ_Code value from is: \(code)\n")
-                            UserDefaults.standard.set(code,forKey: "AuthZCode")
-                            guard let token = json?["token"].toString else {
-                                print("expected token returned")
-                                return
-                            }
-
-                            if (appDelegate.launchMapViewFlag) {
-                                appDelegate.launchMapScreen(token: token)
-                            } else {
-                                appDelegate.launchSignUpScreen(token: token)
-                            }
-
-                    })
-
-                case .error:
-                    appDelegate.launchLoginScreen()
-                case .cancelled:
-                    appDelegate.launchLoginScreen()
-                }
-        }
-    }
         // TODO: reimplement this once we have a demo backend
         // old post auth logic for fetching user:
 //                /*//init view controller for user info
@@ -279,7 +231,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         constraints.append(verifyButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 25))
         constraints.append(verifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(verifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        constraints.append(verifyButton.heightAnchor.constraint(equalToConstant: 44))
         
         constraints.append(poweredByLabel.topAnchor.constraint(equalTo: verifyButton.bottomAnchor, constant: 5))
         constraints.append(poweredByLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
@@ -291,5 +242,46 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         NSLayoutConstraint.activate(constraints)
         
+    }
+}
+
+extension ViewController: ProjectVerifyAuthorizeButtonDelegate {
+    
+    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) { }
+    
+    func buttonDidFinish(_ button: ProjectVerifyAuthorizeButton, withResult result: AuthorizationResult) {
+        // TODO: login + fetch user
+        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
+        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+        switch result {
+        case .code(let authorizedResponse):
+            let code = authorizedResponse.code
+            
+            UserDefaults.standard.set(code, forKey: "AuthZCode")
+            self.serviceAPI.login(
+                withAuthCode: code,
+                mcc: authorizedResponse.mcc,
+                mnc: authorizedResponse.mnc,
+                completionHandler: { json, error in
+                    print("AuthZ_Code value from is: \(code)\n")
+                    UserDefaults.standard.set(code,forKey: "AuthZCode")
+                    guard let token = json?["token"].toString else {
+                        print("expected token returned")
+                        return
+                    }
+                    
+                    if (appDelegate.launchMapViewFlag) {
+                        appDelegate.launchMapScreen(token: token)
+                    } else {
+                        appDelegate.launchSignUpScreen(token: token)
+                    }
+                    
+            })
+            
+        case .error:
+            appDelegate.launchLoginScreen()
+        case .cancelled:
+            appDelegate.launchLoginScreen()
+        }
     }
 }

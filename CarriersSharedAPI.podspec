@@ -33,9 +33,7 @@ TODO: Add long description of the pod here.
 
   s.source_files = 'CarriersSharedAPI/Sources/**/*'
   s.public_header_files = 'CarriersSharedAPI/**/*.h'
-  # s.resource_bundles = {
-  #   'CarriersSharedAPI' => ['CarriersSharedAPI/Assets/*.png']
-  # }   
+  s.resources = ['CarriersSharedAPI/Resources/*.xcassets', 'CarriersSharedAPI/Resources/*.lproj/*.strings']
 
   s.frameworks = 'UIKit'
   s.dependency 'AppAuth', '~> 0.95.0'

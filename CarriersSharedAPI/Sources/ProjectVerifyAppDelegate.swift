@@ -26,7 +26,7 @@ public class ProjectVerifyAppDelegate {
     /// instances is unsupported.
     public static let shared = ProjectVerifyAppDelegate()
 
-    let dependencies: DependenciesProtocol = Dependencies()
+    let dependencies = Dependencies()
 
     private(set) var sdkConfig = SDKConfig()
 

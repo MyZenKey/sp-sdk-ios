@@ -9,7 +9,7 @@
 import Foundation
 import CoreTelephony
 
-protocol MobileNetworkInfoProvider: class {
+protocol MobileNetworkInfoProvider: AnyObject {
 
     typealias NetworkInfoUpdateHanlder = ([SIMInfo]) -> Void
 
