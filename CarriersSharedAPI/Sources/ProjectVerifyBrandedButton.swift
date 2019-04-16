@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// A branded ProjectVerifyButton
 public class ProjectVerifyBrandedButton: UIButton {
     public override var isHighlighted: Bool {
         didSet {

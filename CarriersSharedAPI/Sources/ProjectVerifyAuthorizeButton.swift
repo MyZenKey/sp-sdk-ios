@@ -8,19 +8,37 @@
 
 import UIKit
 
+/// Notifications for the ProjectVerifyAuthorizationButton authorization lifecycle
 public protocol ProjectVerifyAuthorizeButtonDelegate: AnyObject {
     
+    /// Called before the button starts the authorization request
+    ///
+    /// - Parameter button: the button implementing the request
     func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton)
     
+    
+    /// Called upon request completion
+    ///
+    /// - Parameters:
+    ///   - button: the button completing the request
+    ///   - result: the result of the request
+    /// - SeeAlso: `AuthorizationResult`
     func buttonDidFinish(
         _ button: ProjectVerifyAuthorizeButton,
         withResult result: AuthorizationResult)
 }
 
+
+/// A button which encapsulates the project verify authorization logic and exposes the outcomes
+/// via a delegeate.
 public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 
+    /// The scopes the button will request when pressed. Assign this property before the button
+    /// issues its request.
     public var scopes: [ScopeProtocol] = []
     
+    /// the button's delegate
+    /// @SeeAlso: ProjectVerifyAuthorizeButtonDelegate
     public weak var delegate: ProjectVerifyAuthorizeButtonDelegate?
 
     fileprivate(set) var requestState: RequestState = .idle

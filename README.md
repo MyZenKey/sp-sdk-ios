@@ -120,9 +120,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 ```
 
-## Perform An Authorization Request:
+## Using the ProjectVerifyAuthorizationButton
 
-Once your Application Delegate is configured, use the `AuthorizationService` to request an authorization
+The sdk provides a branded button that automatically handles ProjectVerify authorization. 
+Pass the code and associated identifiers to your secure server to complete the token request flow.
+
+```swift
+import CarriersSharedAPI
+
+class LoginViewController {
+    let projectVerifyButton = ProjectVerifyAuthorizationButton()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let scopes: [Scope] = [.profile, .email]
+        projectVerifyButton.scopes = scopes
+        projectVerifyButton.delegate = self
+    }
+}
+
+extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
+
+    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) {
+        // perform any ui updates like showing an activity indicator.
+    }
+    
+    func buttonDidFinish(
+        _ button: ProjectVerifyAuthorizeButton,
+        withResult result: AuthorizationResult) {
+        
+        // handle the outcome of the request:
+        switch result {
+        case .code(let authorizedResponse):
+            let code = authorizedResponse.code
+            let mcc = authorizedResponse.mcc
+            let mnc = authorizedResponse.mnc
+            // pass these identifiers to your secure server to perform a token request
+        case .error:
+            // handle the error case appropriately
+        case .cancelled:
+            // perform any work required when the user cancels
+        }
+    }
+}
+```
+
+## Perform An Authorization Request Manually:
+
+If you require a more hands on approach, you can use the `AuthorizationService` to request an authorization
 code. Pass the code and associated identifiers to your secure server to complete the token request flow.
 
 ```swift
@@ -145,7 +191,7 @@ class LoginViewController {
                 let code = authorizedResponse.code
                 let mcc = authorizedResponse.mcc
                 let mnc = authorizedResponse.mnc
-                // Pass these identifiers to your secure server to perform a token request
+                // pass these identifiers to your secure server to perform a token request
             case .error:
                 // handle the error case appropriately
             case .cancelled:
