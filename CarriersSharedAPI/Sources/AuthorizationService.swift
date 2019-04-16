@@ -66,7 +66,7 @@ extension AuthorizationService: AuthorizationServiceProtocol {
                     redirectURL: sdkConfig.redirectURL,
                     state: "demo-app-state"
                 )
-                
+
                 self?.openIdService.authorize(
                     fromViewController: viewController,
                     authorizationConfig: authorizationConfig,

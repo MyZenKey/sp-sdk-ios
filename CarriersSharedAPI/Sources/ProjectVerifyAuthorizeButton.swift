@@ -41,18 +41,20 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     /// @SeeAlso: ProjectVerifyAuthorizeButtonDelegate
     public weak var delegate: ProjectVerifyAuthorizeButtonDelegate?
 
-    fileprivate(set) var requestState: RequestState = .idle
+    private var requestState: RequestState = .idle
 
-    fileprivate private(set) var authorizationService: AuthorizationServiceProtocol = AuthorizationService()
-    fileprivate private(set) var controllerContextProvider: CurrentControllerContextProvider = DefaultCurrentControllerContextProvider()
+    private var authorizationService: AuthorizationServiceProtocol = AuthorizationService()
+    private var controllerContextProvider: CurrentControllerContextProvider = DefaultCurrentControllerContextProvider()
     
     public override init() {
         super.init()
         configureSelectors()
     }
     
-    init(authorizationService: AuthorizationServiceProtocol,
-         controllerContextProvider: CurrentControllerContextProvider) {
+    init(authorizationService: AuthorizationServiceProtocol = Dependencies.resolve(),
+         controllerContextProvider: CurrentControllerContextProvider = Dependencies.resolve(),
+         configCacheService: ConfigCacheServiceProtocol = Dependencies.resolve(),
+         carrierInfoService: CarrierInfoServiceProtocol = Dependencies.resolve()) {
         self.authorizationService = authorizationService
         self.controllerContextProvider = controllerContextProvider
         

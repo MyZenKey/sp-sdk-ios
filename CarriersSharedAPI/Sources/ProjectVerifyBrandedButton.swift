@@ -50,8 +50,8 @@ public class ProjectVerifyBrandedButton: UIButton {
         configureButton()
     }
     
-    init(configCacheService: ConfigCacheServiceProtocol,
-         carrierInfoService: CarrierInfoServiceProtocol) {
+    init(configCacheService: ConfigCacheServiceProtocol = Dependencies.resolve(),
+         carrierInfoService: CarrierInfoServiceProtocol = Dependencies.resolve()) {
         self.configCacheService = configCacheService
         self.carrierInfoService = carrierInfoService
         super.init(frame: .zero)

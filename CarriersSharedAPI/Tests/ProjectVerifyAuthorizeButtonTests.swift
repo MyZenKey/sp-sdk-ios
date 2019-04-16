@@ -101,6 +101,7 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
     }
     
     // TODO: handle branding
+    // NOTE: will require mocking button via configCacheService:carrierInfoService:
 
     // MARK: - authorization:
     
@@ -137,17 +138,37 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
     
-    func testButtonUpdatesAuthorizingStateAppropriately() {
+    func testButtonCannotMakeRedundantAuthorizeCalls() {
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate
         
+        var willBeginCount = 0
+        mockDelegate.onWillBegin = {
+            willBeginCount += 1
+        }
+
+        button.handlePress(sender: button)
+        button.handlePress(sender: button)
+        XCTAssertEqual(willBeginCount, 1)
+    }
+
+    func testButtonCanMakeAnotherCallAfterCompletingTheFirst() {
+        let mockDelegate = MockAuthorizationButtonDelegate()
+        button.delegate = mockDelegate
         let expectation = XCTestExpectation(description: "wait")
+
+        var willBeginCount = 0
+        mockDelegate.onWillBegin = {
+            willBeginCount += 1
+        }
+
         mockDelegate.onDidFinish = { _ in
-            XCTAssertEqual(self.button.requestState, .idle)
+            self.button.handlePress(sender: self.button)
+            XCTAssertEqual(willBeginCount, 2)
             expectation.fulfill()
         }
+
         button.handlePress(sender: button)
-        XCTAssertEqual(button.requestState, .authorizing)
         wait(for: [expectation], timeout: timeout)
     }
 
@@ -167,7 +188,6 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
             expectation.fulfill()
         }
         button.handlePress(sender: button)
-        XCTAssertEqual(button.requestState, .authorizing)
         wait(for: [expectation], timeout: timeout)
     }
 }

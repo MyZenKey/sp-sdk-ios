@@ -14,7 +14,8 @@ extension ProjectVerifyBrandedButton {
             let primarySIM = carrierInfoService.primarySIM,
             let config = configCacheService.config(
                 forSIMInfo: primarySIM,
-                allowStaleRecords: true) else {
+                allowStaleRecords: true)
+            else {
                     return .default
         }
         
