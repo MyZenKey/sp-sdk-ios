@@ -34,13 +34,16 @@ public class AuthorizationService {
     let sdkConfig: SDKConfig
     let discoveryService: DiscoveryServiceProtocol
     let openIdService: OpenIdServiceProtocol
+    let carrierInfoService: CarrierInfoServiceProtocol
 
     init(sdkConfig: SDKConfig,
          discoveryService: DiscoveryServiceProtocol,
-         openIdService: OpenIdServiceProtocol) {
+         openIdService: OpenIdServiceProtocol,
+         carrierInfoService: CarrierInfoServiceProtocol) {
         self.sdkConfig = sdkConfig
         self.discoveryService = discoveryService
         self.openIdService = openIdService
+        self.carrierInfoService = carrierInfoService
     }
 }
 
@@ -51,8 +54,12 @@ extension AuthorizationService: AuthorizationServiceProtocol {
         completion: @escaping AuthorizationCompletion) {
         
         let sdkConfig = self.sdkConfig
-        
-        discoveryService.discoverConfig() { [weak self] result in
+
+        guard let simInfo = carrierInfoService.primarySIM else {
+            return
+        }
+
+        discoveryService.discoverConfig(forSIMInfo: simInfo) { [weak self] result in
             switch result {
             case .knownMobileNetwork(let config):
                 
@@ -72,16 +79,11 @@ extension AuthorizationService: AuthorizationServiceProtocol {
                     authorizationConfig: authorizationConfig,
                     completion: completion
                 )
+
             case .unknownMobileNetwork:
                 completion(.error(UnsupportedCarrier()))
                 // TODO: -
                 self?.showConsolation("sim not recognized during discovery", on: viewController)
-                break
-            case .noMobileNetwork:
-                // TODO: -
-                // secondary device flow
-                completion(.error(UnknownError()))
-                self?.showConsolation("no sim set up to use for discovery", on: viewController)
                 break
             case .error(let error):
                 completion(.error(error))
@@ -94,6 +96,9 @@ extension AuthorizationService: AuthorizationServiceProtocol {
 }
 
 private extension AuthorizationService {
+
+
+
     // TODO: Remove this, just for qa
     func showConsolation(_ text: String, on viewController: UIViewController) {
         let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)
@@ -103,14 +108,14 @@ private extension AuthorizationService {
 }
 
 public extension AuthorizationService {
-
     /// creates a new instance of an `AuthorizationService`
     convenience init() {
         let appDelegate = ProjectVerifyAppDelegate.shared
         self.init(
             sdkConfig: appDelegate.sdkConfig,
             discoveryService: Dependencies.resolve(),
-            openIdService: Dependencies.resolve()
+            openIdService: Dependencies.resolve(),
+            carrierInfoService: Dependencies.resolve()
         )
     }
 }

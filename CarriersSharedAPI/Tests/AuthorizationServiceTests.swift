@@ -58,14 +58,14 @@ class AuthorizationServiceTests: XCTestCase {
     let networkIdentifierCache =  NetworkIdentifierCache.bundledCarrierLookup
     lazy var discoveryService = DiscoveryService(
         networkService: mockNetworkService,
-        carrierInfoService: mockCarrierInfo,
         configCacheService: ConfigCacheService(networkIdentifierCache: networkIdentifierCache)
     )
 
     lazy var authorizationService = AuthorizationService(
         sdkConfig: mockSDKConfig,
         discoveryService: discoveryService,
-        openIdService: mockOpenIdService
+        openIdService: mockOpenIdService,
+        carrierInfoService: mockCarrierInfo
     )
 
     let scopes: [Scope] = [.address, .address, .email]
@@ -104,4 +104,28 @@ class AuthorizationServiceTests: XCTestCase {
         }
         wait(for: [expectation], timeout: timeout)
     }
+
+    // TODO: test these at Auth Service level
+    //    func testNoSIMReturnsNoMobileNetwork() {
+    //        mockCarrierInfo.primarySIM = nil
+    //        let expectation = XCTestExpectation(description: "async discovery")
+    //        discoveryService.discoverConfig() { result in
+    //            guard case .noMobileNetwork = result else {
+    //                XCTFail("config expected to return noMobileNetwork")
+    //                return
+    //            }
+    //            expectation.fulfill()
+    //        }
+    //        wait(for: [expectation], timeout: timeout)
+    //    }
+
+    //    func testNoSIMDoesNotMakeNetworkRequest() {
+    //        mockCarrierInfo.primarySIM = nil
+    //        let expectation = XCTestExpectation(description: "async discovery")
+    //        discoveryService.discoverConfig() { result in
+    //            XCTAssertNil(self.mockNetworkService.lastRequest)
+    //            expectation.fulfill()
+    //        }
+    //        wait(for: [expectation], timeout: timeout)
+    //    }
 }

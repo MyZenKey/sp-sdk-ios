@@ -16,7 +16,6 @@ class Dependencies {
 
     private(set) lazy var discoveryService: DiscoveryServiceProtocol = DiscoveryService(
         networkService: NetworkService(),
-        carrierInfoService: carrierInfoService,
         configCacheService: configCacheService
     )
 

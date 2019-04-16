@@ -17,7 +17,6 @@ struct CarrierConfig {
 enum DiscoveryServiceResult {
     case knownMobileNetwork(CarrierConfig)
     case unknownMobileNetwork
-    case noMobileNetwork
     case error(DiscoveryServiceError)
 }
 
@@ -52,13 +51,13 @@ protocol DiscoveryServiceProtocol {
     ///
     /// This method will always execute the provided closure on the MainThread.
     /// - Parameter completion: the closure invoked with the result of the Discovery.
-    func discoverConfig(completion: @escaping (DiscoveryServiceResult) -> Void)
+    func discoverConfig(forSIMInfo simInfo: SIMInfo,
+                        completion: @escaping (DiscoveryServiceResult) -> Void)
 }
 
 class DiscoveryService: DiscoveryServiceProtocol {
     typealias OpenIdResult = Result<OpenIdConfig, DiscoveryServiceError>
 
-    private let carrierInfoService: CarrierInfoServiceProtocol
     private let networkService: NetworkServiceProtocol
     private let configCacheService: ConfigCacheServiceProtocol
 
@@ -72,33 +71,27 @@ class DiscoveryService: DiscoveryServiceProtocol {
 //    private let discoveryEndpointFormat = "http://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
     
     init(networkService: NetworkServiceProtocol,
-         carrierInfoService: CarrierInfoServiceProtocol,
          configCacheService: ConfigCacheServiceProtocol) {
         self.networkService = networkService
-        self.carrierInfoService = carrierInfoService
         self.configCacheService = configCacheService
     }
-    
-    func discoverConfig(completion: @escaping (DiscoveryServiceResult) -> Void) {
-        guard let sim = carrierInfoService.primarySIM else {
-            DiscoveryService.outcome(.noMobileNetwork, completion: completion)
-            return
-        }
 
-        openIdConfig(forSIMInfo: sim) { [weak self] result in
+    func discoverConfig(forSIMInfo simInfo: SIMInfo,
+                        completion: @escaping (DiscoveryServiceResult) -> Void) {
+        openIdConfig(forSIMInfo: simInfo) { [weak self] result in
 
             switch result {
             case .value(let openIdConfig):
                 let config = CarrierConfig(
-                    simInfo: sim,
+                    simInfo: simInfo,
                     openIdConfig: openIdConfig)
                 DiscoveryService.outcome(.knownMobileNetwork(config), completion: completion)
 
             case .error(let error):
-                if let fallBackConfig = self?.recoverFromCache(simInfo: sim,
+                if let fallBackConfig = self?.recoverFromCache(simInfo: simInfo,
                                                                allowStaleRecords: true) {
                     let config = CarrierConfig(
-                        simInfo: sim,
+                        simInfo: simInfo,
                         openIdConfig: fallBackConfig)
                     DiscoveryService.outcome(.knownMobileNetwork(config), completion: completion)
                 } else {
@@ -110,6 +103,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
 }
 
 private extension DiscoveryService {
+
     /// performs the discovery outcome on the main thread
     static func outcome(
         _ outcome: DiscoveryServiceResult,
