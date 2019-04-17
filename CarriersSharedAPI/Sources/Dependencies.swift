@@ -19,6 +19,8 @@ class Dependencies {
         configCacheService: configCacheService
     )
 
+    let mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol = MobileNetworkSelectionService()
+
     let openIdService: OpenIdServiceProtocol = OpenIdService(
         urlResolver: XCISchemeOpenIdURLResolver()
     )
@@ -34,7 +36,8 @@ extension Dependencies {
             carrierInfoService,
             discoveryService,
             openIdService,
-            configCacheService
+            configCacheService,
+            mobileNetworkSelectionService,
         ]
     }
     

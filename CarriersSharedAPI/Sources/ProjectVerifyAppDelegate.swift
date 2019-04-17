@@ -73,7 +73,7 @@ public class ProjectVerifyAppDelegate {
 
         // This scheme is project verify specifc and any requests sent to this scheme should be
         // handled by us.
-        guard url.scheme == sdkConfig.redirectURL.scheme else {
+        guard url.scheme == sdkConfig.redirectScheme else {
             return false
         }
 

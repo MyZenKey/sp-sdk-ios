@@ -16,14 +16,14 @@ public enum BundleLoadingErrors: Error, Equatable {
 struct SDKConfig: Equatable {
     public private(set) var isLoaded: Bool = false
     public private(set) var clientId: String!
-    private(set) var redirectURL: URL!
+    private(set) var redirectScheme: String!
 
     init() {}
 
-    init(clientId: String, redirectURL: URL) {
+    init(clientId: String, redirectScheme: String) {
         self.clientId = clientId
-        self.redirectURL = redirectURL
         self.isLoaded = true
+        self.redirectScheme = redirectScheme
     }
 
     static func load(fromBundle bundle: ProjectVerifyBundleProtocol) throws -> SDKConfig {
@@ -36,8 +36,18 @@ struct SDKConfig: Equatable {
             throw BundleLoadingErrors.specifyRedirectURLScheme
         }
 
-        let redirectURL = URL(string: "\(redirectScheme)://code")!
-        return SDKConfig(clientId: clientId, redirectURL: redirectURL)
+        return SDKConfig(clientId: clientId, redirectScheme: redirectScheme)
+    }
+}
+
+extension SDKConfig {
+    enum Route: String {
+        case code
+        case discoveryUI = "discoveryui"
+    }
+
+    func redirectURL(forRoute route: Route) -> URL {
+        return URL(string: "\(redirectScheme!)://\(route.rawValue)")!
     }
 }
 

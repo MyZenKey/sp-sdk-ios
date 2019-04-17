@@ -41,12 +41,23 @@ class SDKConfigTests: XCTestCase {
         }
     }
 
-    func testCorrectBundleURL() {
+    func testCodeRedirectURL() {
         mockBundle.clientId = "foo"
         mockBundle.urlSchemes = ["bar", "biz", "foo", "bah"]
         do {
             let config = try SDKConfig.load(fromBundle: mockBundle)
-            XCTAssertEqual(config.redirectURL, URL(string: "foo://code")!)
+            XCTAssertEqual(config.redirectURL(forRoute: .code), URL(string: "foo://code")!)
+        } catch {
+            XCTFail("expected not to throw")
+        }
+    }
+
+    func testDiscoveryRedirectURL() {
+        mockBundle.clientId = "foo"
+        mockBundle.urlSchemes = ["bar", "biz", "foo", "bah"]
+        do {
+            let config = try SDKConfig.load(fromBundle: mockBundle)
+            XCTAssertEqual(config.redirectURL(forRoute: .discoveryUI), URL(string: "foo://discoveryui")!)
         } catch {
             XCTFail("expected not to throw")
         }

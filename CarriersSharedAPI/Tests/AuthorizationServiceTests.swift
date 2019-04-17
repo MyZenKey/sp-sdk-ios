@@ -52,7 +52,7 @@ class AuthorizationServiceTests: XCTestCase {
 
     let mockSDKConfig = SDKConfig(
         clientId: "mockClient",
-        redirectURL: URL(string: "pvmockCLient://")!
+        redirectScheme: "pvmockCLient://"
     )
 
     let networkIdentifierCache =  NetworkIdentifierCache.bundledCarrierLookup

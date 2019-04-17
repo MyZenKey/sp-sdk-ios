@@ -61,12 +61,6 @@ class DiscoveryService: DiscoveryServiceProtocol {
     private let networkService: NetworkServiceProtocol
     private let configCacheService: ConfigCacheServiceProtocol
 
-//    Issuer –
-//    IP - https://100.25.175.177/.well-known/openid_configuration
-//    FQDN - https://app.xcijv.com/.well-known/openid_configuration
-//    UI –
-//    IP – https://23.20.110.44
-//    FQDN – https://app.xcijv.com/ui
     private let discoveryEndpointFormat = "https://app.xcijv.com/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
 //    private let discoveryEndpointFormat = "http://100.25.175.177/.well-known/openid_configuration?config=false&mcc=%@&mnc=%@"
     
