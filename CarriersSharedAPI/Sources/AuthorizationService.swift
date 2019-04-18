@@ -57,6 +57,7 @@ extension AuthorizationService: AuthorizationServiceProtocol {
         completion: @escaping AuthorizationCompletion) {
 
         guard let simInfo = carrierInfoService.primarySIM else {
+            // show a Mobile Network Operator selction flow in the case of no sim on this mobile device:
             showDiscoveryUI(
                 scopes: scopes,
                 fromViewController: viewController,
@@ -86,9 +87,21 @@ private extension AuthorizationService {
                          fromViewController viewController: UIViewController,
                          completion: @escaping AuthorizationCompletion) {
 
-
         self.mobileNetworkSelectionService.requestUserNetworkSelection(
-            fromCurrentViewController: viewController) { result in
+            fromCurrentViewController: viewController) { [weak self] result in
+                switch result {
+                case .networkInfo(let simInfo):
+                    self?.performDiscovery(
+                        forSIMInfo: simInfo,
+                        scopes: scopes,
+                        fromViewController: viewController,
+                        completion: completion
+                    )
+                case .error(let error):
+                    completion(.error(error))
+                case .cancelled:
+                    completion(.cancelled)
+                }
 
         }
     }
