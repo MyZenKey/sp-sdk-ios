@@ -141,13 +141,13 @@ class OpenIdServiceTests: XCTestCase {
         }
 
         let urlString = "testapp://authorize?code=TESTCODE&state=bar"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        openIdService.conclude(withURL: URL(string: urlString)!)
         wait(for: [expectation], timeout: timeout)
     }
 
     func testConcludeWithURLNoRequestInProgressError() {
         let urlString = "testapp://authorize?code=TESTCODE&state=bar"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        openIdService.conclude(withURL: URL(string: urlString)!)
     }
 
     func testConcludeWithURLStateMismatchError() {
@@ -165,7 +165,7 @@ class OpenIdServiceTests: XCTestCase {
         }
 
         let urlString = "testapp://authorize?code=TESTCODE&state=BIZ"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        openIdService.conclude(withURL: URL(string: urlString)!)
         wait(for: [expectation], timeout: timeout)
     }
 
@@ -184,7 +184,7 @@ class OpenIdServiceTests: XCTestCase {
         }
 
         let urlString = "testapp://authorize?state=bar"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        openIdService.conclude(withURL: URL(string: urlString)!)
         wait(for: [expectation], timeout: timeout)
     }
 
@@ -208,7 +208,7 @@ class OpenIdServiceTests: XCTestCase {
         }
 
         let urlString = "testapp://authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        openIdService.conclude(withURL: URL(string: urlString)!)
         wait(for: [expectation], timeout: timeout)
     }
 
@@ -230,13 +230,13 @@ class OpenIdServiceTests: XCTestCase {
         }
 
         let urlString = "testapp://authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        openIdService.conclude(withURL: URL(string: urlString)!)
         wait(for: [expectation], timeout: timeout)
     }
 
     func testErrorValueForOAuthErrorIdentifierOnly() {
         let expectedError = OAuthErrorCode.invalidRequest
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: nil
         )
@@ -254,7 +254,7 @@ class OpenIdServiceTests: XCTestCase {
     func testErrorValueForOAuthErrorAndDescription() {
         let expectedError = OAuthErrorCode.invalidRequest
         let expectedDescription = "foo"
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: expectedDescription
         )
@@ -271,7 +271,7 @@ class OpenIdServiceTests: XCTestCase {
 
     func testErrorValueForOpenIdErrorIdentifierOnly() {
         let expectedError = OpenIdErrorCode.loginRequired
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: nil
         )
@@ -289,7 +289,7 @@ class OpenIdServiceTests: XCTestCase {
     func testErrorValueForOpenIdErrorAndDescription() {
         let expectedError = OpenIdErrorCode.loginRequired
         let expectedDescription = "foo"
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: expectedDescription
         )
@@ -306,7 +306,7 @@ class OpenIdServiceTests: XCTestCase {
 
     func testErrorValueForProjectVerifyErrorIdentifierOnly() {
         let expectedError = ProjectVerifyErrorCode.authenticationTimedOut
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: nil
         )
@@ -324,7 +324,7 @@ class OpenIdServiceTests: XCTestCase {
     func testErrorValueForProjectVerifyErrorAndDescription() {
         let expectedError = ProjectVerifyErrorCode.authenticationTimedOut
         let expectedDescription = "foo"
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: expectedDescription
         )
@@ -341,7 +341,7 @@ class OpenIdServiceTests: XCTestCase {
 
     func testErrorValueForUnknownErrorIdentifierOnly() {
         let expectedError = "invalid_error_id"
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError,
             description: nil
         )
@@ -359,7 +359,7 @@ class OpenIdServiceTests: XCTestCase {
     func testErrorValueForUnknownErrorAndDescription() {
         let expectedError = "invalid_error_id"
         let expectedDescription = "foo"
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError,
             description: expectedDescription
         )

@@ -60,7 +60,7 @@ protocol OpenIdServiceProtocol {
 
     func cancelCurrentAuthorizationSession()
 
-    func concludeAuthorizationFlow(url: URL)
+    func conclude(withURL url: URL)
 }
 
 class PendingSessionStorage: OpenIdExternalSessionStateStorage {
@@ -71,8 +71,6 @@ class OpenIdService {
     enum ResponseKeys: String {
         case state
         case code
-        case error
-        case errorDescription = "error_description"
     }
 
     enum State {
@@ -153,7 +151,7 @@ extension OpenIdService: OpenIdServiceProtocol {
         concludeAuthorizationFlow(result: .cancelled)
     }
 
-    func concludeAuthorizationFlow(url: URL) {
+    func conclude(withURL url: URL) {
         // NOTE: this logic replicates the functionality in OIDAuthorizationService.m
         // - (BOOL)resumeExternalUserAgentFlowWithURL:(NSURL *)URL
         // Because AppAuth is designed around the OAuth 2.0 spec for native apps
@@ -169,48 +167,32 @@ extension OpenIdService: OpenIdServiceProtocol {
             return
         }
 
-        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        let response = ResponseURL(url: url)
 
-        // duplicate keys are unsupported, let's reduce to a dictionary:
-        let queryDictionary: [String: String] = (components?.queryItems ?? [])
-            .reduce([:]) { accumulator, item in
-                var accumulator = accumulator
-                if let value = item.value {
-                    accumulator[item.name] = value
-                }
-                return accumulator
-        }
-
-        // checks for an OAuth error response as per RFC6749 Section 4.1.2.1
-        let errorId = queryDictionary[ResponseKeys.error.rawValue]
-        guard errorId == nil else {
-            let errorId = errorId!
-            let errorDescription = queryDictionary[ResponseKeys.errorDescription.rawValue]
-            let errorValue = OpenIdService.errorValue(
-                fromIdentifier: errorId,
-                description: errorDescription
-            )
-            concludeAuthorizationFlow(result: .error(errorValue))
+        let error = response.openIdError
+        guard error == nil else {
+            concludeAuthorizationFlow(result: .error(error!))
             return
         }
 
         // no error, should be a valid OAuth 2.0 response
         guard
-            let inboundState = queryDictionary[ResponseKeys.state.rawValue],
-            inboundState == request.state else {
+            let state = request.state,
+            response.hasMatchingState(state)
+            else {
                 concludeAuthorizationFlow(result: .error(AuthorizationError.stateMismatch))
                 return
         }
 
         // extract the code
-        guard let code = queryDictionary[ResponseKeys.code.rawValue] else {
-                concludeAuthorizationFlow(result: .error(AuthorizationError.missingAuthCode))
-                return
+        guard let code = response[ResponseKeys.code.rawValue] else {
+            concludeAuthorizationFlow(result: .error(AuthorizationError.missingAuthCode))
+            return
         }
 
         // success:
         concludeAuthorizationFlow(result: .code(
-                AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
+            AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
             )
         )
     }
@@ -251,9 +233,76 @@ extension OpenIdService {
         
         return request
     }
+}
 
-    
-    static func errorValue(fromIdentifier identifier: String, description: String?) -> AuthorizationError {
+// MARK: - permanent home
+
+struct ResponseURL {
+    private enum Keys: String {
+        case state
+    }
+
+    private let queryDictionary: [String: String]
+    init(url: URL) {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        // duplicate keys are unsupported, let's reduce to a dictionary:
+        queryDictionary = (components?.queryItems ?? [])
+            .reduce([:]) { accumulator, item in
+                var accumulator = accumulator
+                if let value = item.value {
+                    accumulator[item.name] = value
+                }
+                return accumulator
+        }
+    }
+
+    subscript (param: String) -> String? {
+        return queryDictionary[param]
+    }
+
+    /// Checks the redirect url for an open id 'state' value and returns true
+    /// if it matches the value provided.
+    ///
+    /// - Parameter state: the state value to attempt to match.
+    /// - Returns: whether the url contains a state paramter matching the provided value
+    func hasMatchingState(_ state: String) -> Bool {
+        guard
+            let inboundState = queryDictionary[Keys.state.rawValue],
+            inboundState == state else {
+            return false
+        }
+        return true
+    }
+}
+
+extension ResponseURL {
+
+    enum OpenIdErrorKeys: String {
+        case error
+        case errorDescription = "error_description"
+    }
+
+    var openIdError: Error? {
+        // checks for an OAuth error response as per RFC6749 Section 4.1.2.1
+        let errorId = self[OpenIdErrorKeys.error.rawValue]
+        guard errorId == nil else {
+            let errorId = errorId!
+            let errorDescription = self[OpenIdErrorKeys.errorDescription.rawValue]
+            let error = ResponseURL.errorValue(
+                fromIdentifier: errorId,
+                description: errorDescription
+            )
+            return error
+        }
+
+        return nil
+    }
+
+    // TODO: - only expose subset of these errors
+    static func errorValue(
+        fromIdentifier identifier: String,
+        description: String?) -> AuthorizationError {
+
         if let errorCode = OAuthErrorCode(rawValue: identifier) {
             return .oauth(errorCode, description)
         } else if let errorCode = OpenIdErrorCode(rawValue: identifier) {

@@ -39,7 +39,7 @@ class MockOpenIdService: OpenIdServiceProtocol {
 
     func cancelCurrentAuthorizationSession() { }
 
-    func concludeAuthorizationFlow(url: URL) { }
+    func conclude(withURL url: URL) { }
 
     func concludeAuthorizationFlow(result: AuthorizationResult) { }
 }
@@ -65,7 +65,9 @@ class AuthorizationServiceTests: XCTestCase {
         sdkConfig: mockSDKConfig,
         discoveryService: discoveryService,
         openIdService: mockOpenIdService,
-        carrierInfoService: mockCarrierInfo
+        carrierInfoService: mockCarrierInfo,
+        // TODO: test this
+        mobileNetworkSelectionService: MobileNetworkSelectionService()
     )
 
     let scopes: [Scope] = [.address, .address, .email]
