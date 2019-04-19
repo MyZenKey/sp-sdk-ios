@@ -27,8 +27,6 @@ protocol MobileNetworkSelectionServiceProtocol: URLHandling {
         fromCurrentViewController viewController: UIViewController,
         completion: @escaping MobileNetworkSelectionCompletion
     )
-
-    func resolve(url: URL) -> Bool
 }
 
 class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProtocol {
