@@ -41,13 +41,8 @@ struct SDKConfig: Equatable {
 }
 
 extension SDKConfig {
-    enum Route: String {
-        case code
-        case discoveryUI = "discoveryui"
-    }
-
     func redirectURL(forRoute route: Route) -> URL {
-        return URL(string: "\(redirectScheme!)://\(route.rawValue)")!
+        return URL(string: "\(redirectScheme!)://projectverify\(route.rawValue)")!
     }
 }
 

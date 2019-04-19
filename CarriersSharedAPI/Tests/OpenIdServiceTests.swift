@@ -57,7 +57,7 @@ class OpenIdServiceTests: XCTestCase {
         authorizationEndpoint: URL(string: "http://rightpoint.com")!,
         tokenEndpoint: URL(string: "http://rightpoint.com")!,
         formattedScopes: "openid",
-        redirectURL: URL(string: "testapp://authorize")!,
+        redirectURL: URL(string: "testapp://projectverify/authorize")!,
         state: "bar"
     )
 
@@ -140,14 +140,16 @@ class OpenIdServiceTests: XCTestCase {
                 XCTAssertEqual(response.mnc, "456")
         }
 
-        let urlString = "testapp://authorize?code=TESTCODE&state=bar"
-        openIdService.conclude(withURL: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
     func testConcludeWithURLNoRequestInProgressError() {
-        let urlString = "testapp://authorize?code=TESTCODE&state=bar"
-        openIdService.conclude(withURL: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertFalse(handled)
     }
 
     func testConcludeWithURLStateMismatchError() {
@@ -164,8 +166,9 @@ class OpenIdServiceTests: XCTestCase {
                 expectation.fulfill()
         }
 
-        let urlString = "testapp://authorize?code=TESTCODE&state=BIZ"
-        openIdService.conclude(withURL: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=BIZ"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
@@ -183,8 +186,9 @@ class OpenIdServiceTests: XCTestCase {
                 expectation.fulfill()
         }
 
-        let urlString = "testapp://authorize?state=bar"
-        openIdService.conclude(withURL: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?state=bar"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
@@ -207,8 +211,9 @@ class OpenIdServiceTests: XCTestCase {
                 expectation.fulfill()
         }
 
-        let urlString = "testapp://authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)"
-        openIdService.conclude(withURL: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
@@ -229,8 +234,9 @@ class OpenIdServiceTests: XCTestCase {
                 expectation.fulfill()
         }
 
-        let urlString = "testapp://authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"
-        openIdService.conclude(withURL: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 

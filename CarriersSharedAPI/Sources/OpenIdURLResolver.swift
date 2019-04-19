@@ -189,7 +189,6 @@ struct OpenIdURLResolver: OpenIdURLResolverProtocol {
 
         // TODO: clean up /cancel existing session semantics:
         let consentURLString = authorizationConfig.consentURLString
-        print("Checking if " + consentURLString + " is part of a universal link")
         let urlTransformation = OIDExternalUserAgentIOSCustomBrowser.urlTransformationSchemeConcatPrefix(consentURLString)
 
         let externalUserAgent = OIDExternalUserAgentIOSCustomBrowser(

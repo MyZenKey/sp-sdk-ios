@@ -49,7 +49,7 @@ struct OpenIdAuthorizationConfig: Equatable {
     let state: String
 }
 
-protocol OpenIdServiceProtocol {
+protocol OpenIdServiceProtocol: URLHandling {
     func authorize(
         fromViewController viewController: UIViewController,
         authorizationConfig: OpenIdAuthorizationConfig,
@@ -59,8 +59,6 @@ protocol OpenIdServiceProtocol {
     var authorizationInProgress: Bool { get }
 
     func cancelCurrentAuthorizationSession()
-
-    func conclude(withURL url: URL)
 }
 
 class PendingSessionStorage: OpenIdExternalSessionStateStorage {
@@ -151,7 +149,7 @@ extension OpenIdService: OpenIdServiceProtocol {
         concludeAuthorizationFlow(result: .cancelled)
     }
 
-    func conclude(withURL url: URL) {
+    func resolve(url: URL) -> Bool {
         // NOTE: this logic replicates the functionality in OIDAuthorizationService.m
         // - (BOOL)resumeExternalUserAgentFlowWithURL:(NSURL *)URL
         // Because AppAuth is designed around the OAuth 2.0 spec for native apps
@@ -164,11 +162,19 @@ extension OpenIdService: OpenIdServiceProtocol {
         // ensure valid state:
         guard case .inProgress(let request, let simInfo, _, _) = state else {
             // there is no request, return
-            return
+            return false
         }
 
-        let response = ResponseURL(url: url)
+        resolve(request: request, forSIMInfo: simInfo, withURL: url)
+        return true
+    }
 
+    private func resolve(
+        request: OIDAuthorizationRequest,
+        forSIMInfo simInfo: SIMInfo,
+        withURL url: URL) {
+
+        let response = ResponseURL(url: url)
         let error = response.error
         guard error == nil else {
             concludeAuthorizationFlow(result: .error(error!))

@@ -39,7 +39,7 @@ class MockOpenIdService: OpenIdServiceProtocol {
 
     func cancelCurrentAuthorizationSession() { }
 
-    func conclude(withURL url: URL) { }
+    func resolve(url: URL) -> Bool { return true }
 
     func concludeAuthorizationFlow(result: AuthorizationResult) { }
 }

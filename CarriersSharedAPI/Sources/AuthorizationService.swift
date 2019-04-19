@@ -88,21 +88,21 @@ private extension AuthorizationService {
                          completion: @escaping AuthorizationCompletion) {
 
         self.mobileNetworkSelectionService.requestUserNetworkSelection(
-            fromCurrentViewController: viewController) { [weak self] result in
-                switch result {
-                case .networkInfo(let simInfo):
-                    self?.performDiscovery(
-                        forSIMInfo: simInfo,
-                        scopes: scopes,
-                        fromViewController: viewController,
-                        completion: completion
-                    )
-                case .error(let error):
-                    completion(.error(error))
-                case .cancelled:
-                    completion(.cancelled)
-                }
-
+            fromCurrentViewController: viewController
+        ) { [weak self] result in
+            switch result {
+            case .networkInfo(let simInfo):
+                self?.performDiscovery(
+                    forSIMInfo: simInfo,
+                    scopes: scopes,
+                    fromViewController: viewController,
+                    completion: completion
+                )
+            case .error(let error):
+                completion(.error(error))
+            case .cancelled:
+                completion(.cancelled)
+            }
         }
     }
 
@@ -119,11 +119,10 @@ private extension AuthorizationService {
                 let authorizationConfig = OpenIdAuthorizationConfig(
                     simInfo: config.simInfo,
                     clientId: sdkConfig.clientId,
-                    // TODO: fix these forcing optionals here and strongly type upstream
                     authorizationEndpoint: config.openIdConfig.authorizationEndpoint,
                     tokenEndpoint: config.openIdConfig.tokenEndpoint,
                     formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
-                    redirectURL: sdkConfig.redirectURL(forRoute: .code),
+                    redirectURL: sdkConfig.redirectURL(forRoute: .authorize),
                     state: "demo-app-state"
                 )
 

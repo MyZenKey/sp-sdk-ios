@@ -77,13 +77,21 @@ public class ProjectVerifyAppDelegate {
             return false
         }
 
-        // concluding an auth flow:
-        dependencies.openIdService.conclude(withURL: url)
+        // make sure we have a route this sdk can handle:
+        guard let route = Route(rawValue: url.path) else {
+            return false
+        }
 
+        let service: URLHandling
+        switch route {
+        case .authorize:
+            service = dependencies.openIdService
+        case .discoveryUI:
+            service = dependencies.mobileNetworkSelectionService
         // TODO: - We don't have a spec for other states that might be resolved via this url.
         // add those here when we do
+        }
 
-        // unhandled
-        return false
+        return service.resolve(url: url)
     }
 }

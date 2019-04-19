@@ -22,13 +22,13 @@ enum MobileNetworkSelectionUIError: Error {
 
 typealias MobileNetworkSelectionCompletion = (MobileNetworkSelectionUIResult) -> Void
 
-protocol MobileNetworkSelectionServiceProtocol {
+protocol MobileNetworkSelectionServiceProtocol: URLHandling {
     func requestUserNetworkSelection(
         fromCurrentViewController viewController: UIViewController,
         completion: @escaping MobileNetworkSelectionCompletion
     )
 
-    func conclude(withURL url: URL)
+    func resolve(url: URL) -> Bool
 }
 
 class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProtocol {
@@ -82,12 +82,17 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
         viewController.present(safariController, animated: true, completion: nil)
     }
 
-    func conclude(withURL url: URL) {
+    func resolve(url: URL) -> Bool {
         guard case .requesting(let request, _) = state else {
             // no request in progress
-            return
+            return false
         }
 
+        resolve(request: request, withURL: url)
+        return true
+    }
+
+    private func resolve(request: Request, withURL url: URL) {
         let response = ResponseURL(url: url)
         guard response.hasMatchingState(request.state) else {
             // completion mis match state error
@@ -100,7 +105,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
             mccmnc.count == 6
             else {
                 conclude(result: .error(.invalidMCCMNC))
-            return
+                return
         }
 
         let simInfo = mccmnc.toSIMInfo()
