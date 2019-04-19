@@ -75,11 +75,45 @@ class MockMobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol {
     func resolve(url: URL) -> Bool { return true }
 }
 
+class MockDiscoveryService: DiscoveryServiceProtocol {
+
+    static let mockSuccess = CarrierConfig(
+        simInfo: MockSIMs.tmobile,
+        openIdConfig: OpenIdConfig(
+            tokenEndpoint: URL.mocked,
+            authorizationEndpoint: URL.mocked,
+            issuer: URL.mocked
+        )
+    )
+    
+    var mockResponse: DiscoveryServiceResult = .knownMobileNetwork(MockDiscoveryService.mockSuccess)
+    var lastSIMInfo: SIMInfo?
+    var lastCompletion: DiscoveryServiceCompletion?
+
+    func clear() {
+        lastSIMInfo = nil
+        lastCompletion = nil
+        mockResponse = .knownMobileNetwork(MockDiscoveryService.mockSuccess)
+    }
+
+    func discoverConfig(
+        forSIMInfo simInfo: SIMInfo,
+        completion: @escaping DiscoveryServiceCompletion) {
+        lastSIMInfo = simInfo
+        lastCompletion = completion
+
+        DispatchQueue.main.async {
+            completion(self.mockResponse)
+        }
+    }
+}
+
 class AuthorizationServiceTests: XCTestCase {
 
     let mockNetworkService = MockNetworkService()
     let mockCarrierInfo = MockCarrierInfoService()
     let mockOpenIdService = MockOpenIdService()
+    let mockDiscoveryService = MockDiscoveryService()
     let mockNetworkSelectionService = MockMobileNetworkSelectionService()
 
     let mockSDKConfig = SDKConfig(
@@ -88,14 +122,10 @@ class AuthorizationServiceTests: XCTestCase {
     )
 
     let networkIdentifierCache =  NetworkIdentifierCache.bundledCarrierLookup
-    lazy var discoveryService = DiscoveryService(
-        networkService: mockNetworkService,
-        configCacheService: ConfigCacheService(networkIdentifierCache: networkIdentifierCache)
-    )
 
     lazy var authorizationService = AuthorizationService(
         sdkConfig: mockSDKConfig,
-        discoveryService: discoveryService,
+        discoveryService: mockDiscoveryService,
         openIdService: mockOpenIdService,
         carrierInfoService: mockCarrierInfo,
         mobileNetworkSelectionService: mockNetworkSelectionService
@@ -106,19 +136,60 @@ class AuthorizationServiceTests: XCTestCase {
     override func setUp() {
         super.setUp()
         mockOpenIdService.clear()
+        mockDiscoveryService.clear()
         mockNetworkSelectionService.clear()
     }
 
     // MARK: - DiscoveryService Outputs
 
+    func testDiscoverSuccess() {
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
+        let expectation = XCTestExpectation(description: "async authorization")
+        authorizationService.connectWithProjectVerify(
+            scopes: self.scopes,
+            fromViewController: UIViewController()) { result in
+                guard case .code(let payload) = result else {
+                    XCTFail("expected a successful response")
+                    return
+                }
+                let mockedResponse = MockOpenIdService.mockSuccess
+                XCTAssertEqual(payload.code, mockedResponse.code)
+                XCTAssertEqual(payload.mcc, mockedResponse.mcc)
+                XCTAssertEqual(payload.mnc, mockedResponse.mnc)
+                expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    func testDiscoverError() {
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
+        let mockError: DiscoveryServiceError = .networkError(.networkError(NSError.mocked))
+        mockDiscoveryService.mockResponse = .error(mockError)
+        let expectation = XCTestExpectation(description: "async authorization")
+        authorizationService.connectWithProjectVerify(
+            scopes: self.scopes,
+            fromViewController: UIViewController()) { result in
+                guard case .error(let error) = result else {
+                    XCTFail("expected an error response")
+                    return
+                }
+                guard
+                    let discoveryError = error as? DiscoveryServiceError,
+                    case DiscoveryServiceError.networkError = discoveryError
+                    else {
+                        XCTFail("expected an error \(error) to match \(mockError)")
+                        return
+                }
+                expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
     // MARK: - Connection with OpenIdService
 
     func testPassesViewControllerAndScopeToOpenIdService() {
         mockCarrierInfo.primarySIM = MockSIMs.unknown
-        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
-
         let expectedController = UIViewController()
-
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.connectWithProjectVerify(
             scopes: self.scopes,
@@ -134,8 +205,6 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testOpenIdSuccess() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
-        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
-
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.connectWithProjectVerify(
             scopes: self.scopes,
@@ -155,8 +224,7 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testOpenIdError() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
-        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
-        let mockError = NSError(domain: "mock", code: 0, userInfo: [:])
+        let mockError = NSError.mocked
         mockOpenIdService.mockResponse = .error(mockError)
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.connectWithProjectVerify(
@@ -174,7 +242,6 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testOpenIdCancelled() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
-        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         mockOpenIdService.mockResponse = .cancelled
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.connectWithProjectVerify(
@@ -193,7 +260,6 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testSIMPresentBypassesSecondaryDeviceFlow() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
-        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectation = XCTestExpectation(description: "async authorization")
         let expectedViewController = UIViewController()
         authorizationService.connectWithProjectVerify(
@@ -208,7 +274,6 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testNoSIMPassesOffToSecondaryDeviceFlow() {
         mockCarrierInfo.primarySIM = nil
-        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectation = XCTestExpectation(description: "async authorization")
         let expectedViewController = UIViewController()
         authorizationService.connectWithProjectVerify(
@@ -224,7 +289,6 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testSecondaryDeviceFlowSuccess() {
         mockCarrierInfo.primarySIM = nil
-        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.connectWithProjectVerify(
             scopes: self.scopes,
@@ -244,7 +308,6 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testSecondaryDeviceFlowError() {
         mockCarrierInfo.primarySIM = nil
-        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectedError: MobileNetworkSelectionUIError = .invalidMCCMNC
         mockNetworkSelectionService.mockResponse = .error(expectedError)
         let expectation = XCTestExpectation(description: "async authorization")
@@ -270,7 +333,6 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testSecondaryDeviceFlowCancel() {
         mockCarrierInfo.primarySIM = nil
-        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         mockNetworkSelectionService.mockResponse = .cancelled
         let expectation = XCTestExpectation(description: "async authorization")
         let expectedViewController = UIViewController()

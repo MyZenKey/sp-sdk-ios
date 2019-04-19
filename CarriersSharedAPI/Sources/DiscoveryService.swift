@@ -45,6 +45,8 @@ enum DiscoveryServiceError: Error {
     case networkError(NetworkServiceError)
 }
 
+typealias DiscoveryServiceCompletion = (DiscoveryServiceResult) -> Void
+
 protocol DiscoveryServiceProtocol {
     /// Performs carrier discovery using the `CarrierInfoService` with which the `DiscoveryService`
     /// was instantiated.
@@ -52,7 +54,7 @@ protocol DiscoveryServiceProtocol {
     /// This method will always execute the provided closure on the MainThread.
     /// - Parameter completion: the closure invoked with the result of the Discovery.
     func discoverConfig(forSIMInfo simInfo: SIMInfo,
-                        completion: @escaping (DiscoveryServiceResult) -> Void)
+                        completion: @escaping DiscoveryServiceCompletion)
 }
 
 class DiscoveryService: DiscoveryServiceProtocol {
@@ -71,7 +73,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
     }
 
     func discoverConfig(forSIMInfo simInfo: SIMInfo,
-                        completion: @escaping (DiscoveryServiceResult) -> Void) {
+                        completion: @escaping DiscoveryServiceCompletion) {
         openIdConfig(forSIMInfo: simInfo) { [weak self] result in
 
             switch result {
@@ -101,7 +103,7 @@ private extension DiscoveryService {
     /// performs the discovery outcome on the main thread
     static func outcome(
         _ outcome: DiscoveryServiceResult,
-        completion: @escaping (DiscoveryServiceResult) -> Void) {
+        completion: @escaping DiscoveryServiceCompletion) {
         
         guard !Thread.isMainThread else {
             completion(outcome)
