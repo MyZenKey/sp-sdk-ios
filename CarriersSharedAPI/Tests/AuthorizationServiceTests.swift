@@ -140,6 +140,27 @@ class AuthorizationServiceTests: XCTestCase {
         mockNetworkSelectionService.clear()
     }
 
+    // MARK: - DiscoveryService Inputs
+
+    func testDiscoveryServiceRecivesSIMWhenPresent() {
+        mockCarrierInfo.primarySIM = MockSIMs.att
+        authorizationService.connectWithProjectVerify(
+            scopes: self.scopes,
+            fromViewController: UIViewController()) { _ in }
+        XCTAssertEqual(mockDiscoveryService.lastSIMInfo, MockSIMs.att)
+    }
+
+    func testDiscoveryCallsDiscoveryInsteadIfNoSIMPresent() {
+        mockCarrierInfo.primarySIM = nil
+        let expectedViewController = UIViewController()
+        authorizationService.connectWithProjectVerify(
+            scopes: self.scopes,
+            fromViewController: expectedViewController) { _ in }
+
+        XCTAssertNil(mockDiscoveryService.lastSIMInfo)
+        XCTAssertEqual(mockNetworkSelectionService.lastViewController, expectedViewController)
+    }
+
     // MARK: - DiscoveryService Outputs
 
     func testDiscoverSuccess() {
@@ -185,7 +206,7 @@ class AuthorizationServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    // MARK: - Connection with OpenIdService
+    // MARK: - OpenIdService Inputs
 
     func testPassesViewControllerAndScopeToOpenIdService() {
         mockCarrierInfo.primarySIM = MockSIMs.unknown
@@ -201,7 +222,7 @@ class AuthorizationServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    // MARK: - Outputs of OpenIdService
+    // MARK: - OpenIdService Outputs
 
     func testOpenIdSuccess() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
@@ -256,7 +277,7 @@ class AuthorizationServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    // MARK: - Secondary Device Flow
+    // MARK: - Secondary Device Flow Inputs
 
     func testSIMPresentBypassesSecondaryDeviceFlow() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
@@ -286,6 +307,8 @@ class AuthorizationServiceTests: XCTestCase {
         }
         wait(for: [expectation], timeout: timeout)
     }
+
+    // MARK: - Secondary Device Flow Outputs
 
     func testSecondaryDeviceFlowSuccess() {
         mockCarrierInfo.primarySIM = nil
