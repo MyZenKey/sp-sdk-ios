@@ -24,6 +24,7 @@ typealias MobileNetworkSelectionCompletion = (MobileNetworkSelectionUIResult) ->
 
 protocol MobileNetworkSelectionServiceProtocol: URLHandling {
     func requestUserNetworkSelection(
+        fromResource resource: URL,
         fromCurrentViewController viewController: UIViewController,
         completion: @escaping MobileNetworkSelectionCompletion
     )
@@ -31,10 +32,6 @@ protocol MobileNetworkSelectionServiceProtocol: URLHandling {
 
 class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProtocol {
 
-    private enum Keys: String {
-        case mccmnc
-    }
-    //client_id=ccid-SP0001&redirect_uri=https:%2F%2Fclient.example.org%2Fcb&state=testabc
     private var state: State = .idle
     private var sdkConfig: SDKConfig {
         return ProjectVerifyAppDelegate.shared.sdkConfig
@@ -45,6 +42,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
     }
 
     func requestUserNetworkSelection(
+        fromResource resource: URL,
         fromCurrentViewController viewController: UIViewController,
         completion: @escaping ((MobileNetworkSelectionUIResult) -> Void)) {
 
@@ -57,6 +55,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
         }
 
         let request = Request(
+            resource: resource,
             clientId: sdkConfig.clientId,
             redirectURI: sdkConfig.redirectURL(forRoute: .discoveryUI).absoluteString,
             // TODO: better states:
@@ -73,8 +72,6 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
 
         if #available(iOS 11.0, *) {
             safariController.dismissButtonStyle = .cancel
-        } else {
-            // TOOD: Fallback on earlier versions
         }
 
         viewController.present(safariController, animated: true, completion: nil)
@@ -89,8 +86,28 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
         resolve(request: request, withURL: url)
         return true
     }
+}
 
-    private func resolve(request: Request, withURL url: URL) {
+extension MobileNetworkSelectionService {
+    enum State {
+        case requesting(Request, MobileNetworkSelectionCompletion), idle
+    }
+
+    struct Request {
+        ///  the discovery ui resource ie. "https://app.xcijv.com/ui/discovery-ui"
+        let resource: URL
+        let clientId: String
+        let redirectURI: String
+        let state: String
+    }
+}
+
+private extension MobileNetworkSelectionService {
+    enum Keys: String {
+        case mccmnc
+    }
+
+    func resolve(request: Request, withURL url: URL) {
         let response = ResponseURL(url: url)
         guard response.hasMatchingState(request.state) else {
             // completion mis match state error
@@ -110,25 +127,13 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
         conclude(result: .networkInfo(simInfo))
     }
 
-    private func conclude(result: MobileNetworkSelectionUIResult) {
+    func conclude(result: MobileNetworkSelectionUIResult) {
         defer { state = .idle }
         guard case .requesting(_, let completion) = state else {
             return
         }
 
         completion(result)
-    }
-}
-
-extension MobileNetworkSelectionService {
-    enum State {
-        case requesting(Request, MobileNetworkSelectionCompletion), idle
-    }
-
-    struct Request {
-        let clientId: String
-        let redirectURI: String
-        let state: String
     }
 }
 
@@ -139,7 +144,6 @@ extension MobileNetworkSelectionService: SFSafariViewControllerDelegate {
 }
 
 extension MobileNetworkSelectionService.Request {
-
     enum Params: String {
         case clientId = "client_id"
         case redirectURI = "redirect_uri"
@@ -147,8 +151,7 @@ extension MobileNetworkSelectionService.Request {
     }
 
     var url: URL {
-        // TODO: host config
-        var builder = URLComponents(string: "https://xci-demoapp-node.raizlabs.xyz/mock/discovery-ui")
+        var builder = URLComponents(url: resource, resolvingAgainstBaseURL: false)
         builder?.queryItems = [
             URLQueryItem(name: Params.clientId.rawValue, value: clientId),
             URLQueryItem(name: Params.redirectURI.rawValue, value: redirectURI),
@@ -174,7 +177,6 @@ extension String {
         let mcc = copy.popLast(3)
         return SIMInfo(mcc: String(mcc), mnc: String(mnc))
     }
-
 
     /// removes and returns the last n characters from the string
     private mutating func popLast(_ n: Int) -> Substring {

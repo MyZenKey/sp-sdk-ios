@@ -56,18 +56,8 @@ extension AuthorizationService: AuthorizationServiceProtocol {
         fromViewController viewController: UIViewController,
         completion: @escaping AuthorizationCompletion) {
 
-        guard let simInfo = carrierInfoService.primarySIM else {
-            // show a Mobile Network Operator selction flow in the case of no sim on this mobile device:
-            showDiscoveryUI(
-                scopes: scopes,
-                fromViewController: viewController,
-                completion: completion
-            )
-            return
-        }
-
         performDiscovery(
-            forSIMInfo: simInfo,
+            forSIMInfo: carrierInfoService.primarySIM,
             scopes: scopes,
             fromViewController: viewController,
             completion: completion
@@ -83,30 +73,7 @@ private extension AuthorizationService {
         viewController.present(controller, animated: true, completion: nil)
     }
 
-    func showDiscoveryUI(scopes: [ScopeProtocol],
-                         fromViewController viewController: UIViewController,
-                         completion: @escaping AuthorizationCompletion) {
-
-        self.mobileNetworkSelectionService.requestUserNetworkSelection(
-            fromCurrentViewController: viewController
-        ) { [weak self] result in
-            switch result {
-            case .networkInfo(let simInfo):
-                self?.performDiscovery(
-                    forSIMInfo: simInfo,
-                    scopes: scopes,
-                    fromViewController: viewController,
-                    completion: completion
-                )
-            case .error(let error):
-                completion(.error(error))
-            case .cancelled:
-                completion(.cancelled)
-            }
-        }
-    }
-
-    func performDiscovery(forSIMInfo simInfo: SIMInfo,
+    func performDiscovery(forSIMInfo simInfo: SIMInfo?,
                           scopes: [ScopeProtocol],
                           fromViewController viewController: UIViewController,
                           completion: @escaping AuthorizationCompletion) {
@@ -132,16 +99,44 @@ private extension AuthorizationService {
                     completion: completion
                 )
 
-            case .unknownMobileNetwork:
-                completion(.error(UnsupportedCarrier()))
-                // TODO: -
-                self?.showConsolation("sim not recognized during discovery", on: viewController)
+            case .unknownMobileNetwork(let redirect):
+                self?.showDiscoveryUI(
+                    usingResource: redirect.redirectURI,
+                    scopes: scopes,
+                    fromViewController: viewController,
+                    completion: completion
+                )
                 break
             case .error(let error):
                 completion(.error(error))
                 // TODO: -
                 self?.showConsolation("an error occurred during discovery \(error)", on: viewController)
                 break
+            }
+        }
+    }
+
+    func showDiscoveryUI(usingResource resource: URL,
+                         scopes: [ScopeProtocol],
+                         fromViewController viewController: UIViewController,
+                         completion: @escaping AuthorizationCompletion) {
+
+        self.mobileNetworkSelectionService.requestUserNetworkSelection(
+            fromResource: resource,
+            fromCurrentViewController: viewController
+        ) { [weak self] result in
+            switch result {
+            case .networkInfo(let simInfo):
+                self?.performDiscovery(
+                    forSIMInfo: simInfo,
+                    scopes: scopes,
+                    fromViewController: viewController,
+                    completion: completion
+                )
+            case .error(let error):
+                completion(.error(error))
+            case .cancelled:
+                completion(.cancelled)
             }
         }
     }

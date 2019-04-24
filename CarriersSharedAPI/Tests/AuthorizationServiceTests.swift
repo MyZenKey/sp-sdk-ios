@@ -49,21 +49,27 @@ class MockOpenIdService: OpenIdServiceProtocol {
 }
 
 class MockMobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol {
+
     static let mockSuccess: SIMInfo = MockSIMs.tmobile
 
     var mockResponse: MobileNetworkSelectionUIResult = .networkInfo(MockMobileNetworkSelectionService.mockSuccess)
+
+    var lastResource: URL?
     var lastViewController: UIViewController?
     var lastCompletion: MobileNetworkSelectionCompletion?
 
     func clear() {
+        lastResource = nil
         lastViewController = nil
         lastCompletion = nil
     }
 
     func requestUserNetworkSelection(
+        fromResource resource: URL,
         fromCurrentViewController viewController: UIViewController,
         completion: @escaping MobileNetworkSelectionCompletion) {
 
+        self.lastResource = resource
         self.lastViewController = viewController
         self.lastCompletion = completion
 
@@ -76,7 +82,6 @@ class MockMobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol {
 }
 
 class MockDiscoveryService: DiscoveryServiceProtocol {
-
     static let mockSuccess = CarrierConfig(
         simInfo: MockSIMs.tmobile,
         openIdConfig: OpenIdConfig(
@@ -85,25 +90,40 @@ class MockDiscoveryService: DiscoveryServiceProtocol {
             issuer: URL.mocked
         )
     )
-    
-    var mockResponse: DiscoveryServiceResult = .knownMobileNetwork(MockDiscoveryService.mockSuccess)
+
+    static let mockRedirect = IssuerResponse.Redirect(
+        error: "foo", redirectURI: URL.mocked
+    )
+
     var lastSIMInfo: SIMInfo?
     var lastCompletion: DiscoveryServiceCompletion?
+
+    /// FIFO responses
+    var mockResponses: [DiscoveryServiceResult] = [
+        .knownMobileNetwork(MockDiscoveryService.mockSuccess)
+    ]
 
     func clear() {
         lastSIMInfo = nil
         lastCompletion = nil
-        mockResponse = .knownMobileNetwork(MockDiscoveryService.mockSuccess)
+        mockResponses = [
+            .knownMobileNetwork(MockDiscoveryService.mockSuccess)
+        ]
     }
 
     func discoverConfig(
-        forSIMInfo simInfo: SIMInfo,
+        forSIMInfo simInfo: SIMInfo?,
         completion: @escaping DiscoveryServiceCompletion) {
         lastSIMInfo = simInfo
         lastCompletion = completion
 
         DispatchQueue.main.async {
-            completion(self.mockResponse)
+            guard let result = self.mockResponses.first else {
+                XCTFail("not enough reponses configured")
+                return
+            }
+            self.mockResponses = Array(self.mockResponses.dropFirst())
+            completion(result)
         }
     }
 }
@@ -148,9 +168,10 @@ class AuthorizationServiceTests: XCTestCase {
             scopes: self.scopes,
             fromViewController: UIViewController()) { _ in }
         XCTAssertEqual(mockDiscoveryService.lastSIMInfo, MockSIMs.att)
+        XCTAssertNotNil(mockDiscoveryService.lastCompletion)
     }
 
-    func testDiscoveryCallsDiscoveryInsteadIfNoSIMPresent() {
+    func testDiscoveryCallsIfNoSIMPresent() {
         mockCarrierInfo.primarySIM = nil
         let expectedViewController = UIViewController()
         authorizationService.connectWithProjectVerify(
@@ -158,7 +179,7 @@ class AuthorizationServiceTests: XCTestCase {
             fromViewController: expectedViewController) { _ in }
 
         XCTAssertNil(mockDiscoveryService.lastSIMInfo)
-        XCTAssertEqual(mockNetworkSelectionService.lastViewController, expectedViewController)
+        XCTAssertNotNil(mockDiscoveryService.lastCompletion)
     }
 
     // MARK: - DiscoveryService Outputs
@@ -185,7 +206,7 @@ class AuthorizationServiceTests: XCTestCase {
     func testDiscoverError() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
         let mockError: DiscoveryServiceError = .networkError(.networkError(NSError.mocked))
-        mockDiscoveryService.mockResponse = .error(mockError)
+        mockDiscoveryService.mockResponses = [ .error(mockError) ]
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.connectWithProjectVerify(
             scopes: self.scopes,
@@ -293,8 +314,8 @@ class AuthorizationServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    func testNoSIMPassesOffToSecondaryDeviceFlow() {
-        mockCarrierInfo.primarySIM = nil
+    func testUnknownCarrierPassesOffToSecondaryDeviceFlow() {
+        mockSecondaryDeviceFlow()
         let expectation = XCTestExpectation(description: "async authorization")
         let expectedViewController = UIViewController()
         authorizationService.connectWithProjectVerify(
@@ -311,7 +332,7 @@ class AuthorizationServiceTests: XCTestCase {
     // MARK: - Secondary Device Flow Outputs
 
     func testSecondaryDeviceFlowSuccess() {
-        mockCarrierInfo.primarySIM = nil
+        mockSecondaryDeviceFlow()
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.connectWithProjectVerify(
             scopes: self.scopes,
@@ -330,7 +351,7 @@ class AuthorizationServiceTests: XCTestCase {
     }
 
     func testSecondaryDeviceFlowError() {
-        mockCarrierInfo.primarySIM = nil
+        mockSecondaryDeviceFlow()
         let expectedError: MobileNetworkSelectionUIError = .invalidMCCMNC
         mockNetworkSelectionService.mockResponse = .error(expectedError)
         let expectation = XCTestExpectation(description: "async authorization")
@@ -355,7 +376,7 @@ class AuthorizationServiceTests: XCTestCase {
     }
 
     func testSecondaryDeviceFlowCancel() {
-        mockCarrierInfo.primarySIM = nil
+        mockSecondaryDeviceFlow()
         mockNetworkSelectionService.mockResponse = .cancelled
         let expectation = XCTestExpectation(description: "async authorization")
         let expectedViewController = UIViewController()
@@ -369,5 +390,16 @@ class AuthorizationServiceTests: XCTestCase {
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
+    }
+}
+
+private extension AuthorizationServiceTests {
+    func mockSecondaryDeviceFlow() {
+        mockCarrierInfo.primarySIM = nil
+        mockDiscoveryService.mockResponses = [
+            .unknownMobileNetwork(MockDiscoveryService.mockRedirect),
+            .knownMobileNetwork(MockDiscoveryService.mockSuccess),
+        ]
+
     }
 }
