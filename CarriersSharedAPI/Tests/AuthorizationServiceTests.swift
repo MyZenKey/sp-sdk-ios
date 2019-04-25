@@ -50,9 +50,12 @@ class MockOpenIdService: OpenIdServiceProtocol {
 
 class MockMobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol {
 
-    static let mockSuccess: SIMInfo = MockSIMs.tmobile
+    static let mockSuccess: MobileNetworkSelectionResponse = MobileNetworkSelectionResponse(
+        simInfo: MockSIMs.tmobile,
+        loginHintToken: nil
+    )
 
-    var mockResponse: MobileNetworkSelectionUIResult = .networkInfo(MockMobileNetworkSelectionService.mockSuccess)
+    var mockResponse: MobileNetworkSelectionResult = .networkInfo(MockMobileNetworkSelectionService.mockSuccess)
 
     var lastResource: URL?
     var lastViewController: UIViewController?
@@ -352,7 +355,7 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testSecondaryDeviceFlowError() {
         mockSecondaryDeviceFlow()
-        let expectedError: MobileNetworkSelectionUIError = .invalidMCCMNC
+        let expectedError: MobileNetworkSelectionError = .invalidMCCMNC
         mockNetworkSelectionService.mockResponse = .error(expectedError)
         let expectation = XCTestExpectation(description: "async authorization")
         let expectedViewController = UIViewController()
@@ -364,8 +367,8 @@ class AuthorizationServiceTests: XCTestCase {
                     return
                 }
                 guard
-                    let networkSelectionError = error as? MobileNetworkSelectionUIError,
-                    case MobileNetworkSelectionUIError.invalidMCCMNC = networkSelectionError
+                    let networkSelectionError = error as? MobileNetworkSelectionError,
+                    case MobileNetworkSelectionError.invalidMCCMNC = networkSelectionError
                     else {
                         XCTFail("expected an error \(error) to match \(expectedError)")
                         return
@@ -400,6 +403,5 @@ private extension AuthorizationServiceTests {
             .unknownMobileNetwork(MockDiscoveryService.mockRedirect),
             .knownMobileNetwork(MockDiscoveryService.mockSuccess),
         ]
-
     }
 }

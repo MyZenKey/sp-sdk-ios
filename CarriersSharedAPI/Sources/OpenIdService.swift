@@ -46,6 +46,7 @@ struct OpenIdAuthorizationConfig: Equatable {
     let tokenEndpoint: URL
     let formattedScopes: String
     let redirectURL: URL
+    let loginHintToken: String?
     let state: String
 }
 
@@ -221,7 +222,12 @@ extension OpenIdService {
     static func createAuthorizationRequest(
         openIdServiceConfiguration: OIDServiceConfiguration,
         authorizationConfig: OpenIdAuthorizationConfig) -> OIDAuthorizationRequest {
-        
+
+        var additionalParams: [String: String] = [:]
+        if let loginHintToken = authorizationConfig.loginHintToken {
+            additionalParams["login_hint_token"] = loginHintToken
+        }
+
         let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
             configuration: openIdServiceConfiguration,
             clientId: authorizationConfig.clientId,
@@ -234,7 +240,7 @@ extension OpenIdService {
             codeVerifier: nil,
             codeChallenge: nil,
             codeChallengeMethod: nil,
-            additionalParameters: nil
+            additionalParameters: additionalParams
         )
         
         return request

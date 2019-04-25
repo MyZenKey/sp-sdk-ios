@@ -20,7 +20,10 @@ class Dependencies {
     )
 
     private(set) lazy var mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol = {
-        return MobileNetworkSelectionService(sdkConfig: self.sdkConfig)
+        return MobileNetworkSelectionService(
+            sdkConfig: self.sdkConfig,
+            mobileNetworkSelectionUI: MobileNetworkSelectionUI()
+        )
     }()
 
     let openIdService: OpenIdServiceProtocol = OpenIdService(
@@ -41,6 +44,7 @@ class Dependencies {
 extension Dependencies {
     var all: [Any] {
         return [
+            sdkConfig,
             carrierInfoService,
             discoveryService,
             openIdService,

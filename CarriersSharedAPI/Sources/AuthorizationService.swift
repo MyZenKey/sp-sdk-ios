@@ -60,12 +60,20 @@ extension AuthorizationService: AuthorizationServiceProtocol {
             forSIMInfo: carrierInfoService.primarySIM,
             scopes: scopes,
             fromViewController: viewController,
+            authroizationContextParameters: .none,
             completion: completion
         )
     }
 }
 
 private extension AuthorizationService {
+
+    struct AuthorizationContextParameters {
+        let loginHintToken: String?
+
+        static let none = AuthorizationContextParameters(loginHintToken: nil)
+    }
+
     // TODO: Remove this, just for qa
     func showConsolation(_ text: String, on viewController: UIViewController) {
         let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)
@@ -76,6 +84,7 @@ private extension AuthorizationService {
     func performDiscovery(forSIMInfo simInfo: SIMInfo?,
                           scopes: [ScopeProtocol],
                           fromViewController viewController: UIViewController,
+                          authroizationContextParameters: AuthorizationContextParameters,
                           completion: @escaping AuthorizationCompletion) {
 
         let sdkConfig = self.sdkConfig
@@ -90,6 +99,7 @@ private extension AuthorizationService {
                     tokenEndpoint: config.openIdConfig.tokenEndpoint,
                     formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
                     redirectURL: sdkConfig.redirectURL(forRoute: .authorize),
+                    loginHintToken: authroizationContextParameters.loginHintToken,
                     state: "demo-app-state"
                 )
 
@@ -126,11 +136,15 @@ private extension AuthorizationService {
             fromCurrentViewController: viewController
         ) { [weak self] result in
             switch result {
-            case .networkInfo(let simInfo):
+            case .networkInfo(let response):
+                let contextParams = AuthorizationContextParameters(
+                    loginHintToken: response.loginHintToken
+                )
                 self?.performDiscovery(
-                    forSIMInfo: simInfo,
+                    forSIMInfo: response.simInfo,
                     scopes: scopes,
                     fromViewController: viewController,
+                    authroizationContextParameters: contextParams,
                     completion: completion
                 )
             case .error(let error):

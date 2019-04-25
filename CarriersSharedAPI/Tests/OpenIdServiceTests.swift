@@ -58,6 +58,7 @@ class OpenIdServiceTests: XCTestCase {
         tokenEndpoint: URL(string: "http://rightpoint.com")!,
         formattedScopes: "openid",
         redirectURL: URL(string: "testapp://projectverify/authorize")!,
+        loginHintToken: nil,
         state: "bar"
     )
 

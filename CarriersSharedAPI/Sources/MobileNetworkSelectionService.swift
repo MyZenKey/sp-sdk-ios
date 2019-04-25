@@ -9,18 +9,23 @@
 import SafariServices
 import UIKit
 
-enum MobileNetworkSelectionUIResult {
-    case networkInfo(SIMInfo)
-    case error(MobileNetworkSelectionUIError)
+struct MobileNetworkSelectionResponse {
+    let simInfo: SIMInfo
+    let loginHintToken: String?
+}
+
+enum MobileNetworkSelectionResult {
+    case networkInfo(MobileNetworkSelectionResponse)
+    case error(MobileNetworkSelectionError)
     case cancelled
 }
 
-enum MobileNetworkSelectionUIError: Error {
+enum MobileNetworkSelectionError: Error {
     case invalidMCCMNC
     case stateMismatch
 }
 
-typealias MobileNetworkSelectionCompletion = (MobileNetworkSelectionUIResult) -> Void
+typealias MobileNetworkSelectionCompletion = (MobileNetworkSelectionResult) -> Void
 
 protocol MobileNetworkSelectionServiceProtocol: URLHandling {
     func requestUserNetworkSelection(
@@ -33,24 +38,23 @@ protocol MobileNetworkSelectionServiceProtocol: URLHandling {
 class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProtocol {
 
     private var state: State = .idle
-    private var sdkConfig: SDKConfig {
-        return ProjectVerifyAppDelegate.shared.sdkConfig
-    }
+    private let sdkConfig: SDKConfig
+    private let mobileNetworkSelectionUI: MobileNetworkSelectionUIProtocol
 
-    override init() {
+
+    init(sdkConfig: SDKConfig, mobileNetworkSelectionUI: MobileNetworkSelectionUIProtocol) {
+        self.sdkConfig = sdkConfig
+        self.mobileNetworkSelectionUI = mobileNetworkSelectionUI
         super.init()
     }
 
     func requestUserNetworkSelection(
         fromResource resource: URL,
         fromCurrentViewController viewController: UIViewController,
-        completion: @escaping ((MobileNetworkSelectionUIResult) -> Void)) {
+        completion: @escaping ((MobileNetworkSelectionResult) -> Void)) {
 
         guard case .idle = state else {
-            // complete any pending request with implicit cancellation
-            if case .requesting(_, _, _) = state {
-                conclude(result: .cancelled)
-            }
+            conclude(result: .cancelled)
             return
         }
 
@@ -62,23 +66,18 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
             state: "test-state"
         )
 
-        let safariController = SFSafariViewController(
-            url: request.url
-        )
+        state = .requesting(request, completion)
 
-        state = .requesting(request, safariController, completion)
-
-        safariController.delegate = self
-
-        if #available(iOS 11.0, *) {
-            safariController.dismissButtonStyle = .cancel
-        }
-
-        viewController.present(safariController, animated: true, completion: nil)
+        mobileNetworkSelectionUI.showMobileNetworkSelectionUI(
+            fromController: viewController,
+            usingURL: request.url,
+            onUIDidCancel: { [weak self] in
+                self?.conclude(result: .cancelled, cleanUpUI: false)
+        })
     }
 
     func resolve(url: URL) -> Bool {
-        guard case .requesting(let request, _, _) = state else {
+        guard case .requesting(let request, _) = state else {
             // no request in progress
             return false
         }
@@ -90,7 +89,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
 
 extension MobileNetworkSelectionService {
     enum State {
-        case requesting(Request, SFSafariViewController, MobileNetworkSelectionCompletion)
+        case requesting(Request, MobileNetworkSelectionCompletion)
         case idle
     }
 
@@ -106,6 +105,7 @@ extension MobileNetworkSelectionService {
 private extension MobileNetworkSelectionService {
     enum Keys: String {
         case mccmnc
+        case loginHintToken = "login_hint_token"
     }
 
     func resolve(request: Request, withURL url: URL) {
@@ -126,34 +126,32 @@ private extension MobileNetworkSelectionService {
                 return
         }
 
+        let hintToken: String? = response[Keys.loginHintToken.rawValue]
+
         let simInfo = mccmnc.toSIMInfo()
-        conclude(result: .networkInfo(simInfo))
+        conclude(result: .networkInfo(
+            MobileNetworkSelectionResponse(
+                simInfo: simInfo,
+                loginHintToken: hintToken
+            )
+        ))
     }
 
-    func conclude(result: MobileNetworkSelectionUIResult, cleanupController: Bool = true) {
-        guard case .requesting(_, let controller, let completion) = state else {
+    func conclude(result: MobileNetworkSelectionResult,
+                  cleanUpUI: Bool = true) {
+        guard case .requesting(_, let completion) = state else {
             return
         }
 
-        if cleanupController {
-            // remove the view controller and then invoke completion:
-            controller.dismiss(
-                animated: true,
-                completion: {
-                    completion(result)
-                    self.state = .idle
-            })
+        if (cleanUpUI) {
+            mobileNetworkSelectionUI.close {
+                completion(result)
+            }
         } else {
             completion(result)
-            state = .idle
         }
-    }
-}
 
-extension MobileNetworkSelectionService: SFSafariViewControllerDelegate {
-    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        // don't clean up, user dismissed the controller, it will be cleaned up, there is no race
-        conclude(result: .cancelled, cleanupController: false)
+        state = .idle
     }
 }
 
@@ -183,7 +181,7 @@ extension MobileNetworkSelectionService.Request {
     }
 }
 
-extension String {
+private extension String {
     func toSIMInfo() -> SIMInfo {
         precondition(count == 6, "only strings of 6 characters can be converted to SIMInfo")
         var copy = self
@@ -193,10 +191,60 @@ extension String {
     }
 
     /// removes and returns the last n characters from the string
-    private mutating func popLast(_ n: Int) -> Substring {
+    mutating func popLast(_ n: Int) -> Substring {
         let bounded = min(n, count)
         let substring = suffix(bounded)
         removeLast(bounded)
         return substring
+    }
+}
+
+protocol MobileNetworkSelectionUIProtocol {
+    func showMobileNetworkSelectionUI(
+        fromController viewController: UIViewController,
+        usingURL url: URL,
+        onUIDidCancel: @escaping () -> Void
+    )
+
+    func close(completion: @escaping () -> Void)
+}
+
+class MobileNetworkSelectionUI: NSObject, MobileNetworkSelectionUIProtocol, SFSafariViewControllerDelegate {
+
+    private var safariController: SFSafariViewController?
+    private var onUIDidCancel: (() -> Void)?
+
+    func showMobileNetworkSelectionUI(
+        fromController viewController: UIViewController,
+        usingURL url: URL,
+        onUIDidCancel: @escaping () -> Void) {
+
+        self.onUIDidCancel = onUIDidCancel
+
+        let safariController = SFSafariViewController(
+            url: url
+        )
+
+        safariController.delegate = self
+
+        if #available(iOS 11.0, *) {
+            safariController.dismissButtonStyle = .cancel
+        }
+
+        self.safariController = safariController
+
+        viewController.present(safariController, animated: true, completion: nil)
+    }
+
+    func close(completion: @escaping () -> Void) {
+        safariController?.dismiss(
+            animated: true,
+            completion: {
+                completion()
+        })
+    }
+
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        onUIDidCancel?()
     }
 }
