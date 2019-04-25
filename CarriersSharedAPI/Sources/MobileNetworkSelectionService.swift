@@ -48,8 +48,8 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
 
         guard case .idle = state else {
             // complete any pending request with implicit cancellation
-            if case .requesting(_, let completion) = state {
-                completion(.cancelled)
+            if case .requesting(_, _, _) = state {
+                conclude(result: .cancelled)
             }
             return
         }
@@ -62,11 +62,11 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
             state: "test-state"
         )
 
-        state = .requesting(request, completion)
-
         let safariController = SFSafariViewController(
             url: request.url
         )
+
+        state = .requesting(request, safariController, completion)
 
         safariController.delegate = self
 
@@ -78,7 +78,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
     }
 
     func resolve(url: URL) -> Bool {
-        guard case .requesting(let request, _) = state else {
+        guard case .requesting(let request, _, _) = state else {
             // no request in progress
             return false
         }
@@ -90,7 +90,8 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
 
 extension MobileNetworkSelectionService {
     enum State {
-        case requesting(Request, MobileNetworkSelectionCompletion), idle
+        case requesting(Request, SFSafariViewController, MobileNetworkSelectionCompletion)
+        case idle
     }
 
     struct Request {
@@ -109,11 +110,13 @@ private extension MobileNetworkSelectionService {
 
     func resolve(request: Request, withURL url: URL) {
         let response = ResponseURL(url: url)
-        guard response.hasMatchingState(request.state) else {
-            // completion mis match state error
-            conclude(result: .error(.stateMismatch))
-            return
-        }
+
+        // FIXME: jv endpoint isn't yet reflecting the state param
+//        guard response.hasMatchingState(request.state) else {
+//            // completion mis match state error
+//            conclude(result: .error(.stateMismatch))
+//            return
+//        }
 
         guard
             let mccmnc = response[Keys.mccmnc.rawValue],
@@ -127,19 +130,30 @@ private extension MobileNetworkSelectionService {
         conclude(result: .networkInfo(simInfo))
     }
 
-    func conclude(result: MobileNetworkSelectionUIResult) {
-        defer { state = .idle }
-        guard case .requesting(_, let completion) = state else {
+    func conclude(result: MobileNetworkSelectionUIResult, cleanupController: Bool = true) {
+        guard case .requesting(_, let controller, let completion) = state else {
             return
         }
 
-        completion(result)
+        if cleanupController {
+            // remove the view controller and then invoke completion:
+            controller.dismiss(
+                animated: true,
+                completion: {
+                    completion(result)
+                    self.state = .idle
+            })
+        } else {
+            completion(result)
+            state = .idle
+        }
     }
 }
 
 extension MobileNetworkSelectionService: SFSafariViewControllerDelegate {
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        conclude(result: .cancelled)
+        // don't clean up, user dismissed the controller, it will be cleaned up, there is no race
+        conclude(result: .cancelled, cleanupController: false)
     }
 }
 
