@@ -145,13 +145,13 @@ private extension AuthorizationService {
 public extension AuthorizationService {
     /// creates a new instance of an `AuthorizationService`
     convenience init() {
-        let appDelegate = ProjectVerifyAppDelegate.shared
+        let container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies
         self.init(
-            sdkConfig: appDelegate.sdkConfig,
-            discoveryService: Dependencies.resolve(),
-            openIdService: Dependencies.resolve(),
-            carrierInfoService: Dependencies.resolve(),
-            mobileNetworkSelectionService: Dependencies.resolve()
+            sdkConfig: container.resolve(),
+            discoveryService: container.resolve(),
+            openIdService: container.resolve(),
+            carrierInfoService: container.resolve(),
+            mobileNetworkSelectionService: container.resolve()
         )
     }
 }

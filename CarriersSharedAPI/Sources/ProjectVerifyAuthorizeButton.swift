@@ -43,31 +43,37 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 
     private var requestState: RequestState = .idle
 
-    private var authorizationService: AuthorizationServiceProtocol = AuthorizationService()
-    private var controllerContextProvider: CurrentControllerContextProvider = DefaultCurrentControllerContextProvider()
+    private var authorizationService: AuthorizationServiceProtocol
+    private var controllerContextProvider: CurrentControllerContextProvider
     
     public override init() {
+        self.authorizationService = AuthorizationService()
+        self.controllerContextProvider = DefaultCurrentControllerContextProvider()
         super.init()
         configureSelectors()
     }
-    
-    init(authorizationService: AuthorizationServiceProtocol = Dependencies.resolve(),
-         controllerContextProvider: CurrentControllerContextProvider = Dependencies.resolve(),
-         configCacheService: ConfigCacheServiceProtocol = Dependencies.resolve(),
-         carrierInfoService: CarrierInfoServiceProtocol = Dependencies.resolve()) {
+
+    init(authorizationService: AuthorizationServiceProtocol,
+         controllerContextProvider: CurrentControllerContextProvider,
+         configCacheService: ConfigCacheServiceProtocol,
+         carrierInfoService: CarrierInfoServiceProtocol) {
         self.authorizationService = authorizationService
         self.controllerContextProvider = controllerContextProvider
-        
-        super.init()
+        super.init(configCacheService: configCacheService,
+                   carrierInfoService: carrierInfoService)
         configureSelectors()
     }
     
     public override init(frame: CGRect) {
+        self.authorizationService = AuthorizationService()
+        self.controllerContextProvider = DefaultCurrentControllerContextProvider()
         super.init(frame: frame)
         configureSelectors()
     }
     
     public required init?(coder aDecoder: NSCoder) {
+        self.authorizationService = AuthorizationService()
+        self.controllerContextProvider = DefaultCurrentControllerContextProvider()
         super.init(coder: aDecoder)
         configureSelectors()
     }
