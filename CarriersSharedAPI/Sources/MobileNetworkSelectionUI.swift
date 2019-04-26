@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SafariServices
 
 protocol MobileNetworkSelectionUIProtocol {
     func showMobileNetworkSelectionUI(
