@@ -54,7 +54,13 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
         completion: @escaping ((MobileNetworkSelectionResult) -> Void)) {
 
         guard case .idle = state else {
-            conclude(result: .cancelled)
+            dismissUI {
+                self.conclude(result: .cancelled)
+                self.requestUserNetworkSelection(
+                    fromResource: resource,
+                    fromCurrentViewController: viewController,
+                    completion: completion)
+            }
             return
         }
 
@@ -72,7 +78,8 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
             fromController: viewController,
             usingURL: request.url,
             onUIDidCancel: { [weak self] in
-                self?.conclude(result: .cancelled, cleanUpUI: false)
+                // ui triggered the dismissal and will clean itself up, just call the completion
+                self?.conclude(result: .cancelled)
         })
     }
 
@@ -111,10 +118,10 @@ private extension MobileNetworkSelectionService {
     func resolve(request: Request, withURL url: URL) {
         let response = ResponseURL(url: url)
 
-        // FIXME: jv endpoint isn't yet reflecting the state param
+        // FIXME: jv endpoint isn't yet reflecting the state param, comment in when done
 //        guard response.hasMatchingState(request.state) else {
 //            // completion mis match state error
-//            conclude(result: .error(.stateMismatch))
+//            dismissAndUIAndConclude(result: .error(.stateMismatch))
 //            return
 //        }
 
@@ -122,14 +129,14 @@ private extension MobileNetworkSelectionService {
             let mccmnc = response[Keys.mccmnc.rawValue],
             mccmnc.count == 6
             else {
-                conclude(result: .error(.invalidMCCMNC))
+                dismissAndUIAndConclude(result: .error(.invalidMCCMNC))
                 return
         }
 
         let hintToken: String? = response[Keys.loginHintToken.rawValue]
 
         let simInfo = mccmnc.toSIMInfo()
-        conclude(result: .networkInfo(
+        dismissAndUIAndConclude(result: .networkInfo(
             MobileNetworkSelectionResponse(
                 simInfo: simInfo,
                 loginHintToken: hintToken
@@ -137,21 +144,24 @@ private extension MobileNetworkSelectionService {
         ))
     }
 
-    func conclude(result: MobileNetworkSelectionResult,
-                  cleanUpUI: Bool = true) {
+    func dismissUI(completion: @escaping () -> Void) {
+        mobileNetworkSelectionUI.close {
+            completion()
+        }
+    }
+
+    func conclude(result: MobileNetworkSelectionResult) {
+        defer { state = .idle }
         guard case .requesting(_, let completion) = state else {
             return
         }
+        completion(result)
+    }
 
-        if (cleanUpUI) {
-            mobileNetworkSelectionUI.close {
-                completion(result)
-            }
-        } else {
-            completion(result)
+    func dismissAndUIAndConclude(result: MobileNetworkSelectionResult) {
+        dismissUI {
+            self.conclude(result: result)
         }
-
-        state = .idle
     }
 }
 
@@ -196,55 +206,5 @@ private extension String {
         let substring = suffix(bounded)
         removeLast(bounded)
         return substring
-    }
-}
-
-protocol MobileNetworkSelectionUIProtocol {
-    func showMobileNetworkSelectionUI(
-        fromController viewController: UIViewController,
-        usingURL url: URL,
-        onUIDidCancel: @escaping () -> Void
-    )
-
-    func close(completion: @escaping () -> Void)
-}
-
-class MobileNetworkSelectionUI: NSObject, MobileNetworkSelectionUIProtocol, SFSafariViewControllerDelegate {
-
-    private var safariController: SFSafariViewController?
-    private var onUIDidCancel: (() -> Void)?
-
-    func showMobileNetworkSelectionUI(
-        fromController viewController: UIViewController,
-        usingURL url: URL,
-        onUIDidCancel: @escaping () -> Void) {
-
-        self.onUIDidCancel = onUIDidCancel
-
-        let safariController = SFSafariViewController(
-            url: url
-        )
-
-        safariController.delegate = self
-
-        if #available(iOS 11.0, *) {
-            safariController.dismissButtonStyle = .cancel
-        }
-
-        self.safariController = safariController
-
-        viewController.present(safariController, animated: true, completion: nil)
-    }
-
-    func close(completion: @escaping () -> Void) {
-        safariController?.dismiss(
-            animated: true,
-            completion: {
-                completion()
-        })
-    }
-
-    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        onUIDidCancel?()
     }
 }
