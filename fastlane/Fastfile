@@ -87,7 +87,10 @@ platform :ios do
       sh "jazzy --clean --output #{jazzy_output}"
     end
     zip(path: jazzy_output, output_path: jazzy_artifacts)
+  end
 
+  desc "Posts Docs to Slack"
+  lane :post_docs do
     # Private token set in Env
     token = ENV['CIRCLE_API_TOKEN']
     # These are already in the Circle environment
@@ -103,7 +106,7 @@ platform :ios do
       results = fetcher.fetch_queries(queries)
       docs_url = results.url_for_query(docs)
       if !docs_url.nil?
-        slack("[Documentation](#{docs_url}) for iOS Provider SDK – build number: #{build_number}", success: true)
+        slack(mesage: "[Documentation](#{docs_url}) for iOS Provider SDK – build number: #{build_number}", success: true)
       else
         slack(message: "Unable to find documentation artifacts!", success: false)
       end

@@ -73,6 +73,10 @@ jobs:
           # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/15
           path: /Users/distiller/project/docs.zip
           destination: docs
+      - run:
+          name: PostDocs
+          command: |
+            bundle exec fastlane post_docs
   develop:
     <<: *_defaults
     steps:
