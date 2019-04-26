@@ -400,4 +400,59 @@ class OpenIdServiceTests: XCTestCase {
         
         wait(for: [expectation], timeout: timeout)
     }
+
+
+    // MARK: - Request Building
+
+    func testBuildsCorrectRequestFromConfig() {
+        let authConfig = OpenIdAuthorizationConfig(
+            simInfo: MockSIMs.tmobile,
+            clientId: "1234",
+            authorizationEndpoint: URL.mocked,
+            tokenEndpoint: URL.mocked,
+            formattedScopes: "openid profile email",
+            redirectURL: URL.mocked,
+            loginHintToken: nil,
+            state: "foo")
+        let serviceConfig = OIDServiceConfiguration(
+            authorizationEndpoint: URL.mocked,
+            tokenEndpoint: URL.mocked
+        )
+        let request = OpenIdService.createAuthorizationRequest(
+            openIdServiceConfiguration: serviceConfig,
+            authorizationConfig: authConfig
+        )
+
+        let url: URL = request.authorizationRequestURL()
+        let expectdURL = URL(
+            string: "rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=rightpoint.com&state=foo&response_type=code"
+        )!
+        XCTAssertEqual(url, expectdURL)
+    }
+
+    func testBuildsCorrectRequestFromConfigWithLoginHint() {
+        let authConfig = OpenIdAuthorizationConfig(
+            simInfo: MockSIMs.tmobile,
+            clientId: "1234",
+            authorizationEndpoint: URL.mocked,
+            tokenEndpoint: URL.mocked,
+            formattedScopes: "openid profile email",
+            redirectURL: URL.mocked,
+            loginHintToken: "mocktoken",
+            state: "foo")
+        let serviceConfig = OIDServiceConfiguration(
+            authorizationEndpoint: URL.mocked,
+            tokenEndpoint: URL.mocked
+        )
+        let request = OpenIdService.createAuthorizationRequest(
+            openIdServiceConfiguration: serviceConfig,
+            authorizationConfig: authConfig
+        )
+
+        let url: URL = request.authorizationRequestURL()
+        let expectdURL = URL(
+            string: "rightpoint.com?client_id=1234&login_hint_token=mocktoken&redirect_uri=rightpoint.com&scope=openid%20profile%20email&state=foo&response_type=code"
+        )!
+        XCTAssertEqual(url, expectdURL)
+    }
 }
