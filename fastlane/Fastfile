@@ -7,6 +7,7 @@ default_platform :ios
 # Set by build environment
 # FL_HOCKEY_API_TOKEN
 # RZ_KEYCHAIN_PASSWORD
+# CIRCLE_API_TOKEN
 # SLACK_URL - set the hook URL in the CircleCI environment
 
 # defined in config
@@ -78,10 +79,37 @@ platform :ios do
 
   desc "Generates Docs"
   lane :generate_docs do
+
+    jazzy_output = ENV['JAZZY_OUTPUT']
+    jazzy_artifacts = ENV['JAZZY_ARTIFACTS']
+
     Dir.chdir('../') do
-      sh "jazzy --clean --output #{ENV['JAZZY_OUTPUT']}"
+      sh "jazzy --clean --output #{jazzy_output}"
     end
-    zip(path: ENV['JAZZY_OUTPUT'], output_path: ENV['JAZZY_ARTIFACTS'])
+    zip(path: jazzy_output, output_path: jazzy_artifacts)
+
+    # Private token set in Env
+    token = ENV['CIRCLE_API_TOKEN']
+    # These are already in the Circle environment
+    # https://circleci.com/docs/2.0/env-vars/#build-specific-environment-variables
+    username = ENV['CIRCLE_PROJECT_USERNAME']
+    reponame = ENV['CIRCLE_PROJECT_REPONAME']
+    build = ENV['CIRCLE_BUILD_NUM']
+
+    if !(token.nil? or username.nil? or reponame.nil? or build.nil?)
+      fetcher = CircleciArtifact::Fetcher.new(token: token, username: username, reponame: reponame, build: build)
+      docs = CircleciArtifact::Query.new(url_substring: "docs")
+      queries = [docs]
+      results = fetcher.fetch_queries(queries)
+      docs_url = results.url_for_query(docs)
+      if !docs_url.nil?
+        slack("[Documentation](#{docs_url}) for iOS Provider SDK – build number: #{build_number}", success: true)
+      else
+        slack(message: "Unable to find documentation artifacts!", success: false)
+      end
+    else
+      slack(message: "Missing CircleCI artifacts. Most likely the [CIRCLE_API_TOKEN](https://github.com/Raizlabs/circleci_artifact#getting-started) is not set, or not running on CircleCI.", success: false)
+    end
   end
 
   # desc "Runs Code Coverage"
