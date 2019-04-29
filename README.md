@@ -36,7 +36,7 @@ Then run `pod install`. This adds the local source as well as `AppAuth` to your 
 
 ## Carthage
 
-More information will be coming soon about *Carthage* support. 
+More information coming soon - *Carthage* may be supported in the future. 
 
 ## Manual
 
@@ -205,3 +205,6 @@ For technical questions, please contact [support](mailto:support@mobileauthtaskf
 ## Proprietary and Confidential 
 <span style="color:blue"></style>NOTICE: <span style="color:black"></style>
 XCI JV, LLC PROPRIETARY. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.
+
+## Last Change
+The last change to this document occurred on: April 29, 2019
