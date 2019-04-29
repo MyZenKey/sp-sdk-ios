@@ -106,7 +106,7 @@ platform :ios do
       results = fetcher.fetch_queries(queries)
       docs_url = results.url_for_query(docs)
       if !docs_url.nil?
-        slack(mesage: "[Documentation](#{docs_url}) for iOS Provider SDK – build number: #{build_number}", success: true)
+        slack(message: "[Documentation](#{docs_url}) for iOS Provider SDK – build number: #{build_number}", success: true)
       else
         slack(message: "Unable to find documentation artifacts!", success: false)
       end
