@@ -81,6 +81,26 @@ Retrieve your application's client id from the project verify dashboard. Add the
 	</array>
 ```
 
+### Custom URL Schemes
+
+If you would like to use universal links for your redirect scheme, it is possible to configure a custom URL scheme and a custom url host.
+
+The following keys are made available for you to customize the structure of the redirect url:
+```xml
+	<key>ProjectVerifyCustomScheme</key>
+	<string>{your application's custom scheme}</string>
+    <key>ProjectVerifyCustomHost</key>
+	<string>{your application's custom host}</string>
+```
+**Note:** for schemes other than `https`, you must add the scheme to your application's `CFBundleURLTypes` list.
+
+Redirect urls will require the universal links to route the following paths to the application: `/authorize` and `/discoveryui`.
+For more information about universal links, read Apple's [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links).
+
+#### A Note on Custom URL Schemes
+
+It is strongly recommended that you use either the default url scheme (your Project Verify client Id) or a universal linking scheme to support Project Verify Redirects. Other url schemes may be owned by other applications and can introduce unexpected behavior. For more information, view [Apple's documentation](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) on defining a custom url scheme.
+
 ## Instantiate Project Verify in your Application Delegate
 
 First you must configure your application delegate to support project verify:
