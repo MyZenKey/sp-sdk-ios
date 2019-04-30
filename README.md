@@ -81,18 +81,22 @@ Retrieve your application's client id from the project verify dashboard. Add the
 	</array>
 ```
 
+For examples of how to configure the property list, see the [Social App](./Example/SocialApp), and [Bank App](./Example/BankApp).
+
 ### Custom URL Schemes
 
 If you would like to use universal links for your redirect scheme, it is possible to configure a custom URL scheme and a custom url host.
 
 The following keys are made available for you to customize the structure of the redirect url:
 ```xml
-	<key>ProjectVerifyCustomScheme</key>
-	<string>{your application's custom scheme}</string>
+    <key>ProjectVerifyCustomScheme</key>
+    <string>{your application's custom scheme}</string>
     <key>ProjectVerifyCustomHost</key>
-	<string>{your application's custom host}</string>
+    <string>{your application's custom host}</string>
 ```
 **Note:** for schemes other than `https`, you must add the scheme to your application's `CFBundleURLTypes` list.
+
+For an example of how the configure property list for these custom keys, see the [Photo App](./Example/PhotoApp).
 
 Redirect urls will require the universal links to route the following paths to the application: `/authorize` and `/discoveryui`.
 For more information about universal links, read Apple's [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links).
