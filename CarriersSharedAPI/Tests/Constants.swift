@@ -31,3 +31,15 @@ struct MockSIMs {
     static let tmobile = SIMInfo(mcc: "310", mnc: "210")
     static let att = SIMInfo(mcc: "310", mnc: "410")
 }
+
+extension URL {
+    static var mocked: URL {
+        return URL(string: "rightpoint.com")!
+    }
+}
+
+extension NSError {
+    static var mocked: NSError {
+        return NSError(domain: "mockerror", code: 0, userInfo: [:])
+    }
+}

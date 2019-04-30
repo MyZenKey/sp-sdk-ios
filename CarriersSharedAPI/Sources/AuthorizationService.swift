@@ -34,13 +34,19 @@ public class AuthorizationService {
     let sdkConfig: SDKConfig
     let discoveryService: DiscoveryServiceProtocol
     let openIdService: OpenIdServiceProtocol
+    let carrierInfoService: CarrierInfoServiceProtocol
+    let mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol
 
     init(sdkConfig: SDKConfig,
          discoveryService: DiscoveryServiceProtocol,
-         openIdService: OpenIdServiceProtocol) {
+         openIdService: OpenIdServiceProtocol,
+         carrierInfoService: CarrierInfoServiceProtocol,
+         mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol) {
         self.sdkConfig = sdkConfig
         self.discoveryService = discoveryService
         self.openIdService = openIdService
+        self.carrierInfoService = carrierInfoService
+        self.mobileNetworkSelectionService = mobileNetworkSelectionService
     }
 }
 
@@ -49,21 +55,51 @@ extension AuthorizationService: AuthorizationServiceProtocol {
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
         completion: @escaping AuthorizationCompletion) {
-        
+
+        performDiscovery(
+            forSIMInfo: carrierInfoService.primarySIM,
+            scopes: scopes,
+            fromViewController: viewController,
+            authroizationContextParameters: .none,
+            completion: completion
+        )
+    }
+}
+
+private extension AuthorizationService {
+
+    struct AuthorizationContextParameters {
+        let loginHintToken: String?
+
+        static let none = AuthorizationContextParameters(loginHintToken: nil)
+    }
+
+    // TODO: Remove this, just for qa
+    func showConsolation(_ text: String, on viewController: UIViewController) {
+        let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)
+        controller.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
+        viewController.present(controller, animated: true, completion: nil)
+    }
+
+    func performDiscovery(forSIMInfo simInfo: SIMInfo?,
+                          scopes: [ScopeProtocol],
+                          fromViewController viewController: UIViewController,
+                          authroizationContextParameters: AuthorizationContextParameters,
+                          completion: @escaping AuthorizationCompletion) {
+
         let sdkConfig = self.sdkConfig
-        
-        discoveryService.discoverConfig() { [weak self] result in
+        discoveryService.discoverConfig(forSIMInfo: simInfo) { [weak self] result in
             switch result {
             case .knownMobileNetwork(let config):
-                
+
                 let authorizationConfig = OpenIdAuthorizationConfig(
                     simInfo: config.simInfo,
                     clientId: sdkConfig.clientId,
-                    // TODO: fix these forcing optionals here and strongly type upstream
                     authorizationEndpoint: config.openIdConfig.authorizationEndpoint,
                     tokenEndpoint: config.openIdConfig.tokenEndpoint,
                     formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
-                    redirectURL: sdkConfig.redirectURL,
+                    redirectURL: sdkConfig.redirectURL(forRoute: .authorize),
+                    loginHintToken: authroizationContextParameters.loginHintToken,
                     state: "demo-app-state"
                 )
 
@@ -72,16 +108,14 @@ extension AuthorizationService: AuthorizationServiceProtocol {
                     authorizationConfig: authorizationConfig,
                     completion: completion
                 )
-            case .unknownMobileNetwork:
-                completion(.error(UnsupportedCarrier()))
-                // TODO: -
-                self?.showConsolation("sim not recognized during discovery", on: viewController)
-                break
-            case .noMobileNetwork:
-                // TODO: -
-                // secondary device flow
-                completion(.error(UnknownError()))
-                self?.showConsolation("no sim set up to use for discovery", on: viewController)
+
+            case .unknownMobileNetwork(let redirect):
+                self?.showDiscoveryUI(
+                    usingResource: redirect.redirectURI,
+                    scopes: scopes,
+                    fromViewController: viewController,
+                    completion: completion
+                )
                 break
             case .error(let error):
                 completion(.error(error))
@@ -91,26 +125,47 @@ extension AuthorizationService: AuthorizationServiceProtocol {
             }
         }
     }
-}
 
-private extension AuthorizationService {
-    // TODO: Remove this, just for qa
-    func showConsolation(_ text: String, on viewController: UIViewController) {
-        let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)
-        controller.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
-        viewController.present(controller, animated: true, completion: nil)
+    func showDiscoveryUI(usingResource resource: URL,
+                         scopes: [ScopeProtocol],
+                         fromViewController viewController: UIViewController,
+                         completion: @escaping AuthorizationCompletion) {
+
+        self.mobileNetworkSelectionService.requestUserNetworkSelection(
+            fromResource: resource,
+            fromCurrentViewController: viewController
+        ) { [weak self] result in
+            switch result {
+            case .networkInfo(let response):
+                let contextParams = AuthorizationContextParameters(
+                    loginHintToken: response.loginHintToken
+                )
+                self?.performDiscovery(
+                    forSIMInfo: response.simInfo,
+                    scopes: scopes,
+                    fromViewController: viewController,
+                    authroizationContextParameters: contextParams,
+                    completion: completion
+                )
+            case .error(let error):
+                completion(.error(error))
+            case .cancelled:
+                completion(.cancelled)
+            }
+        }
     }
 }
 
 public extension AuthorizationService {
-
     /// creates a new instance of an `AuthorizationService`
     convenience init() {
-        let appDelegate = ProjectVerifyAppDelegate.shared
+        let container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies
         self.init(
-            sdkConfig: appDelegate.sdkConfig,
-            discoveryService: Dependencies.resolve(),
-            openIdService: Dependencies.resolve()
+            sdkConfig: container.resolve(),
+            discoveryService: container.resolve(),
+            openIdService: container.resolve(),
+            carrierInfoService: container.resolve(),
+            mobileNetworkSelectionService: container.resolve()
         )
     }
 }

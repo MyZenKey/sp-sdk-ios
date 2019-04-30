@@ -26,9 +26,7 @@ public class ProjectVerifyAppDelegate {
     /// instances is unsupported.
     public static let shared = ProjectVerifyAppDelegate()
 
-    let dependencies = Dependencies()
-
-    private(set) var sdkConfig = SDKConfig()
+    private(set) var dependencies: Dependencies!
 
     /// The entry point for the ProjectVerifyLogin SDK. You should call this method during your
     /// applicaiton's `application(_:didFinishLaunchingWithOptions:)` method before returning.
@@ -47,7 +45,10 @@ public class ProjectVerifyAppDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         // initialize sdk config
         do {
-            self.sdkConfig = try SDKConfig.load(fromBundle: Bundle.main)
+
+            let sdkConfig = try SDKConfig.load(fromBundle: Bundle.main)
+            self.dependencies = Dependencies(sdkConfig: sdkConfig)
+
         } catch {
             fatalError("Bundle configuration error: \(error)")
         }
@@ -73,17 +74,25 @@ public class ProjectVerifyAppDelegate {
 
         // This scheme is project verify specifc and any requests sent to this scheme should be
         // handled by us.
-        guard url.scheme == sdkConfig.redirectURL.scheme else {
+        guard url.scheme == dependencies.sdkConfig.redirectScheme else {
             return false
         }
 
-        // concluding an auth flow:
-        dependencies.openIdService.concludeAuthorizationFlow(url: url)
+        // make sure we have a route this sdk can handle:
+        guard let route = Route(rawValue: url.path) else {
+            return false
+        }
 
+        let service: URLHandling
+        switch route {
+        case .authorize:
+            service = dependencies.openIdService
+        case .discoveryUI:
+            service = dependencies.mobileNetworkSelectionService
         // TODO: - We don't have a spec for other states that might be resolved via this url.
         // add those here when we do
+        }
 
-        // unhandled
-        return false
+        return service.resolve(url: url)
     }
 }

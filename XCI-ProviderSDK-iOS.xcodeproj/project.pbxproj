@@ -26,6 +26,8 @@
 		23F88F5E2225AD6600A5F5D9 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5D2225AD6500A5F5D9 /* Result.swift */; };
 		23F88F602226086600A5F5D9 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5F2226086600A5F5D9 /* Scope.swift */; };
 		8A37A010226142CC001FE65D /* CurrentControllerContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A00F226142CC001FE65D /* CurrentControllerContextProvider.swift */; };
+		8A37A013226659A5001FE65D /* ProjectVerifyHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A012226659A5001FE65D /* ProjectVerifyHost.swift */; };
+		8A37A022226659B3001FE65D /* MobileNetworkSelectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A021226659B3001FE65D /* MobileNetworkSelectionService.swift */; };
 		8A3FAB1C224055DD00767A03 /* ConfigCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */; };
 		8A48895122555345006337EC /* ProjectVerifyAuthorizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48895022555345006337EC /* ProjectVerifyAuthorizeButton.swift */; };
 		8A5C3F8B225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5C3F8A225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift */; };
@@ -35,7 +37,10 @@
 		8A80823D2257CBBF00FCF691 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A80823C2257CBBF00FCF691 /* Localizable.strings */; };
 		8A80823F2257CDF100FCF691 /* LocalizationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A80823E2257CDF100FCF691 /* LocalizationUtils.swift */; };
 		8A9DEC42224A9B2A00E010EB /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A9DEC41224A9B2A00E010EB /* AppAuth.framework */; };
+		8ABF75462268FF9200A81F50 /* ResponseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABF75452268FF9200A81F50 /* ResponseURL.swift */; };
+		8ABF7548226A0BD900A81F50 /* URLHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABF7547226A0BD900A81F50 /* URLHandling.swift */; };
 		8AD167BC224EB8D3005C1CA3 /* OpenIdConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD167BB224EB8D3005C1CA3 /* OpenIdConfig.swift */; };
+		8AEFF02C22736011001CF41D /* MobileNetworkSelectionUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEFF02B22736011001CF41D /* MobileNetworkSelectionUI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -183,6 +188,8 @@
 		23F88F5F2226086600A5F5D9 /* Scope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
 		8A37A00022611061001FE65D /* ProjectVerifyAuthorizeButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerifyAuthorizeButtonTests.swift; sourceTree = "<group>"; };
 		8A37A00F226142CC001FE65D /* CurrentControllerContextProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentControllerContextProvider.swift; sourceTree = "<group>"; };
+		8A37A012226659A5001FE65D /* ProjectVerifyHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerifyHost.swift; sourceTree = "<group>"; };
+		8A37A021226659B3001FE65D /* MobileNetworkSelectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionService.swift; sourceTree = "<group>"; };
 		8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCacheService.swift; sourceTree = "<group>"; };
 		8A4888D122550A75006337EC /* AppAuth.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppAuth.xcodeproj; path = "AppAuth-iOS/AppAuth.xcodeproj"; sourceTree = "<group>"; };
 		8A48895022555345006337EC /* ProjectVerifyAuthorizeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerifyAuthorizeButton.swift; sourceTree = "<group>"; };
@@ -194,7 +201,11 @@
 		8A80823C2257CBBF00FCF691 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		8A80823E2257CDF100FCF691 /* LocalizationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationUtils.swift; sourceTree = "<group>"; };
 		8A9DEC41224A9B2A00E010EB /* AppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8ABF75452268FF9200A81F50 /* ResponseURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseURL.swift; sourceTree = "<group>"; };
+		8ABF7547226A0BD900A81F50 /* URLHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLHandling.swift; sourceTree = "<group>"; };
+		8ABF7549226A1C9F00A81F50 /* MobileNetworkSelectionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionServiceTests.swift; sourceTree = "<group>"; };
 		8AD167BB224EB8D3005C1CA3 /* OpenIdConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdConfig.swift; sourceTree = "<group>"; };
+		8AEFF02B22736011001CF41D /* MobileNetworkSelectionUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionUI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +260,11 @@
 				8A5C3F99225E93EE0013DEC3 /* ImageUtils.swift */,
 				8A5C3F9B225E9B190013DEC3 /* ProjectVerifyBrandedButton.swift */,
 				8A37A00F226142CC001FE65D /* CurrentControllerContextProvider.swift */,
+				8A37A012226659A5001FE65D /* ProjectVerifyHost.swift */,
+				8A37A021226659B3001FE65D /* MobileNetworkSelectionService.swift */,
+				8ABF75452268FF9200A81F50 /* ResponseURL.swift */,
+				8ABF7547226A0BD900A81F50 /* URLHandling.swift */,
+				8AEFF02B22736011001CF41D /* MobileNetworkSelectionUI.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -269,6 +285,7 @@
 				2340CAAB2231D253009556FE /* SDKConfigTests.swift */,
 				8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */,
 				8A37A00022611061001FE65D /* ProjectVerifyAuthorizeButtonTests.swift */,
+				8ABF7549226A1C9F00A81F50 /* MobileNetworkSelectionServiceTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -536,10 +553,12 @@
 				23F88F38221F2B0E00A5F5D9 /* SIMInfo.swift in Sources */,
 				23F88F5E2225AD6600A5F5D9 /* Result.swift in Sources */,
 				8A5C3F9A225E93EE0013DEC3 /* ImageUtils.swift in Sources */,
+				8AEFF02C22736011001CF41D /* MobileNetworkSelectionUI.swift in Sources */,
 				8A3FAB1C224055DD00767A03 /* ConfigCacheService.swift in Sources */,
 				8AD167BC224EB8D3005C1CA3 /* OpenIdConfig.swift in Sources */,
 				23F88F3E221F433900A5F5D9 /* MobileNetworkInfoProvider.swift in Sources */,
 				23196D9322309173005393AB /* OpenIdURLResolver.swift in Sources */,
+				8A37A022226659B3001FE65D /* MobileNetworkSelectionService.swift in Sources */,
 				8A5C3F8B225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift in Sources */,
 				2365C04D2236D31F00E0ED4A /* AuthorizationError.swift in Sources */,
 				23F88F4D2224579900A5F5D9 /* CarrierInfoService.swift in Sources */,
@@ -547,12 +566,15 @@
 				231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */,
 				8A48895122555345006337EC /* ProjectVerifyAuthorizeButton.swift in Sources */,
 				23F88F3C221F31B800A5F5D9 /* Carrier.swift in Sources */,
+				8A37A013226659A5001FE65D /* ProjectVerifyHost.swift in Sources */,
 				8A5C3F9C225E9B190013DEC3 /* ProjectVerifyBrandedButton.swift in Sources */,
 				23F88F44222080C800A5F5D9 /* DiscoveryService.swift in Sources */,
 				23F88F542224738A00A5F5D9 /* NetworkService.swift in Sources */,
 				8A80823F2257CDF100FCF691 /* LocalizationUtils.swift in Sources */,
 				231FFB9C221C6DE500E2B1BA /* SDKConfig.swift in Sources */,
+				8ABF75462268FF9200A81F50 /* ResponseURL.swift in Sources */,
 				23B524ED22152129002124D4 /* ProjectVerifyAppDelegate.swift in Sources */,
+				8ABF7548226A0BD900A81F50 /* URLHandling.swift in Sources */,
 				231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */,
 				23F88F602226086600A5F5D9 /* Scope.swift in Sources */,
 				236AC638222720E600E7C900 /* OpenIdService.swift in Sources */,

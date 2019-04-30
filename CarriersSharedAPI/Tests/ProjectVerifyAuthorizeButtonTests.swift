@@ -64,7 +64,12 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
     let mockControllerProvider = MockCurrentControllerContextProvider()
     let mockAuthorizationService = MockAuthorizationService()
 
-    var button = ProjectVerifyAuthorizeButton()
+    lazy var button = ProjectVerifyAuthorizeButton(
+        authorizationService: mockAuthorizationService,
+        controllerContextProvider: mockControllerProvider,
+        configCacheService: MockConfigCacheService(),
+        carrierInfoService: MockCarrierInfoService()
+    )
     
     override func setUp() {
         super.setUp()
@@ -73,7 +78,9 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         
         button = ProjectVerifyAuthorizeButton(
             authorizationService: mockAuthorizationService,
-            controllerContextProvider: mockControllerProvider
+            controllerContextProvider: mockControllerProvider,
+            configCacheService: MockConfigCacheService(),
+            carrierInfoService: MockCarrierInfoService()
         )
     }
     

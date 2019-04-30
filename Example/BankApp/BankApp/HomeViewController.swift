@@ -66,8 +66,13 @@ class HomeViewController: UIViewController {
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide = view.safeAreaLayoutGuide
-        
+        let safeAreaGuide: UILayoutGuide
+        if #available(iOS 11.0, *) {
+            safeAreaGuide = view.safeAreaLayoutGuide
+        } else {
+            // Fallback on earlier versions
+            safeAreaGuide = view.layoutMarginsGuide
+        }
         
         view.addSubview(gradientView)
         view.addSubview(logo)

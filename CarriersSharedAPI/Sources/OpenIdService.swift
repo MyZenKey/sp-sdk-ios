@@ -46,10 +46,11 @@ struct OpenIdAuthorizationConfig: Equatable {
     let tokenEndpoint: URL
     let formattedScopes: String
     let redirectURL: URL
+    let loginHintToken: String?
     let state: String
 }
 
-protocol OpenIdServiceProtocol {
+protocol OpenIdServiceProtocol: URLHandling {
     func authorize(
         fromViewController viewController: UIViewController,
         authorizationConfig: OpenIdAuthorizationConfig,
@@ -59,8 +60,6 @@ protocol OpenIdServiceProtocol {
     var authorizationInProgress: Bool { get }
 
     func cancelCurrentAuthorizationSession()
-
-    func concludeAuthorizationFlow(url: URL)
 }
 
 class PendingSessionStorage: OpenIdExternalSessionStateStorage {
@@ -71,8 +70,6 @@ class OpenIdService {
     enum ResponseKeys: String {
         case state
         case code
-        case error
-        case errorDescription = "error_description"
     }
 
     enum State {
@@ -153,7 +150,7 @@ extension OpenIdService: OpenIdServiceProtocol {
         concludeAuthorizationFlow(result: .cancelled)
     }
 
-    func concludeAuthorizationFlow(url: URL) {
+    func resolve(url: URL) -> Bool {
         // NOTE: this logic replicates the functionality in OIDAuthorizationService.m
         // - (BOOL)resumeExternalUserAgentFlowWithURL:(NSURL *)URL
         // Because AppAuth is designed around the OAuth 2.0 spec for native apps
@@ -166,51 +163,43 @@ extension OpenIdService: OpenIdServiceProtocol {
         // ensure valid state:
         guard case .inProgress(let request, let simInfo, _, _) = state else {
             // there is no request, return
-            return
+            return false
         }
 
-        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        resolve(request: request, forSIMInfo: simInfo, withURL: url)
+        return true
+    }
 
-        // duplicate keys are unsupported, let's reduce to a dictionary:
-        let queryDictionary: [String: String] = (components?.queryItems ?? [])
-            .reduce([:]) { accumulator, item in
-                var accumulator = accumulator
-                if let value = item.value {
-                    accumulator[item.name] = value
-                }
-                return accumulator
-        }
+    private func resolve(
+        request: OIDAuthorizationRequest,
+        forSIMInfo simInfo: SIMInfo,
+        withURL url: URL) {
 
-        // checks for an OAuth error response as per RFC6749 Section 4.1.2.1
-        let errorId = queryDictionary[ResponseKeys.error.rawValue]
-        guard errorId == nil else {
-            let errorId = errorId!
-            let errorDescription = queryDictionary[ResponseKeys.errorDescription.rawValue]
-            let errorValue = OpenIdService.errorValue(
-                fromIdentifier: errorId,
-                description: errorDescription
-            )
-            concludeAuthorizationFlow(result: .error(errorValue))
+        let response = ResponseURL(url: url)
+        let error = response.error
+        guard error == nil else {
+            concludeAuthorizationFlow(result: .error(error!))
             return
         }
 
         // no error, should be a valid OAuth 2.0 response
         guard
-            let inboundState = queryDictionary[ResponseKeys.state.rawValue],
-            inboundState == request.state else {
+            let state = request.state,
+            response.hasMatchingState(state)
+            else {
                 concludeAuthorizationFlow(result: .error(AuthorizationError.stateMismatch))
                 return
         }
 
         // extract the code
-        guard let code = queryDictionary[ResponseKeys.code.rawValue] else {
-                concludeAuthorizationFlow(result: .error(AuthorizationError.missingAuthCode))
-                return
+        guard let code = response[ResponseKeys.code.rawValue] else {
+            concludeAuthorizationFlow(result: .error(AuthorizationError.missingAuthCode))
+            return
         }
 
         // success:
         concludeAuthorizationFlow(result: .code(
-                AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
+            AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
             )
         )
     }
@@ -233,7 +222,12 @@ extension OpenIdService {
     static func createAuthorizationRequest(
         openIdServiceConfiguration: OIDServiceConfiguration,
         authorizationConfig: OpenIdAuthorizationConfig) -> OIDAuthorizationRequest {
-        
+
+        var additionalParams: [String: String] = [:]
+        if let loginHintToken = authorizationConfig.loginHintToken {
+            additionalParams["login_hint_token"] = loginHintToken
+        }
+
         let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
             configuration: openIdServiceConfiguration,
             clientId: authorizationConfig.clientId,
@@ -246,21 +240,9 @@ extension OpenIdService {
             codeVerifier: nil,
             codeChallenge: nil,
             codeChallengeMethod: nil,
-            additionalParameters: nil
+            additionalParameters: additionalParams
         )
         
         return request
-    }
-
-    
-    static func errorValue(fromIdentifier identifier: String, description: String?) -> AuthorizationError {
-        if let errorCode = OAuthErrorCode(rawValue: identifier) {
-            return .oauth(errorCode, description)
-        } else if let errorCode = OpenIdErrorCode(rawValue: identifier) {
-            return .openId(errorCode, description)
-        } else if let errorCode = ProjectVerifyErrorCode(rawValue: identifier) {
-            return .projectVerify(errorCode, description)
-        }
-        return .unknown(identifier, description)
     }
 }

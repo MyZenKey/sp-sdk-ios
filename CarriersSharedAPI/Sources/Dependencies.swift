@@ -16,9 +16,15 @@ class Dependencies {
 
     private(set) lazy var discoveryService: DiscoveryServiceProtocol = DiscoveryService(
         networkService: NetworkService(),
-        carrierInfoService: carrierInfoService,
         configCacheService: configCacheService
     )
+
+    private(set) lazy var mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol = {
+        return MobileNetworkSelectionService(
+            sdkConfig: self.sdkConfig,
+            mobileNetworkSelectionUI: MobileNetworkSelectionUI()
+        )
+    }()
 
     let openIdService: OpenIdServiceProtocol = OpenIdService(
         urlResolver: XCISchemeOpenIdURLResolver()
@@ -27,21 +33,28 @@ class Dependencies {
     let configCacheService: ConfigCacheServiceProtocol = ConfigCacheService(
         networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
     )
+
+    let sdkConfig: SDKConfig
+
+    init(sdkConfig: SDKConfig) {
+        self.sdkConfig = sdkConfig
+    }
 }
 
 extension Dependencies {
     var all: [Any] {
         return [
+            sdkConfig,
             carrierInfoService,
             discoveryService,
             openIdService,
-            configCacheService
+            configCacheService,
+            mobileNetworkSelectionService,
         ]
     }
     
-    static func resolve<T>() -> T {
-        let container = ProjectVerifyAppDelegate.shared.dependencies
-        let firstResolution = container.all.compactMap { $0 as? T }.first
+    func resolve<T>() -> T {
+        let firstResolution = all.compactMap { $0 as? T }.first
         guard let resolved = firstResolution else {
             fatalError("attemtping to resolve a dependency that doesn't exist")
         }

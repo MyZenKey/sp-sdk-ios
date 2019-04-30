@@ -51,7 +51,6 @@ class DiscoveryServiceTests: XCTestCase {
     
     lazy var discoveryService = DiscoveryService(
         networkService: mockNetworkService,
-        carrierInfoService: mockCarrierInfo,
         configCacheService: mockConfigCacheService
     )
 
@@ -62,40 +61,28 @@ class DiscoveryServiceTests: XCTestCase {
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
     }
 
-    func testNoSIMReturnsNoMobileNetwork() {
-        mockCarrierInfo.primarySIM = nil
+    func testCorrectlyFormatsURLWithMCCMNC() {
         let expectation = XCTestExpectation(description: "async discovery")
-        discoveryService.discoverConfig() { result in
-            guard case .noMobileNetwork = result else {
-                XCTFail("config expected to return noMobileNetwork")
-                return
-            }
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: timeout)
-    }
-
-    func testNoSIMDoesNotMakeNetworkRequest() {
-        mockCarrierInfo.primarySIM = nil
-        let expectation = XCTestExpectation(description: "async discovery")
-        discoveryService.discoverConfig() { result in
-            XCTAssertNil(self.mockNetworkService.lastRequest)
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: timeout)
-    }
-
-    func testCorrectlyFormatsURL() {
-        mockCarrierInfo.primarySIM = MockSIMs.unknown
-        let expectation = XCTestExpectation(description: "async discovery")
-        discoveryService.discoverConfig() { _ in
+        discoveryService.discoverConfig(forSIMInfo: MockSIMs.unknown) { _ in
             let request = self.mockNetworkService.lastRequest
 
             XCTAssertEqual(request?.httpMethod, "GET")
             XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
-            XCTAssertTrue(request?.url?.query?.contains("config=false") ?? false)
-            XCTAssertTrue(request?.url?.query?.contains("mcc=123") ?? false)
-            XCTAssertTrue(request?.url?.query?.contains("mnc=456") ?? false)
+            XCTAssertTrue(request?.url?.query?.contains("mccmnc=123456") ?? false)
+
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    func testCorrectlyFormatsURLWithoutMCCMNC() {
+        let expectation = XCTestExpectation(description: "async discovery")
+        discoveryService.discoverConfig(forSIMInfo: nil) { _ in
+            let request = self.mockNetworkService.lastRequest
+
+            XCTAssertEqual(request?.httpMethod, "GET")
+            XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
+            XCTAssertFalse(request?.url?.query?.contains("mccmnc") ?? false)
 
             expectation.fulfill()
         }
@@ -103,11 +90,10 @@ class DiscoveryServiceTests: XCTestCase {
     }
 
     func testUnknownCarrierEndpointErrorReturnsError() {
-        mockCarrierInfo.primarySIM = MockSIMs.unknown
         let error = NSError(domain: "", code: 1, userInfo: [:])
         mockNetworkService.mockError(.networkError(error))
         let expectation = XCTestExpectation(description: "async discovery")
-        discoveryService.discoverConfig() { result in
+        discoveryService.discoverConfig(forSIMInfo: MockSIMs.unknown) { result in
             let resultingError = try! UnwrapAndAssertNotNil(result.errorValue)
             guard case DiscoveryServiceError.networkError = resultingError else {
                 XCTFail("result expected to be networkError")
@@ -120,11 +106,10 @@ class DiscoveryServiceTests: XCTestCase {
     }
 
     func testKnownCarrierEndpointErrorFallbackToBundledConfigByDefault() {
-        mockCarrierInfo.primarySIM = MockSIMs.tmobile
         let error = NSError(domain: "", code: 1, userInfo: [:])
         mockNetworkService.mockError(.networkError(error))
         let expectation = XCTestExpectation(description: "async discovery")
-        discoveryService.discoverConfig() { result in
+        discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { result in
             let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
             XCTAssertEqual(
                 config.openIdConfig,
@@ -139,31 +124,27 @@ class DiscoveryServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    // NOTE: this could be returns testUnknownCarrierEndpointSuccessReturnsUnknownMobileNetwork
-    // in the future
-    func testUnknownCarrierEndpointSuccessReturnsError() {
-        mockCarrierInfo.primarySIM = MockSIMs.unknown
+    func testUnknownCarrierEndpointSuccessReturnsDiscoveryUI() {
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.carrierNotFound)
         let expectation = XCTestExpectation(description: "async discovery")
-        discoveryService.discoverConfig() { result in
-            let resultingError = try! UnwrapAndAssertNotNil(result.errorValue)
-            let assertionDescription = "result expected to be issuerError"
-            if case DiscoveryServiceError.issuerError = resultingError {
-                XCTAssertTrue(true, assertionDescription)
-            } else {
-                XCTAssertTrue(false, assertionDescription)
+        discoveryService.discoverConfig(forSIMInfo: MockSIMs.unknown) { result in
+
+            defer { expectation.fulfill() }
+            guard case .unknownMobileNetwork(let redirect) = result else {
+                XCTFail("expected a redirect to discovery ui")
+                return
             }
 
-            expectation.fulfill()
+            XCTAssertEqual(redirect.redirectURI.absoluteString, "http://app.xcijv.com/ui/discovery-ui")
+
         }
         wait(for: [expectation], timeout: timeout)
     }
 
     func testKnownCarrierEndpointSuccessCachesAndReturnsMockedConfig() {
-        mockCarrierInfo.primarySIM = MockSIMs.tmobile
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectation = XCTestExpectation(description: "async discovery")
-        discoveryService.discoverConfig() { result in
+        discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { result in
             let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
             let expectedResult = OpenIdConfig(
                 tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
@@ -193,15 +174,14 @@ class DiscoveryServiceTests: XCTestCase {
     }
     
     func testKnownCarrierEndpointErrorFallbackToLastSuccessfulConfigIfAvailable() {
-        mockCarrierInfo.primarySIM = MockSIMs.tmobile
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         
         let expectation = XCTestExpectation(description: "async discovery")
-        discoveryService.discoverConfig() { _ in
+        discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { _ in
 
             let error = NSError(domain: "", code: 1, userInfo: [:])
             self.mockNetworkService.mockError(.networkError(error))
-            self.discoveryService.discoverConfig() { result in
+            self.discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { result in
                 let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
                 
                 let expectedResult = OpenIdConfig(
@@ -223,10 +203,9 @@ class DiscoveryServiceTests: XCTestCase {
     }
     
     func testServiceReturnsOnMainThreadFromMainThread() {
-        mockCarrierInfo.primarySIM = MockSIMs.tmobile
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectation = XCTestExpectation(description: "async discovery")
-        discoveryService.discoverConfig() { _ in
+        discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { _ in
             XCTAssertTrue(Thread.isMainThread)
             expectation.fulfill()
         }
@@ -235,15 +214,36 @@ class DiscoveryServiceTests: XCTestCase {
     }
     
     func testServiceReturnsOnMainThreadFromBackgroundThread() {
-        mockCarrierInfo.primarySIM = MockSIMs.tmobile
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectation = XCTestExpectation(description: "async discovery")
         DispatchQueue.global().async {
-            self.discoveryService.discoverConfig() { _ in
+            self.discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { _ in
                 XCTAssertTrue(Thread.isMainThread)
                 expectation.fulfill()
             }
         }
         wait(for: [expectation], timeout: timeout)
+    }
+}
+
+// MARK: - test utils
+
+extension DiscoveryServiceResult {
+    var carrierConfig: CarrierConfig? {
+        switch self {
+        case .knownMobileNetwork(let config):
+            return config
+        default:
+            return nil
+        }
+    }
+
+    var errorValue: DiscoveryServiceError? {
+        switch self {
+        case .error(let error):
+            return error
+        default:
+            return nil
+        }
     }
 }

@@ -25,7 +25,12 @@
     "CarriersSharedAPI/Resources/*.xcassets",
     "CarriersSharedAPI/Resources/*.lproj/*.strings"
   ],
-  "frameworks": "UIKit",
+  "ios": {
+    "frameworks": [
+      "UIKit",
+      "SafariServices"
+    ]
+  },
   "dependencies": {
     "AppAuth": [
       "~> 0.95.0"

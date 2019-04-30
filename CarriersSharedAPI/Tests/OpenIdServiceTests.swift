@@ -57,7 +57,8 @@ class OpenIdServiceTests: XCTestCase {
         authorizationEndpoint: URL(string: "http://rightpoint.com")!,
         tokenEndpoint: URL(string: "http://rightpoint.com")!,
         formattedScopes: "openid",
-        redirectURL: URL(string: "testapp://authorize")!,
+        redirectURL: URL(string: "testapp://projectverify/authorize")!,
+        loginHintToken: nil,
         state: "bar"
     )
 
@@ -140,14 +141,16 @@ class OpenIdServiceTests: XCTestCase {
                 XCTAssertEqual(response.mnc, "456")
         }
 
-        let urlString = "testapp://authorize?code=TESTCODE&state=bar"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
     func testConcludeWithURLNoRequestInProgressError() {
-        let urlString = "testapp://authorize?code=TESTCODE&state=bar"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertFalse(handled)
     }
 
     func testConcludeWithURLStateMismatchError() {
@@ -164,8 +167,9 @@ class OpenIdServiceTests: XCTestCase {
                 expectation.fulfill()
         }
 
-        let urlString = "testapp://authorize?code=TESTCODE&state=BIZ"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=BIZ"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
@@ -183,8 +187,9 @@ class OpenIdServiceTests: XCTestCase {
                 expectation.fulfill()
         }
 
-        let urlString = "testapp://authorize?state=bar"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?state=bar"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
@@ -207,8 +212,9 @@ class OpenIdServiceTests: XCTestCase {
                 expectation.fulfill()
         }
 
-        let urlString = "testapp://authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
@@ -229,14 +235,15 @@ class OpenIdServiceTests: XCTestCase {
                 expectation.fulfill()
         }
 
-        let urlString = "testapp://authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"
-        openIdService.concludeAuthorizationFlow(url: URL(string: urlString)!)
+        let urlString = "testapp://projectverify/authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
     func testErrorValueForOAuthErrorIdentifierOnly() {
         let expectedError = OAuthErrorCode.invalidRequest
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: nil
         )
@@ -254,7 +261,7 @@ class OpenIdServiceTests: XCTestCase {
     func testErrorValueForOAuthErrorAndDescription() {
         let expectedError = OAuthErrorCode.invalidRequest
         let expectedDescription = "foo"
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: expectedDescription
         )
@@ -271,7 +278,7 @@ class OpenIdServiceTests: XCTestCase {
 
     func testErrorValueForOpenIdErrorIdentifierOnly() {
         let expectedError = OpenIdErrorCode.loginRequired
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: nil
         )
@@ -289,7 +296,7 @@ class OpenIdServiceTests: XCTestCase {
     func testErrorValueForOpenIdErrorAndDescription() {
         let expectedError = OpenIdErrorCode.loginRequired
         let expectedDescription = "foo"
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: expectedDescription
         )
@@ -306,7 +313,7 @@ class OpenIdServiceTests: XCTestCase {
 
     func testErrorValueForProjectVerifyErrorIdentifierOnly() {
         let expectedError = ProjectVerifyErrorCode.authenticationTimedOut
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: nil
         )
@@ -324,7 +331,7 @@ class OpenIdServiceTests: XCTestCase {
     func testErrorValueForProjectVerifyErrorAndDescription() {
         let expectedError = ProjectVerifyErrorCode.authenticationTimedOut
         let expectedDescription = "foo"
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError.rawValue,
             description: expectedDescription
         )
@@ -341,7 +348,7 @@ class OpenIdServiceTests: XCTestCase {
 
     func testErrorValueForUnknownErrorIdentifierOnly() {
         let expectedError = "invalid_error_id"
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError,
             description: nil
         )
@@ -359,7 +366,7 @@ class OpenIdServiceTests: XCTestCase {
     func testErrorValueForUnknownErrorAndDescription() {
         let expectedError = "invalid_error_id"
         let expectedDescription = "foo"
-        let error = OpenIdService.errorValue(
+        let error = ResponseURL.errorValue(
             fromIdentifier: expectedError,
             description: expectedDescription
         )
@@ -392,5 +399,60 @@ class OpenIdServiceTests: XCTestCase {
             authorizationConfig: OpenIdServiceTests.mockConfig) { _ in }
         
         wait(for: [expectation], timeout: timeout)
+    }
+
+
+    // MARK: - Request Building
+
+    func testBuildsCorrectRequestFromConfig() {
+        let authConfig = OpenIdAuthorizationConfig(
+            simInfo: MockSIMs.tmobile,
+            clientId: "1234",
+            authorizationEndpoint: URL.mocked,
+            tokenEndpoint: URL.mocked,
+            formattedScopes: "openid profile email",
+            redirectURL: URL.mocked,
+            loginHintToken: nil,
+            state: "foo")
+        let serviceConfig = OIDServiceConfiguration(
+            authorizationEndpoint: URL.mocked,
+            tokenEndpoint: URL.mocked
+        )
+        let request = OpenIdService.createAuthorizationRequest(
+            openIdServiceConfiguration: serviceConfig,
+            authorizationConfig: authConfig
+        )
+
+        let url: URL = request.authorizationRequestURL()
+        let expectdURL = URL(
+            string: "rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=rightpoint.com&state=foo&response_type=code"
+        )!
+        XCTAssertEqual(url, expectdURL)
+    }
+
+    func testBuildsCorrectRequestFromConfigWithLoginHint() {
+        let authConfig = OpenIdAuthorizationConfig(
+            simInfo: MockSIMs.tmobile,
+            clientId: "1234",
+            authorizationEndpoint: URL.mocked,
+            tokenEndpoint: URL.mocked,
+            formattedScopes: "openid profile email",
+            redirectURL: URL.mocked,
+            loginHintToken: "mocktoken",
+            state: "foo")
+        let serviceConfig = OIDServiceConfiguration(
+            authorizationEndpoint: URL.mocked,
+            tokenEndpoint: URL.mocked
+        )
+        let request = OpenIdService.createAuthorizationRequest(
+            openIdServiceConfiguration: serviceConfig,
+            authorizationConfig: authConfig
+        )
+
+        let url: URL = request.authorizationRequestURL()
+        let expectdURL = URL(
+            string: "rightpoint.com?client_id=1234&login_hint_token=mocktoken&redirect_uri=rightpoint.com&scope=openid%20profile%20email&state=foo&response_type=code"
+        )!
+        XCTAssertEqual(url, expectdURL)
     }
 }

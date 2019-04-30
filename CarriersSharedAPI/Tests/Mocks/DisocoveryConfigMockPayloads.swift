@@ -51,6 +51,6 @@ enum DiscoveryConfigMockPayloads {
 
     static let carrierNotFound: [String: Any] = [
         "error": "provider_not_found",
-        "redirect_uri": "http://23.20.110.44/discovery-ui",
+        "redirect_uri": "http://app.xcijv.com/ui/discovery-ui",
     ]
 }

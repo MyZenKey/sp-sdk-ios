@@ -42,28 +42,41 @@ public class ProjectVerifyBrandedButton: UIButton {
     // can use the custom initializer `init(configCacheService:carrierInfoService:)` to pass
     // specific dependencies.
     
-    private(set) var configCacheService: ConfigCacheServiceProtocol = Dependencies.resolve()
-    private(set) var carrierInfoService: CarrierInfoServiceProtocol = Dependencies.resolve()
+    let configCacheService: ConfigCacheServiceProtocol
+    let carrierInfoService: CarrierInfoServiceProtocol
     
     public init() {
+        configCacheService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
+        carrierInfoService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
         super.init(frame: .zero)
         configureButton()
     }
     
-    init(configCacheService: ConfigCacheServiceProtocol = Dependencies.resolve(),
-         carrierInfoService: CarrierInfoServiceProtocol = Dependencies.resolve()) {
+    init(dependencyContainer container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies) {
+        self.configCacheService = container.resolve()
+        self.carrierInfoService = container.resolve()
+        super.init(frame: .zero)
+        configureButton()
+    }
+
+    init(configCacheService: ConfigCacheServiceProtocol,
+         carrierInfoService: CarrierInfoServiceProtocol) {
         self.configCacheService = configCacheService
         self.carrierInfoService = carrierInfoService
         super.init(frame: .zero)
         configureButton()
     }
-    
+
     public override init(frame: CGRect) {
+        configCacheService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
+        carrierInfoService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
         super.init(frame: frame)
         configureButton()
     }
     
     public required init?(coder aDecoder: NSCoder) {
+        configCacheService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
+        carrierInfoService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
         super.init(coder: aDecoder)
         configureButton()
     }
