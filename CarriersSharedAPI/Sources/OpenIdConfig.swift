@@ -39,7 +39,7 @@ enum IssuerResponse {
         let redirectURI: URL
     }
 
-    /// an error originating within the issuer service and returned via a successful HTTP response.
+    /// An error originating within the issuer service and returned via a successful HTTP response.
     struct Error {
         let error: String
         let errorDescription: String?

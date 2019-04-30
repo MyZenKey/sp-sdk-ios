@@ -15,12 +15,12 @@ struct CarrierConfig {
 }
 
 enum DiscoveryServiceResult {
-    /// a carrier valid configuration.
+    /// A carrier valid configuration.
     case knownMobileNetwork(CarrierConfig)
     /// The mobile network is unsupported or couldn't be identified. Seek clarification using
     /// the provided redirect.
     case unknownMobileNetwork(IssuerResponse.Redirect)
-    /// an error which occured during the discovery process.
+    /// An error which occured during the discovery process.
     case error(DiscoveryServiceError)
 }
 
