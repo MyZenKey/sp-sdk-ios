@@ -209,7 +209,8 @@ platform :ios do
       })
       hockey(
         ipa: productIPA(productName),
-        public_identifier: DEVELOP_IDS[productName]
+        public_identifier: DEVELOP_IDS[productName],
+        bypass_cdn: true
       )
       # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_DEVELOPZZ')
       slack(message: "Successfully uploaded #{buildName} build number #{build_number} to develop", success: true)  
@@ -227,7 +228,8 @@ platform :ios do
       })
       hockey(
         ipa: productIPA(productName),
-        public_identifier: SPRINT_IDS[productName]
+        public_identifier: SPRINT_IDS[productName],
+        bypass_cdn: true
       )
       # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_SPRINTZZ')
       slack(message: "Successfully uploaded #{buildName} build number #{build_number} to sprint", success: true)
