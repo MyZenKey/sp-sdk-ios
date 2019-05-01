@@ -224,11 +224,11 @@ class LoginViewController {
 
 ## Support
 
-For technical questions, please contact [support](mailto:support@mobileauthtaskforce.com).
+For technical questions, contact [support](mailto:support@mobileauthtaskforce.com).
 
 ## Proprietary and Confidential 
 <span style="color:blue"></style>NOTICE: <span style="color:black"></style>
 XCI JV, LLC PROPRIETARY. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.
 
-## Last Change
-The last change to this document occurred on: April 29, 2019
+<sub> <span style="color:blue"></style>Last Update: <span style="color:black"></style>
+The last change to this document occurred on: April 29, 2019</sub>
