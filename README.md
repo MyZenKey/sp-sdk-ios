@@ -1,15 +1,16 @@
 ![Logo](https://static.raizlabs.xyz/project_verify.png)
 
 # XCI-Provider SDK for iOS
+
 This guide is for developers integrating Project Verify into their iOS applications.
 
 # Background
 
-Project Verify is a joint undertaking of the Mobile Authentication Taskforce. The taskforce provides customers with the ability to use their mobile phone number to sign into apps. 
+Project Verify is a joint undertaking of the Mobile Authentication Taskforce. The taskforce provides customers with the ability to use their mobile phone number to sign into apps.
 
 # Installation
 
-There are three ways to integrate ProjectVerify (and its dependency `AppAuth`) to your project: CocoaPods, Carthage and manually. 
+There are three ways to integrate ProjectVerify (and its dependency `AppAuth`) to your project: CocoaPods, Carthage and manually.
 
 ### Dependencies
 
@@ -36,7 +37,7 @@ Then run `pod install`. This adds the local source as well as `AppAuth` to your 
 
 ## Carthage
 
-More information coming soon - *Carthage* may be supported in the future. 
+More information coming soon - *Carthage* may be supported in the future.
 
 ## Manual
 
@@ -57,6 +58,7 @@ The following steps show how to add ProjectVerifyLogin SDK to your project manua
 That's it! Build and run to ensure that everything is working correctly.
 
 # Integration
+
 To integrate Project Verify into your iOS application,  configure your Info.plist and instantiate Project Verify in your application delegate.  
 
 ## Configure your Info.plist
@@ -81,22 +83,24 @@ Retrieve your application's client id from the project verify dashboard. Add the
 	</array>
 ```
 
-For examples of how to configure the property list, see the [Social App](./Example/SocialApp), and [Bank App](./Example/BankApp).
+For examples of how to configure the property list, see the [Social App](https://github.com/Rightpoint/XCI-ProviderSDK-iOS/tree/develop/Example/SocialApp), and [Bank App](https://github.com/Rightpoint/XCI-ProviderSDK-iOS/tree/develop/Example/BankApp).
 
 ### Custom URL Schemes
 
 If you would like to use universal links for your redirect scheme, it is possible to configure a custom URL scheme and a custom url host.
 
 The following keys are made available for you to customize the structure of the redirect url:
+
 ```xml
     <key>ProjectVerifyCustomScheme</key>
     <string>{your application's custom scheme}</string>
     <key>ProjectVerifyCustomHost</key>
     <string>{your application's custom host}</string>
 ```
+
 **Note:** for schemes other than `https`, you must add the scheme to your application's `CFBundleURLTypes` list.
 
-For an example of how the configure property list for these custom keys, see the [Photo App](./Example/PhotoApp).
+For an example of how the configure property list for these custom keys, see the [Photo App](https://github.com/Rightpoint/XCI-ProviderSDK-iOS/tree/develop/Example/PhotoApp).
 
 Redirect urls will require the universal links to route the following paths to the application: `/authorize` and `/discoveryui`.
 For more information about universal links, read Apple's [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links).
@@ -133,7 +137,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard !ProjectVerifyAppDelegate.shared.application(app, open: url, options: options) else {
             return true
         }
-        // Perform any other URL processing your app may need to perform. 
+        // Perform any other URL processing your app may need to perform.
         return true
     }
 }
@@ -163,11 +167,11 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
     func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) {
         // perform any ui updates like showing an activity indicator.
     }
-    
+
     func buttonDidFinish(
         _ button: ProjectVerifyAuthorizeButton,
         withResult result: AuthorizationResult) {
-        
+
         // handle the outcome of the request:
         switch result {
         case .code(let authorizedResponse):
@@ -195,7 +199,7 @@ import CarriersSharedAPI
 class LoginViewController {
 
     let authService = AuthorizationService()
-    
+
     func loginWithProjectVerify() {
         // in response to some UI, perform an authorization using the AuthorizationService
         let scopes: [Scope] = [.profile, .email]
@@ -218,6 +222,7 @@ class LoginViewController {
     }
 }
 ```
+
 [submodules]: https://git-scm.com/docs/git-submodule
 [projectVerifyLogin]: https://github.com/Raizlabs/XCI-ProviderSDK-iOS
 [appAuth]: https://github.com/openid/AppAuth-iOS
@@ -226,9 +231,10 @@ class LoginViewController {
 
 For technical questions, contact [support](mailto:support@mobileauthtaskforce.com).
 
-## Proprietary and Confidential 
-NOTICE: 
+## Proprietary and Confidential
+
+NOTICE:
 XCI JV, LLC PROPRIETARY. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.
 
-<sub> Last Update: 
-Document Version 0.9 - April 29, 2019</sub>
+<sub> Last Update:
+Document Version 0.9 - May 1, 2019</sub>
