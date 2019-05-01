@@ -69,72 +69,6 @@ extension OpenIdURLResolverProtocol {
     }
 }
 
-/// A url resolver which uses a hard coded xci url scheme
-struct XCISchemeOpenIdURLResolver: OpenIdURLResolverProtocol {
-    func resolve(
-        request: OIDAuthorizationRequest,
-        usingStorage storage: OpenIdExternalSessionStateStorage,
-        fromViewController viewController: UIViewController,
-        authorizationConfig: OpenIdAuthorizationConfig,
-        completion: @escaping OpenIdURLResolverCompletion) {
-
-        if UIApplication.shared.canOpenURL(URL(string: "xci://")!) {
-            
-            // restructure resquest to user xci:// scheme for auth point
-            // this reach backward pattern is not ideal and is for QA only!
-            let openIdConfiguration = OIDServiceConfiguration(
-                authorizationEndpoint: URL(string: "xci://authorize")!,
-                tokenEndpoint: authorizationConfig.tokenEndpoint
-            )
-            
-            let authorizationRequest: OIDAuthorizationRequest = OpenIdService
-                .createAuthorizationRequest(
-                    openIdServiceConfiguration: openIdConfiguration,
-                    authorizationConfig: authorizationConfig
-            )
-            
-            self.performCCIDAuthorization(
-                request: authorizationRequest,
-                storage: storage,
-                authorizationConfig: authorizationConfig,
-                completion: completion
-            )
-        } else {
-            self.performSafariAuthorization(
-                request: request,
-                storage: storage,
-                simInfo: authorizationConfig.simInfo,
-                fromViewController: viewController,
-                completion: completion
-            )
-        }
-    }
-
-    func performCCIDAuthorization(
-        request: OIDAuthorizationRequest,
-        storage: OpenIdExternalSessionStateStorage,
-        authorizationConfig: OpenIdAuthorizationConfig,
-        completion: @escaping OpenIdURLResolverCompletion) {
-
-        let consentURLString = authorizationConfig.consentURLString
-        let externalUserAgent = OIDExternalUserAgentIOSCustomBrowser(
-            urlTransformation: { request in return request },
-            canOpenURLScheme: "xci",
-            appStore: URL(string: consentURLString)
-        )!
-
-        // since we don't rejoin via resumeExternalUserAgentFlowWithURL, we don't need to store the
-        // sesssion
-        let session = OIDAuthState.authState(
-            byPresenting: request,
-            externalUserAgent: externalUserAgent,
-            callback: completion
-        )
-        
-        storage.pendingSession = session
-    }
-}
-
 private extension OpenIdAuthorizationConfig {
     var consentURLString: String {
         // NOTE: copy+paste from sample code
@@ -206,3 +140,73 @@ struct OpenIdURLResolver: OpenIdURLResolverProtocol {
         storage.pendingSession = session
     }
 }
+
+#if DEBUG
+
+/// A url resolver which uses a hard coded xci url scheme
+struct XCISchemeOpenIdURLResolver: OpenIdURLResolverProtocol {
+    func resolve(
+        request: OIDAuthorizationRequest,
+        usingStorage storage: OpenIdExternalSessionStateStorage,
+        fromViewController viewController: UIViewController,
+        authorizationConfig: OpenIdAuthorizationConfig,
+        completion: @escaping OpenIdURLResolverCompletion) {
+
+        if UIApplication.shared.canOpenURL(URL(string: "xci://")!) {
+
+            // restructure resquest to user xci:// scheme for auth point
+            // this reach backward pattern is not ideal and is for QA only!
+            let openIdConfiguration = OIDServiceConfiguration(
+                authorizationEndpoint: URL(string: "xci://authorize")!,
+                tokenEndpoint: authorizationConfig.tokenEndpoint
+            )
+
+            let authorizationRequest: OIDAuthorizationRequest = OpenIdService
+                .createAuthorizationRequest(
+                    openIdServiceConfiguration: openIdConfiguration,
+                    authorizationConfig: authorizationConfig
+            )
+
+            self.performCCIDAuthorization(
+                request: authorizationRequest,
+                storage: storage,
+                authorizationConfig: authorizationConfig,
+                completion: completion
+            )
+        } else {
+            self.performSafariAuthorization(
+                request: request,
+                storage: storage,
+                simInfo: authorizationConfig.simInfo,
+                fromViewController: viewController,
+                completion: completion
+            )
+        }
+    }
+
+    func performCCIDAuthorization(
+        request: OIDAuthorizationRequest,
+        storage: OpenIdExternalSessionStateStorage,
+        authorizationConfig: OpenIdAuthorizationConfig,
+        completion: @escaping OpenIdURLResolverCompletion) {
+
+        let consentURLString = authorizationConfig.consentURLString
+        let externalUserAgent = OIDExternalUserAgentIOSCustomBrowser(
+            urlTransformation: { request in return request },
+            canOpenURLScheme: "xci",
+            appStore: URL(string: consentURLString)
+            )!
+
+        // since we don't rejoin via resumeExternalUserAgentFlowWithURL, we don't need to store the
+        // sesssion
+        let session = OIDAuthState.authState(
+            byPresenting: request,
+            externalUserAgent: externalUserAgent,
+            callback: completion
+        )
+
+        storage.pendingSession = session
+    }
+}
+
+#endif
