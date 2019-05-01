@@ -5,7 +5,7 @@ This guide is for developers integrating Project Verify into their iOS applicati
 
 # Background
 
-Project Verify is a joint undertaking of the Mobile Authentication Taskforce that aims to provide customers with the ability to use their mobile phone number to sign into apps. 
+Project Verify is a joint undertaking of the Mobile Authentication Taskforce. The taskforce provides customers with the ability to use their mobile phone number to sign into apps. 
 
 # Installation
 
@@ -227,8 +227,8 @@ class LoginViewController {
 For technical questions, contact [support](mailto:support@mobileauthtaskforce.com).
 
 ## Proprietary and Confidential 
-<span style="color:blue"></style>NOTICE: <span style="color:black"></style>
+NOTICE: 
 XCI JV, LLC PROPRIETARY. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.
 
-<sub> <span style="color:blue"></style>Last Update: <span style="color:black"></style>
-The last change to this document occurred on: April 29, 2019</sub>
+<sub> Last Update: 
+Document Version 0.9 - April 29, 2019</sub>
