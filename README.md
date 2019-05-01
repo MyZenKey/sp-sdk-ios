@@ -203,8 +203,8 @@ class LoginViewController {
 For technical questions, contact [support](mailto:support@mobileauthtaskforce.com).
 
 ## Proprietary and Confidential 
-<span style="color:blue"></style>NOTICE: <span style="color:black"></style>
+NOTICE: 
 XCI JV, LLC PROPRIETARY. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.
 
-<sub> <span style="color:blue"></style>Last Update: <span style="color:black"></style>
+<sub> Last Update: 
 Document Version 0.9 - April 29, 2019</sub>
