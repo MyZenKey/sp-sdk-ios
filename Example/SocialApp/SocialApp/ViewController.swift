@@ -66,8 +66,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         return label
     }()
     
-    let verifyButton: UIButton = {
+    lazy var verifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
+        button.delegate = self
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -96,7 +97,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
     /// Do any additional setup after loading the view, typically from a nib.
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         layoutView()
         
         // set up powered by
