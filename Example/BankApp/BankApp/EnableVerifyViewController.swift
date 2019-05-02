@@ -111,8 +111,13 @@ class EnableVerifyViewController: UIViewController {
                         mcc: authorizedResponse.mcc,
                         mnc: authorizedResponse.mnc,
                         completionHandler: { json, error in
-//                            guard error == nil else { return }
-                            print("AuthZ_Code value from is: \(code)\n")
+                            guard
+                                let accessToken = json?["token"],
+                                let tokenString = accessToken.toString else {
+                                    print("error no token returned")
+                                    return
+                            }
+                            UserDefaults.standard.set(tokenString, forKey: "AccessToken")
                             appDelegate.launchHomeScreen()
                     })
 

@@ -161,7 +161,7 @@ class CheckoutViewController: UIViewController {
                         mnc: authorizedResponse.mnc,
                         completionHandler: { json, error in
                             guard
-                                let accessToken = json?["access_token"],
+                                let accessToken = json?["token"],
                                 let tokenString = accessToken.toString else {
                                 print("error no token returned")
                                 return
