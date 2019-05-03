@@ -27,7 +27,7 @@ class Dependencies {
     }()
 
     let openIdService: OpenIdServiceProtocol = OpenIdService(
-        urlResolver: XCISchemeOpenIdURLResolver()
+        urlResolver: OpenIdURLResolver()
     )
     
     let configCacheService: ConfigCacheServiceProtocol = ConfigCacheService(

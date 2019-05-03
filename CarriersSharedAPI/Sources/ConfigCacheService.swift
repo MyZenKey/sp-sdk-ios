@@ -96,8 +96,7 @@ private extension ConfigCacheService {
         ),
         "att": OpenIdConfig(
             tokenEndpoint: URL(string: "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/token")!,
-            authorizationEndpoint: URL(string: "xci://authorize")!,
-//            authorizationEndpoint: URL(string: "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize")!,
+            authorizationEndpoint: URL(string: "https://oidc.test.xlogin.att.com/mga/sps/oauth/oauth20/authorize")!,
             issuer: URL(string: "https://oidc.test.xlogin.att.com")!
         ),
     ]
