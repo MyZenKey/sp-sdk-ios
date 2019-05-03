@@ -41,7 +41,7 @@ More information coming soon - *Carthage* may be supported in the future.
 
 ## Manual
 
-The following steps show how to add ProjectVerifyLogin SDK to your project manually. For a project that links ProjectVerifyLogin manually, see the example [SocialApp](https://github.com/Raizlabs/XCI-ProviderSDK-iOS/tree/develop/Example/SocialApp).
+The following steps show how to add ProjectVerifyLogin SDK to your project manually. For a project that links ProjectVerifyLogin manually, see the example [SocialApp](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/SocialApp).
 
 1 - Retrieve the source for `ProjectVerifyLogin`. We recommend adding it as a [submodule](#pre-release-git-access).
 
