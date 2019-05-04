@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import CoreTelephony
 
 struct SIMInfo: Equatable {
     let mcc: String

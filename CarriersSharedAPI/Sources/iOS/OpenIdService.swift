@@ -15,30 +15,6 @@ enum ResponseType: String {
 
 public struct UnsupportedCarrier: Error { }
 
-/// Represents the successful compltion of an autorization request. The code should be used to
-/// retrieve a token from a secure server.
-public struct AuthorizedResponse: Equatable {
-    /// Authorization code returned from the issuer.
-    public let code: String
-    /// The Mobile Country Code used to identify the correct issuer.
-    public let mcc: String
-    /// The Mobile Network Code used to identify the correct issuer.
-    public let mnc: String
-}
-
-/// The outcome of an Authorization Operation.
-public enum AuthorizationResult {
-    /// A successful authorization returns the authorization code and mcc/mnc corresponding to the
-    /// issuer used to return the authorized code.
-    case code(AuthorizedResponse)
-    /// When an error occurs it is surfaced here with this result.
-    case error(Error)
-    /// When the authorizaiton is cancelled this result is returned.
-    case cancelled
-}
-
-public typealias AuthorizationCompletion = (AuthorizationResult) -> Void
-
 struct OpenIdAuthorizationConfig: Equatable {
     let simInfo: SIMInfo
     let clientId: String

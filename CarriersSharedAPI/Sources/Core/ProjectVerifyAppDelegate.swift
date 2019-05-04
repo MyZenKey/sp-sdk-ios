@@ -6,7 +6,6 @@
 //  Copyright © 2018 XCI JV, LLC. ALL RIGHTS RESERVED.
 //
 
-import AppAuth
 import UIKit
 
 /// This class represents the entry point for the application and mirrors the behavior of
@@ -78,21 +77,7 @@ public class ProjectVerifyAppDelegate {
             return false
         }
 
-        // make sure we have a route this sdk can handle:
-        guard let route = Route(rawValue: url.path) else {
-            return false
-        }
-
-        let service: URLHandling
-        switch route {
-        case .authorize:
-            service = dependencies.openIdService
-        case .discoveryUI:
-            service = dependencies.mobileNetworkSelectionService
-        // TODO: - We don't have a spec for other states that might be resolved via this url.
-        // add those here when we do
-        }
-
-        return service.resolve(url: url)
+        let router: RouterServiceProtocol = dependencies.resolve()
+        return router.application(app, open: url, options: options)
     }
 }

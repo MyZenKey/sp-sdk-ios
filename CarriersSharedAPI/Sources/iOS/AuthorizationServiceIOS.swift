@@ -1,36 +1,27 @@
 //
-//  AuthorizationService.swift
+//  IOSAuthorizationService.swift
 //  CarriersSharedAPI
 //
-//  Created by Adam Tierney on 2/19/19.
-//  Copyright © 2018 XCI JV, LLC. ALL RIGHTS RESERVED.
+//  Created by Adam Tierney on 5/3/19.
+//  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
-import AppAuth
-import UIKit
+import Foundation
 
-protocol AuthorizationServiceProtocol {
-    /// Requests authorization for the specified scopes from Project Verify.
-    /// - Parameters:
-    ///   - scopes: an array of scopes to be authorized for access. See the predefined
-    ///     `Scope` for a list of supported scope types.
-    ///   - viewController: the UI context from which the authorization request originated
-    ///    this is used as the presentation view controller if additional ui is required for resolving
-    ///    the request.
-    ///   - completion: an escaping block executed asynchronously, on the main thread. This
-    ///    block will take one parameter, a result, see `AuthorizationResult` for more information.
-    ///
-    /// - SeeAlso: ScopeProtocol
-    /// - SeeAlso: Scopes
-    /// - SeeAlso: AuthorizationResult
-    func connectWithProjectVerify(
-        scopes: [ScopeProtocol],
-        fromViewController viewController: UIViewController,
-        completion: @escaping AuthorizationCompletion)
+class AuthorizationServiceIOSFactory: AuthorizationServiceFactory {
+    func createAuthorizationService() -> AuthorizationServiceProtocol {
+        let container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies
+        return AuthorizationServiceIOS(
+            sdkConfig: container.resolve(),
+            discoveryService: container.resolve(),
+            openIdService: container.resolve(),
+            carrierInfoService: container.resolve(),
+            mobileNetworkSelectionService: container.resolve()
+        )
+    }
 }
 
-/// This service provides an interface for authorizing an application with Project Verify.
-public class AuthorizationService {
+class AuthorizationServiceIOS {
     let sdkConfig: SDKConfig
     let discoveryService: DiscoveryServiceProtocol
     let openIdService: OpenIdServiceProtocol
@@ -50,7 +41,7 @@ public class AuthorizationService {
     }
 }
 
-extension AuthorizationService: AuthorizationServiceProtocol {
+extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
     public func connectWithProjectVerify(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
@@ -66,7 +57,7 @@ extension AuthorizationService: AuthorizationServiceProtocol {
     }
 }
 
-private extension AuthorizationService {
+private extension AuthorizationServiceIOS {
 
     struct AuthorizationContextParameters {
         let loginHintToken: String?
@@ -153,19 +144,5 @@ private extension AuthorizationService {
                 completion(.cancelled)
             }
         }
-    }
-}
-
-public extension AuthorizationService {
-    /// creates a new instance of an `AuthorizationService`
-    convenience init() {
-        let container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies
-        self.init(
-            sdkConfig: container.resolve(),
-            discoveryService: container.resolve(),
-            openIdService: container.resolve(),
-            carrierInfoService: container.resolve(),
-            mobileNetworkSelectionService: container.resolve()
-        )
     }
 }

@@ -16,3 +16,10 @@ enum Route: String {
 protocol URLHandling {
     func resolve(url: URL) -> Bool
 }
+
+protocol RouterServiceProtocol {
+    func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool
+}
