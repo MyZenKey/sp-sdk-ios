@@ -19,7 +19,7 @@ For more information about AppAuth, see the repository [here](https://github.com
 
 ## Pre-release Git Access
 
-While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule][submodules]. If that is not possible, download the source [here][projectVerifyLogin] and place it in your project directory.
+While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule][https://git-scm.com/docs/git-submodule]. If that is not possible, download the source [here][https://git.xcijv.net/sp-sdk/sp-sdk-ios] and place it in your project directory.
 
 ```bash
 git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
