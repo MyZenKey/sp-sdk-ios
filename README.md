@@ -22,7 +22,7 @@ For more information about AppAuth, see the repository [here](https://github.com
 While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule][submodules]. If that is not possible, download the source [here][projectVerifyLogin] and place it in your project directory.
 
 ```bash
-git submodule add https://github.com/Raizlabs/XCI-ProviderSDK-iOS
+git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 ```
 
 ## CocoaPods
@@ -224,7 +224,7 @@ class LoginViewController {
 ```
 
 [submodules]: https://git-scm.com/docs/git-submodule
-[projectVerifyLogin]: https://github.com/Raizlabs/XCI-ProviderSDK-iOS
+[projectVerifyLogin]: https://git.xcijv.net/sp-sdk/sp-sdk-ios
 [appAuth]: https://github.com/openid/AppAuth-iOS
 
 ## Support
@@ -237,4 +237,4 @@ NOTICE:
 XCI JV, LLC PROPRIETARY. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.
 
 <sub> Last Update:
-Document Version 0.9.1 - May 3, 2019</sub>
+Document Version 0.9.2 - May 6, 2019</sub>
