@@ -21,32 +21,37 @@ class Dependencies {
     }
 
     private func buildDependencies() {
+        let configCacheService = ConfigCacheService(
+            networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
+        )
+
+        let discoveryService = DiscoveryService(
+            networkService: NetworkService(),
+            configCacheService: configCacheService
+        )
+
+        let router = Router()
+
         #if os(iOS)
             let carrierInfoService = CarrierInfoService(
                 mobileNetworkInfoProvder: CTTelephonyNetworkInfo()
             )
 
-            let configCacheService = ConfigCacheService(
-                networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
-            )
-
-            let discoveryService = DiscoveryService(
-                networkService: NetworkService(),
-                configCacheService: configCacheService
-            )
-
             let mobileNetworkSelectionService = MobileNetworkSelectionService(
                 sdkConfig: self.sdkConfig,
-                mobileNetworkSelectionUI: MobileNetworkSelectionUI()
+                mobileNetworkSelectionUI: MobileNetworkSelectionUIIOS()
             )
 
             let openIdService = OpenIdService(
                 urlResolver: OpenIdURLResolverIOS()
             )
 
-            let iosRouter = RouterIOS()
-
             let iosAuthorizationServiceFactory = AuthorizationServiceIOSFactory()
+
+            let brandingProvider = CurrentSIMBrandingProvider(
+                configCacheService: configCacheService,
+                carrierInfoService: carrierInfoService
+            )
 
             all = [
                 carrierInfoService,
@@ -54,10 +59,41 @@ class Dependencies {
                 discoveryService,
                 mobileNetworkSelectionService,
                 openIdService,
-                iosRouter,
+                router,
                 iosAuthorizationServiceFactory,
+                brandingProvider,
             ]
         #elseif os(tvOS)
+
+        // TODO: tvOS Network Selection UI
+//        let mobileNetworkSelectionService = MobileNetworkSelectionService(
+//            sdkConfig: self.sdkConfig,
+//            mobileNetworkSelectionUI: MobileNetworkSelectionUIIOS()
+//        )
+
+        // TOOD: tvOS OpenIDURLResolver
+//        let openIdService = OpenIdService(
+//            urlResolver: OpenIdURLResolverIOS()
+//        )
+
+        // TODO: tvOS Authorization Service Factory
+//        let iosAuthorizationServiceFactory = AuthorizationServiceIOSFactory()
+
+        // TODO: tvOS Branding Provider
+//        let brandingProvider = CurrentSIMBrandingProvider(
+//            configCacheService: configCacheService,
+//            carrierInfoService: carrierInfoService
+//        )
+
+        all = [
+            configCacheService,
+            discoveryService,
+            router,
+//            mobileNetworkSelectionService,
+//            openIdService,
+//            iosAuthorizationServiceFactory,
+//            brandingProvider,
+        ]
 
         #endif
     }

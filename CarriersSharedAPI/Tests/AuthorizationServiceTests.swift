@@ -146,7 +146,7 @@ class AuthorizationServiceTests: XCTestCase {
 
     let networkIdentifierCache =  NetworkIdentifierCache.bundledCarrierLookup
 
-    lazy var authorizationService = IOSAuthorizationService(
+    lazy var authorizationService = AuthorizationServiceIOS(
         sdkConfig: mockSDKConfig,
         discoveryService: mockDiscoveryService,
         openIdService: mockOpenIdService,

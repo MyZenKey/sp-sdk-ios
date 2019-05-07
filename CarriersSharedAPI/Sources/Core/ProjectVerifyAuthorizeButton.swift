@@ -55,12 +55,10 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 
     init(authorizationService: AuthorizationServiceProtocol,
          controllerContextProvider: CurrentControllerContextProvider,
-         configCacheService: ConfigCacheServiceProtocol,
-         carrierInfoService: CarrierInfoServiceProtocol) {
+         brandingProvider: BrandingProvider) {
         self.authorizationService = authorizationService
         self.controllerContextProvider = controllerContextProvider
-        super.init(configCacheService: configCacheService,
-                   carrierInfoService: carrierInfoService)
+        super.init(brandingProvider: brandingProvider)
         configureSelectors()
     }
     

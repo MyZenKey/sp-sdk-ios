@@ -1,5 +1,5 @@
 //
-//  IOSRouter.swift
+//  Router.swift
 //  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 5/3/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RouterIOS: RouterServiceProtocol {
+class Router: RouterServiceProtocol {
     public func application(
         _ app: UIApplication,
         open url: URL,

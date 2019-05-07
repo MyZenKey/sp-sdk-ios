@@ -37,46 +37,39 @@ public class ProjectVerifyBrandedButton: UIButton {
             updateBranding()
         }
     }
-    
+
     // NOTE: dependencies are resolved automatically for all of the button initalizers.
     // can use the custom initializer `init(configCacheService:carrierInfoService:)` to pass
     // specific dependencies.
-    
-    let configCacheService: ConfigCacheServiceProtocol
-    let carrierInfoService: CarrierInfoServiceProtocol
-    
+
+    let brandingProvider: BrandingProvider
+
     public init() {
-        configCacheService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
-        carrierInfoService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
+        brandingProvider = ProjectVerifyAppDelegate.shared.dependencies.resolve()
         super.init(frame: .zero)
         configureButton()
     }
     
     init(dependencyContainer container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies) {
-        self.configCacheService = container.resolve()
-        self.carrierInfoService = container.resolve()
+        brandingProvider = container.resolve()
         super.init(frame: .zero)
         configureButton()
     }
 
-    init(configCacheService: ConfigCacheServiceProtocol,
-         carrierInfoService: CarrierInfoServiceProtocol) {
-        self.configCacheService = configCacheService
-        self.carrierInfoService = carrierInfoService
+    init(brandingProvider: BrandingProvider) {
+        self.brandingProvider = brandingProvider
         super.init(frame: .zero)
         configureButton()
     }
 
     public override init(frame: CGRect) {
-        configCacheService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
-        carrierInfoService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
+        brandingProvider = ProjectVerifyAppDelegate.shared.dependencies.resolve()
         super.init(frame: frame)
         configureButton()
     }
     
     public required init?(coder aDecoder: NSCoder) {
-        configCacheService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
-        carrierInfoService = ProjectVerifyAppDelegate.shared.dependencies.resolve()
+        brandingProvider = ProjectVerifyAppDelegate.shared.dependencies.resolve()
         super.init(coder: aDecoder)
         configureButton()
     }
@@ -97,10 +90,6 @@ public class ProjectVerifyBrandedButton: UIButton {
 // MARK: - sub-types
 
 extension ProjectVerifyBrandedButton {
-    enum Branding {
-        case `default`
-    }
-    
     /// Provide guidance for the button to use a light background button or a dark background button.
     public enum Style {
         /// Suggests the button should prefer using a light background
@@ -136,7 +125,7 @@ private extension ProjectVerifyBrandedButton {
         titleEdgeInsets = .projectVerifyButtonTitleEdgeInsets
         imageEdgeInsets = .projectVerifyButtonImageEdgeInsets
 
-        branding = brandingFromCache()
+        branding = brandingProvider.branding
         
         if bounds.isEmpty {
             sizeToFit()
