@@ -41,7 +41,7 @@ class Dependencies {
             )
 
             let openIdService = OpenIdService(
-                urlResolver: XCISchemeOpenIdURLResolver()
+                urlResolver: OpenIdURLResolverIOS()
             )
 
             let iosRouter = RouterIOS()

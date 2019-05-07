@@ -9,17 +9,7 @@
 import Foundation
 import SafariServices
 
-protocol MobileNetworkSelectionUIProtocol {
-    func showMobileNetworkSelectionUI(
-        fromController viewController: UIViewController,
-        usingURL url: URL,
-        onUIDidCancel: @escaping () -> Void
-    )
-
-    func close(completion: @escaping () -> Void)
-}
-
-class MobileNetworkSelectionUI: NSObject, MobileNetworkSelectionUIProtocol, SFSafariViewControllerDelegate {
+class MobileNetworkSelectionUIIOS: NSObject, MobileNetworkSelectionUIProtocol, SFSafariViewControllerDelegate {
 
     private var safariController: SFSafariViewController?
     private var onUIDidCancel: (() -> Void)?

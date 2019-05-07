@@ -6,7 +6,6 @@
 //  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
-import SafariServices
 import UIKit
 
 struct MobileNetworkSelectionResponse {
