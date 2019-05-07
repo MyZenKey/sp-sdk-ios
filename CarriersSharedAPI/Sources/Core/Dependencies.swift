@@ -18,6 +18,7 @@ class Dependencies {
 
     init(sdkConfig: SDKConfig) {
         self.sdkConfig = sdkConfig
+        self.buildDependencies()
     }
 
     private func buildDependencies() {
@@ -46,7 +47,7 @@ class Dependencies {
                 urlResolver: OpenIdURLResolverIOS()
             )
 
-            let iosAuthorizationServiceFactory = AuthorizationServiceIOSFactory()
+            let authorizationServiceFactoryIOS = AuthorizationServiceIOSFactory()
 
             let brandingProvider = CurrentSIMBrandingProvider(
                 configCacheService: configCacheService,
@@ -54,13 +55,14 @@ class Dependencies {
             )
 
             all = [
+                sdkConfig,
                 carrierInfoService,
                 configCacheService,
                 discoveryService,
                 mobileNetworkSelectionService,
                 openIdService,
                 router,
-                iosAuthorizationServiceFactory,
+                authorizationServiceFactoryIOS,
                 brandingProvider,
             ]
         #elseif os(tvOS)
@@ -86,6 +88,7 @@ class Dependencies {
 //        )
 
         all = [
+            sdkConfig,
             configCacheService,
             discoveryService,
             router,
@@ -103,7 +106,7 @@ extension Dependencies {
     func resolve<T>() -> T {
         let firstResolution = all.compactMap { $0 as? T }.first
         guard let resolved = firstResolution else {
-            fatalError("attemtping to resolve a dependency that doesn't exist")
+            fatalError("attemtping to resolve a dependency of type \(T.self) that doesn't exist")
         }
         return resolved
     }
