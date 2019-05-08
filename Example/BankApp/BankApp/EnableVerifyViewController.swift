@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import AppAuth
 import CarriersSharedAPI
 
 class EnableVerifyViewController: UIViewController {

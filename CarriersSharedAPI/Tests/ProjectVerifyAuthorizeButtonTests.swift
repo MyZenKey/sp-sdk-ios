@@ -59,16 +59,22 @@ class MockAuthorizationButtonDelegate: ProjectVerifyAuthorizeButtonDelegate {
     }
 }
 
+class MockBrandingProvider: BrandingProvider {
+    var branding: Branding {
+        return .default
+    }
+}
+
 class ProjectVerifyAuthorizeButtonTests: XCTestCase {
     
     let mockControllerProvider = MockCurrentControllerContextProvider()
     let mockAuthorizationService = MockAuthorizationService()
+    let mockBrandingProvider = MockBrandingProvider()
 
     lazy var button = ProjectVerifyAuthorizeButton(
         authorizationService: mockAuthorizationService,
         controllerContextProvider: mockControllerProvider,
-        configCacheService: MockConfigCacheService(),
-        carrierInfoService: MockCarrierInfoService()
+        brandingProvider: mockBrandingProvider
     )
     
     override func setUp() {
@@ -79,8 +85,7 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         button = ProjectVerifyAuthorizeButton(
             authorizationService: mockAuthorizationService,
             controllerContextProvider: mockControllerProvider,
-            configCacheService: MockConfigCacheService(),
-            carrierInfoService: MockCarrierInfoService()
+            brandingProvider: mockBrandingProvider
         )
     }
     

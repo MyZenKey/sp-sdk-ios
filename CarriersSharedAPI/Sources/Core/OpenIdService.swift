@@ -1,0 +1,224 @@
+//
+//  OpenIdService.swift
+//  CarriersSharedAPI
+//
+//  Created by Adam Tierney on 2/27/19.
+//  Copyright © 2019 XCI JV, LLC. All rights reserved.
+//
+
+import Foundation
+import AppAuth
+
+enum ResponseType: String {
+    case code = "code"
+}
+
+public struct UnsupportedCarrier: Error { }
+
+struct OpenIdAuthorizationConfig: Equatable {
+    let simInfo: SIMInfo
+    let clientId: String
+    let authorizationEndpoint: URL
+    let tokenEndpoint: URL
+    let formattedScopes: String
+    let redirectURL: URL
+    let loginHintToken: String?
+    let state: String
+}
+
+protocol OpenIdServiceProtocol: URLHandling {
+    func authorize(
+        fromViewController viewController: UIViewController,
+        authorizationConfig: OpenIdAuthorizationConfig,
+        completion: @escaping AuthorizationCompletion
+    )
+
+    var authorizationInProgress: Bool { get }
+
+    func cancelCurrentAuthorizationSession()
+}
+
+class PendingSessionStorage: OpenIdExternalSessionStateStorage {
+    var pendingSession: OIDExternalUserAgentSession?
+}
+
+class OpenIdService {
+    enum ResponseKeys: String {
+        case state
+        case code
+    }
+
+    enum State {
+        case idle
+        case inProgress(OIDAuthorizationRequest, SIMInfo, AuthorizationCompletion, PendingSessionStorage)
+    }
+
+    var state: State = .idle
+
+    var authorizationInProgress: Bool {
+        switch state {
+        case .idle:
+            return false
+        case .inProgress:
+            return true
+        }
+    }
+
+    let urlResolver: OpenIdURLResolverProtocol
+
+    init(urlResolver: OpenIdURLResolverProtocol) {
+        self.urlResolver = urlResolver
+    }
+}
+
+extension OpenIdService: OpenIdServiceProtocol {
+    func authorize(
+        fromViewController viewController: UIViewController,
+        authorizationConfig: OpenIdAuthorizationConfig,
+        completion: @escaping AuthorizationCompletion
+        ) {
+
+        // issuing a second authorization flow causes the first to be cancelled:
+        if case .inProgress = state {
+            cancelCurrentAuthorizationSession()
+        }
+        
+        let openIdConfiguration = OIDServiceConfiguration(
+            authorizationEndpoint: authorizationConfig.authorizationEndpoint,
+            tokenEndpoint: authorizationConfig.tokenEndpoint
+        )
+
+        //create the authorization request
+        let authorizationRequest: OIDAuthorizationRequest = OpenIdService.createAuthorizationRequest(
+            openIdServiceConfiguration: openIdConfiguration,
+            authorizationConfig: authorizationConfig
+        )
+
+        let sessionStorage = PendingSessionStorage()
+        
+        let simInfo = authorizationConfig.simInfo
+        urlResolver.resolve(
+            request: authorizationRequest,
+            usingStorage: sessionStorage,
+            fromViewController: viewController,
+            authorizationConfig: authorizationConfig) { [weak self] (authState, error) in
+                guard
+                    error == nil,
+                    let authState = authState,
+                    let authCode = authState.lastAuthorizationResponse.authorizationCode else {
+                        self?.concludeAuthorizationFlow(result: .error(error ?? UnknownError()))
+                        return
+                }
+
+                let authorizedResponse = AuthorizedResponse(
+                    code: authCode,
+                    mcc: simInfo.mcc,
+                    mnc: simInfo.mnc
+                )
+
+                self?.concludeAuthorizationFlow(result: .code(authorizedResponse))
+        }
+
+        state = .inProgress(authorizationRequest, simInfo, completion, sessionStorage)
+    }
+    
+    func cancelCurrentAuthorizationSession() {
+        concludeAuthorizationFlow(result: .cancelled)
+    }
+
+    func resolve(url: URL) -> Bool {
+        // NOTE: this logic replicates the functionality in OIDAuthorizationService.m
+        // - (BOOL)resumeExternalUserAgentFlowWithURL:(NSURL *)URL
+        // Because AppAuth is designed around the OAuth 2.0 spec for native apps
+        // (https://tools.ietf.org/html/rfc8252)
+        // it is designed for apps implementing a public client authorization+token flow
+        // we would use the above is the method if we wanted to also request a token but it
+        // doen't support only requesting authorization. Here we'll short circut the token flow and
+        // hand that off to the SP:
+
+        // ensure valid state:
+        guard case .inProgress(let request, let simInfo, _, _) = state else {
+            // there is no request, return
+            return false
+        }
+
+        resolve(request: request, forSIMInfo: simInfo, withURL: url)
+        return true
+    }
+
+    private func resolve(
+        request: OIDAuthorizationRequest,
+        forSIMInfo simInfo: SIMInfo,
+        withURL url: URL) {
+
+        let response = ResponseURL(url: url)
+        let error = response.error
+        guard error == nil else {
+            concludeAuthorizationFlow(result: .error(error!))
+            return
+        }
+
+        // no error, should be a valid OAuth 2.0 response
+        guard
+            let state = request.state,
+            response.hasMatchingState(state)
+            else {
+                concludeAuthorizationFlow(result: .error(AuthorizationError.stateMismatch))
+                return
+        }
+
+        // extract the code
+        guard let code = response[ResponseKeys.code.rawValue] else {
+            concludeAuthorizationFlow(result: .error(AuthorizationError.missingAuthCode))
+            return
+        }
+
+        // success:
+        concludeAuthorizationFlow(result: .code(
+            AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
+            )
+        )
+    }
+
+    func concludeAuthorizationFlow(result: AuthorizationResult) {
+        defer {
+            state = .idle
+        }
+
+        guard case .inProgress(_, _, let completion, _) = state else {
+            return
+        }
+
+        completion(result)
+    }
+}
+
+extension OpenIdService {
+    
+    static func createAuthorizationRequest(
+        openIdServiceConfiguration: OIDServiceConfiguration,
+        authorizationConfig: OpenIdAuthorizationConfig) -> OIDAuthorizationRequest {
+
+        var additionalParams: [String: String] = [:]
+        if let loginHintToken = authorizationConfig.loginHintToken {
+            additionalParams["login_hint_token"] = loginHintToken
+        }
+
+        let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
+            configuration: openIdServiceConfiguration,
+            clientId: authorizationConfig.clientId,
+            clientSecret: nil,
+            scope: authorizationConfig.formattedScopes,
+            redirectURL: authorizationConfig.redirectURL,
+            responseType: ResponseType.code.rawValue,
+            state: authorizationConfig.state,
+            nonce: nil,
+            codeVerifier: nil,
+            codeChallenge: nil,
+            codeChallengeMethod: nil,
+            additionalParameters: additionalParams
+        )
+        
+        return request
+    }
+}
