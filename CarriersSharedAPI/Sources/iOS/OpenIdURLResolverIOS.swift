@@ -23,6 +23,12 @@ extension OpenIdURLResolverProtocol {
             byPresenting: request,
             presenting: viewController,
             callback: { authState, error in
+
+                // This response will be a cancellation or potentially some sort of network error.
+                // we will expect to recieive the redirect url through the handle url flow and
+                // in all likelyhood clean this up manually.
+
+                // TODO: verify errors here on cancel
                 guard
                     error == nil,
                     let authState = authState else {

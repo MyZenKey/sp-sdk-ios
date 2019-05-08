@@ -21,7 +21,7 @@ enum MobileNetworkSelectionResult {
 
 enum MobileNetworkSelectionError: Error {
     case invalidMCCMNC
-    case stateMismatch
+    case urlResponseError(URLResponseError)
 }
 
 typealias MobileNetworkSelectionCompletion = (MobileNetworkSelectionResult) -> Void
@@ -117,30 +117,26 @@ private extension MobileNetworkSelectionService {
     func resolve(request: Request, withURL url: URL) {
         let response = ResponseURL(url: url)
 
-        // FIXME: jv endpoint isn't yet reflecting the state param, comment in when done
-//        guard response.hasMatchingState(request.state) else {
-//            // completion mis match state error
-//            dismissAndUIAndConclude(result: .error(.stateMismatch))
-//            return
-//        }
-
-        guard
-            let mccmnc = response[Keys.mccmnc.rawValue],
-            mccmnc.count == 6
-            else {
-                dismissAndUIAndConclude(result: .error(.invalidMCCMNC))
-                return
+        do {
+            // FIXME: jv endpoint isn't yet reflecting the state param, comment in when done
+//            try response.assertMatchingState(state)
+            try response.assertSuccess()
+            let mccmnc = try response.getRequiredValue(Keys.mccmnc.rawValue)
+            let simInfo = try mccmnc.toSIMInfo()
+            let hintToken: String? = response[Keys.loginHintToken.rawValue]
+            dismissAndUIAndConclude(result: .networkInfo(
+                MobileNetworkSelectionResponse(
+                    simInfo: simInfo,
+                    loginHintToken: hintToken
+                )
+            ))
+        } catch let error as URLResponseError {
+            dismissAndUIAndConclude(result: .error(.urlResponseError(error)))
+        } catch let error as MobileNetworkSelectionError {
+            dismissAndUIAndConclude(result: .error(error))
+        } catch {
+            fatalError("unexpected error occured \(error)")
         }
-
-        let hintToken: String? = response[Keys.loginHintToken.rawValue]
-
-        let simInfo = mccmnc.toSIMInfo()
-        dismissAndUIAndConclude(result: .networkInfo(
-            MobileNetworkSelectionResponse(
-                simInfo: simInfo,
-                loginHintToken: hintToken
-            )
-        ))
     }
 
     func dismissUI(completion: @escaping () -> Void) {
@@ -191,8 +187,10 @@ extension MobileNetworkSelectionService.Request {
 }
 
 private extension String {
-    func toSIMInfo() -> SIMInfo {
-        precondition(count == 6, "only strings of 6 characters can be converted to SIMInfo")
+    func toSIMInfo() throws -> SIMInfo {
+        guard count == 6 else {
+            throw MobileNetworkSelectionError.invalidMCCMNC
+        }
         var copy = self
         let mnc = copy.popLast(3)
         let mcc = copy.popLast(3)

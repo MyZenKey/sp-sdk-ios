@@ -8,6 +8,12 @@
 
 import Foundation
 
+enum URLResponseError: Error {
+    case stateMismatch
+    case missingParameter(String)
+    case errorResponse(String, String?)
+}
+
 struct ResponseURL {
     private enum Keys: String {
         case state
@@ -36,13 +42,19 @@ struct ResponseURL {
     ///
     /// - Parameter state: the state value to attempt to match.
     /// - Returns: whether the url contains a state paramter matching the provided value
-    func hasMatchingState(_ state: String) -> Bool {
+    func assertMatchingState(_ state: String) throws {
         guard
             let inboundState = queryDictionary[Keys.state.rawValue],
             inboundState == state else {
-                return false
+                throw URLResponseError.stateMismatch
         }
-        return true
+    }
+
+    func getRequiredValue(_ param: String) throws -> String {
+        guard let value = self[param] else {
+            throw URLResponseError.missingParameter(param)
+        }
+        return value
     }
 }
 
@@ -57,33 +69,12 @@ extension ResponseURL {
         case errorDescription = "error_description"
     }
 
-    var error: Error? {
-        let errorId = self[ErrorKeys.error.rawValue]
-        guard errorId == nil else {
-            let errorId = errorId!
+    func assertSuccess() throws {
+        let errorCode = self[ErrorKeys.error.rawValue]
+        guard errorCode == nil else {
+            let errorCode = errorCode!
             let errorDescription = self[ErrorKeys.errorDescription.rawValue]
-            let error = ResponseURL.errorValue(
-                fromIdentifier: errorId,
-                description: errorDescription
-            )
-            return error
+            throw URLResponseError.errorResponse(errorCode, errorDescription)
         }
-
-        return nil
-    }
-
-    // TODO: - only expose subset of these errors
-    static func errorValue(
-        fromIdentifier identifier: String,
-        description: String?) -> AuthorizationError {
-
-        if let errorCode = OAuthErrorCode(rawValue: identifier) {
-            return .oauth(errorCode, description)
-        } else if let errorCode = OpenIdErrorCode(rawValue: identifier) {
-            return .openId(errorCode, description)
-        } else if let errorCode = ProjectVerifyErrorCode(rawValue: identifier) {
-            return .projectVerify(errorCode, description)
-        }
-        return .unknown(identifier, description)
     }
 }
