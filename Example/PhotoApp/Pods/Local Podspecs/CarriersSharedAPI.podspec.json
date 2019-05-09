@@ -17,20 +17,31 @@
   },
   "swift_version": "4.2",
   "platforms": {
-    "ios": "10.0"
+    "ios": "10.0",
+    "tvos": "10.0"
   },
-  "source_files": "CarriersSharedAPI/Sources/**/*",
-  "public_header_files": "CarriersSharedAPI/**/*.h",
-  "resources": [
-    "CarriersSharedAPI/Resources/*.xcassets",
-    "CarriersSharedAPI/Resources/*.lproj/*.strings"
-  ],
   "ios": {
+    "source_files": [
+      "CarriersSharedAPI/Sources/Core/**/*",
+      "CarriersSharedAPI/Sources/iOS/**/*"
+    ],
     "frameworks": [
       "UIKit",
       "SafariServices"
     ]
   },
+  "tvos": {
+    "source_files": [
+      "CarriersSharedAPI/Sources/Core/**/*",
+      "CarriersSharedAPI/Sources/tvOS/**/*"
+    ],
+    "frameworks": "UIKit"
+  },
+  "public_header_files": "CarriersSharedAPI/**/*.h",
+  "resources": [
+    "CarriersSharedAPI/Resources/*.xcassets",
+    "CarriersSharedAPI/Resources/*.lproj/*.strings"
+  ],
   "dependencies": {
     "AppAuth": [
       "~> 0.95.0"
