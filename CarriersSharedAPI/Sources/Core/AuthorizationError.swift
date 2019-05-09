@@ -8,22 +8,37 @@
 
 import Foundation
 
+/// An error type which encapsulates the errors that can occur during the authorization flow.
 public struct AuthorizationError: Error, Equatable {
     /// An error occuring during the Open Id Authorization flow
     public enum ErrorType: Equatable {
+        /// The request made is invalid. Check the parameters passed to the authorization call.
         case invalidRequest
+        /// The request was denied by the user or carrier.
         case requestDenied
+        /// The request has timed out.
         case requestTimeout
+        /// There was an error on the server. Please try again later.
         case serverError
+        /// There was a problem communicating over the network. Check your connection and try again.
         case networkFailure
+        /// There is an error configuring the SDK. Confirm your configuration locally and with the
+        /// service provider portal.
         case configurationError
+        /// There is an inconsistency with the user's state. Retry discovery.
         case discoveryStateError
+        /// An unknown error has occured. If the problem persists, contact support.
         case unknownError
     }
 
-    public let errorType: ErrorType
+    /// The error's code. This will provide context as to the origin of the error.
+    ///
+    /// - SeeAlso: ErrorCodes.swift
     public let code: String
+    /// A description of the error if any.
     public let description: String?
+    /// The error type dictates potential origin and recovery suggestion.
+    public let errorType: ErrorType
 
     init(rawErrorCode code: String,
          description: String? = nil) {
