@@ -146,7 +146,7 @@ extension SDKErrorCode: AuthorizationErrorTypeMappable {
     var errorType: AuthorizationError.ErrorType {
         switch self {
         case .stateMismatch, .missingParameter, .invalidParameter:
-            return .serverError
+            return .unknownError
         case .networkError:
             return .networkFailure
         }

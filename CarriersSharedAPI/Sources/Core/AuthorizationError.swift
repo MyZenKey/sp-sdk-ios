@@ -65,7 +65,7 @@ extension URLResponseError: AuthorizationErrorConvertible {
         case .stateMismatch:
             return "the state returned did not match the state sent"
         case .missingParameter(let param):
-            return "the paramter \(param) is required"
+            return "the paramter '\(param)' is required"
         case .errorResponse(_, let description):
             return description
         }
@@ -102,7 +102,7 @@ extension DiscoveryServiceError: AuthorizationErrorConvertible {
         case .networkError:
             return AuthorizationError(
                 rawErrorCode: SDKErrorCode.networkError.rawValue,
-                description: "a network error occured"
+                description: "a network error occurred"
             )
         }
     }
@@ -110,12 +110,11 @@ extension DiscoveryServiceError: AuthorizationErrorConvertible {
 
 extension OpenIdServiceError: AuthorizationErrorConvertible {
     var asAuthorizationError: AuthorizationError {
-
         switch self {
         case .urlResolverError:
             return AuthorizationError(
                 rawErrorCode: SDKErrorCode.networkError.rawValue,
-                description: "a network error occured"
+                description: "a network error occurred"
             )
         case .urlResponseError(let urlError):
             return urlError.asAuthorizationError
@@ -128,7 +127,8 @@ extension MobileNetworkSelectionError: AuthorizationErrorConvertible {
         switch self {
         case .invalidMCCMNC:
             return AuthorizationError(
-                rawErrorCode: SDKErrorCode.invalidParameter.rawValue
+                rawErrorCode: SDKErrorCode.invalidParameter.rawValue,
+                description: "mccmnc paramter is misformatted"
             )
         case .urlResponseError(let urlError):
             return urlError.asAuthorizationError
