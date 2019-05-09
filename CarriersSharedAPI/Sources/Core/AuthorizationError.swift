@@ -10,7 +10,7 @@ import Foundation
 
 /// An error type which encapsulates the errors that can occur during the authorization flow.
 public struct AuthorizationError: Error, Equatable {
-    /// An error occuring during the Open Id Authorization flow
+    /// An error occuring during the OpenId Authorization flow.
     public enum ErrorType: Equatable {
         /// The request made is invalid. Check the parameters passed to the authorization call.
         case invalidRequest
@@ -33,7 +33,7 @@ public struct AuthorizationError: Error, Equatable {
 
     /// The error's code. This will provide context as to the origin of the error.
     ///
-    /// - SeeAlso: ErrorCodes.swift
+    /// - SeeAlso: `ErrorCodes.swift`
     public let code: String
     /// A description of the error if any.
     public let description: String?
@@ -62,12 +62,12 @@ extension AuthorizationError {
     }
 }
 
-/// An error value which corresponds with an AuthorizationError.ErrorType
+/// An error value which corresponds with an `AuthorizationError.ErrorType`
 protocol AuthorizationErrorTypeMappable {
     var errorType: AuthorizationError.ErrorType { get }
 }
 
-/// An error value which can be parsed into an AuthorizationError
+/// An error value which can be parsed into an `AuthorizationError`
 protocol AuthorizationErrorConvertible {
     var asAuthorizationError: AuthorizationError { get }
 }

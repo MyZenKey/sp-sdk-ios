@@ -26,7 +26,7 @@ public enum AuthorizationResult {
     case code(AuthorizedResponse)
     /// When an error occurs it is surfaced here with this result.
     case error(AuthorizationError)
-    /// When the authorizaiton is cancelled this result is returned.
+    /// When the authorization is cancelled this result is returned.
     case cancelled
 }
 

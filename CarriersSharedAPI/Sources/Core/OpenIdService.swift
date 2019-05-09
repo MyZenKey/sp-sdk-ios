@@ -117,7 +117,7 @@ extension OpenIdService: OpenIdServiceProtocol {
                     error == nil,
                     let authState = authState,
                     let authCode = authState.lastAuthorizationResponse.authorizationCode else {
-                        // error value is present here, or we didn't recieve a symetrical response
+                        // error value is present here, or we didn't recieve a symmetrical response
                         // from the api's result
                         self?.concludeAuthorizationFlow(result: .error(.urlResolverError(error)))
                         return

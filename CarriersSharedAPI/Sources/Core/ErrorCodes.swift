@@ -22,7 +22,7 @@ public enum OAuthErrorCode: String {
     /// The RP should only use code or async-token.
     case unsupportedResponseType = "unsupported_response_type"
     /// The RP has constructed a bad request. The RP should visit the service portal to confirm the
-    /// scopes allowed
+    /// scopes allowed.
     case invalidScope = "invalid_scope"
     case serverError = "server_error"
     case temporarilyUnavailable = "temporarily_unavailable"
@@ -53,14 +53,14 @@ extension OAuthErrorCode: AuthorizationErrorTypeMappable {
 ///
 /// for additional info, see [OpenId Connect Core Section 3.1.2.6](https://openid.net/specs/openid-connect-core-1_0.html#AuthError)
 public enum OpenIdErrorCode: String {
-    /// The RP should not be using `display=none`
+    /// The RP should not be using `display=none`.
     case interactionRequired = "interaction_required"
-    /// The RP should not be using `display=none`
+    /// The RP should not be using `display=none`.
     case loginRequired = "login_required"
     case invalidRequestURI = "invalid_request_uri"
-    /// This error may be returned while carriers are still adding support for Request objects
+    /// This error may be returned while carriers are still adding support for Request objects.
     case invalidRequestObject = "invalid_request_object"
-    /// This error may be returned while carriers are still adding support for Request objects
+    /// This error may be returned while carriers are still adding support for Request objects.
     case requestNotSupported = "request_not_supported"
     /// Request URI’s won’t be supported.
     case requestUIRNotSupported = "request_uri_not_supported"
@@ -86,7 +86,7 @@ extension OpenIdErrorCode: AuthorizationErrorTypeMappable {
 
 /// Project Verify Error Codes
 public enum ProjectVerifyErrorCode: String {
-    /// This may be returned if the carrier does not support the user identity. (this may be that
+    /// This may be returned if the carrier does not support the user identity. (This may be that
     /// the phone number is not currently on this carrier, or that the subscriber ID is for a user
     /// that has ported out).
     ///
@@ -94,7 +94,7 @@ public enum ProjectVerifyErrorCode: String {
     case userNotFound = "user_not_found"
     /// The user has denied the transaction.
     case requestDenied = "request_denied"
-    /// The user may not have access to their phone and therefore the  transaction may have failed.
+    /// The user may not have access to their phone and therefore the transaction may have failed.
     /// Or the user did not notice the request.
     case authenticationTimedOut = "authentication_timed_out"
     /// The user's device has been unsuccessful with authentication. This may happen if the user has
@@ -107,9 +107,9 @@ public enum ProjectVerifyErrorCode: String {
     case deviceUnavailable = "device_unavailable"
     /// In the event device authentication has failed.
     case deviceAuthenticationFailure = "device_authentication_failure"
-    /// A user that does not have the CCID application, and or has decided not to install the ccid
-    /// application. This error is likely on Server initiated responces where the user does not have
-    /// the app. Or may accur if the user had ccid but then changed devices, or uninstalled the app.
+    /// A user that does not have the CCID application, and or has decided not to install the CCID
+    /// application. This error is likely on server initiated responses where the user does not have
+    /// the app. Or may accur if the user had CCID but then changed devices, or uninstalled the app.
     case userUnsupported = "user_unsupported"
 }
 
@@ -130,15 +130,15 @@ extension ProjectVerifyErrorCode: AuthorizationErrorTypeMappable {
     }
 }
 
-/// Error codes for errors occuring locally to the SDK
+/// Error codes for errors occuring locally to the SDK.
 public enum SDKErrorCode: String {
     /// The SDK received a network error when communicating with an endpoint.
     case networkError = "sdk_network_error"
-    /// The SDK received a url with a state which did not match the request
+    /// The SDK received a url with a state which did not match the request.
     case stateMismatch = "sdk_mismatch_state"
-    /// The SDK received a respnose which was missing a required parameter
+    /// The SDK received a response which was missing a required parameter.
     case missingParameter = "sdk_missing_parameter"
-    /// The SDK received a respnose with a parameter which did not pass validation
+    /// The SDK received a response with a parameter which did not pass validation.
     case invalidParameter = "sdk_invalid_parameter"
 }
 
@@ -154,7 +154,7 @@ extension SDKErrorCode: AuthorizationErrorTypeMappable {
 }
 
 extension String {
-    /// returns a typed version of th known error code string
+    /// - Returns: a typed version of the known error code string.
     var knownAuthorizationErrorCode: AuthorizationErrorTypeMappable? {
         let errorCodes: [(String) -> AuthorizationErrorTypeMappable?] = [
             OAuthErrorCode.init,
