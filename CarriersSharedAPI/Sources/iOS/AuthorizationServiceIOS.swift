@@ -51,7 +51,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
             forSIMInfo: carrierInfoService.primarySIM,
             scopes: scopes,
             fromViewController: viewController,
-            authroizationContextParameters: .none,
+            authorizationContextParameters: .none,
             completion: completion
         )
     }
@@ -75,7 +75,7 @@ private extension AuthorizationServiceIOS {
     func performDiscovery(forSIMInfo simInfo: SIMInfo?,
                           scopes: [ScopeProtocol],
                           fromViewController viewController: UIViewController,
-                          authroizationContextParameters: AuthorizationContextParameters,
+                          authorizationContextParameters: AuthorizationContextParameters,
                           completion: @escaping AuthorizationCompletion) {
 
         discoveryService.discoverConfig(forSIMInfo: simInfo) { [weak self] result in
@@ -85,7 +85,7 @@ private extension AuthorizationServiceIOS {
                     usingConfig: config,
                     scopes: scopes,
                     fromViewController: viewController,
-                    authroizationContextParameters: authroizationContextParameters,
+                    authorizationContextParameters: authorizationContextParameters,
                     completion: completion
                 )
 
@@ -111,7 +111,7 @@ private extension AuthorizationServiceIOS {
     func showAuthorizationUI(usingConfig config: CarrierConfig,
                              scopes: [ScopeProtocol],
                              fromViewController viewController: UIViewController,
-                             authroizationContextParameters: AuthorizationContextParameters,
+                             authorizationContextParameters: AuthorizationContextParameters,
                              completion: @escaping AuthorizationCompletion) {
 
         let authorizationConfig = OpenIdAuthorizationConfig(
@@ -121,7 +121,7 @@ private extension AuthorizationServiceIOS {
             tokenEndpoint: config.openIdConfig.tokenEndpoint,
             formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
             redirectURL: sdkConfig.redirectURL(forRoute: .authorize),
-            loginHintToken: authroizationContextParameters.loginHintToken,
+            loginHintToken: authorizationContextParameters.loginHintToken,
             state: "demo-app-state"
         )
 
@@ -158,7 +158,7 @@ private extension AuthorizationServiceIOS {
                     forSIMInfo: response.simInfo,
                     scopes: scopes,
                     fromViewController: viewController,
-                    authroizationContextParameters: contextParams,
+                    authorizationContextParameters: contextParams,
                     completion: completion
                 )
             case .error(let error):

@@ -158,6 +158,7 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
                     case .urlResponseError(let responseError) = error,
@@ -165,8 +166,6 @@ class OpenIdServiceTests: XCTestCase {
                     XCTFail("expected to be state mismatch error")
                     return
                 }
-
-                expectation.fulfill()
         }
 
         let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=BIZ"
@@ -180,6 +179,7 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
                     case .urlResponseError(let responseError) = error,
@@ -189,8 +189,6 @@ class OpenIdServiceTests: XCTestCase {
                 }
 
                 XCTAssertEqual(param, "code")
-
-                expectation.fulfill()
         }
 
         let urlString = "testapp://projectverify/authorize?state=bar"
@@ -206,6 +204,7 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
                     case .urlResponseError(let responseError) = error,
@@ -216,7 +215,6 @@ class OpenIdServiceTests: XCTestCase {
 
                 XCTAssertEqual(code, OAuthErrorCode.invalidRequest.rawValue)
                 XCTAssertNil(desc)
-                expectation.fulfill()
         }
 
         let urlString = "testapp://projectverify/authorize?state=bar&error=\(OAuthErrorCode.invalidRequest.rawValue)"
@@ -230,6 +228,7 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
                     case .urlResponseError(let responseError) = error,
@@ -240,7 +239,6 @@ class OpenIdServiceTests: XCTestCase {
 
                 XCTAssertEqual(code, OAuthErrorCode.invalidRequest.rawValue)
                 XCTAssertEqual(desc, "foo")
-                expectation.fulfill()
         }
 
         let urlString = "testapp://projectverify/authorize?state=bar&error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"

@@ -117,25 +117,30 @@ private extension MobileNetworkSelectionService {
     func resolve(request: Request, withURL url: URL) {
         let response = ResponseURL(url: url)
 
-        do {
-            // FIXME: jv endpoint isn't yet reflecting the state param, comment in when done
-//            try response.assertMatchingState(state)
-            try response.assertSuccess()
-            let mccmnc = try response.getRequiredValue(Keys.mccmnc.rawValue)
-            let simInfo = try mccmnc.toSIMInfo()
-            let hintToken: String? = response[Keys.loginHintToken.rawValue]
-            dismissAndUIAndConclude(result: .networkInfo(
+        // FIXME: jv endpoint isn't yet reflecting the state param, comment in when done
+//        // promotes URLResponseError into a MobileNetworkSelectionFlowError
+//        let validatedSIMInfoResult = response.hasMatchingState(request.state).promoteResult()
+//            // check error
+//            .flatMap({ response.getError().promoteResult() })
+        let validatedSIMInfoResult = response.getError().promoteResult()
+            // parse mcc/mnc value
+            .flatMap({ response.getRequiredValue(Keys.mccmnc.rawValue).promoteResult() })
+            // map to sim info
+            .flatMap({ mccmnc in return mccmnc.toSIMInfo() })
+
+        let loginHintToken: String? = response[Keys.loginHintToken.rawValue]
+
+        switch validatedSIMInfoResult {
+        case .value(let simInfo):
+            dismissUIAndConclude(result: .networkInfo(
                 MobileNetworkSelectionResponse(
                     simInfo: simInfo,
-                    loginHintToken: hintToken
+                    loginHintToken: loginHintToken
                 )
             ))
-        } catch let error as URLResponseError {
-            dismissAndUIAndConclude(result: .error(.urlResponseError(error)))
-        } catch let error as MobileNetworkSelectionError {
-            dismissAndUIAndConclude(result: .error(error))
-        } catch {
-            fatalError("unexpected error occured \(error)")
+
+        case .error(let error):
+            dismissUIAndConclude(result: .error(error))
         }
     }
 
@@ -153,7 +158,7 @@ private extension MobileNetworkSelectionService {
         completion(result)
     }
 
-    func dismissAndUIAndConclude(result: MobileNetworkSelectionResult) {
+    func dismissUIAndConclude(result: MobileNetworkSelectionResult) {
         dismissUI {
             self.conclude(result: result)
         }
@@ -187,14 +192,14 @@ extension MobileNetworkSelectionService.Request {
 }
 
 private extension String {
-    func toSIMInfo() throws -> SIMInfo {
+    func toSIMInfo() -> Result<SIMInfo, MobileNetworkSelectionError> {
         guard count == 6 else {
-            throw MobileNetworkSelectionError.invalidMCCMNC
+            return .error(.invalidMCCMNC)
         }
         var copy = self
         let mnc = copy.popLast(3)
         let mcc = copy.popLast(3)
-        return SIMInfo(mcc: String(mcc), mnc: String(mnc))
+        return .value(SIMInfo(mcc: String(mcc), mnc: String(mnc)))
     }
 
     /// removes and returns the last n characters from the string
@@ -203,5 +208,18 @@ private extension String {
         let substring = suffix(bounded)
         removeLast(bounded)
         return substring
+    }
+}
+
+// MARK: - Error Mapping
+
+private extension Result where E == URLResponseError {
+    func promoteResult() -> Result<T, MobileNetworkSelectionError> {
+        switch self {
+        case .value(let value):
+            return .value(value)
+        case .error(let error):
+            return .error(.urlResponseError(error))
+        }
     }
 }

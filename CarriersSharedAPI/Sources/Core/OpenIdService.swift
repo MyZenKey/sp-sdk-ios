@@ -169,22 +169,39 @@ extension OpenIdService: OpenIdServiceProtocol {
             fatalError("no requests should be sent without a valid state")
         }
 
-        do {
-            try response.assertMatchingState(state)
-            try response.assertSuccess()
+        // validate state
+        let validatedCode = response.hasMatchingState(state).promoteResult()
+            // check for error
+            .flatMap({ response.getError().promoteResult() })
+            // extract code
+            .flatMap({ response.getRequiredValue(ResponseKeys.code.rawValue).promoteResult() })
 
-            // no error, should be a valid OAuth 2.0 response
-            let code = try response.getRequiredValue(ResponseKeys.code.rawValue)
-            // success:
+        switch validatedCode {
+        case .value(let code):
             concludeAuthorizationFlow(result: .code(
                 AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
                 )
             )
-        } catch let error as URLResponseError {
-            concludeAuthorizationFlow(result: .error(.urlResponseError(error)))
-        } catch {
-            concludeAuthorizationFlow(result: .error(.urlResolverError(error)))
+        case .error(let error):
+            concludeAuthorizationFlow(result: .error(error))
         }
+
+//        do {
+//            try response.assertMatchingState(state)
+//            try response.assertSuccess()
+//
+//            // no error, should be a valid OAuth 2.0 response
+//            let code = try response.getRequiredValue(ResponseKeys.code.rawValue)
+//            // success:
+//            concludeAuthorizationFlow(result: .code(
+//                AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
+//                )
+//            )
+//        } catch let error as URLResponseError {
+//            concludeAuthorizationFlow(result: .error(.urlResponseError(error)))
+//        } catch {
+//            concludeAuthorizationFlow(result: .error(.urlResolverError(error)))
+//        }
     }
 
     func concludeAuthorizationFlow(result: OpenIdServiceResult) {
@@ -227,5 +244,18 @@ extension OpenIdService {
         )
         
         return request
+    }
+}
+
+// MARK: - Error Mapping
+
+private extension Result where E == URLResponseError {
+    func promoteResult() -> Result<T, OpenIdServiceError> {
+        switch self {
+        case .value(let value):
+            return .value(value)
+        case .error(let error):
+            return .error(.urlResponseError(error))
+        }
     }
 }
