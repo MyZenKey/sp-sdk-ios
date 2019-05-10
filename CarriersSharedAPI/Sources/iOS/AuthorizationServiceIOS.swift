@@ -57,7 +57,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
     }
 }
 
-private extension AuthorizationServiceIOS {
+extension AuthorizationServiceIOS {
 
     struct AuthorizationContextParameters {
         let loginHintToken: String?

@@ -38,7 +38,6 @@
 		8A6C135C228203E700F42E3A /* MobileNetworkSelectionUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C135B228203E700F42E3A /* MobileNetworkSelectionUI.swift */; };
 		8A6C135E22820C1F00F42E3A /* Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C135D22820C1F00F42E3A /* Branding.swift */; };
 		8A6C136022820CDC00F42E3A /* CurrentSIMBrandingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C135F22820CDC00F42E3A /* CurrentSIMBrandingProvider.swift */; };
-		8A6C13862282524400F42E3A /* CarriersSharedAPI_tvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A6C13842282524300F42E3A /* CarriersSharedAPI_tvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A6C138A2282527F00F42E3A /* AppAUth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4888F922550A75006337EC /* AppAUth.framework */; };
 		8A6C138B2282531300F42E3A /* MobileNetworkSelectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A021226659B3001FE65D /* MobileNetworkSelectionService.swift */; };
 		8A6C138C2282531300F42E3A /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A378EC6227CB9A300B63612 /* Router.swift */; };
@@ -250,8 +249,6 @@
 		8A6C136A2282521B00F42E3A /* CarriersSharedAPI_tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarriersSharedAPI_tvOS.h; sourceTree = "<group>"; };
 		8A6C136B2282521B00F42E3A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A6C13822282524300F42E3A /* CarriersSharedAPI_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CarriersSharedAPI_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8A6C13842282524300F42E3A /* CarriersSharedAPI_tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarriersSharedAPI_tvOS.h; sourceTree = "<group>"; };
-		8A6C13852282524400F42E3A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCacheServiceTests.swift; sourceTree = "<group>"; };
 		8A80823A2257C8F700FCF691 /* ProjectVerify.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ProjectVerify.xcassets; sourceTree = "<group>"; };
 		8A80823C2257CBBF00FCF691 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -346,7 +343,6 @@
 				8A4888D122550A75006337EC /* AppAuth.xcodeproj */,
 				233AF955220A3B080023059C /* CarriersSharedAPI */,
 				8A6C13692282521B00F42E3A /* CarriersSharedAPI-tvOS */,
-				8A6C13832282524300F42E3A /* CarriersSharedAPI-tvOS */,
 				56BCE4842203755D00196A17 /* Products */,
 				8A9DEC40224A9B2A00E010EB /* Frameworks */,
 			);
@@ -387,15 +383,6 @@
 			children = (
 				8A6C136A2282521B00F42E3A /* CarriersSharedAPI_tvOS.h */,
 				8A6C136B2282521B00F42E3A /* Info.plist */,
-			);
-			path = "CarriersSharedAPI-tvOS";
-			sourceTree = "<group>";
-		};
-		8A6C13832282524300F42E3A /* CarriersSharedAPI-tvOS */ = {
-			isa = PBXGroup;
-			children = (
-				8A6C13842282524300F42E3A /* CarriersSharedAPI_tvOS.h */,
-				8A6C13852282524400F42E3A /* Info.plist */,
 			);
 			path = "CarriersSharedAPI-tvOS";
 			sourceTree = "<group>";
@@ -490,7 +477,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A6C13862282524400F42E3A /* CarriersSharedAPI_tvOS.h in Headers */,
 				8A6C138D2282531300F42E3A /* CarriersSharedAPI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

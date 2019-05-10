@@ -26,6 +26,11 @@ Runs tests
 fastlane ios generate_docs
 ```
 Generates Docs
+### ios post_docs
+```
+fastlane ios post_docs
+```
+Posts Docs to Slack
 ### ios develop
 ```
 fastlane ios develop
@@ -36,6 +41,11 @@ Builds and submits a Develop release to Hockey
 fastlane ios sprint
 ```
 Builds and submits a Sprint release to Hockey
+### ios update_pods
+```
+fastlane ios update_pods
+```
+Updates the pods for all Example repos
 ### ios beta
 ```
 fastlane ios beta

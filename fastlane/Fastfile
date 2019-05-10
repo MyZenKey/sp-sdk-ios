@@ -236,6 +236,19 @@ platform :ios do
     end
   end
 
+  desc "Updates the pods for all Example repos"
+  lane :update_pods do
+    Dir.chdir('../Example') do
+      directories = Dir.glob('*').select { |file| File.directory? file }
+      directories.each do |entry|
+        Dir.chdir("./#{entry}") do
+          puts "in #{Dir.pwd}"
+          sh "bundle exec pod install" unless !File.exists? "Podfile" 
+        end
+      end
+    end  
+  end
+
   # desc "Builds and submits an App Store release to TestFlight"
   lane :beta do
   #  build("appStore-PRODUCTNAME", 'app-store', {
