@@ -37,14 +37,14 @@ extension OAuthErrorCode: AuthorizationErrorTypeMappable {
         switch self {
         case .invalidRequest, .unauthorizedClient:
             return .configurationError
+        case .accessDenied:
+            return .requestDenied
         case .unsupportedResponseType:
             return .unknownError
         case .invalidScope:
             return .invalidRequest
         case .serverError, .temporarilyUnavailable:
             return .serverError
-        case .accessDenied:
-            return .requestDenied
         }
     }
 }
@@ -75,10 +75,11 @@ public enum OpenIdErrorCode: String {
 extension OpenIdErrorCode: AuthorizationErrorTypeMappable {
     var errorType: AuthorizationError.ErrorType {
         switch self {
-        case .invalidRequestURI:
-            return .configurationError
+        case .invalidRequestObject:
+            return .invalidRequest
         case .interactionRequired, .loginRequired, .accountSelectionRequired, .consentRequired,
-             .requestNotSupported, .invalidRequestObject, .requestUIRNotSupported, .registrationNotSupported:
+             .invalidRequestURI, .requestNotSupported,
+             .requestUIRNotSupported, .registrationNotSupported:
             return .unknownError
         }
     }
@@ -111,20 +112,20 @@ public enum ProjectVerifyErrorCode: String {
     /// application. This error is likely on server initiated responses where the user does not have
     /// the app. Or may accur if the user had CCID but then changed devices, or uninstalled the app.
     case userUnsupported = "user_unsupported"
+    /// The login hint token returned by discovery ui is not valid for this user on this carrier.
+    case invalidLoginHint = "invalid_login_hint"
 }
 
 extension ProjectVerifyErrorCode: AuthorizationErrorTypeMappable {
     var errorType: AuthorizationError.ErrorType {
         switch self {
-        case .deviceUnavailable, .deviceAuthenticationFailure:
+        case .requestDenied, .deviceUnavailable, .deviceAuthenticationFailure:
             return .requestDenied
         case .networkFailure:
             return .networkFailure
         case .authenticationTimedOut:
             return .requestTimeout
-        case .requestDenied:
-            return .requestDenied
-        case .userNotFound, .userUnsupported:
+        case .userNotFound, .userUnsupported, .invalidLoginHint:
             return .discoveryStateError
         }
     }
