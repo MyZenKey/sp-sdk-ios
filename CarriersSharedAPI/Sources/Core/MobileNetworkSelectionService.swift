@@ -21,7 +21,7 @@ enum MobileNetworkSelectionResult {
 
 enum MobileNetworkSelectionError: Error {
     case invalidMCCMNC
-    case stateMismatch
+    case urlResponseError(URLResponseError)
 }
 
 typealias MobileNetworkSelectionCompletion = (MobileNetworkSelectionResult) -> Void
@@ -118,29 +118,30 @@ private extension MobileNetworkSelectionService {
         let response = ResponseURL(url: url)
 
         // FIXME: jv endpoint isn't yet reflecting the state param, comment in when done
-//        guard response.hasMatchingState(request.state) else {
-//            // completion mis match state error
-//            dismissAndUIAndConclude(result: .error(.stateMismatch))
-//            return
-//        }
+//        // promotes URLResponseError into a MobileNetworkSelectionFlowError
+//        let validatedSIMInfoResult = response.hasMatchingState(request.state).promoteResult()
+//            // check error
+//            .flatMap({ response.getError().promoteResult() })
+        let validatedSIMInfoResult = response.getError().promoteResult()
+            // parse mcc/mnc value
+            .flatMap({ response.getRequiredValue(Keys.mccmnc.rawValue).promoteResult() })
+            // map to sim info
+            .flatMap({ mccmnc in return mccmnc.toSIMInfo() })
 
-        guard
-            let mccmnc = response[Keys.mccmnc.rawValue],
-            mccmnc.count == 6
-            else {
-                dismissAndUIAndConclude(result: .error(.invalidMCCMNC))
-                return
+        let loginHintToken: String? = response[Keys.loginHintToken.rawValue]
+
+        switch validatedSIMInfoResult {
+        case .value(let simInfo):
+            dismissUIAndConclude(result: .networkInfo(
+                MobileNetworkSelectionResponse(
+                    simInfo: simInfo,
+                    loginHintToken: loginHintToken
+                )
+            ))
+
+        case .error(let error):
+            dismissUIAndConclude(result: .error(error))
         }
-
-        let hintToken: String? = response[Keys.loginHintToken.rawValue]
-
-        let simInfo = mccmnc.toSIMInfo()
-        dismissAndUIAndConclude(result: .networkInfo(
-            MobileNetworkSelectionResponse(
-                simInfo: simInfo,
-                loginHintToken: hintToken
-            )
-        ))
     }
 
     func dismissUI(completion: @escaping () -> Void) {
@@ -157,7 +158,7 @@ private extension MobileNetworkSelectionService {
         completion(result)
     }
 
-    func dismissAndUIAndConclude(result: MobileNetworkSelectionResult) {
+    func dismissUIAndConclude(result: MobileNetworkSelectionResult) {
         dismissUI {
             self.conclude(result: result)
         }
@@ -191,12 +192,14 @@ extension MobileNetworkSelectionService.Request {
 }
 
 private extension String {
-    func toSIMInfo() -> SIMInfo {
-        precondition(count == 6, "only strings of 6 characters can be converted to SIMInfo")
+    func toSIMInfo() -> Result<SIMInfo, MobileNetworkSelectionError> {
+        guard count == 6 else {
+            return .error(.invalidMCCMNC)
+        }
         var copy = self
         let mnc = copy.popLast(3)
         let mcc = copy.popLast(3)
-        return SIMInfo(mcc: String(mcc), mnc: String(mnc))
+        return .value(SIMInfo(mcc: String(mcc), mnc: String(mnc)))
     }
 
     /// removes and returns the last n characters from the string
@@ -205,5 +208,18 @@ private extension String {
         let substring = suffix(bounded)
         removeLast(bounded)
         return substring
+    }
+}
+
+// MARK: - Error Mapping
+
+private extension Result where E == URLResponseError {
+    func promoteResult() -> Result<T, MobileNetworkSelectionError> {
+        switch self {
+        case .value(let value):
+            return .value(value)
+        case .error(let error):
+            return .error(.urlResponseError(error))
+        }
     }
 }

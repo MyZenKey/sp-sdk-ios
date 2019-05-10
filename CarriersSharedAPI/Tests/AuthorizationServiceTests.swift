@@ -13,14 +13,14 @@ class MockOpenIdService: OpenIdServiceProtocol {
     static let mockSuccess = AuthorizedResponse(code: "abc123", mcc: "123", mnc: "456")
     var lastConfig: OpenIdAuthorizationConfig?
     var lastViewController: UIViewController?
-    var mockResponse: AuthorizationResult = AuthorizationResult.code(
+    var mockResponse: OpenIdServiceResult = .code(
         MockOpenIdService.mockSuccess
     )
 
     func clear() {
         lastConfig = nil
         lastViewController = nil
-        mockResponse = AuthorizationResult.code(
+        mockResponse = .code(
             MockOpenIdService.mockSuccess
         )
     }
@@ -28,7 +28,7 @@ class MockOpenIdService: OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
         authorizationConfig: OpenIdAuthorizationConfig,
-        completion: @escaping AuthorizationCompletion
+        completion: @escaping OpenIdServiceCompletion
     ) {
 
         self.lastViewController = viewController
@@ -218,13 +218,8 @@ class AuthorizationServiceTests: XCTestCase {
                     XCTFail("expected an error response")
                     return
                 }
-                guard
-                    let discoveryError = error as? DiscoveryServiceError,
-                    case DiscoveryServiceError.networkError = discoveryError
-                    else {
-                        XCTFail("expected an error \(error) to match \(mockError)")
-                        return
-                }
+                XCTAssertEqual(error.code, SDKErrorCode.networkError.rawValue)
+                XCTAssertEqual(error.description, "a network error occurred")
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
@@ -269,17 +264,19 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testOpenIdError() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
-        let mockError = NSError.mocked
+        let mockNetowrkError = NSError.mocked
+        let mockError: OpenIdServiceError = .urlResolverError(mockNetowrkError)
         mockOpenIdService.mockResponse = .error(mockError)
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.connectWithProjectVerify(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
-                guard case .error(let error) = result else {
+                guard
+                    case .error(let error) = result else {
                     XCTFail("expected an error response")
                     return
                 }
-                XCTAssertEqual(error as NSError, mockError)
+                XCTAssertEqual(error.code, SDKErrorCode.networkError.rawValue)
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
@@ -366,13 +363,9 @@ class AuthorizationServiceTests: XCTestCase {
                     XCTFail("expected an error response")
                     return
                 }
-                guard
-                    let networkSelectionError = error as? MobileNetworkSelectionError,
-                    case MobileNetworkSelectionError.invalidMCCMNC = networkSelectionError
-                    else {
-                        XCTFail("expected an error \(error) to match \(expectedError)")
-                        return
-                    }
+
+                XCTAssertEqual(error.code, SDKErrorCode.invalidParameter.rawValue)
+                XCTAssertEqual(error.description, "mccmnc paramter is misformatted")
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)

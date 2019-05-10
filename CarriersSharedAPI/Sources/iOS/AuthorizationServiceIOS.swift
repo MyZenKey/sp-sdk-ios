@@ -51,7 +51,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
             forSIMInfo: carrierInfoService.primarySIM,
             scopes: scopes,
             fromViewController: viewController,
-            authroizationContextParameters: .none,
+            authorizationContextParameters: .none,
             completion: completion
         )
     }
@@ -75,28 +75,17 @@ private extension AuthorizationServiceIOS {
     func performDiscovery(forSIMInfo simInfo: SIMInfo?,
                           scopes: [ScopeProtocol],
                           fromViewController viewController: UIViewController,
-                          authroizationContextParameters: AuthorizationContextParameters,
+                          authorizationContextParameters: AuthorizationContextParameters,
                           completion: @escaping AuthorizationCompletion) {
 
-        let sdkConfig = self.sdkConfig
         discoveryService.discoverConfig(forSIMInfo: simInfo) { [weak self] result in
             switch result {
             case .knownMobileNetwork(let config):
-
-                let authorizationConfig = OpenIdAuthorizationConfig(
-                    simInfo: config.simInfo,
-                    clientId: sdkConfig.clientId,
-                    authorizationEndpoint: config.openIdConfig.authorizationEndpoint,
-                    tokenEndpoint: config.openIdConfig.tokenEndpoint,
-                    formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
-                    redirectURL: sdkConfig.redirectURL(forRoute: .authorize),
-                    loginHintToken: authroizationContextParameters.loginHintToken,
-                    state: "demo-app-state"
-                )
-
-                self?.openIdService.authorize(
+                self?.showAuthorizationUI(
+                    usingConfig: config,
+                    scopes: scopes,
                     fromViewController: viewController,
-                    authorizationConfig: authorizationConfig,
+                    authorizationContextParameters: authorizationContextParameters,
                     completion: completion
                 )
 
@@ -109,11 +98,45 @@ private extension AuthorizationServiceIOS {
                 )
                 break
             case .error(let error):
-                completion(.error(error))
+                let authorizationError = error.asAuthorizationError
+                completion(.error(authorizationError))
                 // TODO: -
                 self?.showConsolation("an error occurred during discovery \(error)", on: viewController)
                 break
             }
+        }
+    }
+
+
+    func showAuthorizationUI(usingConfig config: CarrierConfig,
+                             scopes: [ScopeProtocol],
+                             fromViewController viewController: UIViewController,
+                             authorizationContextParameters: AuthorizationContextParameters,
+                             completion: @escaping AuthorizationCompletion) {
+
+        let authorizationConfig = OpenIdAuthorizationConfig(
+            simInfo: config.simInfo,
+            clientId: sdkConfig.clientId,
+            authorizationEndpoint: config.openIdConfig.authorizationEndpoint,
+            tokenEndpoint: config.openIdConfig.tokenEndpoint,
+            formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
+            redirectURL: sdkConfig.redirectURL(forRoute: .authorize),
+            loginHintToken: authorizationContextParameters.loginHintToken,
+            state: "demo-app-state"
+        )
+
+        openIdService.authorize(
+            fromViewController: viewController,
+            authorizationConfig: authorizationConfig) { result in
+                switch result {
+                case .code(let response):
+                    completion(.code(response))
+                case .error(let error):
+                    let authorizationError = error.asAuthorizationError
+                    completion(.error(authorizationError))
+                case .cancelled:
+                    completion(.cancelled)
+                }
         }
     }
 
@@ -135,11 +158,12 @@ private extension AuthorizationServiceIOS {
                     forSIMInfo: response.simInfo,
                     scopes: scopes,
                     fromViewController: viewController,
-                    authroizationContextParameters: contextParams,
+                    authorizationContextParameters: contextParams,
                     completion: completion
                 )
             case .error(let error):
-                completion(.error(error))
+                let authorizationError = error.asAuthorizationError
+                completion(.error(authorizationError))
             case .cancelled:
                 completion(.cancelled)
             }

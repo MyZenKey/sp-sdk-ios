@@ -8,6 +8,12 @@
 
 import Foundation
 
+enum URLResponseError: Error {
+    case stateMismatch
+    case missingParameter(String)
+    case errorResponse(String, String?)
+}
+
 struct ResponseURL {
     private enum Keys: String {
         case state
@@ -31,18 +37,27 @@ struct ResponseURL {
         return queryDictionary[param]
     }
 
-    /// Checks the redirect url for an open id 'state' value and returns true
+    /// Checks the redirect url for an open id 'state' value and returns successfully
     /// if it matches the value provided.
     ///
     /// - Parameter state: the state value to attempt to match.
-    /// - Returns: whether the url contains a state paramter matching the provided value
-    func hasMatchingState(_ state: String) -> Bool {
+    /// - Returns: a successful result or an error if the url state doesn't match the value
+    /// provided.
+    func hasMatchingState(_ state: String) -> Result<Void, URLResponseError> {
         guard
             let inboundState = queryDictionary[Keys.state.rawValue],
             inboundState == state else {
-                return false
+                return .error(URLResponseError.stateMismatch)
         }
-        return true
+
+        return .value(())
+    }
+
+    func getRequiredValue(_ param: String) -> Result<String, URLResponseError> {
+        guard let value = self[param] else {
+            return .error(URLResponseError.missingParameter(param))
+        }
+        return .value(value)
     }
 }
 
@@ -57,33 +72,13 @@ extension ResponseURL {
         case errorDescription = "error_description"
     }
 
-    var error: Error? {
-        let errorId = self[ErrorKeys.error.rawValue]
-        guard errorId == nil else {
-            let errorId = errorId!
+    func getError() -> Result<Void, URLResponseError> {
+        let errorCode = self[ErrorKeys.error.rawValue]
+        guard errorCode == nil else {
+            let errorCode = errorCode!
             let errorDescription = self[ErrorKeys.errorDescription.rawValue]
-            let error = ResponseURL.errorValue(
-                fromIdentifier: errorId,
-                description: errorDescription
-            )
-            return error
+            return .error(URLResponseError.errorResponse(errorCode, errorDescription))
         }
-
-        return nil
-    }
-
-    // TODO: - only expose subset of these errors
-    static func errorValue(
-        fromIdentifier identifier: String,
-        description: String?) -> AuthorizationError {
-
-        if let errorCode = OAuthErrorCode(rawValue: identifier) {
-            return .oauth(errorCode, description)
-        } else if let errorCode = OpenIdErrorCode(rawValue: identifier) {
-            return .openId(errorCode, description)
-        } else if let errorCode = ProjectVerifyErrorCode(rawValue: identifier) {
-            return .projectVerify(errorCode, description)
-        }
-        return .unknown(identifier, description)
+        return .value(())
     }
 }

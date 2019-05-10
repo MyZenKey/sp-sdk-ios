@@ -13,8 +13,6 @@ enum ResponseType: String {
     case code = "code"
 }
 
-public struct UnsupportedCarrier: Error { }
-
 struct OpenIdAuthorizationConfig: Equatable {
     let simInfo: SIMInfo
     let clientId: String
@@ -26,11 +24,24 @@ struct OpenIdAuthorizationConfig: Equatable {
     let state: String
 }
 
+enum OpenIdServiceError: Error {
+    case urlResponseError(URLResponseError)
+    case urlResolverError(Error?)
+}
+
+enum OpenIdServiceResult {
+    case code(AuthorizedResponse)
+    case error(OpenIdServiceError)
+    case cancelled
+}
+
+typealias OpenIdServiceCompletion = (OpenIdServiceResult) -> Void
+
 protocol OpenIdServiceProtocol: URLHandling {
     func authorize(
         fromViewController viewController: UIViewController,
         authorizationConfig: OpenIdAuthorizationConfig,
-        completion: @escaping AuthorizationCompletion
+        completion: @escaping OpenIdServiceCompletion
     )
 
     var authorizationInProgress: Bool { get }
@@ -50,7 +61,7 @@ class OpenIdService {
 
     enum State {
         case idle
-        case inProgress(OIDAuthorizationRequest, SIMInfo, AuthorizationCompletion, PendingSessionStorage)
+        case inProgress(OIDAuthorizationRequest, SIMInfo, OpenIdServiceCompletion, PendingSessionStorage)
     }
 
     var state: State = .idle
@@ -75,7 +86,7 @@ extension OpenIdService: OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
         authorizationConfig: OpenIdAuthorizationConfig,
-        completion: @escaping AuthorizationCompletion
+        completion: @escaping OpenIdServiceCompletion
         ) {
 
         // issuing a second authorization flow causes the first to be cancelled:
@@ -106,7 +117,9 @@ extension OpenIdService: OpenIdServiceProtocol {
                     error == nil,
                     let authState = authState,
                     let authCode = authState.lastAuthorizationResponse.authorizationCode else {
-                        self?.concludeAuthorizationFlow(result: .error(error ?? UnknownError()))
+                        // error value is present here, or we didn't recieve a symmetrical response
+                        // from the api's result
+                        self?.concludeAuthorizationFlow(result: .error(.urlResolverError(error)))
                         return
                 }
 
@@ -152,35 +165,29 @@ extension OpenIdService: OpenIdServiceProtocol {
         withURL url: URL) {
 
         let response = ResponseURL(url: url)
-        let error = response.error
-        guard error == nil else {
-            concludeAuthorizationFlow(result: .error(error!))
-            return
+        guard let state = request.state else {
+            fatalError("no requests should be sent without a valid state")
         }
 
-        // no error, should be a valid OAuth 2.0 response
-        guard
-            let state = request.state,
-            response.hasMatchingState(state)
-            else {
-                concludeAuthorizationFlow(result: .error(AuthorizationError.stateMismatch))
-                return
-        }
+        // validate state
+        let validatedCode = response.hasMatchingState(state).promoteResult()
+            // check for error
+            .flatMap({ response.getError().promoteResult() })
+            // extract code
+            .flatMap({ response.getRequiredValue(ResponseKeys.code.rawValue).promoteResult() })
 
-        // extract the code
-        guard let code = response[ResponseKeys.code.rawValue] else {
-            concludeAuthorizationFlow(result: .error(AuthorizationError.missingAuthCode))
-            return
-        }
-
-        // success:
-        concludeAuthorizationFlow(result: .code(
-            AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
+        switch validatedCode {
+        case .value(let code):
+            concludeAuthorizationFlow(result: .code(
+                AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
+                )
             )
-        )
+        case .error(let error):
+            concludeAuthorizationFlow(result: .error(error))
+        }
     }
 
-    func concludeAuthorizationFlow(result: AuthorizationResult) {
+    func concludeAuthorizationFlow(result: OpenIdServiceResult) {
         defer {
             state = .idle
         }
@@ -220,5 +227,18 @@ extension OpenIdService {
         )
         
         return request
+    }
+}
+
+// MARK: - Error Mapping
+
+private extension Result where E == URLResponseError {
+    func promoteResult() -> Result<T, OpenIdServiceError> {
+        switch self {
+        case .value(let value):
+            return .value(value)
+        case .error(let error):
+            return .error(.urlResponseError(error))
+        }
     }
 }

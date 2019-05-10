@@ -79,7 +79,7 @@ class OpenIdServiceTests: XCTestCase {
 
     func testPassesParametersToURLResolver() {
         let testViewContorller = UIViewController()
-        let completion: AuthorizationCompletion = { _ in }
+        let completion: OpenIdServiceCompletion = { _ in }
         openIdService.authorize(
             fromViewController: testViewContorller,
             authorizationConfig: OpenIdServiceTests.mockConfig,
@@ -158,13 +158,14 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
-                    case AuthorizationError.stateMismatch = error else {
+                    case .urlResponseError(let responseError) = error,
+                    case .stateMismatch = responseError else {
                     XCTFail("expected to be state mismatch error")
                     return
                 }
-                expectation.fulfill()
         }
 
         let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=BIZ"
@@ -178,13 +179,16 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
-                    case AuthorizationError.missingAuthCode = error else {
+                    case .urlResponseError(let responseError) = error,
+                    case .missingParameter(let param) = responseError else {
                         XCTFail("expected to be state mismatch error")
                         return
                 }
-                expectation.fulfill()
+
+                XCTAssertEqual(param, "code")
         }
 
         let urlString = "testapp://projectverify/authorize?state=bar"
@@ -200,19 +204,20 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
-                    case AuthorizationError.oauth(let code, let description) = error else {
+                    case .urlResponseError(let responseError) = error,
+                    case .errorResponse(let code, let desc) = responseError else {
                         XCTFail("expected to be an oauth error")
                         return
                 }
 
-                XCTAssertEqual(code, OAuthErrorCode.invalidRequest)
-                XCTAssertNil(description)
-                expectation.fulfill()
+                XCTAssertEqual(code, OAuthErrorCode.invalidRequest.rawValue)
+                XCTAssertNil(desc)
         }
 
-        let urlString = "testapp://projectverify/authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)"
+        let urlString = "testapp://projectverify/authorize?state=bar&error=\(OAuthErrorCode.invalidRequest.rawValue)"
         let handled = openIdService.resolve(url: URL(string: urlString)!)
         XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
@@ -223,164 +228,25 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+                defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
-                    case AuthorizationError.oauth(let code, let description) = error else {
+                    case .urlResponseError(let responseError) = error,
+                    case .errorResponse(let code, let desc) = responseError  else {
                         XCTFail("expected to be an oauth error")
                         return
                 }
 
-                XCTAssertEqual(code, OAuthErrorCode.invalidRequest)
-                XCTAssertEqual(description, "foo")
-                expectation.fulfill()
+                XCTAssertEqual(code, OAuthErrorCode.invalidRequest.rawValue)
+                XCTAssertEqual(desc, "foo")
         }
 
-        let urlString = "testapp://projectverify/authorize?error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"
+        let urlString = "testapp://projectverify/authorize?state=bar&error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"
         let handled = openIdService.resolve(url: URL(string: urlString)!)
         XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
-    func testErrorValueForOAuthErrorIdentifierOnly() {
-        let expectedError = OAuthErrorCode.invalidRequest
-        let error = ResponseURL.errorValue(
-            fromIdentifier: expectedError.rawValue,
-            description: nil
-        )
-
-        guard
-            case AuthorizationError.oauth(let code, let description) = error else {
-                XCTFail("expected to be an oauth error")
-                return
-        }
-
-        XCTAssertEqual(code, expectedError)
-        XCTAssertNil(description)
-    }
-
-    func testErrorValueForOAuthErrorAndDescription() {
-        let expectedError = OAuthErrorCode.invalidRequest
-        let expectedDescription = "foo"
-        let error = ResponseURL.errorValue(
-            fromIdentifier: expectedError.rawValue,
-            description: expectedDescription
-        )
-
-        guard
-            case AuthorizationError.oauth(let code, let description) = error else {
-                XCTFail("expected to be an oauth error")
-                return
-        }
-
-        XCTAssertEqual(code, expectedError)
-        XCTAssertEqual(description, expectedDescription)
-    }
-
-    func testErrorValueForOpenIdErrorIdentifierOnly() {
-        let expectedError = OpenIdErrorCode.loginRequired
-        let error = ResponseURL.errorValue(
-            fromIdentifier: expectedError.rawValue,
-            description: nil
-        )
-
-        guard
-            case AuthorizationError.openId(let code, let description) = error else {
-                XCTFail("expected to be an oauth error")
-                return
-        }
-
-        XCTAssertEqual(code, expectedError)
-        XCTAssertNil(description)
-    }
-
-    func testErrorValueForOpenIdErrorAndDescription() {
-        let expectedError = OpenIdErrorCode.loginRequired
-        let expectedDescription = "foo"
-        let error = ResponseURL.errorValue(
-            fromIdentifier: expectedError.rawValue,
-            description: expectedDescription
-        )
-
-        guard
-            case AuthorizationError.openId(let code, let description) = error else {
-                XCTFail("expected to be an oauth error")
-                return
-        }
-
-        XCTAssertEqual(code, expectedError)
-        XCTAssertEqual(description, expectedDescription)
-    }
-
-    func testErrorValueForProjectVerifyErrorIdentifierOnly() {
-        let expectedError = ProjectVerifyErrorCode.authenticationTimedOut
-        let error = ResponseURL.errorValue(
-            fromIdentifier: expectedError.rawValue,
-            description: nil
-        )
-
-        guard
-            case AuthorizationError.projectVerify(let code, let description) = error else {
-                XCTFail("expected to be an oauth error")
-                return
-        }
-
-        XCTAssertEqual(code, expectedError)
-        XCTAssertNil(description)
-    }
-
-    func testErrorValueForProjectVerifyErrorAndDescription() {
-        let expectedError = ProjectVerifyErrorCode.authenticationTimedOut
-        let expectedDescription = "foo"
-        let error = ResponseURL.errorValue(
-            fromIdentifier: expectedError.rawValue,
-            description: expectedDescription
-        )
-
-        guard
-            case AuthorizationError.projectVerify(let code, let description) = error else {
-                XCTFail("expected to be an oauth error")
-                return
-        }
-
-        XCTAssertEqual(code, expectedError)
-        XCTAssertEqual(description, expectedDescription)
-    }
-
-    func testErrorValueForUnknownErrorIdentifierOnly() {
-        let expectedError = "invalid_error_id"
-        let error = ResponseURL.errorValue(
-            fromIdentifier: expectedError,
-            description: nil
-        )
-
-        guard
-            case AuthorizationError.unknown(let code, let description) = error else {
-                XCTFail("expected to be an oauth error")
-                return
-        }
-
-        XCTAssertEqual(code, expectedError)
-        XCTAssertNil(description)
-    }
-
-    func testErrorValueForUnknownErrorAndDescription() {
-        let expectedError = "invalid_error_id"
-        let expectedDescription = "foo"
-        let error = ResponseURL.errorValue(
-            fromIdentifier: expectedError,
-            description: expectedDescription
-        )
-
-        guard
-            case AuthorizationError.unknown(let code, let description) = error else {
-                XCTFail("expected to be an oauth error")
-                return
-        }
-
-        XCTAssertEqual(code, expectedError)
-        XCTAssertEqual(description, expectedDescription)
-    }
-    
     // MARK: - Redundant Requests
     
     func testDuplicateRequestsCancelsFirst() {

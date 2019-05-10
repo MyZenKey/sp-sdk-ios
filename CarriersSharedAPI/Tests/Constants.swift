@@ -43,3 +43,9 @@ extension NSError {
         return NSError(domain: "mockerror", code: 0, userInfo: [:])
     }
 }
+
+extension AuthorizationError {
+    static var mocked: AuthorizationError {
+        return AuthorizationError(rawErrorCode: "mock_error", description: "a mock error")
+    }
+}
