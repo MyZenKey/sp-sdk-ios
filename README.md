@@ -10,7 +10,7 @@ Project Verify is a joint undertaking of the Mobile Authentication Taskforce. Th
 
 # Installation
 
-There are three ways to integrate ProjectVerify (and its dependency `AppAuth`) to your project: CocoaPods, Carthage and manually.
+There are currently two ways to integrate ProjectVerify (and its dependency `AppAuth`) to your project: CocoaPods or manually. Carthage may be supported in the future.
 
 ### Dependencies
 
@@ -19,7 +19,7 @@ For more information about AppAuth, see the repository [here](https://github.com
 
 ## Pre-release Git Access
 
-While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule][https://git-scm.com/docs/git-submodule]. If that is not possible, download the source [here][https://git.xcijv.net/mobiledevelopment/sp-sdk-ios] and place it in your project directory.
+While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios) and place it in your project directory.
 
 ```bash
 git submodule add https://git.xcijv.net/mobiledevelopment/sp-sdk-ios
@@ -237,4 +237,4 @@ NOTICE:
 XCI JV, LLC PROPRIETARY. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.
 
 <sub> Last Update:
-Document Version 0.9.3 - May 10, 2019</sub>
+Document Version 0.9.4 - May 10, 2019</sub>
