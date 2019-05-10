@@ -185,23 +185,6 @@ extension OpenIdService: OpenIdServiceProtocol {
         case .error(let error):
             concludeAuthorizationFlow(result: .error(error))
         }
-
-//        do {
-//            try response.assertMatchingState(state)
-//            try response.assertSuccess()
-//
-//            // no error, should be a valid OAuth 2.0 response
-//            let code = try response.getRequiredValue(ResponseKeys.code.rawValue)
-//            // success:
-//            concludeAuthorizationFlow(result: .code(
-//                AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
-//                )
-//            )
-//        } catch let error as URLResponseError {
-//            concludeAuthorizationFlow(result: .error(.urlResponseError(error)))
-//        } catch {
-//            concludeAuthorizationFlow(result: .error(.urlResolverError(error)))
-//        }
     }
 
     func concludeAuthorizationFlow(result: OpenIdServiceResult) {
