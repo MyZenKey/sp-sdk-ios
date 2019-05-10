@@ -75,6 +75,24 @@
 		8A80823F2257CDF100FCF691 /* LocalizationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A80823E2257CDF100FCF691 /* LocalizationUtils.swift */; };
 		8A8FAC912282017A003278C6 /* OpenIdURLResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8FAC902282017A003278C6 /* OpenIdURLResolver.swift */; };
 		8A9DEC42224A9B2A00E010EB /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A9DEC41224A9B2A00E010EB /* AppAuth.framework */; };
+		8AB309EA228614AA003E08D8 /* CarriersSharedAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 233AF954220A3B080023059C /* CarriersSharedAPI.framework */; };
+		8AB309FC228614DE003E08D8 /* AuthorizationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236AC635222714F100E7C900 /* AuthorizationServiceTests.swift */; };
+		8AB309FD228614DE003E08D8 /* ScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237B7BF422261A4500E29992 /* ScopeTests.swift */; };
+		8AB309FE228614DE003E08D8 /* CarriersSharedAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B52505221539E5002124D4 /* CarriersSharedAPITests.swift */; };
+		8AB30A00228614DE003E08D8 /* CarrierInfoServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F412220803500A5F5D9 /* CarrierInfoServiceTests.swift */; };
+		8AB30A01228614DE003E08D8 /* DiscoveryServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F472220B83700A5F5D9 /* DiscoveryServiceTests.swift */; };
+		8AB30A02228614DE003E08D8 /* SIMInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F4A2220C23600A5F5D9 /* SIMInfoTests.swift */; };
+		8AB30A03228614DE003E08D8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5922247E2E00A5F5D9 /* Constants.swift */; };
+		8AB30A04228614DE003E08D8 /* OpenIdServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23196D9022306E29005393AB /* OpenIdServiceTests.swift */; };
+		8AB30A05228614DE003E08D8 /* SDKConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2340CAAB2231D253009556FE /* SDKConfigTests.swift */; };
+		8AB30A06228614DE003E08D8 /* ConfigCacheServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */; };
+		8AB30A07228614DE003E08D8 /* ProjectVerifyAuthorizeButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A00022611061001FE65D /* ProjectVerifyAuthorizeButtonTests.swift */; };
+		8AB30A08228614DE003E08D8 /* MobileNetworkSelectionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABF7549226A1C9F00A81F50 /* MobileNetworkSelectionServiceTests.swift */; };
+		8AB30A09228614DE003E08D8 /* AuthorizationErrorParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC7CF732284D731002A79CB /* AuthorizationErrorParsing.swift */; };
+		8AB30A0A228614E2003E08D8 /* DisocoveryConfigMockPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5122246EC100A5F5D9 /* DisocoveryConfigMockPayloads.swift */; };
+		8AB30A0B228614E2003E08D8 /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5522247A3500A5F5D9 /* MockNetworkService.swift */; };
+		8AB30A0C228614E2003E08D8 /* MockMobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5722247A4600A5F5D9 /* MockMobileNetworkInfoProvider.swift */; };
+		8AB30A0D228614E2003E08D8 /* MockCarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233A50302228831A0089BA0D /* MockCarrierInfoService.swift */; };
 		8ABF75462268FF9200A81F50 /* ResponseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABF75452268FF9200A81F50 /* ResponseURL.swift */; };
 		8ABF7548226A0BD900A81F50 /* URLHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABF7547226A0BD900A81F50 /* URLHandling.swift */; };
 		8AD167BC224EB8D3005C1CA3 /* OpenIdConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD167BB224EB8D3005C1CA3 /* OpenIdConfig.swift */; };
@@ -194,6 +212,13 @@
 			remoteGlobalIDString = 343AAAA51E83489A00F9D36E;
 			remoteInfo = AppAuth_tvOS;
 		};
+		8AB309EB228614AA003E08D8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56BCE47B2203755D00196A17 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 233AF953220A3B080023059C;
+			remoteInfo = CarriersSharedAPI;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -255,6 +280,7 @@
 		8A80823E2257CDF100FCF691 /* LocalizationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationUtils.swift; sourceTree = "<group>"; };
 		8A8FAC902282017A003278C6 /* OpenIdURLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdURLResolver.swift; sourceTree = "<group>"; };
 		8A9DEC41224A9B2A00E010EB /* AppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AB309E5228614AA003E08D8 /* CarriersSharedAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CarriersSharedAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8ABF75452268FF9200A81F50 /* ResponseURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseURL.swift; sourceTree = "<group>"; };
 		8ABF7547226A0BD900A81F50 /* URLHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLHandling.swift; sourceTree = "<group>"; };
 		8ABF7549226A1C9F00A81F50 /* MobileNetworkSelectionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionServiceTests.swift; sourceTree = "<group>"; };
@@ -277,6 +303,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A6C138A2282527F00F42E3A /* AppAUth.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AB309E2228614AA003E08D8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AB309EA228614AA003E08D8 /* CarriersSharedAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +387,7 @@
 			children = (
 				233AF954220A3B080023059C /* CarriersSharedAPI.framework */,
 				8A6C13822282524300F42E3A /* CarriersSharedAPI_tvOS.framework */,
+				8AB309E5228614AA003E08D8 /* CarriersSharedAPITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -522,6 +557,24 @@
 			productReference = 8A6C13822282524300F42E3A /* CarriersSharedAPI_tvOS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		8AB309E4228614AA003E08D8 /* CarriersSharedAPITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8AB309FB228614AA003E08D8 /* Build configuration list for PBXNativeTarget "CarriersSharedAPITests" */;
+			buildPhases = (
+				8AB309E1228614AA003E08D8 /* Sources */,
+				8AB309E2228614AA003E08D8 /* Frameworks */,
+				8AB309E3228614AA003E08D8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8AB309EC228614AA003E08D8 /* PBXTargetDependency */,
+			);
+			name = CarriersSharedAPITests;
+			productName = CarriersSharedAPITests;
+			productReference = 8AB309E5228614AA003E08D8 /* CarriersSharedAPITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -529,7 +582,7 @@
 			isa = PBXProject;
 			attributes = {
 				DefaultBuildSystemTypeForWorkspace = Original;
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "XCI JV, LLC.";
 				TargetAttributes = {
@@ -538,6 +591,9 @@
 						LastSwiftMigration = 1010;
 					};
 					8A6C13812282524300F42E3A = {
+						CreatedOnToolsVersion = 10.2;
+					};
+					8AB309E4228614AA003E08D8 = {
 						CreatedOnToolsVersion = 10.2;
 					};
 				};
@@ -563,6 +619,7 @@
 			targets = (
 				233AF953220A3B080023059C /* CarriersSharedAPI */,
 				8A6C13812282524300F42E3A /* CarriersSharedAPI_tvOS */,
+				8AB309E4228614AA003E08D8 /* CarriersSharedAPITests */,
 			);
 		};
 /* End PBXProject section */
@@ -685,6 +742,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8AB309E3228614AA003E08D8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -768,6 +832,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8AB309E1228614AA003E08D8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AB30A01228614DE003E08D8 /* DiscoveryServiceTests.swift in Sources */,
+				8AB30A09228614DE003E08D8 /* AuthorizationErrorParsing.swift in Sources */,
+				8AB30A04228614DE003E08D8 /* OpenIdServiceTests.swift in Sources */,
+				8AB30A06228614DE003E08D8 /* ConfigCacheServiceTests.swift in Sources */,
+				8AB30A00228614DE003E08D8 /* CarrierInfoServiceTests.swift in Sources */,
+				8AB30A08228614DE003E08D8 /* MobileNetworkSelectionServiceTests.swift in Sources */,
+				8AB30A02228614DE003E08D8 /* SIMInfoTests.swift in Sources */,
+				8AB309FD228614DE003E08D8 /* ScopeTests.swift in Sources */,
+				8AB30A0D228614E2003E08D8 /* MockCarrierInfoService.swift in Sources */,
+				8AB30A0B228614E2003E08D8 /* MockNetworkService.swift in Sources */,
+				8AB30A05228614DE003E08D8 /* SDKConfigTests.swift in Sources */,
+				8AB30A07228614DE003E08D8 /* ProjectVerifyAuthorizeButtonTests.swift in Sources */,
+				8AB309FE228614DE003E08D8 /* CarriersSharedAPITests.swift in Sources */,
+				8AB30A0C228614E2003E08D8 /* MockMobileNetworkInfoProvider.swift in Sources */,
+				8AB309FC228614DE003E08D8 /* AuthorizationServiceTests.swift in Sources */,
+				8AB30A03228614DE003E08D8 /* Constants.swift in Sources */,
+				8AB30A0A228614E2003E08D8 /* DisocoveryConfigMockPayloads.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -780,6 +868,11 @@
 			isa = PBXTargetDependency;
 			name = AppAuth_tvOS;
 			targetProxy = 8A6C13AA2282549800F42E3A /* PBXContainerItemProxy */;
+		};
+		8AB309EC228614AA003E08D8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 233AF953220A3B080023059C /* CarriersSharedAPI */;
+			targetProxy = 8AB309EB228614AA003E08D8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1027,6 +1120,46 @@
 			};
 			name = Release;
 		};
+		8AB309ED228614AA003E08D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = CarriersSharedAPI/Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rightpoint.CarriersSharedAPITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8AB309EE228614AA003E08D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = CarriersSharedAPI/Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rightpoint.CarriersSharedAPITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1053,6 +1186,15 @@
 			buildConfigurations = (
 				8A6C13882282524400F42E3A /* Debug */,
 				8A6C13892282524400F42E3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8AB309FB228614AA003E08D8 /* Build configuration list for PBXNativeTarget "CarriersSharedAPITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8AB309ED228614AA003E08D8 /* Debug */,
+				8AB309EE228614AA003E08D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

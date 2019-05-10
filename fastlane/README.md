@@ -31,6 +31,11 @@ Generates Docs
 fastlane ios post_docs
 ```
 Posts Docs to Slack
+### ios coverage
+```
+fastlane ios coverage
+```
+Runs Code Coverage
 ### ios develop
 ```
 fastlane ios develop
