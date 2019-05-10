@@ -1,6 +1,6 @@
 ![Logo](https://static.raizlabs.xyz/project_verify.png)
 
-# XCI-Provider SDK for iOS
+# iOS Integration Guide
 
 This guide is for developers integrating Project Verify into their iOS applications.
 
@@ -19,10 +19,10 @@ For more information about AppAuth, see the repository [here](https://github.com
 
 ## Pre-release Git Access
 
-While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule][https://git-scm.com/docs/git-submodule]. If that is not possible, download the source [here][https://git.xcijv.net/sp-sdk/sp-sdk-ios] and place it in your project directory.
+While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule][https://git-scm.com/docs/git-submodule]. If that is not possible, download the source [here][https://git.xcijv.net/mobiledevelopment/sp-sdk-ios] and place it in your project directory.
 
 ```bash
-git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
+git submodule add https://git.xcijv.net/mobiledevelopment/sp-sdk-ios
 ```
 
 ## CocoaPods
@@ -41,7 +41,7 @@ More information coming soon - *Carthage* may be supported in the future.
 
 ## Manual
 
-The following steps show how to add ProjectVerifyLogin SDK to your project manually. For a project that links ProjectVerifyLogin manually, see the example [SocialApp](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/SocialApp).
+The following steps show how to add ProjectVerifyLogin SDK to your project manually. For a project that links ProjectVerifyLogin manually, see the example [SocialApp](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/tree/develop/Example/SocialApp).
 
 1 - Retrieve the source for `ProjectVerifyLogin`. We recommend adding it as a [submodule](#pre-release-git-access).
 
@@ -83,7 +83,7 @@ Retrieve your application's client id from the project verify dashboard. Add the
 	</array>
 ```
 
-For examples of how to configure the property list, see the [Social App](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/SocialApp), and [Bank App](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/BankApp).
+For examples of how to configure the property list, see the [Social App](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/tree/develop/Example/SocialApp), and [Bank App](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/tree/develop/Example/BankApp).
 
 ### Custom URL Schemes
 
@@ -100,7 +100,7 @@ The following keys are made available for you to customize the structure of the 
 
 **Note:** for schemes other than `https`, you must add the scheme to your application's `CFBundleURLTypes` list.
 
-For an example of how the configure property list for these custom keys, see the [Photo App](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/PhotoApp).
+For an example of how the configure property list for these custom keys, see the [Photo App](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/tree/develop/Example/PhotoApp).
 
 Redirect urls will require the universal links to route the following paths to the application: `/authorize` and `/discoveryui`.
 For more information about universal links, read Apple's [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links).
@@ -224,7 +224,7 @@ class LoginViewController {
 ```
 
 [submodules]: https://git-scm.com/docs/git-submodule
-[projectVerifyLogin]: https://git.xcijv.net/sp-sdk/sp-sdk-ios
+[projectVerifyLogin]: https://git.xcijv.net/mobiledevelopment/sp-sdk-ios
 [appAuth]: https://github.com/openid/AppAuth-iOS
 
 ## Support
@@ -237,4 +237,4 @@ NOTICE:
 XCI JV, LLC PROPRIETARY. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.
 
 <sub> Last Update:
-Document Version 0.9.2 - May 6, 2019</sub>
+Document Version 0.9.3 - May 10, 2019</sub>
