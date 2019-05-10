@@ -80,10 +80,9 @@ struct OpenIdURLResolverIOS: OpenIdURLResolverProtocol {
 
         // TODO: clean up /cancel existing session semantics:
         let consentURLString = authorizationConfig.consentURLString
-        let urlTransformation = OIDExternalUserAgentIOSCustomBrowser.urlTransformationSchemeConcatPrefix(consentURLString)
 
         let externalUserAgent = OIDExternalUserAgentIOSCustomBrowser(
-            urlTransformation: urlTransformation,
+            urlTransformation: { request in return request },
             canOpenURLScheme: nil,
             appStore: URL(string: consentURLString)
         )!
