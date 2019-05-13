@@ -170,7 +170,7 @@ private extension DiscoveryService {
 }
 
 private extension DiscoveryService {
-    enum Param: String {
+    enum Params: String {
         case clientId = "client_id"
         case mccmnc
     }
@@ -178,11 +178,11 @@ private extension DiscoveryService {
     func discoveryEndpoint(forSIMInfo simInfo: SIMInfo?) -> URL {
 
         var params: [String: String] = [
-            Param.clientId.rawValue: sdkConfig.clientId,
+            Params.clientId.rawValue: sdkConfig.clientId,
         ]
 
         if let simInfo = simInfo {
-            params[Param.mccmnc.rawValue] = simInfo.networkString
+            params[Params.mccmnc.rawValue] = simInfo.networkString
         }
 
         return hostConfig.resource(
