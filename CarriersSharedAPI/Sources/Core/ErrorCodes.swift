@@ -12,16 +12,19 @@ import Foundation
 ///
 /// for additional info, see: [OAuth 2.0 Authorization Section 4.2.2.1](https://tools.ietf.org/html/rfc6749#page-35)
 public enum OAuthErrorCode: String {
-    /// The RP has constructed a bad request. This may be due to any of the parameters submitted.
-    /// The RP should visit the service portal to confirm the parameters they should use.
+    /// The service provider has constructed a bad request. This may be due to any of the parameters
+    /// submitted. The service provider should visit the service portal to confirm the parameters
+    /// they should use.
     case invalidRequest = "invalid_request"
-    /// The RP has constructed a bad request. This may be due to any of the parameters submitted.
-    /// The RP should visit the service portal to confirm the parameters they should use.
+    /// The service provider has constructed a bad request. This may be due to any of the parameters
+    /// submitted. The service provider should visit the service portal to confirm the parameters
+    /// they should use.
     case unauthorizedClient = "unauthorized_client"
-    /// The RP has constructed a bad request. This may be due to any of the parameters submitted.
-    /// The RP should only use code or async-token.
+    /// The service provider has constructed a bad request. This may be due to any of the parameters
+    /// submitted. The service provider should only use code or async-token.
     case unsupportedResponseType = "unsupported_response_type"
-    /// The RP has constructed a bad request. The RP should visit the service portal to confirm the
+    /// The service provider has constructed a bad request. The service provider should visit the
+    /// service portal to confirm the
     /// scopes allowed.
     case invalidScope = "invalid_scope"
     case serverError = "server_error"
@@ -53,9 +56,9 @@ extension OAuthErrorCode: AuthorizationErrorTypeMappable {
 ///
 /// for additional info, see [OpenId Connect Core Section 3.1.2.6](https://openid.net/specs/openid-connect-core-1_0.html#AuthError)
 public enum OpenIdErrorCode: String {
-    /// The RP should not be using `display=none`.
+    /// The service provider should not be using `display=none`.
     case interactionRequired = "interaction_required"
-    /// The RP should not be using `display=none`.
+    /// The service provider should not be using `display=none`.
     case loginRequired = "login_required"
     case invalidRequestURI = "invalid_request_uri"
     /// This error may be returned while carriers are still adding support for Request objects.
@@ -91,7 +94,7 @@ public enum ProjectVerifyErrorCode: String {
     /// the phone number is not currently on this carrier, or that the subscriber ID is for a user
     /// that has ported out).
     ///
-    /// The RP should re-try discovery to locate this user.
+    /// The service provider should re-try discovery to locate this user.
     case userNotFound = "user_not_found"
     /// The user has denied the transaction.
     case requestDenied = "request_denied"
