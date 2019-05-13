@@ -30,6 +30,7 @@ class Dependencies {
         )
 
         let discoveryService = DiscoveryService(
+            sdkConfig: sdkConfig,
             hostConfig: hostConfig,
             networkService: NetworkService(),
             configCacheService: configCacheService

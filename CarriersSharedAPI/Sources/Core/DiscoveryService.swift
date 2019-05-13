@@ -43,6 +43,7 @@ protocol DiscoveryServiceProtocol {
 }
 
 class DiscoveryService: DiscoveryServiceProtocol {
+    private let sdkConfig: SDKConfig
     private let hostConfig: ProjectVerifyNetworkConfig
     private let networkService: NetworkServiceProtocol
     private let configCacheService: ConfigCacheServiceProtocol
@@ -50,9 +51,11 @@ class DiscoveryService: DiscoveryServiceProtocol {
     private let discoveryPath = "/.well-known/openid_configuration"
     private let discoveryEndpointFormat = "%@?&mccmnc=%@%@"
 
-    init(hostConfig: ProjectVerifyNetworkConfig,
+    init(sdkConfig: SDKConfig,
+         hostConfig: ProjectVerifyNetworkConfig,
          networkService: NetworkServiceProtocol,
          configCacheService: ConfigCacheServiceProtocol) {
+        self.sdkConfig = sdkConfig
         self.hostConfig = hostConfig
         self.networkService = networkService
         self.configCacheService = configCacheService
@@ -168,17 +171,23 @@ private extension DiscoveryService {
 
 private extension DiscoveryService {
     enum Param: String {
+        case clientId = "client_id"
         case mccmnc
     }
 
     func discoveryEndpoint(forSIMInfo simInfo: SIMInfo?) -> URL {
-        guard let simInfo = simInfo else {
-            return hostConfig.resource(forPath: discoveryPath)
+
+        var params: [String: String] = [
+            Param.clientId.rawValue: sdkConfig.clientId,
+        ]
+
+        if let simInfo = simInfo {
+            params[Param.mccmnc.rawValue] = simInfo.networkString
         }
 
         return hostConfig.resource(
             forPath: discoveryPath,
-            queryItems: [Param.mccmnc.rawValue: simInfo.networkString]
+            queryItems: params
         )
     }
 }
