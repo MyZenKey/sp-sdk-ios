@@ -28,7 +28,7 @@
 		8A378EC7227CB9A300B63612 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A378EC6227CB9A300B63612 /* Router.swift */; };
 		8A378ED6227D0FBC00B63612 /* AuthorizationServiceIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A378ED5227D0FBC00B63612 /* AuthorizationServiceIOS.swift */; };
 		8A37A010226142CC001FE65D /* CurrentControllerContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A00F226142CC001FE65D /* CurrentControllerContextProvider.swift */; };
-		8A37A013226659A5001FE65D /* ProjectVerifyHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A012226659A5001FE65D /* ProjectVerifyHost.swift */; };
+		8A37A013226659A5001FE65D /* ProjectVerifyNetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A012226659A5001FE65D /* ProjectVerifyNetworkConfig.swift */; };
 		8A37A022226659B3001FE65D /* MobileNetworkSelectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A021226659B3001FE65D /* MobileNetworkSelectionService.swift */; };
 		8A3FAB1C224055DD00767A03 /* ConfigCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */; };
 		8A48895122555345006337EC /* ProjectVerifyAuthorizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48895022555345006337EC /* ProjectVerifyAuthorizeButton.swift */; };
@@ -46,7 +46,7 @@
 		8A6C138F2282531300F42E3A /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */; };
 		8A6C13902282531300F42E3A /* AuthorizationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2399F3F82227702A007D3613 /* AuthorizationError.swift */; };
 		8A6C13912282531300F42E3A /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233A502E22287DD10089BA0D /* Dependencies.swift */; };
-		8A6C13922282531300F42E3A /* ProjectVerifyHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A012226659A5001FE65D /* ProjectVerifyHost.swift */; };
+		8A6C13922282531300F42E3A /* ProjectVerifyNetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A012226659A5001FE65D /* ProjectVerifyNetworkConfig.swift */; };
 		8A6C13932282531300F42E3A /* ProjectVerifyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */; };
 		8A6C13942282531300F42E3A /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */; };
 		8A6C13952282531300F42E3A /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5F2226086600A5F5D9 /* Scope.swift */; };
@@ -260,7 +260,7 @@
 		8A378ED5227D0FBC00B63612 /* AuthorizationServiceIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceIOS.swift; sourceTree = "<group>"; };
 		8A37A00022611061001FE65D /* ProjectVerifyAuthorizeButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerifyAuthorizeButtonTests.swift; sourceTree = "<group>"; };
 		8A37A00F226142CC001FE65D /* CurrentControllerContextProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentControllerContextProvider.swift; sourceTree = "<group>"; };
-		8A37A012226659A5001FE65D /* ProjectVerifyHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerifyHost.swift; sourceTree = "<group>"; };
+		8A37A012226659A5001FE65D /* ProjectVerifyNetworkConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerifyNetworkConfig.swift; sourceTree = "<group>"; };
 		8A37A021226659B3001FE65D /* MobileNetworkSelectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionService.swift; sourceTree = "<group>"; };
 		8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCacheService.swift; sourceTree = "<group>"; };
 		8A4888D122550A75006337EC /* AppAuth.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppAuth.xcodeproj; path = "AppAuth-iOS/AppAuth.xcodeproj"; sourceTree = "<group>"; };
@@ -485,7 +485,7 @@
 				8A48895022555345006337EC /* ProjectVerifyAuthorizeButton.swift */,
 				8A5C3F8A225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift */,
 				8A5C3F9B225E9B190013DEC3 /* ProjectVerifyBrandedButton.swift */,
-				8A37A012226659A5001FE65D /* ProjectVerifyHost.swift */,
+				8A37A012226659A5001FE65D /* ProjectVerifyNetworkConfig.swift */,
 				8ABF75452268FF9200A81F50 /* ResponseURL.swift */,
 				23F88F5D2225AD6500A5F5D9 /* Result.swift */,
 				8A378EC6227CB9A300B63612 /* Router.swift */,
@@ -777,7 +777,7 @@
 				8A48895122555345006337EC /* ProjectVerifyAuthorizeButton.swift in Sources */,
 				8A6C135E22820C1F00F42E3A /* Branding.swift in Sources */,
 				23F88F3C221F31B800A5F5D9 /* Carrier.swift in Sources */,
-				8A37A013226659A5001FE65D /* ProjectVerifyHost.swift in Sources */,
+				8A37A013226659A5001FE65D /* ProjectVerifyNetworkConfig.swift in Sources */,
 				8A5C3F9C225E9B190013DEC3 /* ProjectVerifyBrandedButton.swift in Sources */,
 				23F88F44222080C800A5F5D9 /* DiscoveryService.swift in Sources */,
 				23F88F542224738A00A5F5D9 /* NetworkService.swift in Sources */,
@@ -812,7 +812,7 @@
 				8A6C139F2282531300F42E3A /* ErrorCodes.swift in Sources */,
 				8A6C138C2282531300F42E3A /* Router.swift in Sources */,
 				8A6C13952282531300F42E3A /* Scope.swift in Sources */,
-				8A6C13922282531300F42E3A /* ProjectVerifyHost.swift in Sources */,
+				8A6C13922282531300F42E3A /* ProjectVerifyNetworkConfig.swift in Sources */,
 				8A6C13A72282531300F42E3A /* ProjectVerifyBrandedButton+Branding.swift in Sources */,
 				8A6C13982282531300F42E3A /* URLHandling.swift in Sources */,
 				8A6C13A52282531300F42E3A /* MobileNetworkSelectionUI.swift in Sources */,

@@ -43,14 +43,17 @@ protocol DiscoveryServiceProtocol {
 }
 
 class DiscoveryService: DiscoveryServiceProtocol {
-
+    private let hostConfig: ProjectVerifyNetworkConfig
     private let networkService: NetworkServiceProtocol
     private let configCacheService: ConfigCacheServiceProtocol
-    private let discoveryResource = "https://app.xcijv.com/.well-known/openid_configuration"
+
+    private let discoveryPath = "/.well-known/openid_configuration"
     private let discoveryEndpointFormat = "%@?&mccmnc=%@%@"
 
-    init(networkService: NetworkServiceProtocol,
+    init(hostConfig: ProjectVerifyNetworkConfig,
+         networkService: NetworkServiceProtocol,
          configCacheService: ConfigCacheServiceProtocol) {
+        self.hostConfig = hostConfig
         self.networkService = networkService
         self.configCacheService = configCacheService
     }
@@ -119,11 +122,7 @@ private extension DiscoveryService {
     func performDiscovery(forSIMInfo simInfo: SIMInfo?,
                           completion: @escaping DiscoveryServiceCompletion) {
 
-        let endpointString = discoveryEndpoint(forSIMInfo: simInfo)
-        guard let discoveryURL = URL(string: endpointString) else {
-            fatalError("disocvery endpoint is returning an invalid url: \(endpointString)")
-        }
-
+        let discoveryURL = discoveryEndpoint(forSIMInfo: simInfo)
         var request = URLRequest(url: discoveryURL)
         request.httpMethod = "GET"
         networkService.requestJSON(
@@ -165,17 +164,21 @@ private extension DiscoveryService {
             }
         }
     }
+}
 
-    func discoveryEndpoint(forSIMInfo simInfo: SIMInfo?) -> String {
+private extension DiscoveryService {
+    enum Param: String {
+        case mccmnc
+    }
+
+    func discoveryEndpoint(forSIMInfo simInfo: SIMInfo?) -> URL {
         guard let simInfo = simInfo else {
-            return discoveryResource
+            return hostConfig.resource(forPath: discoveryPath)
         }
 
-        return String(
-            format: discoveryEndpointFormat,
-            discoveryResource,
-            simInfo.mcc,
-            simInfo.mnc
+        return hostConfig.resource(
+            forPath: discoveryPath,
+            queryItems: [Param.mccmnc.rawValue: simInfo.networkString]
         )
     }
 }
