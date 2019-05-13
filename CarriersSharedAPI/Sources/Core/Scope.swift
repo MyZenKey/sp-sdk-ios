@@ -107,6 +107,6 @@ extension Array where Element == ScopeProtocol {
 
 extension Array where Element == String {
     var deduplicateStrings: [String] {
-        return Array<String>(Set<String>(self))
+        return [String](Set<String>(self))
     }
 }

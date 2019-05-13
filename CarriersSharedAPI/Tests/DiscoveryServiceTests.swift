@@ -9,23 +9,25 @@
 import XCTest
 @testable import CarriersSharedAPI
 
+// swiftlint:disable force_try
 class MockConfigCacheService: ConfigCacheServiceProtocol {
     var implementation = MockConfigCacheService.newImplementation()
-    
+
     var lastCacheParams: (OpenIdConfig, SIMInfo)?
     var lastConfigForParams: (SIMInfo, Bool)?
 
     var cacheTTL: TimeInterval {
         get { return implementation.cacheTTL }
+        // swiftlint:disable:next unused_setter_value
         set {}
     }
-    
+
     func clear() {
         implementation = MockConfigCacheService.newImplementation()
         lastCacheParams = nil
         lastConfigForParams = nil
     }
-    
+
     func cacheConfig(_ config: OpenIdConfig, forSIMInfo simInfo: SIMInfo) {
         lastCacheParams = (config, simInfo)
         implementation.cacheConfig(config, forSIMInfo: simInfo)
@@ -35,7 +37,7 @@ class MockConfigCacheService: ConfigCacheServiceProtocol {
         lastConfigForParams = (simInfo, allowStaleRecords)
         return implementation.config(forSIMInfo: simInfo, allowStaleRecords: allowStaleRecords)
     }
-    
+
     private static func newImplementation() -> ConfigCacheService {
         return ConfigCacheService(
             networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
@@ -162,31 +164,31 @@ class DiscoveryServiceTests: XCTestCase {
                 authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
                 issuer: URL(string: "https://brass.account.t-mobile.com")!
             )
-            
+
             XCTAssertEqual(
                 config.openIdConfig,
                 expectedResult
             )
-            
+
             let lastParams = try! UnwrapAndAssertNotNil(self.mockConfigCacheService.lastCacheParams)
             XCTAssertEqual(
                 lastParams.0,
                 expectedResult
             )
-            
+
             XCTAssertEqual(
                 lastParams.1,
                 MockSIMs.tmobile
             )
-            
+
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
     }
-    
+
     func testKnownCarrierEndpointErrorFallbackToLastSuccessfulConfigIfAvailable() {
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
-        
+
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { _ in
 
@@ -194,25 +196,25 @@ class DiscoveryServiceTests: XCTestCase {
             self.mockNetworkService.mockError(.networkError(error))
             self.discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { result in
                 let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
-                
+
                 let expectedResult = OpenIdConfig(
                     tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
                     authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
                     issuer: URL(string: "https://brass.account.t-mobile.com")!
                 )
-                
+
                 XCTAssertEqual(
                     config.openIdConfig,
                     expectedResult
                 )
-                
+
                 expectation.fulfill()
             }
         }
-        
+
         wait(for: [expectation], timeout: timeout)
     }
-    
+
     func testServiceReturnsOnMainThreadFromMainThread() {
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectation = XCTestExpectation(description: "async discovery")
@@ -220,10 +222,10 @@ class DiscoveryServiceTests: XCTestCase {
             XCTAssertTrue(Thread.isMainThread)
             expectation.fulfill()
         }
-        
+
         wait(for: [expectation], timeout: timeout)
     }
-    
+
     func testServiceReturnsOnMainThreadFromBackgroundThread() {
         mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
         let expectation = XCTestExpectation(description: "async discovery")
@@ -258,3 +260,4 @@ extension DiscoveryServiceResult {
         }
     }
 }
+// swiftlint:enable force_try

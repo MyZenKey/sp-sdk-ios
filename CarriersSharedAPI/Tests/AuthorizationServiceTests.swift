@@ -103,14 +103,14 @@ class MockDiscoveryService: DiscoveryServiceProtocol {
 
     /// FIFO responses
     var mockResponses: [DiscoveryServiceResult] = [
-        .knownMobileNetwork(MockDiscoveryService.mockSuccess)
+        .knownMobileNetwork(MockDiscoveryService.mockSuccess),
     ]
 
     func clear() {
         lastSIMInfo = nil
         lastCompletion = nil
         mockResponses = [
-            .knownMobileNetwork(MockDiscoveryService.mockSuccess)
+            .knownMobileNetwork(MockDiscoveryService.mockSuccess),
         ]
     }
 
@@ -233,7 +233,7 @@ class AuthorizationServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.connectWithProjectVerify(
             scopes: self.scopes,
-            fromViewController: expectedController) { result in
+            fromViewController: expectedController) { _ in
                 XCTAssertEqual(self.mockOpenIdService.lastViewController, expectedController)
                 XCTAssertEqual(self.mockOpenIdService.lastConfig?.formattedScopes, "openid address email")
                 expectation.fulfill()

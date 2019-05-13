@@ -14,29 +14,29 @@ class MockCurrentControllerContextProvider: CurrentControllerContextProvider {
 }
 
 class MockAuthorizationService: AuthorizationServiceProtocol {
-   
+
     var mockResult: AuthorizationResult = .cancelled
-    
+
     var lastScopes: [ScopeProtocol]?
     var lastViewController: UIViewController?
     var lastCompletion: AuthorizationCompletion?
-    
+
     func clear() {
         mockResult = .cancelled
         lastScopes = nil
         lastViewController = nil
         lastCompletion = nil
     }
-    
+
     func connectWithProjectVerify(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
         completion: @escaping AuthorizationCompletion) {
-     
+
         lastScopes = scopes
         lastViewController = viewController
         lastCompletion = completion
-        
+
         DispatchQueue.main.async {
             completion(self.mockResult)
         }
@@ -44,14 +44,14 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
 }
 
 class MockAuthorizationButtonDelegate: ProjectVerifyAuthorizeButtonDelegate {
-    
+
     var onWillBegin: (() -> Void)?
     var onDidFinish: ((AuthorizationResult) -> Void)?
 
     func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) {
         onWillBegin?()
     }
-    
+
     func buttonDidFinish(
         _ button: ProjectVerifyAuthorizeButton,
         withResult result: AuthorizationResult) {
@@ -66,7 +66,7 @@ class MockBrandingProvider: BrandingProvider {
 }
 
 class ProjectVerifyAuthorizeButtonTests: XCTestCase {
-    
+
     let mockControllerProvider = MockCurrentControllerContextProvider()
     let mockAuthorizationService = MockAuthorizationService()
     let mockBrandingProvider = MockBrandingProvider()
@@ -76,19 +76,19 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         controllerContextProvider: mockControllerProvider,
         brandingProvider: mockBrandingProvider
     )
-    
+
     override func setUp() {
         super.setUp()
         mockControllerProvider.currentController = UIViewController()
         mockAuthorizationService.clear()
-        
+
         button = ProjectVerifyAuthorizeButton(
             authorizationService: mockAuthorizationService,
             controllerContextProvider: mockControllerProvider,
             brandingProvider: mockBrandingProvider
         )
     }
-    
+
     func testDefaultAppearance() {
         let appearance = ProjectVerifyBrandedButton.Appearance.dark
         XCTAssertTrue(button.isCurrentColorScheme(appearance.normal))
@@ -99,7 +99,7 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         let appearance = ProjectVerifyBrandedButton.Appearance.light
         XCTAssertTrue(button.isCurrentColorScheme(appearance.normal))
     }
-    
+
     func testHighlightApperance() {
         button.isHighlighted = true
         let appearance = ProjectVerifyBrandedButton.Appearance.dark
@@ -111,18 +111,17 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         let appearance = ProjectVerifyBrandedButton.Appearance.dark
         XCTAssertTrue(button.isCurrentColorScheme(appearance.highlighted))
     }
-    
+
     // TODO: handle branding
     // NOTE: will require mocking button via configCacheService:carrierInfoService:
 
     // MARK: - authorization:
-    
     func testAuthorizationServiceCalled() {
         XCTAssertNil(mockAuthorizationService.lastCompletion)
         button.handlePress(sender: button)
         XCTAssertNotNil(mockAuthorizationService.lastCompletion)
     }
-    
+
     func testRequestSetScopes() {
         let testScopes: [Scope] = [.secondFactor]
         button.scopes = testScopes
@@ -137,11 +136,11 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
             mockControllerProvider.currentController
         )
     }
-    
+
     func testDelegateWillStartCalled() {
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate
-        
+
         let expectation = XCTestExpectation(description: "wait")
         mockDelegate.onWillBegin = {
             expectation.fulfill()
@@ -149,11 +148,11 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         button.handlePress(sender: button)
         wait(for: [expectation], timeout: timeout)
     }
-    
+
     func testButtonCannotMakeRedundantAuthorizeCalls() {
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate
-        
+
         var willBeginCount = 0
         mockDelegate.onWillBegin = {
             willBeginCount += 1
@@ -189,7 +188,7 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate
-        
+
         let expectation = XCTestExpectation(description: "wait")
         mockDelegate.onDidFinish = { result in
             guard case .code(let response) = result else {
@@ -212,7 +211,7 @@ private extension ProjectVerifyBrandedButton {
             let attributedTitleColor = value as? UIColor else {
                 return false
         }
-        
+
         return
             attributedTitleColor == colorScheme.title &&
             tintColor == colorScheme.image &&

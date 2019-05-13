@@ -49,6 +49,8 @@ extension OpenIdAuthorizationConfig {
         // a) do we need this url tansformation? it seems to be for adding a custom scheme
         // when we probably want to use universal links
         // b) passing the authorization url to the app store link might make sense but I'm not sure
+
+        //swiftlint:disable:next line_length
         return "\(authorizationEndpoint)?client_id=\(clientId.urlEncode())&response_type=code&redirect_uri=\(redirectURL.absoluteString.urlEncode())&scope=\(formattedScopes.urlEncode())&state=\(state.urlEncode())"
     }
 }

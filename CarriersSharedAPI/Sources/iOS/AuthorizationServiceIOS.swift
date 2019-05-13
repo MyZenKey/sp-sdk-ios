@@ -88,7 +88,6 @@ extension AuthorizationServiceIOS {
                     authorizationContextParameters: authorizationContextParameters,
                     completion: completion
                 )
-
             case .unknownMobileNetwork(let redirect):
                 self?.showDiscoveryUI(
                     usingResource: redirect.redirectURI,
@@ -96,17 +95,14 @@ extension AuthorizationServiceIOS {
                     fromViewController: viewController,
                     completion: completion
                 )
-                break
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
                 completion(.error(authorizationError))
                 // TODO: -
                 self?.showConsolation("an error occurred during discovery \(error)", on: viewController)
-                break
             }
         }
     }
-
 
     func showAuthorizationUI(usingConfig config: CarrierConfig,
                              scopes: [ScopeProtocol],

@@ -46,6 +46,8 @@ struct NetworkIdentifierCache {
 
     func carrier(forMcc mcc: String, mnc: String) -> Carrier {
         var matchedCarrier: Carrier = .unknown
+        // use for loop to exit early:
+        // swiftlint:disable:next unused_enumerated
         for (_, element) in identifiersByCarrier.enumerated() {
             let identifiers = element.value
             if identifiers.has(mcc: mcc, mnc: mnc) {
@@ -59,13 +61,13 @@ struct NetworkIdentifierCache {
 
     private static let attCodes = NetworkIdentifiers([
         "310": [
-            "007", "560", "680", "150", "170", "380", "410"
+            "007", "560", "680", "150", "170", "380", "410",
         ],
     ])
 
     private static let tmobileCodes = NetworkIdentifiers([
         "310": [
-            "160", "200", "210", "220", "230", "240", "250", "260", "270", "310", "490", "660", "800"
+            "160", "200", "210", "220", "230", "240", "250", "260", "270", "310", "490", "660", "800",
         ],
     ])
 
@@ -74,7 +76,7 @@ struct NetworkIdentifierCache {
         "311": [
             "110", "270", "271", "272", "273", "274", "275", "276", "277", "278", "279", "280",
             "281", "282", "283", "284", "285", "286", "287", "288", "289", "390", "480", "481",
-            "482", "483", "484", "485", "486", "487", "488", "489"
+            "482", "483", "484", "485", "486", "487", "488", "489",
         ],
     ])
 

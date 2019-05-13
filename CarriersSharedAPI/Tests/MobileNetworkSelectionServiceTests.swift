@@ -6,7 +6,6 @@
 //  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
-
 import XCTest
 import Foundation
 @testable import CarriersSharedAPI
@@ -39,6 +38,7 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
     static let resource = URL(string: "https://app.xcijv.com/ui/discovery-ui")!
 
     static let validRequestURL = URL(
+        // swiftlint:disable:next line_length
         string: "https://app.xcijv.com/ui/discovery-ui?client_id=mockClientId&redirect_uri=mockClientId://com.xci.provider.sdk/projectverify/discoveryui&state=test-state"
     )!
 
@@ -179,8 +179,9 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 }
-class MobileNetworkSelectionServiceRequestTests: XCTestCase {
 
+// swiftlint:disable:next type_name
+class MobileNetworkSelectionServiceRequestTests: XCTestCase {
     func testRequestCretatesAppropriatelyFormattedURL() {
         let request = MobileNetworkSelectionService.Request(
             resource: URL(string: "https://rightpoint")!,

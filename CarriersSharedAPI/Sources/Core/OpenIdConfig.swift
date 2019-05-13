@@ -12,7 +12,7 @@ struct OpenIdConfig: Equatable {
     let tokenEndpoint: URL
     let authorizationEndpoint: URL
     let issuer: URL
-    
+
     init(tokenEndpoint: URL,
          authorizationEndpoint: URL,
          issuer: URL) {
@@ -54,7 +54,7 @@ extension IssuerResponse: Decodable {
     init(from decoder: Decoder) throws {
         if let config = try? OpenIdConfig(from: decoder) {
             self = .config(config)
-        } else if let redirect = try? Redirect(from: decoder)  {
+        } else if let redirect = try? Redirect(from: decoder) {
             self = .redirect(redirect)
         } else {
             // throw out if no error

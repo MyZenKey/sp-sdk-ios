@@ -15,13 +15,13 @@ public class ProjectVerifyBrandedButton: UIButton {
             updateTinting()
         }
     }
-    
+
     public override var isEnabled: Bool {
         didSet {
             updateTinting()
         }
     }
-    
+
     /// A style for the button to adopt. Light backgrounds should prefer a dark style, while
     /// dark backgrounds may find a light style provides greater contrast.
     ///
@@ -31,7 +31,7 @@ public class ProjectVerifyBrandedButton: UIButton {
             updateBranding()
         }
     }
-    
+
     var branding: Branding = .default {
         didSet {
             updateBranding()
@@ -49,7 +49,7 @@ public class ProjectVerifyBrandedButton: UIButton {
         super.init(frame: .zero)
         configureButton()
     }
-    
+
     init(dependencyContainer container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies) {
         brandingProvider = container.resolve()
         super.init(frame: .zero)
@@ -67,21 +67,21 @@ public class ProjectVerifyBrandedButton: UIButton {
         super.init(frame: frame)
         configureButton()
     }
-    
+
     public required init?(coder aDecoder: NSCoder) {
         brandingProvider = ProjectVerifyAppDelegate.shared.dependencies.resolve()
         super.init(coder: aDecoder)
         configureButton()
     }
-    
+
     public override func awakeFromNib() {
         super.awakeFromNib()
         configureButton()
     }
-    
+
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         guard !isHidden else { return .zero }
-        
+
         let fittingSize = super.sizeThatFits(size)
         return CGSize(width: max(fittingSize.width, size.width), height: Constants.height)
     }
@@ -97,15 +97,16 @@ extension ProjectVerifyBrandedButton {
         /// Suggests the button should prefer using a dark background
         case dark
     }
-    
+
     /// Branded button appearance configuration
     struct Appearance {
+        // swiftlint:disable:next nesting
         struct ColorScheme {
             let title: UIColor
             let image: UIColor
             let background: UIColor
         }
-        
+
         let normal: ColorScheme
         let highlighted: ColorScheme
     }
@@ -115,10 +116,10 @@ extension ProjectVerifyBrandedButton {
 
 private extension ProjectVerifyBrandedButton {
     func configureButton() {
-        
+
         adjustsImageWhenHighlighted = false
         adjustsImageWhenDisabled = false
-        
+
         layer.cornerRadius = Constants.cornerRadius
 
         contentEdgeInsets = .projectVerifyButtonContentInsets
@@ -126,12 +127,12 @@ private extension ProjectVerifyBrandedButton {
         imageEdgeInsets = .projectVerifyButtonImageEdgeInsets
 
         branding = brandingProvider.branding
-        
+
         if bounds.isEmpty {
             sizeToFit()
         }
     }
-    
+
     func updateBranding() {
         setAttributedTitle(
             attributedTitle(
@@ -140,7 +141,7 @@ private extension ProjectVerifyBrandedButton {
             ),
             for: .normal
         )
-        
+
         setAttributedTitle(
             attributedTitle(
                 forTitle: branding.primaryText,
@@ -148,7 +149,7 @@ private extension ProjectVerifyBrandedButton {
             ),
             for: .highlighted
         )
-        
+
         setAttributedTitle(
             attributedTitle(
                 forTitle: branding.primaryText,
@@ -156,12 +157,12 @@ private extension ProjectVerifyBrandedButton {
             ),
             for: .disabled
         )
-        
+
         setImage(branding.icon, for: .normal)
-        
+
         updateTinting()
     }
-    
+
     func updateTinting() {
         let colorScheme: Appearance.ColorScheme
         if isHighlighted || !isEnabled {
@@ -169,15 +170,15 @@ private extension ProjectVerifyBrandedButton {
         } else {
             colorScheme = appearance.normal
         }
-        
+
         tintColor = colorScheme.image
         backgroundColor = colorScheme.background
 
     }
-    
+
     func attributedTitle(forTitle title: String,
                          withColor color: UIColor) -> NSAttributedString {
-        let attributes: [NSAttributedString.Key : Any] = [
+        let attributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: color,
             .font: UIFont.boldSystemFont(ofSize: 17.0),
         ]
@@ -197,15 +198,15 @@ private extension ProjectVerifyBrandedButton {
 
 private extension UIEdgeInsets {
     static let xOffset: CGFloat = 5
-    
+
     static var projectVerifyButtonContentInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 16, left: 42, bottom: 16, right: 42)
     }
-    
+
     static var projectVerifyButtonTitleEdgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: xOffset, bottom: 0, right: -xOffset)
     }
-    
+
     static var projectVerifyButtonImageEdgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: -xOffset, bottom: 0, right: xOffset)
     }

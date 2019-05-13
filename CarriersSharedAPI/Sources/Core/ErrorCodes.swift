@@ -54,7 +54,8 @@ extension OAuthErrorCode: AuthorizationErrorTypeMappable {
 
 /// Open Id Error Codes
 ///
-/// for additional info, see [OpenId Connect Core Section 3.1.2.6](https://openid.net/specs/openid-connect-core-1_0.html#AuthError)
+/// for additional info, see:
+/// [OpenId Connect Core Section 3.1.2.6](https://openid.net/specs/openid-connect-core-1_0.html#AuthError)
 public enum OpenIdErrorCode: String {
     /// The service provider should not be using `display=none`.
     case interactionRequired = "interaction_required"

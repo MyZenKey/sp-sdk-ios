@@ -65,8 +65,7 @@ struct OpenIdURLResolverIOS: OpenIdURLResolverProtocol {
                     authorizationConfig: authorizationConfig,
                     completion: completion
                 )
-            }
-            else {
+            } else {
                 self.performSafariAuthorization(
                     request: request,
                     storage: storage,
@@ -98,7 +97,7 @@ struct OpenIdURLResolverIOS: OpenIdURLResolverProtocol {
             externalUserAgent: externalUserAgent,
             callback: completion
         )
-        
+
         storage.pendingSession = session
     }
 }

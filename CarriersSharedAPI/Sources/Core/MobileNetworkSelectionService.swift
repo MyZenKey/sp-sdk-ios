@@ -40,7 +40,6 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
     private let sdkConfig: SDKConfig
     private let mobileNetworkSelectionUI: MobileNetworkSelectionUIProtocol
 
-
     init(sdkConfig: SDKConfig, mobileNetworkSelectionUI: MobileNetworkSelectionUIProtocol) {
         self.sdkConfig = sdkConfig
         self.mobileNetworkSelectionUI = mobileNetworkSelectionUI
@@ -203,8 +202,8 @@ private extension String {
     }
 
     /// removes and returns the last n characters from the string
-    mutating func popLast(_ n: Int) -> Substring {
-        let bounded = min(n, count)
+    mutating func popLast(_ number: Int) -> Substring {
+        let bounded = min(number, count)
         let substring = suffix(bounded)
         removeLast(bounded)
         return substring
