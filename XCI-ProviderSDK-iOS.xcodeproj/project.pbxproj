@@ -320,10 +320,10 @@
 		233AF955220A3B080023059C /* CarriersSharedAPI */ = {
 			isa = PBXGroup;
 			children = (
-				233AF957220A3B080023059C /* Info.plist */,
 				8A80822C2257C7FA00FCF691 /* Resources */,
-				23B5250E22153AAA002124D4 /* Tests */,
 				233AF970220A44AD0023059C /* Sources */,
+				23B5250E22153AAA002124D4 /* Tests */,
+				233AF957220A3B080023059C /* Info.plist */,
 			);
 			path = CarriersSharedAPI;
 			sourceTree = "<group>";
@@ -332,8 +332,8 @@
 			isa = PBXGroup;
 			children = (
 				8AE7F643227B7269009B4358 /* Core */,
-				8AE7F642227B725A009B4358 /* tvOS */,
 				8AE7F634227B7251009B4358 /* iOS */,
+				8AE7F642227B725A009B4358 /* tvOS */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -341,21 +341,21 @@
 		23B5250E22153AAA002124D4 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				236AC635222714F100E7C900 /* AuthorizationServiceTests.swift */,
-				237B7BF422261A4500E29992 /* ScopeTests.swift */,
 				23F88F5022246EA500A5F5D9 /* Mocks */,
-				23B52505221539E5002124D4 /* CarriersSharedAPITests.swift */,
-				23B52507221539E5002124D4 /* Info.plist */,
-				23F88F412220803500A5F5D9 /* CarrierInfoServiceTests.swift */,
-				23F88F472220B83700A5F5D9 /* DiscoveryServiceTests.swift */,
-				23F88F4A2220C23600A5F5D9 /* SIMInfoTests.swift */,
-				23F88F5922247E2E00A5F5D9 /* Constants.swift */,
-				23196D9022306E29005393AB /* OpenIdServiceTests.swift */,
-				2340CAAB2231D253009556FE /* SDKConfigTests.swift */,
-				8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */,
-				8A37A00022611061001FE65D /* ProjectVerifyAuthorizeButtonTests.swift */,
-				8ABF7549226A1C9F00A81F50 /* MobileNetworkSelectionServiceTests.swift */,
 				8AC7CF732284D731002A79CB /* AuthorizationErrorParsing.swift */,
+				236AC635222714F100E7C900 /* AuthorizationServiceTests.swift */,
+				23F88F412220803500A5F5D9 /* CarrierInfoServiceTests.swift */,
+				23B52505221539E5002124D4 /* CarriersSharedAPITests.swift */,
+				8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */,
+				23F88F5922247E2E00A5F5D9 /* Constants.swift */,
+				23F88F472220B83700A5F5D9 /* DiscoveryServiceTests.swift */,
+				23B52507221539E5002124D4 /* Info.plist */,
+				8ABF7549226A1C9F00A81F50 /* MobileNetworkSelectionServiceTests.swift */,
+				23196D9022306E29005393AB /* OpenIdServiceTests.swift */,
+				8A37A00022611061001FE65D /* ProjectVerifyAuthorizeButtonTests.swift */,
+				2340CAAB2231D253009556FE /* SDKConfigTests.swift */,
+				23F88F4A2220C23600A5F5D9 /* SIMInfoTests.swift */,
+				237B7BF422261A4500E29992 /* ScopeTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -364,9 +364,9 @@
 			isa = PBXGroup;
 			children = (
 				23F88F5122246EC100A5F5D9 /* DisocoveryConfigMockPayloads.swift */,
-				23F88F5522247A3500A5F5D9 /* MockNetworkService.swift */,
-				23F88F5722247A4600A5F5D9 /* MockMobileNetworkInfoProvider.swift */,
 				233A50302228831A0089BA0D /* MockCarrierInfoService.swift */,
+				23F88F5722247A4600A5F5D9 /* MockMobileNetworkInfoProvider.swift */,
+				23F88F5522247A3500A5F5D9 /* MockNetworkService.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -374,11 +374,11 @@
 		56BCE47A2203755D00196A17 = {
 			isa = PBXGroup;
 			children = (
-				8A4888D122550A75006337EC /* AppAuth.xcodeproj */,
 				233AF955220A3B080023059C /* CarriersSharedAPI */,
 				8A6C13692282521B00F42E3A /* CarriersSharedAPI-tvOS */,
-				56BCE4842203755D00196A17 /* Products */,
 				8A9DEC40224A9B2A00E010EB /* Frameworks */,
+				56BCE4842203755D00196A17 /* Products */,
+				8A4888D122550A75006337EC /* AppAuth.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -425,8 +425,8 @@
 		8A80822C2257C7FA00FCF691 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8A80823A2257C8F700FCF691 /* ProjectVerify.xcassets */,
 				8A80823C2257CBBF00FCF691 /* Localizable.strings */,
+				8A80823A2257C8F700FCF691 /* ProjectVerify.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -442,12 +442,12 @@
 		8AE7F634227B7251009B4358 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				23F88F3D221F433900A5F5D9 /* MobileNetworkInfoProvider.swift */,
-				23196D9222309173005393AB /* OpenIdURLResolverIOS.swift */,
-				8AEFF02B22736011001CF41D /* MobileNetworkSelectionUIIOS.swift */,
-				23F88F4C2224579900A5F5D9 /* CarrierInfoService.swift */,
 				8A378ED5227D0FBC00B63612 /* AuthorizationServiceIOS.swift */,
+				23F88F4C2224579900A5F5D9 /* CarrierInfoService.swift */,
 				8A6C135F22820CDC00F42E3A /* CurrentSIMBrandingProvider.swift */,
+				23F88F3D221F433900A5F5D9 /* MobileNetworkInfoProvider.swift */,
+				8AEFF02B22736011001CF41D /* MobileNetworkSelectionUIIOS.swift */,
+				23196D9222309173005393AB /* OpenIdURLResolverIOS.swift */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -462,37 +462,37 @@
 		8AE7F643227B7269009B4358 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				8A37A021226659B3001FE65D /* MobileNetworkSelectionService.swift */,
-				8A378EC6227CB9A300B63612 /* Router.swift */,
-				233AF956220A3B080023059C /* CarriersSharedAPI.h */,
-				23F88F37221F2B0E00A5F5D9 /* SIMInfo.swift */,
-				231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */,
 				2399F3F82227702A007D3613 /* AuthorizationError.swift */,
-				233A502E22287DD10089BA0D /* Dependencies.swift */,
-				8A37A012226659A5001FE65D /* ProjectVerifyHost.swift */,
-				23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */,
-				231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */,
-				23F88F5F2226086600A5F5D9 /* Scope.swift */,
-				231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */,
-				23F88F5D2225AD6500A5F5D9 /* Result.swift */,
-				8ABF7547226A0BD900A81F50 /* URLHandling.swift */,
-				8ABF75452268FF9200A81F50 /* ResponseURL.swift */,
+				231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */,
+				8A6C135D22820C1F00F42E3A /* Branding.swift */,
+				23F88F3B221F31B800A5F5D9 /* Carrier.swift */,
+				233AF956220A3B080023059C /* CarriersSharedAPI.h */,
+				8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */,
 				8A37A00F226142CC001FE65D /* CurrentControllerContextProvider.swift */,
+				233A502E22287DD10089BA0D /* Dependencies.swift */,
+				231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */,
+				23F88F43222080C800A5F5D9 /* DiscoveryService.swift */,
+				2365C04C2236D31F00E0ED4A /* ErrorCodes.swift */,
 				8A5C3F99225E93EE0013DEC3 /* ImageUtils.swift */,
 				8A80823E2257CDF100FCF691 /* LocalizationUtils.swift */,
-				8AD167BB224EB8D3005C1CA3 /* OpenIdConfig.swift */,
-				8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */,
-				2365C04C2236D31F00E0ED4A /* ErrorCodes.swift */,
-				23F88F532224738A00A5F5D9 /* NetworkService.swift */,
-				23F88F43222080C800A5F5D9 /* DiscoveryService.swift */,
-				236AC637222720E600E7C900 /* OpenIdService.swift */,
-				23F88F3B221F31B800A5F5D9 /* Carrier.swift */,
-				8A8FAC902282017A003278C6 /* OpenIdURLResolver.swift */,
+				8A37A021226659B3001FE65D /* MobileNetworkSelectionService.swift */,
 				8A6C135B228203E700F42E3A /* MobileNetworkSelectionUI.swift */,
-				8A5C3F9B225E9B190013DEC3 /* ProjectVerifyBrandedButton.swift */,
-				8A5C3F8A225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift */,
+				23F88F532224738A00A5F5D9 /* NetworkService.swift */,
+				8AD167BB224EB8D3005C1CA3 /* OpenIdConfig.swift */,
+				236AC637222720E600E7C900 /* OpenIdService.swift */,
+				8A8FAC902282017A003278C6 /* OpenIdURLResolver.swift */,
+				23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */,
 				8A48895022555345006337EC /* ProjectVerifyAuthorizeButton.swift */,
-				8A6C135D22820C1F00F42E3A /* Branding.swift */,
+				8A5C3F8A225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift */,
+				8A5C3F9B225E9B190013DEC3 /* ProjectVerifyBrandedButton.swift */,
+				8A37A012226659A5001FE65D /* ProjectVerifyHost.swift */,
+				8ABF75452268FF9200A81F50 /* ResponseURL.swift */,
+				23F88F5D2225AD6500A5F5D9 /* Result.swift */,
+				8A378EC6227CB9A300B63612 /* Router.swift */,
+				231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */,
+				23F88F37221F2B0E00A5F5D9 /* SIMInfo.swift */,
+				23F88F5F2226086600A5F5D9 /* Scope.swift */,
+				8ABF7547226A0BD900A81F50 /* URLHandling.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
