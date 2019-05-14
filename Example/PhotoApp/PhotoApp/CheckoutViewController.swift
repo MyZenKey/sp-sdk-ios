@@ -101,7 +101,6 @@ class CheckoutViewController: UIViewController {
         return label
     }()
 
-    var typeOfSegue: String?
     var authzCode: String?
     var tokenInfo: String?
     var userInfo: String?
@@ -143,39 +142,53 @@ class CheckoutViewController: UIViewController {
     }
     
     @IBAction func onUseVerifyKeyAddressTapped(_ sender: Any) {
+        // Request an authorization code from Project Verify:
         let scopes: [Scope] = [.profile, .email]
         authService.connectWithProjectVerify(
             scopes: scopes,
             fromViewController: self) { result in
-                // TODO: login + fetch user
-                // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-                let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+                // handle the result of the authorization call
                 switch result {
                 case .code(let authorizedResponse):
-                    let code = authorizedResponse.code
-
-                    UserDefaults.standard.set(code, forKey: "AuthZCode")
-                    self.serviceAPI.login(
-                        withAuthCode: code,
-                        mcc: authorizedResponse.mcc,
-                        mnc: authorizedResponse.mnc,
-                        completionHandler: { json, error in
-                            guard
-                                let accessToken = json?["token"],
-                                let tokenString = accessToken.toString else {
-                                print("error no token returned")
-                                return
-                            }
-                            UserDefaults.standard.set(tokenString, forKey: "AccessToken")
-                            self.getUserInfo(with: tokenString)
-                    })
-
+                    self.authorizeUser(authorizedResponse: authorizedResponse)
                 case .error:
-                    appDelegate.launchLoginScreen()
+                    self.launchLoginScreen()
                 case .cancelled:
-                    appDelegate.launchLoginScreen()
+                    self.launchLoginScreen()
                 }
         }
+    }
+
+    func authorizeUser(authorizedResponse: AuthorizedResponse) {
+        let code = authorizedResponse.code
+        UserDefaults.standard.set(code, forKey: "AuthZCode")
+        self.serviceAPI.login(
+            withAuthCode: code,
+            mcc: authorizedResponse.mcc,
+            mnc: authorizedResponse.mnc,
+            completionHandler: { json, error in
+                guard
+                    let accountToken = json?["token"],
+                    let tokenString = accountToken.toString else {
+                        print("error no token returned")
+                        return
+                }
+                UserDefaults.standard.set(tokenString, forKey: "AccessToken")
+
+                self.requestUserInfo(token: tokenString)
+        })
+    }
+
+    func requestUserInfo(token: String) {
+        self.serviceAPI.getUserInfo(with: token) { userJSON in
+            self.displayUserInfo(from: userJSON)
+        }
+    }
+
+    func launchLoginScreen() {
+        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
+        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+        appDelegate.launchLoginScreen()
     }
 
     @IBAction func debug() {
@@ -184,35 +197,6 @@ class CheckoutViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
 
-    func getUserInfo(with accessToken: String) {
-        // TODO: re-enable once we have our demo server
-
-        self.nameField.text = "TODO: incorporate mock SP user endpoint"
-
-//        var request = URLRequest(url: URL(string: self.carrierConfig!["userinfo_endpoint"] as! String)!)
-//        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-//
-//        DispatchQueue.main.async {
-//
-//            let dataTask = self.session.dataTask(with: request) { (data, response, error) in
-//                guard error == nil else {return}
-//                if let data = data {
-//
-//                    let json = JsonDocument(data: data)
-//
-//                    print(json.description)
-//                    UserDefaults.standard.set(json.description,forKey: "UserInfoJSON")
-//                    UserDefaults.standard.synchronize();
-//
-//                    self.displayUserInfo(from: json)
-//                }
-//            }
-//            self.dataTask = dataTask
-//            dataTask.resume()
-//        }
-    }
-    
-    
     func displayUserInfo(from json: JsonDocument){
         print("Populating user information..")
         self.userInfo = json.description
@@ -221,7 +205,7 @@ class CheckoutViewController: UIViewController {
             self.nameField.text = "\(given_name) \(family_name)"
         }
         if let email = json["email"].toString {
-            emailField.text = "john@email.com"
+            emailField.text = email
         }
          if let phone = json["phone_number"].toString {
             phoneField.text = phone

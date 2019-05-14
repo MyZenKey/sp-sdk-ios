@@ -74,18 +74,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     func launchLoginScreen() {
-        let storyboard = UIStoryboard(name:"Main", bundle: nil)
-        let loginVC = storyboard.instantiateInitialViewController()
+        let loginVC = ViewController()
         self.window?.rootViewController = loginVC
     }
 
     func launchCheckOutScreen(code: String) {
-        
-        let checkOutNavVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CheckoutNavViewController") as! UINavigationController
-        let checkOutVC = checkOutNavVC.topViewController as! CheckoutViewController
-        checkOutVC.authzCode = code
+        let checkoutViewController = CheckoutViewController()
+        let navigationController = UINavigationController(rootViewController: checkoutViewController)
+        checkoutViewController.authzCode = code
 
-        UIApplication.shared.keyWindow?.rootViewController?.present(checkOutNavVC, animated: true, completion: nil)
+        UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true, completion: nil)
     }
 }
-
