@@ -27,15 +27,15 @@ _run_steps:
       git submodule update --init --recursive
   _restore_cache: &_restore_cache
     keys:
-      - 5-gems-{{ checksum "Gemfile.lock" }}
+      - 7-gems-{{ checksum "Gemfile.lock" }}
       # Fall back to a previous cache if exact match cannot be found
-      - 5-gems-
+      - 7-gems-
   _restore_gems: &_restore_gems
     name: Restore Gems
     command: |
       bundle check || bundle install
   _save_cache: &_save_cache
-    key: 5-gems-{{ checksum "Gemfile.lock" }}
+    key: 7-gems-{{ checksum "Gemfile.lock" }}
     paths:
       - "/Users/distiller/project/app/build/gems"
 

@@ -22,11 +22,16 @@ class Dependencies {
     }
 
     private func buildDependencies() {
+
+        let hostConfig = ProjectVerifyNetworkConfig(host: .production)
+
         let configCacheService = ConfigCacheService(
             networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
         )
 
         let discoveryService = DiscoveryService(
+            sdkConfig: sdkConfig,
+            hostConfig: hostConfig,
             networkService: NetworkService(),
             configCacheService: configCacheService
         )
@@ -56,6 +61,7 @@ class Dependencies {
 
             all = [
                 sdkConfig,
+                hostConfig,
                 carrierInfoService,
                 configCacheService,
                 discoveryService,
@@ -89,6 +95,7 @@ class Dependencies {
 
         all = [
             sdkConfig,
+            hostConfig,
             configCacheService,
             discoveryService,
             router,

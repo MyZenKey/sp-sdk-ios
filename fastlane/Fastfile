@@ -42,7 +42,9 @@ ENV['CI_BUILD'] = 'yes'
 ENV['FL_HOCKEY_NOTIFY'] = '0'
 
 DERIVED_DATA_PATH = "#{ENV['RZ_TEST_REPORTS']}/derived_data"
-TEST_SCHEME = "CarriersSharedAPI-Unit-Tests"
+TEST_PROJCET = 'XCI-ProviderSDK-iOS.xcodeproj'
+TEST_PROJCET_PATH = "./#{TEST_PROJCET}"
+TEST_SCHEME = "CarriersSharedAPITests"
 
 # lanes
 
@@ -58,7 +60,7 @@ platform :ios do
   lane :test do
     unlock_keychain(path: './Signing/Raizlabs-DemoApps.keychain', password: ENV['RZ_KEYCHAIN_PASSWORD'] )
     scan(
-      workspace: './Example/BankApp/BankApp.xcworkspace',
+      project: TEST_PROJCET_PATH,
       output_types: 'junit,html',
       scheme: TEST_SCHEME,
       output_directory: "#{ENV['RZ_TEST_REPORTS']}/scan",
@@ -115,59 +117,57 @@ platform :ios do
     end
   end
 
-  # desc "Runs Code Coverage"
-  # lane :coverage do
-  #   slather_use_coveralls = "false"
-  #   slather_use_circleci = "false"
+  desc "Runs Code Coverage"
+  lane :coverage do
+    slather_use_coveralls = "false"
+    slather_use_circleci = "false"
 
-  #   if !ENV['CIRCLE_BUILD_NUM'].nil?
-  #     slather_use_circleci = "true"
-  #   end
+    if !ENV['CIRCLE_BUILD_NUM'].nil?
+      slather_use_circleci = "true"
+    end
 
-  #   # Add targets here as you create internal frameworks
-  #   xcov_targets = "debug-PRODUCTNAME.app, Services.framework"
-  #   xcov_scheme = TEST_SCHEME
-  #   xcov_workspace = "PRODUCTNAME.xcworkspace"
+    # Add targets here as you create internal frameworks
+    xcov_targets = "CarriersSharedAPI.framework"
+    xcov_scheme = TEST_SCHEME
 
-  #   xcov(
-  #     workspace: xcov_workspace,
-  #     scheme: xcov_scheme,
-  #     output_directory: "#{ENV['RZ_TEST_REPORTS']}/xcov",
-  #     include_targets: xcov_targets,
-  #     derived_data_path: DERIVED_DATA_PATH
-  #   )
+    xcov(
+      project: TEST_PROJCET_PATH,
+      scheme: xcov_scheme,
+      output_directory: "#{ENV['RZ_TEST_REPORTS']}/xcov",
+      include_targets: xcov_targets,
+      derived_data_path: DERIVED_DATA_PATH
+    )
 
-  #   slather_proj = "PRODUCTNAME.xcodeproj"
-  #   slather_workspace = xcov_workspace
-  #   slather_scheme = TEST_SCHEME
-  #   # Add binaries here as you create internal frameworks
-  #   slather_binaries = ['debug-PRODUCTNAME', 'Services']
-  #   slather_output_directory = "#{ENV['RZ_TEST_REPORTS']}/slather"
+    slather_proj = TEST_PROJCET
+    slather_scheme = TEST_SCHEME
+    # Add binaries here as you create internal frameworks
+    slather_binaries = ['CarriersSharedAPI']
+    slather_output_directory = "#{ENV['RZ_TEST_REPORTS']}/slather"
 
-  #   # html and cobertura_xml output must be run separately
-  #   slather(
-  #     proj: slather_proj,
-  #     workspace: slather_workspace,
-  #     scheme: slather_scheme,
-  #     binary_basename: slather_binaries,
-  #     output_directory: slather_output_directory,
-  #     html: "true",
-  #     build_directory: DERIVED_DATA_PATH
-  #   )
-  #   # Using Cobertura XML allows us to upload to Codecov.io
-  #   # Uploading to codecov is handled separately in the .circleci/config.yml
-  #   slather(
-  #     proj: slather_proj,
-  #     workspace: slather_workspace,
-  #     scheme: slather_scheme,
-  #     binary_basename: slather_binaries,
-  #     output_directory: slather_output_directory,
-  #     circleci: slather_use_circleci,
-  #     coveralls: slather_use_coveralls,
-  #     cobertura_xml: "true",
-  #     build_directory: DERIVED_DATA_PATH
-  #   )
-  # end
+    # html and cobertura_xml output must be run separately
+    slather(
+      proj: slather_proj,
+      scheme: slather_scheme,
+      binary_basename: slather_binaries,
+      output_directory: slather_output_directory,
+      html: "true",
+      build_directory: DERIVED_DATA_PATH,
+      verbose: true
+    )
+    # Using Cobertura XML allows us to upload to Codecov.io
+    # Uploading to codecov is handled separately in the .circleci/config.yml
+    slather(
+      proj: slather_proj,
+      scheme: slather_scheme,
+      binary_basename: slather_binaries,
+      output_directory: slather_output_directory,
+      circleci: slather_use_circleci,
+      coveralls: slather_use_coveralls,
+      cobertura_xml: "true",
+      build_directory: DERIVED_DATA_PATH,
+      verbose: true
+    )
+  end
 
   # desc "Posts screenshots to Slack"
   # lane :slackshots do
@@ -234,6 +234,19 @@ platform :ios do
       # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_SPRINTZZ')
       slack(message: "Successfully uploaded #{buildName} build number #{build_number} to sprint", success: true)
     end
+  end
+
+  desc "Updates the pods for all Example repos"
+  lane :update_pods do
+    Dir.chdir('../Example') do
+      directories = Dir.glob('*').select { |file| File.directory? file }
+      directories.each do |entry|
+        Dir.chdir("./#{entry}") do
+          puts "in #{Dir.pwd}"
+          sh "bundle exec pod install" unless !File.exists? "Podfile" 
+        end
+      end
+    end  
   end
 
   # desc "Builds and submits an App Store release to TestFlight"
