@@ -39,7 +39,7 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
     static let resource = URL(string: "https://app.xcijv.com/ui/discovery-ui")!
 
     static let validRequestURL = URL(
-        string: "https://app.xcijv.com/ui/discovery-ui?client_id=mockClientId&redirect_uri=mockClientId://projectverify/discoveryui&state=test-state"
+        string: "https://app.xcijv.com/ui/discovery-ui?client_id=mockClientId&redirect_uri=mockClientId://com.xci.provider.sdk/projectverify/discoveryui&state=test-state"
     )!
 
     static let mockClientId = "mockClientId"

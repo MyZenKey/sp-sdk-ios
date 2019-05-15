@@ -9,8 +9,8 @@
 import Foundation
 
 enum Route: String {
-    case authorize = "/authorize"
-    case discoveryUI = "/discoveryui"
+    case authorize = "/projectverify/authorize"
+    case discoveryUI = "/projectverify/discoveryui"
 }
 
 protocol URLHandling {

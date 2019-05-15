@@ -48,8 +48,13 @@ class DiscoveryServiceTests: XCTestCase {
     let mockNetworkService = MockNetworkService()
     let mockCarrierInfo = MockCarrierInfoService()
     let mockConfigCacheService = MockConfigCacheService()
-    
+
+    let mockClientId = "mockclientid"
+    let mockRedirectScheme = "xci"
+
     lazy var discoveryService = DiscoveryService(
+        sdkConfig: SDKConfig(clientId: mockClientId, redirectScheme: mockRedirectScheme),
+        hostConfig: ProjectVerifyNetworkConfig(host: .production),
         networkService: mockNetworkService,
         configCacheService: mockConfigCacheService
     )
@@ -67,8 +72,11 @@ class DiscoveryServiceTests: XCTestCase {
             let request = self.mockNetworkService.lastRequest
 
             XCTAssertEqual(request?.httpMethod, "GET")
+            XCTAssertEqual(request?.url?.scheme, "https")
+            XCTAssertEqual(request?.url?.host, ProjectVerifyNetworkConfig.Host.production.rawValue)
             XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
             XCTAssertTrue(request?.url?.query?.contains("mccmnc=123456") ?? false)
+            XCTAssertTrue(request?.url?.query?.contains("client_id=\(self.mockClientId)") ?? false)
 
             expectation.fulfill()
         }
@@ -81,8 +89,11 @@ class DiscoveryServiceTests: XCTestCase {
             let request = self.mockNetworkService.lastRequest
 
             XCTAssertEqual(request?.httpMethod, "GET")
+            XCTAssertEqual(request?.url?.scheme, "https")
+            XCTAssertEqual(request?.url?.host, ProjectVerifyNetworkConfig.Host.production.rawValue)
             XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
             XCTAssertFalse(request?.url?.query?.contains("mccmnc") ?? false)
+            XCTAssertTrue(request?.url?.query?.contains("client_id=\(self.mockClientId)") ?? false)
 
             expectation.fulfill()
         }
