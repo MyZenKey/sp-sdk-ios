@@ -15,7 +15,7 @@ public enum BundleLoadingErrors: Error, Equatable {
 
 struct SDKConfig: Equatable {
 
-    private static let defaultHost = "projectverify"
+    private static let defaultHost = "com.xci.provider.sdk"
 
     public private(set) var isLoaded: Bool = false
     public private(set) var clientId: String!
