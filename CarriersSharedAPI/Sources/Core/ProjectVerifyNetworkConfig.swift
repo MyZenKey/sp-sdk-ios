@@ -13,11 +13,9 @@ struct ProjectVerifyNetworkConfig {
     let scheme = "https"
 
     enum Host: String {
-        #if DEBUG
         case staging = "app.xcijv.com"
         // swiftlint:disable:next identifier_name
         case qa = "discoveryissuer-qa.xcijv.com"
-        #endif
         case production = "discoveryissuer.xcijv.com"
     }
 

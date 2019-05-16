@@ -140,6 +140,11 @@ extension OpenIdServiceError: AuthorizationErrorConvertible {
 extension MobileNetworkSelectionError: AuthorizationErrorConvertible {
     var asAuthorizationError: AuthorizationError {
         switch self {
+        case .viewControllerNotInHeirarchy:
+            return AuthorizationError(
+                rawErrorCode: SDKErrorCode.invalidParameter.rawValue,
+                description: "ensure you're presenting on a valid view controller"
+            )
         case .invalidMCCMNC:
             return AuthorizationError(
                 rawErrorCode: SDKErrorCode.invalidParameter.rawValue,

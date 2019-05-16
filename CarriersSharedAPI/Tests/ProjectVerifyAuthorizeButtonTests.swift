@@ -149,20 +149,6 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    func testButtonCannotMakeRedundantAuthorizeCalls() {
-        let mockDelegate = MockAuthorizationButtonDelegate()
-        button.delegate = mockDelegate
-
-        var willBeginCount = 0
-        mockDelegate.onWillBegin = {
-            willBeginCount += 1
-        }
-
-        button.handlePress(sender: button)
-        button.handlePress(sender: button)
-        XCTAssertEqual(willBeginCount, 1)
-    }
-
     func testButtonCanMakeAnotherCallAfterCompletingTheFirst() {
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate

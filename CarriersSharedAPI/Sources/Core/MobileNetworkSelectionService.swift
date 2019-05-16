@@ -20,6 +20,7 @@ enum MobileNetworkSelectionResult {
 }
 
 enum MobileNetworkSelectionError: Error {
+    case viewControllerNotInHeirarchy
     case invalidMCCMNC
     case urlResponseError(URLResponseError)
 }
@@ -62,6 +63,11 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
             return
         }
 
+        guard viewController.view?.window != nil else {
+            self.conclude(result: .error(.viewControllerNotInHeirarchy))
+            return
+        }
+
         let request = Request(
             resource: resource,
             clientId: sdkConfig.clientId,
@@ -79,6 +85,12 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
                 // ui triggered the dismissal and will clean itself up, just call the completion
                 self?.conclude(result: .cancelled)
         })
+    }
+
+    func cancel() {
+        dismissUI {
+            self.conclude(result: .cancelled)
+        }
     }
 
     func resolve(url: URL) -> Bool {
@@ -116,12 +128,10 @@ private extension MobileNetworkSelectionService {
     func resolve(request: Request, withURL url: URL) {
         let response = ResponseURL(url: url)
 
-        // FIXME: jv endpoint isn't yet reflecting the state param, comment in when done
-//        // promotes URLResponseError into a MobileNetworkSelectionFlowError
-//        let validatedSIMInfoResult = response.hasMatchingState(request.state).promoteResult()
-//            // check error
-//            .flatMap({ response.getError().promoteResult() })
-        let validatedSIMInfoResult = response.getError().promoteResult()
+        // promotes URLResponseError into a MobileNetworkSelectionFlowError
+        let validatedSIMInfoResult = response.hasMatchingState(request.state).promoteResult()
+            // check error
+            .flatMap({ response.getError().promoteResult() })
             // parse mcc/mnc value
             .flatMap({ response.getRequiredValue(Keys.mccmnc.rawValue).promoteResult() })
             // map to sim info

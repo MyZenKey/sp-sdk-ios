@@ -38,8 +38,6 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     /// @SeeAlso: ProjectVerifyAuthorizeButtonDelegate
     public weak var delegate: ProjectVerifyAuthorizeButtonDelegate?
 
-    private var requestState: RequestState = .idle
-
     private var authorizationService: AuthorizationServiceProtocol
     private var controllerContextProvider: CurrentControllerContextProvider
 
@@ -74,17 +72,12 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     }
 
     @objc func handlePress(sender: Any) {
-        guard requestState == .idle else {
-            return
-        }
 
         guard let currentViewController = controllerContextProvider.currentController else {
             fatalError("attempting to authorize before the key window has a root view controller")
         }
 
         delegate?.buttonWillBeginAuthorizing(self)
-
-        requestState = .authorizing
 
         authorizationService.connectWithProjectVerify(
             scopes: scopes,
@@ -94,19 +87,12 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     }
 }
 
-extension ProjectVerifyAuthorizeButton {
-    enum RequestState: Int {
-        case idle, authorizing
-    }
-}
-
 private extension ProjectVerifyAuthorizeButton {
     func configureSelectors() {
         addTarget(self, action: #selector(handlePress(sender:)), for: .touchUpInside)
     }
 
     func handle(result: AuthorizationResult) {
-        requestState = .idle
         delegate?.buttonDidFinish(self, withResult: result)
     }
 }
