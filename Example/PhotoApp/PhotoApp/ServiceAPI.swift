@@ -25,7 +25,7 @@ class ServiceAPI: NSObject {
         // With the auth code, mcc, and mnc, you have everything you need to re-perform discovery
         // on your secure server and use the discovered token endpoint to request an access token
         // from Project Verify. This access token shouldn't reach the client transparently,
-        // but instead be used as the basis for accessing or creating an a token within
+        // but instead be used as the basis for accessing or creating a token within
         // the domain of your application.
 
         var request = URLRequest(url: URL(string: "https://xci-demoapp-node.raizlabs.xyz/api/auth")!)
