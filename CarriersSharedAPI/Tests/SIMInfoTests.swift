@@ -1,4 +1,4 @@
-    //
+//
 //  SIMInfoTests.swift
 //  CarriersSharedAPI
 //
@@ -11,6 +11,7 @@ import XCTest
 
 struct MockCodes {
     struct MCC {
+        // swiftlint:disable:next identifier_name
         static let us = "310"
         static let secondaryUS = "311"
     }

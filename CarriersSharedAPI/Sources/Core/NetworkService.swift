@@ -23,18 +23,18 @@ protocol NetworkServiceProtocol {
 
 class NetworkService: NetworkServiceProtocol {
     let jsonDecoder = JSONDecoder()
-    
+
     let session: URLSession = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)
     }()
-    
+
     func requestJSON<T: Decodable>(
         request: URLRequest,
         completion: @escaping (Result<T, NetworkServiceError>) -> Void) {
-        
+
         let decoder = self.jsonDecoder
-        let task = URLSession.shared.dataTask(with: request) { (data, rawResponse, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
             DispatchQueue.main.async {
                 completion(
                     JSONResponseParser.parseDecodable(
@@ -57,15 +57,15 @@ extension NetworkService {
             fromData data: Data?,
             request: URLRequest,
             error: Error?) -> Result<T, NetworkServiceError> {
-            
+
             guard error == nil else {
                 return .error(.networkError(error!))
             }
-            
+
             guard let data = data else {
                 return .error(NetworkServiceError.invalidResponseBody(request: request))
             }
-            
+
             do {
                 let parsed: T = try decoder.decode(T.self, from: data)
                 return .value(parsed)

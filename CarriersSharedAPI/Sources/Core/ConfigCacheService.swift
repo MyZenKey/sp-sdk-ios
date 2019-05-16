@@ -30,22 +30,22 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
     private var cacheTimeStamps: [String: Date] = [:]
 
     private var cache: [String: OpenIdConfig] = [:]
-    
+
     private let networkIdentifierCache: NetworkIdentifierCache
-    
+
     init(networkIdentifierCache: NetworkIdentifierCache) {
         self.networkIdentifierCache = networkIdentifierCache
     }
-    
+
     func cacheConfig(_ config: OpenIdConfig, forSIMInfo simInfo: SIMInfo) {
         let identifier = identifer(forSIMInfo: simInfo)
         cacheTimeStamps[identifier] = Date()
         cache[identifier] = config
     }
-    
+
     func config(forSIMInfo simInfo: SIMInfo,
                 allowStaleRecords: Bool) -> OpenIdConfig? {
-        
+
         let identifier = identifer(forSIMInfo: simInfo)
         let cachedTimeStamp = cacheTimeStamps[identifier] ?? Date.distantPast
         let cachedValue = cache[identifier]
@@ -55,15 +55,15 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
         guard cachedRecordIsValid || allowStaleRecords else {
             return nil
         }
-        
+
         // if there is no record, fallback on bundled record
         guard let record = cachedValue else {
             return fallbackToBundle(forSIMInfo: simInfo)
         }
-        
+
         return record
     }
-    
+
     private func fallbackToBundle(forSIMInfo simInfo: SIMInfo) -> OpenIdConfig? {
         // fall back on bundled data if this is a known mobile network operator:
         let carrier = self.networkIdentifierCache.carrier(
@@ -72,17 +72,17 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
         )
         return ConfigCacheService.bundledDiscoveryData[carrier.shortName]
     }
-    
+
     private func identifer(forSIMInfo simInfo: SIMInfo) -> String {
         return "\(simInfo.mcc)\(simInfo.mnc)"
     }
 }
 
 private extension ConfigCacheService {
-    
+
     /// default TTL is 15 mins
     static let defaultTTL: TimeInterval = ( 15 * 60 )
-    
+
     static let bundledDiscoveryData = [
         "tmo": OpenIdConfig(
             tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,

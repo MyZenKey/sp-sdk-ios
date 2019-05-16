@@ -6,7 +6,6 @@
 //  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
-
 import XCTest
 import Foundation
 @testable import CarriersSharedAPI
@@ -39,6 +38,7 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
     static let resource = URL(string: "https://app.xcijv.com/ui/discovery-ui")!
 
     static let validRequestURL = URL(
+        // swiftlint:disable:next line_length
         string: "https://app.xcijv.com/ui/discovery-ui?client_id=mockClientId&redirect_uri=mockClientId://com.xci.provider.sdk/projectverify/discoveryui&state=test-state"
     )!
 
@@ -56,7 +56,7 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
     )
 
     func testCallsMobileNetworkSelectionUIWithViewController() {
-        let controller = UIViewController()
+        let controller = MockWindowViewController()
         mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: MobileNetworkSelectionServiceTests.resource,
             fromCurrentViewController: controller) { _ in }
@@ -64,7 +64,7 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
     }
 
     func testCorrectSafariControllerURL() {
-        let controller = UIViewController()
+        let controller = MockWindowViewController()
         mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: MobileNetworkSelectionServiceTests.resource,
             fromCurrentViewController: controller) { _ in }
@@ -75,7 +75,7 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
     func testDuplicateRequestsCancelsPrevious() {
         mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: MobileNetworkSelectionServiceTests.resource,
-            fromCurrentViewController: UIViewController()) { result in
+            fromCurrentViewController: MockWindowViewController()) { result in
                 guard case .cancelled = result else {
                     XCTFail("expected to cancel if a second request is made")
                     return
@@ -91,31 +91,32 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
         XCTAssertFalse(mobileNetworkSelectionService.resolve(url: url))
     }
 
-    // FIXME: re-enable when JV is passing back state
-//    func testConcludesWithErrorForMismatchState() {
-//        let expectation = XCTestExpectation(description: "wait")
-//        mobileNetworkSelectionService.requestUserNetworkSelection(
-//            fromResource: MobileNetworkSelectionServiceTests.resource,
-//            fromCurrentViewController: UIViewController()) { result in
-//                defer { expectation.fulfill() }
-//                guard case .error(let error) = result,
-//                    case MobileNetworkSelectionError.stateMismatch = error  else {
-//                    XCTFail("expected state mismatch error")
-//                    return
-//                }
-//        }
-//
-//        let url = URL.mocked
-//        let didResolve = mobileNetworkSelectionService.resolve(url: url)
-//        XCTAssertTrue(didResolve)
-//        wait(for: [expectation], timeout: timeout)
-//    }
+    func testConcludesWithErrorForMismatchState() {
+        let expectation = XCTestExpectation(description: "wait")
+        mobileNetworkSelectionService.requestUserNetworkSelection(
+            fromResource: MobileNetworkSelectionServiceTests.resource,
+            fromCurrentViewController: MockWindowViewController()) { result in
+                defer { expectation.fulfill() }
+                guard
+                    case .error(let error) = result,
+                    case .urlResponseError(let urlError) = error,
+                    case .stateMismatch = urlError else {
+                    XCTFail("expected state mismatch error")
+                    return
+                }
+        }
+
+        let url = URL.mocked
+        let didResolve = mobileNetworkSelectionService.resolve(url: url)
+        XCTAssertTrue(didResolve)
+        wait(for: [expectation], timeout: timeout)
+    }
 
     func testConcludesWithErrorForInvlaidMCCMNC() {
         let expectation = XCTestExpectation(description: "wait")
         mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: MobileNetworkSelectionServiceTests.resource,
-            fromCurrentViewController: UIViewController()) { result in
+            fromCurrentViewController: MockWindowViewController()) { result in
                 defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
@@ -139,7 +140,7 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: MobileNetworkSelectionServiceTests.resource,
-            fromCurrentViewController: UIViewController()) { result in
+            fromCurrentViewController: MockWindowViewController()) { result in
                 defer { expectation.fulfill() }
                 guard
                     case .networkInfo(let response) = result else {
@@ -162,7 +163,7 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: MobileNetworkSelectionServiceTests.resource,
-            fromCurrentViewController: UIViewController()) { result in
+            fromCurrentViewController: MockWindowViewController()) { result in
                 defer { expectation.fulfill() }
                 guard
                     case .networkInfo(let response) = result else {
@@ -179,8 +180,9 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 }
-class MobileNetworkSelectionServiceRequestTests: XCTestCase {
 
+// swiftlint:disable:next type_name
+class MobileNetworkSelectionServiceRequestTests: XCTestCase {
     func testRequestCretatesAppropriatelyFormattedURL() {
         let request = MobileNetworkSelectionService.Request(
             resource: URL(string: "https://rightpoint")!,

@@ -1,5 +1,5 @@
 //
-//  MobileNetworkSelectionUI.swift
+//  MobileNetworkSelectionUIIOS.swift
 //  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 4/26/19.
@@ -38,7 +38,13 @@ class MobileNetworkSelectionUIIOS: NSObject, MobileNetworkSelectionUIProtocol, S
     }
 
     func close(completion: @escaping () -> Void) {
-        safariController?.dismiss(
+
+        guard let presentingViewController = safariController?.presentingViewController else {
+            completion()
+            return
+        }
+
+        presentingViewController.dismiss(
             animated: true,
             completion: {
                 completion()

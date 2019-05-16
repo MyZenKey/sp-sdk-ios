@@ -1,4 +1,3 @@
-
 //
 //  OpenIdServiceTests.swift
 //  CarriersSharedAPI
@@ -241,6 +240,7 @@ class OpenIdServiceTests: XCTestCase {
                 XCTAssertEqual(desc, "foo")
         }
 
+        // swiftlint:disable:next line_length
         let urlString = "testapp://projectverify/authorize?state=bar&error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"
         let handled = openIdService.resolve(url: URL(string: urlString)!)
         XCTAssertTrue(handled)
@@ -248,7 +248,7 @@ class OpenIdServiceTests: XCTestCase {
     }
 
     // MARK: - Redundant Requests
-    
+
     func testDuplicateRequestsCancelsFirst() {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
@@ -263,10 +263,9 @@ class OpenIdServiceTests: XCTestCase {
         openIdService.authorize(
             fromViewController: UIViewController(),
             authorizationConfig: OpenIdServiceTests.mockConfig) { _ in }
-        
+
         wait(for: [expectation], timeout: timeout)
     }
-
 
     // MARK: - Request Building
 
@@ -291,6 +290,7 @@ class OpenIdServiceTests: XCTestCase {
 
         let url: URL = request.authorizationRequestURL()
         let expectdURL = URL(
+            // swiftlint:disable:next line_length
             string: "rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=rightpoint.com&state=foo&response_type=code"
         )!
         XCTAssertEqual(url, expectdURL)
@@ -317,6 +317,7 @@ class OpenIdServiceTests: XCTestCase {
 
         let url: URL = request.authorizationRequestURL()
         let expectdURL = URL(
+            // swiftlint:disable:next line_length
             string: "rightpoint.com?client_id=1234&login_hint_token=mocktoken&redirect_uri=rightpoint.com&scope=openid%20profile%20email&state=foo&response_type=code"
         )!
         XCTAssertEqual(url, expectdURL)

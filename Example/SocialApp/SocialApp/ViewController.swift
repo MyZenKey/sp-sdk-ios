@@ -250,38 +250,40 @@ extension ViewController: ProjectVerifyAuthorizeButtonDelegate {
     func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) { }
     
     func buttonDidFinish(_ button: ProjectVerifyAuthorizeButton, withResult result: AuthorizationResult) {
-        // TODO: login + fetch user
-        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
         switch result {
         case .code(let authorizedResponse):
-            let code = authorizedResponse.code
-            
-            UserDefaults.standard.set(code, forKey: "AuthZCode")
-            self.serviceAPI.login(
-                withAuthCode: code,
-                mcc: authorizedResponse.mcc,
-                mnc: authorizedResponse.mnc,
-                completionHandler: { json, error in
-                    print("AuthZ_Code value from is: \(code)\n")
-                    UserDefaults.standard.set(code,forKey: "AuthZCode")
-                    guard let token = json?["token"].toString else {
-                        print("expected token returned")
-                        return
-                    }
-                    
-                    if (appDelegate.launchMapViewFlag) {
-                        appDelegate.launchMapScreen(token: token)
-                    } else {
-                        appDelegate.launchSignUpScreen(token: token)
-                    }
-                    
-            })
-            
+            self.authorizeUser(authorizedResponse: authorizedResponse)
         case .error:
-            appDelegate.launchLoginScreen()
+            self.launchLoginScreen()
         case .cancelled:
-            appDelegate.launchLoginScreen()
+            self.launchLoginScreen()
         }
+    }
+
+    func authorizeUser(authorizedResponse: AuthorizedResponse) {
+        let code = authorizedResponse.code
+        UserDefaults.standard.set(code, forKey: "AuthZCode")
+        self.serviceAPI.login(
+            withAuthCode: code,
+            mcc: authorizedResponse.mcc,
+            mnc: authorizedResponse.mnc,
+            completionHandler: { json, error in
+                guard
+                    let accountToken = json?["token"],
+                    let tokenString = accountToken.toString else {
+                        print("error no token returned")
+                        return
+                }
+                UserDefaults.standard.set(tokenString, forKey: "AccountToken")
+                let vc = UserInfoViewController()
+                vc.token = tokenString
+                self.navigationController?.viewControllers = [vc]
+        })
+    }
+
+    func launchLoginScreen() {
+        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
+        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+        appDelegate.launchLoginScreen()
     }
 }

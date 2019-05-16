@@ -13,6 +13,7 @@ let timeout: TimeInterval = 10.0
 
 struct UnexpectedNilVariableError: Error {}
 
+// swiftlint:disable:next identifier_name
 func UnwrapAndAssertNotNil<T>(_ variable: T?,
                               message: String = "Unexpected nil variable",
                               file: StaticString = #file,
@@ -24,7 +25,6 @@ func UnwrapAndAssertNotNil<T>(_ variable: T?,
     }
     return variable
 }
-
 
 struct MockSIMs {
     static let unknown = SIMInfo(mcc: "123", mnc: "456")

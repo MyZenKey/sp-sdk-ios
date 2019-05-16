@@ -117,10 +117,10 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         return label
     }()
     
-    let verifyButton: UIButton = {
-        let button = ProjectVerifyBrandedButton()
+    lazy var verifyButton: ProjectVerifyAuthorizeButton = {
+        let button = ProjectVerifyAuthorizeButton()
+        button.delegate = self
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(signUpWithVerify), for: .touchUpInside)
         return button
     }()
     
@@ -189,7 +189,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     }
 
     func displayUserInfo(from json: JsonDocument) {
-        
         if let phone = json["phone_number"].toString {
             self.phoneNumberField.text = phone
         }
@@ -202,28 +201,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             self.emailField.text = email
         }
     }
-    
-    /// Launches the Verify app.
-    @objc func signUpWithVerify() {
-        //Set AppDelegate launchMapViewFlag to False to open current form page
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.launchMapViewFlag = false
-        
-        // custom URL scheme
-        if let url = URL(string: "\(AppConfig.AuthorizeURL)?client_id=\(AppConfig.clientID.urlEncode())&response_type=code&state=teststate&redirect_uri=\(AppConfig.code_redirect_uri.urlEncode())&scope=\(AppConfig.consentScope.urlEncode())") {
-            
-            UIApplication.shared.open(url, options: [:]) { [weak self] success in
-                print(success)
-                
-                if success {
-                    NSLog("Successful!")
-                } else {
-                    self?.showOkAlert(title: "Sorry, looks like something went wrong. Please try again.", message: nil)
-                }
-            }
-        }
-    }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -312,8 +290,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         constraints.append(verifyButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 15))
         constraints.append(verifyButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30))
         constraints.append(verifyButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30))
-        constraints.append(verifyButton.heightAnchor.constraint(equalToConstant: 44))
-        
+
         constraints.append(poweredByLabel.topAnchor.constraint(equalTo: verifyButton.bottomAnchor, constant: 5))
         constraints.append(poweredByLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30))
         constraints.append(poweredByLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30))
@@ -325,5 +302,42 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         
         NSLayoutConstraint.activate(constraints)
         
+    }
+}
+
+extension SignUpViewController: ProjectVerifyAuthorizeButtonDelegate {
+
+    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) { }
+
+    func buttonDidFinish(_ button: ProjectVerifyAuthorizeButton, withResult result: AuthorizationResult) {
+        switch result {
+        case .code(let authorizedResponse):
+            self.authorizeUser(authorizedResponse: authorizedResponse)
+        case .error:
+            print("error occured")
+        case .cancelled:
+            print("cancelled")
+        }
+    }
+
+    func authorizeUser(authorizedResponse: AuthorizedResponse) {
+        let code = authorizedResponse.code
+        UserDefaults.standard.set(code, forKey: "AuthZCode")
+        self.serviceAPI.login(
+            withAuthCode: code,
+            mcc: authorizedResponse.mcc,
+            mnc: authorizedResponse.mnc,
+            completionHandler: { json, error in
+                guard
+                    let accountToken = json?["token"],
+                    let tokenString = accountToken.toString else {
+                        print("error no token returned")
+                        return
+                }
+                UserDefaults.standard.set(tokenString, forKey: "AccountToken")
+                self.serviceAPI.getUserInfo(with: tokenString) { userInfo in
+                    self.displayUserInfo(from: userInfo)
+                }
+        })
     }
 }

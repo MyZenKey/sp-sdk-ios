@@ -10,7 +10,7 @@ import Foundation
 import AppAuth
 
 enum ResponseType: String {
-    case code = "code"
+    case code
 }
 
 struct OpenIdAuthorizationConfig: Equatable {
@@ -93,7 +93,7 @@ extension OpenIdService: OpenIdServiceProtocol {
         if case .inProgress = state {
             cancelCurrentAuthorizationSession()
         }
-        
+
         let openIdConfiguration = OIDServiceConfiguration(
             authorizationEndpoint: authorizationConfig.authorizationEndpoint,
             tokenEndpoint: authorizationConfig.tokenEndpoint
@@ -106,7 +106,7 @@ extension OpenIdService: OpenIdServiceProtocol {
         )
 
         let sessionStorage = PendingSessionStorage()
-        
+
         let simInfo = authorizationConfig.simInfo
         urlResolver.resolve(
             request: authorizationRequest,
@@ -134,7 +134,7 @@ extension OpenIdService: OpenIdServiceProtocol {
 
         state = .inProgress(authorizationRequest, simInfo, completion, sessionStorage)
     }
-    
+
     func cancelCurrentAuthorizationSession() {
         concludeAuthorizationFlow(result: .cancelled)
     }
@@ -201,7 +201,7 @@ extension OpenIdService: OpenIdServiceProtocol {
 }
 
 extension OpenIdService {
-    
+
     static func createAuthorizationRequest(
         openIdServiceConfiguration: OIDServiceConfiguration,
         authorizationConfig: OpenIdAuthorizationConfig) -> OIDAuthorizationRequest {
@@ -225,7 +225,7 @@ extension OpenIdService {
             codeChallengeMethod: nil,
             additionalParameters: additionalParams
         )
-        
+
         return request
     }
 }

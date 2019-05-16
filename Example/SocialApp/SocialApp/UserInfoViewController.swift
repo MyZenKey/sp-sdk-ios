@@ -93,7 +93,6 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
     }()
     
     var selectedPinMapItem: MKMapItem?
-    var userInfo: String?
     var userInfoJson: JsonDocument?
     var token: String?
     let serviceAPI = ServiceAPI()
@@ -113,20 +112,17 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
                 return
             }
 
-            serviceAPI.getUserInfo(with: token, completionHandler: { (userInfoResponse) in
-                // TODO: enble this once we have a user info endpoint
-//                UserDefaults.standard.set(user.description,forKey: "UserInfoJSON")
-//                UserDefaults.standard.synchronize();
-//                self.userInfo = userInfoResponse.description
-//                self.displayUserInfo(from: userInfoResponse)
-            })
+            serviceAPI.getUserInfo(with: token) { userInfoResponse in
+                self.userInfoJson = userInfoResponse
+                self.displayUserInfo(from: userInfoResponse)
+            }
         }
     }
 
     @IBAction func debug() {
-        let vc = DebugViewController()
-        vc.finalInit(with: DebugViewController.Info(token: self.token, userInfo: self.userInfo, code: nil))
-        present(vc, animated: true, completion: nil)
+//        let vc = DebugViewController()
+//        vc.finalInit(with: DebugViewController.Info(token: self.token, userInfo: self.userInfo, code: nil))
+//        present(vc, animated: true, completion: nil)
     }
 
     var geocoder: CLGeocoder?

@@ -115,7 +115,7 @@ private extension DiscoveryService {
         // last resort – go over the network again:
         performDiscovery(forSIMInfo: simInfo, completion: completion)
     }
-    
+
     func recoverFromCache(simInfo: SIMInfo,
                           allowStaleRecords: Bool = false) -> OpenIdConfig? {
         return configCacheService.config(forSIMInfo: simInfo,
@@ -157,11 +157,11 @@ private extension DiscoveryService {
 
                 case .redirect(let redirect):
                     completion(.unknownMobileNetwork(redirect))
-                    
+
                 case .error(let issuerError):
                     completion(.error(.issuerError(issuerError)))
                 }
-                
+
             case .error(let error):
                 completion(.error(.networkError(error)))
             }

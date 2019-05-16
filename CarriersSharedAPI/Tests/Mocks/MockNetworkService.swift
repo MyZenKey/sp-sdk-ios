@@ -30,20 +30,23 @@ class MockNetworkService: NetworkServiceProtocol {
         mockError = nil
         mockJSON = nil
     }
-    
+
     let jsonDecoder = JSONDecoder()
 
     func requestJSON<T>(
         request: URLRequest,
-        completion: @escaping (Result<T, NetworkServiceError>) -> Void) where T : Decodable {
-        
+        completion: @escaping (Result<T, NetworkServiceError>) -> Void) where T: Decodable {
+
         self.lastRequest = request
         let mockJSON = self.mockJSON
         let mockError = self.mockError
         let decoder = jsonDecoder
         DispatchQueue.main.async {
             if let mockJSON = mockJSON {
-                let data = try! JSONSerialization.data(withJSONObject: mockJSON, options: [])
+                guard let data = try? JSONSerialization.data(withJSONObject: mockJSON, options: []) else {
+                    fatalError("unable to parse mock json, check your mocks")
+                }
+
                 let parsed: Result<T, NetworkServiceError> = NetworkService.JSONResponseParser
                     .parseDecodable(
                         with: decoder,
@@ -51,10 +54,10 @@ class MockNetworkService: NetworkServiceProtocol {
                         request: request,
                         error: nil
                 )
-                
+
                 completion(parsed)
             }
-            
+
             if let mockError = mockError {
                 completion(.error(mockError))
             }
