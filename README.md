@@ -33,8 +33,10 @@ While the SDK is under development, we recommend maintaining the Provider SDK so
 git submodule add https://git.xcijv.net/mobiledevelopment/sp-sdk-ios
 ```
 
-### Client Information
-Service providers decide how much client information they obtain from the user. In your setup, you can choose to have an experience with or without requiring a PIN or a biometric.
+### Client Information and Scopes
+Service providers decide how much client information they obtain from the user. In your setup, you can choose to have an experience with or without requiring a PIN or a biometric. 
+
+Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented by the OpenID Connect protocol and can be set to request profile information (email address, name, phone) to verify users. OpenID is the only required scope. All others are optional depending on the needs of your application.
 
 ## Add Project Verify SDK 
 
@@ -58,25 +60,25 @@ More information coming soon - *Carthage* may be supported in the future.
 
 You can add the ProjectVerifyLogin SDK to your project manually. For an example of a project that links ProjectVerifyLogin manually, see  [SocialApp](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/tree/develop/Example/SocialApp).
 
-1 - Retrieve the source for `ProjectVerifyLogin`. We recommend adding it as a [submodule](#pre-release-git-access).
+1. Retrieve the source for `ProjectVerifyLogin`. We recommend adding it as a [submodule](#pre-release-git-access).
 
-2 - After you clone the repository, run `git submodule update --init --recursive` to recursively clone `AppAuth`.
+2. After you clone the repository, run `git submodule update --init --recursive` to recursively clone `AppAuth`.
 
-3 - If you've been unable to use submodules, you must separately clone `AppAuth` and set your working copy to the release tag you would like to target. This SDK currently supports version [0.95.0](https://github.com/openid/AppAuth-iOS/releases/tag/0.95.0).
+3. If you cannot access submodules, then you must separately clone `AppAuth` and set your working copy to the release tag you would like to target. This SDK currently supports version [0.95.0](https://github.com/openid/AppAuth-iOS/releases/tag/0.95.0).
 
 ## Configure Project Verify SDK 
 
 After you add the source via submodule or manually, then configure the Project Verify SDK as follows:
 
-1 - Add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
+1. Add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
 
-2 - After adding the project, confirm that the deployment targets are less than or equal to your deployment target.
+2. After adding the project, confirm that the deployment targets are less than or equal to your deployment target.
 
-3 - Ensure that `AppAuth` is linked to `CarriersSharedAPI` and included as a "Target Dependency" in the `CarrierSharedAPI` build phases.
+3. Ensure that `AppAuth` is linked to `CarriersSharedAPI` and included as a "Target Dependency" in the `CarrierSharedAPI` build phases.
 
-4 - View your project's "Embedded Binaries" under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks. Be sure to select the corresponding framework for the platform you're targeting (the iOS framework for an iOS target).
+4. View your project's "Embedded Binaries" under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks. Be sure to select the corresponding framework for the platform you're targeting (the iOS framework for an iOS target).
 
-That's it. Build and run to ensure that everything is working correctly.
+Build and run to ensure that everything is working correctly.
 
 ## Integration
 
@@ -319,4 +321,4 @@ For technical questions, contact [support](mailto:support@mobileauthtaskforce.co
 NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND CONFIDENTIAL. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.  NO RECIPIENT MAY DISCLOSE, DISTRIBUTE, OR POST THIS DOCUMENT WITHOUT XCI JV, LLC’S EXPRESS WRITTEN AUTHORIZATION.
 
 <sub> Last Update:
-Document Version 0.9.5 - May 17, 2019</sub>
+Document Version 0.9.5 - May 21, 2019</sub>
