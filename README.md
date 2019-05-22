@@ -34,9 +34,10 @@ git submodule add https://git.xcijv.net/mobiledevelopment/sp-sdk-ios
 ```
 
 ### Client Information and Scopes
-Service providers decide how much client information they obtain from the user. In your setup, you can choose to have an experience with or without requiring a PIN or a biometric. 
 
-Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented by the OpenID Connect protocol and can be set to request profile information (email address, name, phone) to verify users. OpenID is the only required scope. All others are optional depending on the needs of your application.
+Service providers decide how much client information they obtain from the user. In your setup, you can choose to have an experience with or without requiring a PIN or a biometric.
+
+Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented by the OpenID Connect protocol and can be set to request profile information (email address, name, phone ...) to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
 
 ## Add Project Verify SDK 
 
@@ -321,4 +322,4 @@ For technical questions, contact [support](mailto:support@mobileauthtaskforce.co
 NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND CONFIDENTIAL. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.  NO RECIPIENT MAY DISCLOSE, DISTRIBUTE, OR POST THIS DOCUMENT WITHOUT XCI JV, LLC’S EXPRESS WRITTEN AUTHORIZATION.
 
 <sub> Last Update:
-Document Version 0.9.5 - May 21, 2019</sub>
+Document Version 0.9.5 - May 22, 2019</sub>
