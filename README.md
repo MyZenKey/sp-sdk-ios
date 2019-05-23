@@ -1,4 +1,4 @@
-![Logo](https://static.raizlabs.xyz/project_verify.png)
+![Project Verify](image/project_verify.png "Project Verify")
 
 # iOS Integration Guide
 
@@ -6,7 +6,7 @@ This guide is for developers integrating Project Verify into their iOS applicati
 
 ## Background
 
-Project Verify is a joint undertaking of the Mobile Authentication Taskforce. The taskforce provides customers with the ability to use their mobile phone number to sign into apps. Project Verify is built on top of OpenID Connect (OIDC). 
+Project Verify is a joint undertaking of the Mobile Authentication Taskforce. The taskforce provides customers with the ability to use their mobile phone number to sign into apps. Project Verify is built on top of OpenID Connect (OIDC).
 
 ### OpenID Connect
 
@@ -27,10 +27,10 @@ For more information about AppAuth, see the repository [here](https://github.com
 
 ### Pre-Release Git Access
 
-While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios) and place it in your project directory.
+While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
 
 ```bash
-git submodule add https://git.xcijv.net/mobiledevelopment/sp-sdk-ios
+git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 ```
 
 ### Client Information and Scopes
@@ -59,7 +59,7 @@ More information coming soon - *Carthage* may be supported in the future.
 
 ### Adding Project Verify SDK Manually
 
-You can add the ProjectVerifyLogin SDK to your project manually. For an example of a project that links ProjectVerifyLogin manually, see  [SocialApp](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/tree/develop/Example/SocialApp).
+You can add the ProjectVerifyLogin SDK to your project manually. For an example of a project that links ProjectVerifyLogin manually, see  [SocialApp](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/SocialApp).
 
 1. Retrieve the source for `ProjectVerifyLogin`. We recommend adding it as a [submodule](#pre-release-git-access).
 
@@ -107,7 +107,7 @@ Retrieve your application's `clientId` from the Project Verify dashboard. Add th
 	</array>
 ```
 
-For examples of how to configure the property list, see the [Social App](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/tree/develop/Example/SocialApp), and [Bank App](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/tree/develop/Example/BankApp).
+For examples of how to configure the property list, see the [Social App](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/SocialApp), and [Bank App](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/BankApp).
 
 ### Using a Custom Redirect URI
 
@@ -124,7 +124,7 @@ The following keys are made available for you to customize the structure of the 
 
 **Note:** For schemes other than `https`, you must add the scheme to your application's `CFBundleURLTypes` list.
 
-For an example of how to configure property lists for these custom keys, see the [Photo App](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/tree/develop/Example/PhotoApp).
+For an example of how to configure property lists for these custom keys, see the [Photo App](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/PhotoApp).
 
 Redirect URLs will require the universal links to route the following paths to the application: `/authorize` and `/discoveryui`.
 For more information about universal links, read Apple's [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links).
@@ -192,7 +192,7 @@ class LoginViewController {
     }
 }
 ```
-For examples of how the button works with both Interface Builder and Autolayout, see the example [Branding Project](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/tree/develop/Example/ProjectVerifyBranding).
+For examples of how the button works with both Interface Builder and Autolayout, see the example [Branding Project](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/ProjectVerifyBranding).
 
 #### Dark Button 
 ​
@@ -209,7 +209,7 @@ The dark style looks like this:
 
  <img src="image/verify_button_dark.png" alt="Verify Button Dark" width="360">
 
-#### Light Button 
+#### Light Button
 
 A light button style is appropriate to use with dark backgrounds. For the light style, add the following parameter: 
 
@@ -259,7 +259,7 @@ By default, authorization requests made with the Project Verify SDK include the 
     let scopes: [Scope] = [.profile, .email]
 ```
 
-For more information, see [Scope.swift](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios/blob/develop/CarriersSharedAPI/Sources/Core/Scope.swift).
+For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/blob/develop/CarriersSharedAPI/Sources/Core/Scope.swift).
 
 ## Request Authorization Code Manually
 
@@ -298,7 +298,7 @@ class LoginViewController {
 For more information, see the following:  
 
 * [submodules](https://git-scm.com/docs/git-submodule)
-* [projectVerifyLogin](https://git.xcijv.net/mobiledevelopment/sp-sdk-ios)
+* [projectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
 * [appAuth](https://github.com/openid/AppAuth-iOS)
 
 ## Next Steps
@@ -322,4 +322,4 @@ For technical questions, contact [support](mailto:support@mobileauthtaskforce.co
 NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND CONFIDENTIAL. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.  NO RECIPIENT MAY DISCLOSE, DISTRIBUTE, OR POST THIS DOCUMENT WITHOUT XCI JV, LLC’S EXPRESS WRITTEN AUTHORIZATION.
 
 <sub> Last Update:
-Document Version 0.9.5 - May 22, 2019</sub>
+Document Version 0.9.5 - May 23, 2019</sub>
