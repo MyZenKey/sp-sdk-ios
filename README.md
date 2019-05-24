@@ -194,29 +194,25 @@ class LoginViewController {
 ```
 For examples of how the button works with both Interface Builder and Autolayout, see the example [Branding Project](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/ProjectVerifyBranding).
 
-#### Dark Button 
-​
-You can customize the appearance of the button. By default, the Project Verify button uses the dark style specified as:
+#### Dark Button
+
+You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the Project Verify button uses the dark style specified as follows:
 
 ```swift
     projectVerifyButton 
 ```
-or 
-```swift
-    projectVerifyButton.style = .dark
-```
-The dark style looks like this:
+The dark button style looks like this:
 
  <img src="image/verify_button_dark.png" alt="Verify Button Dark" width="360">
 
 #### Light Button
 
-A light button style is appropriate to use with dark backgrounds. For the light style, add the following parameter: 
+A light button style is appropriate to use with dark backgrounds. For the light style, add the light parameter specified as follows: 
 
 ```swift
     projectVerifyButton.style = .light
 ```
-The light style looks like this:
+The light button style looks like this:
  
 <img src="image/verify_button_light.png" alt="Verify Button Light" width="360">
 
@@ -322,4 +318,4 @@ For technical questions, contact [support](mailto:support@mobileauthtaskforce.co
 NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND CONFIDENTIAL. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.  NO RECIPIENT MAY DISCLOSE, DISTRIBUTE, OR POST THIS DOCUMENT WITHOUT XCI JV, LLC’S EXPRESS WRITTEN AUTHORIZATION.
 
 <sub> Last Update:
-Document Version 0.9.5 - May 23, 2019</sub>
+Document Version 0.9.5 - May 24, 2019</sub>
