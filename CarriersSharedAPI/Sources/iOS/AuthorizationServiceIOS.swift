@@ -123,13 +123,15 @@ extension AuthorizationServiceIOS {
 
         openIdService.authorize(
             fromViewController: viewController,
-            authorizationConfig: authorizationConfig) { result in
+            authorizationConfig: authorizationConfig) { [weak self] result in
                 switch result {
                 case .code(let response):
                     completion(.code(response))
                 case .error(let error):
                     let authorizationError = error.asAuthorizationError
                     completion(.error(authorizationError))
+                    // TODO: -
+                    self?.showConsolation("an error occurred during discovery \(error)", on: viewController)
                 case .cancelled:
                     completion(.cancelled)
                 }
@@ -160,6 +162,8 @@ extension AuthorizationServiceIOS {
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
                 completion(.error(authorizationError))
+                // TODO: -
+                self?.showConsolation("an error occurred during discovery \(error)", on: viewController)
             case .cancelled:
                 completion(.cancelled)
             }
