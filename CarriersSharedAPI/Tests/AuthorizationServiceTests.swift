@@ -40,8 +40,13 @@ class AuthorizationServiceTests: XCTestCase {
         mockDiscoveryService.clear()
         mockNetworkSelectionService.clear()
     }
+}
 
-    // MARK: - DiscoveryService Inputs
+// MARK: - DiscoveryService
+
+extension AuthorizationServiceTests {
+
+    // MARK: Inputs
 
     func testDiscoveryServiceRecivesSIMWhenPresent() {
         mockCarrierInfo.primarySIM = MockSIMs.att
@@ -63,7 +68,7 @@ class AuthorizationServiceTests: XCTestCase {
         XCTAssertNotNil(mockDiscoveryService.lastCompletion)
     }
 
-    // MARK: - DiscoveryService Outputs
+    // MARK: Outputs
 
     func testDiscoverSuccess() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
@@ -102,8 +107,13 @@ class AuthorizationServiceTests: XCTestCase {
         }
         wait(for: [expectation], timeout: timeout)
     }
+}
 
-    // MARK: - OpenIdService Inputs
+// MARK: - OpenIdService
+
+extension AuthorizationServiceTests {
+
+    // MARK: Inputs
 
     func testPassesViewControllerAndScopeToOpenIdService() {
         mockCarrierInfo.primarySIM = MockSIMs.unknown
@@ -119,7 +129,41 @@ class AuthorizationServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    // MARK: - OpenIdService Outputs
+    func testPassesOptionalParameters() {
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
+        let expectedController = UIViewController()
+        let expectation = XCTestExpectation(description: "async authorization")
+
+        let expected = OpenIdAuthorizationParameters(
+            clientId: mockSDKConfig.clientId,
+            redirectURL: mockSDKConfig.redirectURL(forRoute: .authorize),
+            formattedScopes: "openid address email",
+            state: "foo",
+            nonce: "bar",
+            acrValues: [.aal2],
+            prompt: .consent,
+            correlationId: "bar",
+            context: "biz",
+            loginHintToken: nil
+        )
+
+        authorizationService.authorize(
+            scopes: self.scopes,
+            fromViewController: expectedController,
+            acrValues: expected.acrValues,
+            state: expected.state,
+            correlationId: expected.correlationId,
+            context: expected.context,
+            prompt: expected.prompt,
+            nonce: expected.nonce) { _ in
+                XCTAssertEqual(self.mockOpenIdService.lastViewController, expectedController)
+                XCTAssertEqual(self.mockOpenIdService.lastParameters, expected)
+                expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    // MARK: Outputs
 
     func testOpenIdSuccess() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
@@ -175,8 +219,13 @@ class AuthorizationServiceTests: XCTestCase {
         }
         wait(for: [expectation], timeout: timeout)
     }
+}
 
-    // MARK: - Secondary Device Flow Inputs
+// MARK: - Secondary Device Flow
+
+extension AuthorizationServiceTests {
+
+    // MARK: Inputs
 
     func testSIMPresentBypassesSecondaryDeviceFlow() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
@@ -207,7 +256,7 @@ class AuthorizationServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    // MARK: - Secondary Device Flow Outputs
+    // MARK: Outputs
 
     func testSecondaryDeviceFlowSuccess() {
         mockSecondaryDeviceFlow()
@@ -266,6 +315,8 @@ class AuthorizationServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 }
+
+// MARK: - Helpers
 
 private extension AuthorizationServiceTests {
     func mockSecondaryDeviceFlow() {

@@ -265,7 +265,6 @@ class OpenIdServiceTests: XCTestCase {
 
         wait(for: [expectation], timeout: timeout)
     }
-
 }
 
 extension OpenIdServiceTests {
