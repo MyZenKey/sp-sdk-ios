@@ -188,7 +188,6 @@ extension MobileNetworkSelectionService.Request {
             URLQueryItem(name: Params.redirectURI.rawValue, value: redirectURI),
             URLQueryItem(name: Params.state.rawValue, value: state),
         ]
-        
 
         guard
             let components = builder,

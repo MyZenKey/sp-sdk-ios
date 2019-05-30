@@ -49,29 +49,6 @@ class MockURLResolver: OpenIdURLResolverProtocol {
 }
 
 class OpenIdServiceTests: XCTestCase {
-
-    static let mockParameters = OpenIdAuthorizationParameters(
-        clientId: "foo",
-        redirectURL: URL(string: "testapp://projectverify/authorize")!,
-        formattedScopes: "openid",
-        state: "bar",
-        nonce: nil,
-        acrValues: [.aal1],
-        prompt: nil,
-        correlationId: nil,
-        context: nil,
-        loginHintToken: nil
-    )
-
-    static let mockCarrierConfig = CarrierConfig(
-        simInfo: MockSIMs.tmobile,
-        openIdConfig: OpenIdConfig(
-            tokenEndpoint: URL.mocked,
-            authorizationEndpoint: URL.mocked,
-            issuer: URL.mocked
-        )
-    )
-
     var mockURLResolver = MockURLResolver()
     lazy var openIdService: OpenIdService = {
         OpenIdService(urlResolver: mockURLResolver)
@@ -289,7 +266,35 @@ class OpenIdServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    // MARK: - Request Building
+}
+
+extension OpenIdServiceTests {
+    static let mockParameters = OpenIdAuthorizationParameters(
+        clientId: "foo",
+        redirectURL: URL(string: "testapp://projectverify/authorize")!,
+        formattedScopes: "openid",
+        state: "bar",
+        nonce: nil,
+        acrValues: [.aal1],
+        prompt: nil,
+        correlationId: nil,
+        context: nil,
+        loginHintToken: nil
+    )
+
+    static let mockCarrierConfig = CarrierConfig(
+        simInfo: MockSIMs.tmobile,
+        openIdConfig: OpenIdConfig(
+            tokenEndpoint: URL.mocked,
+            authorizationEndpoint: URL.mocked,
+            issuer: URL.mocked
+        )
+    )
+}
+
+// MARK: - Request Building
+
+class AuthorizationURLBuilderTests: XCTestCase {
 
     func testBuildsCorrectRequestFromConfig() {
         let parameters = OpenIdAuthorizationParameters(
