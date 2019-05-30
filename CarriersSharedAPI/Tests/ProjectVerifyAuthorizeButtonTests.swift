@@ -28,9 +28,16 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
         lastCompletion = nil
     }
 
-    func connectWithProjectVerify(
+    // swiftlint:disable:next function_parameter_count
+    func authorize(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
+        acrValues: [ACRValue]?,
+        state: String?,
+        correlationId: String?,
+        context: String?,
+        prompt: PromptValue?,
+        nonce: String?,
         completion: @escaping AuthorizationCompletion) {
 
         lastScopes = scopes

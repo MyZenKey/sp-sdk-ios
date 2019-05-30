@@ -79,7 +79,7 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 
         delegate?.buttonWillBeginAuthorizing(self)
 
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: scopes,
             fromViewController: currentViewController) { [weak self] result in
                 self?.handle(result: result)

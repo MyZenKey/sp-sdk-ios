@@ -10,15 +10,16 @@ import AppAuth
 @testable import CarriersSharedAPI
 
 class MockOpenIdService: OpenIdServiceProtocol {
+
     static let mockSuccess = AuthorizedResponse(code: "abc123", mcc: "123", mnc: "456")
-    var lastConfig: OpenIdAuthorizationConfig?
+    var lastParameters: OpenIdAuthorizationParameters?
     var lastViewController: UIViewController?
     var mockResponse: OpenIdServiceResult = .code(
         MockOpenIdService.mockSuccess
     )
 
     func clear() {
-        lastConfig = nil
+        lastParameters = nil
         lastViewController = nil
         mockResponse = .code(
             MockOpenIdService.mockSuccess
@@ -27,12 +28,12 @@ class MockOpenIdService: OpenIdServiceProtocol {
 
     func authorize(
         fromViewController viewController: UIViewController,
-        authorizationConfig: OpenIdAuthorizationConfig,
-        completion: @escaping OpenIdServiceCompletion
-    ) {
+        carrierConfig: CarrierConfig,
+        authorizationParameters: OpenIdAuthorizationParameters,
+        completion: @escaping OpenIdServiceCompletion) {
 
         self.lastViewController = viewController
-        self.lastConfig = authorizationConfig
+        self.lastParameters = authorizationParameters
 
         DispatchQueue.main.async {
             completion(self.mockResponse)
@@ -167,7 +168,7 @@ class AuthorizationServiceTests: XCTestCase {
 
     func testDiscoveryServiceRecivesSIMWhenPresent() {
         mockCarrierInfo.primarySIM = MockSIMs.att
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: UIViewController()) { _ in }
         XCTAssertEqual(mockDiscoveryService.lastSIMInfo, MockSIMs.att)
@@ -177,7 +178,7 @@ class AuthorizationServiceTests: XCTestCase {
     func testDiscoveryCallsIfNoSIMPresent() {
         mockCarrierInfo.primarySIM = nil
         let expectedViewController = UIViewController()
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: expectedViewController) { _ in }
 
@@ -190,7 +191,7 @@ class AuthorizationServiceTests: XCTestCase {
     func testDiscoverSuccess() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
         let expectation = XCTestExpectation(description: "async authorization")
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
                 guard case .code(let payload) = result else {
@@ -211,7 +212,7 @@ class AuthorizationServiceTests: XCTestCase {
         let mockError: DiscoveryServiceError = .networkError(.networkError(NSError.mocked))
         mockDiscoveryService.mockResponses = [ .error(mockError) ]
         let expectation = XCTestExpectation(description: "async authorization")
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
                 guard case .error(let error) = result else {
@@ -231,11 +232,11 @@ class AuthorizationServiceTests: XCTestCase {
         mockCarrierInfo.primarySIM = MockSIMs.unknown
         let expectedController = UIViewController()
         let expectation = XCTestExpectation(description: "async authorization")
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: expectedController) { _ in
                 XCTAssertEqual(self.mockOpenIdService.lastViewController, expectedController)
-                XCTAssertEqual(self.mockOpenIdService.lastConfig?.formattedScopes, "openid address email")
+                XCTAssertEqual(self.mockOpenIdService.lastParameters?.formattedScopes, "openid address email")
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
@@ -246,7 +247,7 @@ class AuthorizationServiceTests: XCTestCase {
     func testOpenIdSuccess() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
         let expectation = XCTestExpectation(description: "async authorization")
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
                 guard case .code(let payload) = result else {
@@ -268,7 +269,7 @@ class AuthorizationServiceTests: XCTestCase {
         let mockError: OpenIdServiceError = .urlResolverError(mockNetowrkError)
         mockOpenIdService.mockResponse = .error(mockError)
         let expectation = XCTestExpectation(description: "async authorization")
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
                 guard
@@ -286,7 +287,7 @@ class AuthorizationServiceTests: XCTestCase {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
         mockOpenIdService.mockResponse = .cancelled
         let expectation = XCTestExpectation(description: "async authorization")
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
                 guard case .cancelled = result else {
@@ -304,7 +305,7 @@ class AuthorizationServiceTests: XCTestCase {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
         let expectation = XCTestExpectation(description: "async authorization")
         let expectedViewController = UIViewController()
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: expectedViewController) { _ in
                 XCTAssertNil(self.mockNetworkSelectionService.lastViewController)
@@ -318,7 +319,7 @@ class AuthorizationServiceTests: XCTestCase {
         mockSecondaryDeviceFlow()
         let expectation = XCTestExpectation(description: "async authorization")
         let expectedViewController = UIViewController()
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: expectedViewController) { _ in
                 XCTAssertEqual(
@@ -334,7 +335,7 @@ class AuthorizationServiceTests: XCTestCase {
     func testSecondaryDeviceFlowSuccess() {
         mockSecondaryDeviceFlow()
         let expectation = XCTestExpectation(description: "async authorization")
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
                 guard case .code(let payload) = result else {
@@ -356,7 +357,7 @@ class AuthorizationServiceTests: XCTestCase {
         mockNetworkSelectionService.mockResponse = .error(expectedError)
         let expectation = XCTestExpectation(description: "async authorization")
         let expectedViewController = UIViewController()
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: expectedViewController) { result in
                 guard case .error(let error) = result else {
@@ -376,7 +377,7 @@ class AuthorizationServiceTests: XCTestCase {
         mockNetworkSelectionService.mockResponse = .cancelled
         let expectation = XCTestExpectation(description: "async authorization")
         let expectedViewController = UIViewController()
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: expectedViewController) { result in
                 guard case .cancelled = result else {

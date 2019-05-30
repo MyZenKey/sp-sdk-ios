@@ -13,15 +13,42 @@ enum ResponseType: String {
     case code
 }
 
-struct OpenIdAuthorizationConfig: Equatable {
-    let simInfo: SIMInfo
+struct OpenIdAuthorizationParameters: Equatable {
     let clientId: String
-    let authorizationEndpoint: URL
-    let tokenEndpoint: URL
-    let formattedScopes: String
     let redirectURL: URL
-    let loginHintToken: String?
-    let state: String
+    let formattedScopes: String
+    let state: String?
+    let nonce: String?
+
+    let acrValues: [ACRValue]?
+    let prompt: PromptValue?
+    let correlationId: String?
+    let context: String?
+    var loginHintToken: String?
+
+    init(
+        clientId: String,
+        redirectURL: URL,
+        formattedScopes: String,
+        state: String?,
+        nonce: String?,
+        acrValues: [ACRValue]?,
+        prompt: PromptValue?,
+        correlationId: String?,
+        context: String?,
+        loginHintToken: String?
+    ) {
+        self.clientId = clientId
+        self.redirectURL = redirectURL
+        self.formattedScopes = formattedScopes
+        self.state = state ?? OIDAuthorizationRequest.generateState()
+        self.nonce = nonce ?? OIDAuthorizationRequest.generateState()
+        self.acrValues = acrValues
+        self.prompt = prompt
+        self.correlationId = correlationId
+        self.context = context
+        self.loginHintToken = loginHintToken
+    }
 }
 
 enum OpenIdServiceError: Error {
@@ -40,7 +67,8 @@ typealias OpenIdServiceCompletion = (OpenIdServiceResult) -> Void
 protocol OpenIdServiceProtocol: URLHandling {
     func authorize(
         fromViewController viewController: UIViewController,
-        authorizationConfig: OpenIdAuthorizationConfig,
+        carrierConfig: CarrierConfig,
+        authorizationParameters: OpenIdAuthorizationParameters,
         completion: @escaping OpenIdServiceCompletion
     )
 
@@ -85,7 +113,8 @@ class OpenIdService {
 extension OpenIdService: OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
-        authorizationConfig: OpenIdAuthorizationConfig,
+        carrierConfig: CarrierConfig,
+        authorizationParameters: OpenIdAuthorizationParameters,
         completion: @escaping OpenIdServiceCompletion
         ) {
 
@@ -95,24 +124,24 @@ extension OpenIdService: OpenIdServiceProtocol {
         }
 
         let openIdConfiguration = OIDServiceConfiguration(
-            authorizationEndpoint: authorizationConfig.authorizationEndpoint,
-            tokenEndpoint: authorizationConfig.tokenEndpoint
+            authorizationEndpoint: carrierConfig.openIdConfig.authorizationEndpoint,
+            tokenEndpoint: carrierConfig.openIdConfig.tokenEndpoint
         )
 
         //create the authorization request
         let authorizationRequest: OIDAuthorizationRequest = OpenIdService.createAuthorizationRequest(
             openIdServiceConfiguration: openIdConfiguration,
-            authorizationConfig: authorizationConfig
+            authorizationParameters: authorizationParameters
         )
 
         let sessionStorage = PendingSessionStorage()
 
-        let simInfo = authorizationConfig.simInfo
+        let simInfo = carrierConfig.simInfo
         urlResolver.resolve(
             request: authorizationRequest,
             usingStorage: sessionStorage,
             fromViewController: viewController,
-            authorizationConfig: authorizationConfig) { [weak self] (authState, error) in
+            authorizationParameters: authorizationParameters) { [weak self] (authState, error) in
                 guard
                     error == nil,
                     let authState = authState,
@@ -132,7 +161,7 @@ extension OpenIdService: OpenIdServiceProtocol {
                 self?.concludeAuthorizationFlow(result: .code(authorizedResponse))
         }
 
-        state = .inProgress(authorizationRequest, simInfo, completion, sessionStorage)
+        state = .inProgress(authorizationRequest, carrierConfig.simInfo, completion, sessionStorage)
     }
 
     func cancelCurrentAuthorizationSession() {
@@ -201,25 +230,40 @@ extension OpenIdService: OpenIdServiceProtocol {
 }
 
 extension OpenIdService {
+    enum Keys: String {
+        case loginHintToken = "login_hint_token"
+        case acrValues = "acr_values"
+        case correlationId = "correlation_id"
+        case context = "context"
+        case prompt = "prompt"
+    }
 
     static func createAuthorizationRequest(
         openIdServiceConfiguration: OIDServiceConfiguration,
-        authorizationConfig: OpenIdAuthorizationConfig) -> OIDAuthorizationRequest {
+        authorizationParameters: OpenIdAuthorizationParameters) -> OIDAuthorizationRequest {
 
-        var additionalParams: [String: String] = [:]
-        if let loginHintToken = authorizationConfig.loginHintToken {
-            additionalParams["login_hint_token"] = loginHintToken
-        }
+        let additionalParams: [String: String] = [
+            Keys.loginHintToken.rawValue: authorizationParameters.loginHintToken,
+            Keys.acrValues.rawValue: authorizationParameters.acrValues?
+                .map() { $0.rawValue }
+                .joined(separator: " "),
+            Keys.correlationId.rawValue: authorizationParameters.correlationId,
+            Keys.context.rawValue: authorizationParameters.context,
+            Keys.prompt.rawValue: authorizationParameters.prompt?.rawValue,
+        ].compactMapValues() { return $0 }
 
+        // This uses the AppAuth defaults from the conveneince initializer in
+        // OIDAuthorizationRequest.m
+        // When we support PKCE challenges see the default imp. there as well.
         let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
             configuration: openIdServiceConfiguration,
-            clientId: authorizationConfig.clientId,
-            clientSecret: nil,
-            scope: authorizationConfig.formattedScopes,
-            redirectURL: authorizationConfig.redirectURL,
+            clientId: authorizationParameters.clientId,
+            clientSecret: nil, // client secret is never used in a public client.
+            scope: authorizationParameters.formattedScopes,
+            redirectURL: authorizationParameters.redirectURL,
             responseType: ResponseType.code.rawValue,
-            state: authorizationConfig.state,
-            nonce: nil,
+            state: authorizationParameters.state,
+            nonce: authorizationParameters.nonce,
             codeVerifier: nil,
             codeChallenge: nil,
             codeChallengeMethod: nil,

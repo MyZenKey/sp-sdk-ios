@@ -14,7 +14,6 @@ extension OpenIdURLResolverProtocol {
     func performSafariAuthorization(
         request: OIDAuthorizationRequest,
         storage: OpenIdExternalSessionStateStorage,
-        simInfo: SIMInfo,
         fromViewController viewController: UIViewController,
         completion: @escaping OpenIdURLResolverCompletion) {
 
@@ -49,27 +48,26 @@ struct OpenIdURLResolverIOS: OpenIdURLResolverProtocol {
         request: OIDAuthorizationRequest,
         usingStorage storage: OpenIdExternalSessionStateStorage,
         fromViewController viewController: UIViewController,
-        authorizationConfig: OpenIdAuthorizationConfig,
+        authorizationParameters: OpenIdAuthorizationParameters,
         completion: @escaping OpenIdURLResolverCompletion) {
         // NOTE: we need to use stage, not test, for universal links to work with att
         // ie:
         // URL(string: "https://oidc.stage.xlogin.att.com/mga/sps/oauth/oauth20/authorize")!,
         UIApplication.shared.open(
-            authorizationConfig.authorizationEndpoint,
+            request.configuration.authorizationEndpoint,
             options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true]
         ) { success in
             if success {
                 self.performCCIDAuthorization(
                     request: request,
                     storage: storage,
-                    authorizationConfig: authorizationConfig,
+                    authorizationParameters: authorizationParameters,
                     completion: completion
                 )
             } else {
                 self.performSafariAuthorization(
                     request: request,
                     storage: storage,
-                    simInfo: authorizationConfig.simInfo,
                     fromViewController: viewController,
                     completion: completion
                 )
@@ -80,16 +78,13 @@ struct OpenIdURLResolverIOS: OpenIdURLResolverProtocol {
     func performCCIDAuthorization(
         request: OIDAuthorizationRequest,
         storage: OpenIdExternalSessionStateStorage,
-        authorizationConfig: OpenIdAuthorizationConfig,
+        authorizationParameters: OpenIdAuthorizationParameters,
         completion: @escaping OpenIdURLResolverCompletion) {
-
-        // TODO: clean up /cancel existing session semantics:
-        let consentURLString = authorizationConfig.consentURLString
 
         let externalUserAgent = OIDExternalUserAgentIOSCustomBrowser(
             urlTransformation: { request in return request },
             canOpenURLScheme: nil,
-            appStore: URL(string: consentURLString)
+            appStore: request.authorizationRequestURL()
         )!
 
         let session = OIDAuthState.authState(
@@ -110,7 +105,7 @@ struct XCISchemeOpenIdURLResolverIOS: OpenIdURLResolverProtocol {
         request: OIDAuthorizationRequest,
         usingStorage storage: OpenIdExternalSessionStateStorage,
         fromViewController viewController: UIViewController,
-        authorizationConfig: OpenIdAuthorizationConfig,
+        authorizationParameters: OpenIdAuthorizationParameters,
         completion: @escaping OpenIdURLResolverCompletion) {
 
         if UIApplication.shared.canOpenURL(URL(string: "xci://")!) {
@@ -119,26 +114,25 @@ struct XCISchemeOpenIdURLResolverIOS: OpenIdURLResolverProtocol {
             // this reach backward pattern is not ideal and is for QA only!
             let openIdConfiguration = OIDServiceConfiguration(
                 authorizationEndpoint: URL(string: "xci://authorize")!,
-                tokenEndpoint: authorizationConfig.tokenEndpoint
+                tokenEndpoint: request.configuration.tokenEndpoint
             )
 
             let authorizationRequest: OIDAuthorizationRequest = OpenIdService
                 .createAuthorizationRequest(
                     openIdServiceConfiguration: openIdConfiguration,
-                    authorizationConfig: authorizationConfig
+                    authorizationParameters: authorizationParameters
             )
 
             self.performCCIDAuthorization(
                 request: authorizationRequest,
                 storage: storage,
-                authorizationConfig: authorizationConfig,
+                authorizationParameters: authorizationParameters,
                 completion: completion
             )
         } else {
             self.performSafariAuthorization(
                 request: request,
                 storage: storage,
-                simInfo: authorizationConfig.simInfo,
                 fromViewController: viewController,
                 completion: completion
             )
@@ -148,15 +142,14 @@ struct XCISchemeOpenIdURLResolverIOS: OpenIdURLResolverProtocol {
     func performCCIDAuthorization(
         request: OIDAuthorizationRequest,
         storage: OpenIdExternalSessionStateStorage,
-        authorizationConfig: OpenIdAuthorizationConfig,
+        authorizationParameters: OpenIdAuthorizationParameters,
         completion: @escaping OpenIdURLResolverCompletion) {
 
-        let consentURLString = authorizationConfig.consentURLString
         let externalUserAgent = OIDExternalUserAgentIOSCustomBrowser(
             urlTransformation: { request in return request },
             canOpenURLScheme: "xci",
-            appStore: URL(string: consentURLString)
-            )!
+            appStore: request.authorizationRequestURL()
+        )!
 
         // since we don't rejoin via resumeExternalUserAgentFlowWithURL, we don't need to store the
         // sesssion

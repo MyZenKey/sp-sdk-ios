@@ -15,14 +15,14 @@ class MockURLResolver: OpenIdURLResolverProtocol {
     var lastStorage: OpenIdExternalSessionStateStorage?
     var lastRequest: OIDAuthorizationRequest?
     var lastViewController: UIViewController?
-    var lastConfig: OpenIdAuthorizationConfig?
+    var lastParameters: OpenIdAuthorizationParameters?
     var lastCompletion: OpenIdURLResolverCompletion?
 
     func clear() {
         lastStorage = nil
         lastRequest = nil
         lastViewController = nil
-        lastConfig = nil
+        lastParameters = nil
         lastCompletion = nil
     }
 
@@ -30,19 +30,19 @@ class MockURLResolver: OpenIdURLResolverProtocol {
         request: OIDAuthorizationRequest,
         usingStorage storage: OpenIdExternalSessionStateStorage,
         fromViewController viewController: UIViewController,
-        authorizationConfig: OpenIdAuthorizationConfig,
+        authorizationParameters: OpenIdAuthorizationParameters,
         completion: @escaping OpenIdURLResolverCompletion) {
         lastStorage = storage
         lastRequest = request
         lastViewController = viewController
-        lastConfig = authorizationConfig
+        lastParameters = authorizationParameters
         lastCompletion = completion
     }
 
     func performCCIDAuthorization(
         request: OIDAuthorizationRequest,
         storage: OpenIdExternalSessionStateStorage,
-        authorizationConfig: OpenIdAuthorizationConfig,
+        authorizationParameters: OpenIdAuthorizationParameters,
         completion: @escaping OpenIdURLResolverCompletion) {
 
     }
@@ -50,15 +50,26 @@ class MockURLResolver: OpenIdURLResolverProtocol {
 
 class OpenIdServiceTests: XCTestCase {
 
-    static let mockConfig = OpenIdAuthorizationConfig(
-        simInfo: MockSIMs.unknown,
+    static let mockParameters = OpenIdAuthorizationParameters(
         clientId: "foo",
-        authorizationEndpoint: URL(string: "http://rightpoint.com")!,
-        tokenEndpoint: URL(string: "http://rightpoint.com")!,
-        formattedScopes: "openid",
         redirectURL: URL(string: "testapp://projectverify/authorize")!,
-        loginHintToken: nil,
-        state: "bar"
+        formattedScopes: "openid",
+        state: "bar",
+        nonce: nil,
+        acrValues: [.aal1],
+        prompt: nil,
+        correlationId: nil,
+        context: nil,
+        loginHintToken: nil
+    )
+
+    static let mockCarrierConfig = CarrierConfig(
+        simInfo: MockSIMs.tmobile,
+        openIdConfig: OpenIdConfig(
+            tokenEndpoint: URL.mocked,
+            authorizationEndpoint: URL.mocked,
+            issuer: URL.mocked
+        )
     )
 
     var mockURLResolver = MockURLResolver()
@@ -81,14 +92,16 @@ class OpenIdServiceTests: XCTestCase {
         let completion: OpenIdServiceCompletion = { _ in }
         openIdService.authorize(
             fromViewController: testViewContorller,
-            authorizationConfig: OpenIdServiceTests.mockConfig,
-            completion: completion)
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: OpenIdServiceTests.mockParameters,
+            completion: completion
+        )
 
         let passedViewController = try? UnwrapAndAssertNotNil(mockURLResolver.lastViewController)
-        let passedConfig = try? UnwrapAndAssertNotNil(mockURLResolver.lastConfig)
+        let passedParameters = try? UnwrapAndAssertNotNil(mockURLResolver.lastParameters)
 
         XCTAssertEqual(passedViewController, testViewContorller)
-        XCTAssertEqual(passedConfig, OpenIdServiceTests.mockConfig)
+        XCTAssertEqual(passedParameters, OpenIdServiceTests.mockParameters)
 
         guard case .inProgress(let request, _, _, let storage) = openIdService.state else {
             XCTFail("expected in progress state")
@@ -104,7 +117,8 @@ class OpenIdServiceTests: XCTestCase {
     func testAuthorizationInProgress() {
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConfig: OpenIdServiceTests.mockConfig,
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: OpenIdServiceTests.mockParameters,
             completion: { _ in })
         XCTAssertTrue(openIdService.authorizationInProgress)
     }
@@ -113,7 +127,8 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: OpenIdServiceTests.mockParameters) { result in
                 defer { expectation.fulfill() }
                 guard case .cancelled = result else {
                     XCTFail("expected to be cancelled")
@@ -128,7 +143,8 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: OpenIdServiceTests.mockParameters) { result in
                 defer { expectation.fulfill() }
                 guard case .code(let response) = result else {
                     XCTFail("expected to be cancelled")
@@ -136,8 +152,8 @@ class OpenIdServiceTests: XCTestCase {
                 }
 
                 XCTAssertEqual(response.code, "TESTCODE")
-                XCTAssertEqual(response.mcc, "123")
-                XCTAssertEqual(response.mnc, "456")
+                XCTAssertEqual(response.mcc, MockSIMs.tmobile.mcc)
+                XCTAssertEqual(response.mnc, MockSIMs.tmobile.mnc)
         }
 
         let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"
@@ -156,7 +172,8 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: OpenIdServiceTests.mockParameters) { result in
                 defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
@@ -177,7 +194,8 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: OpenIdServiceTests.mockParameters) { result in
                 defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
@@ -202,7 +220,8 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: OpenIdServiceTests.mockParameters) { result in
                 defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
@@ -226,7 +245,8 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: OpenIdServiceTests.mockParameters) { result in
                 defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result,
@@ -253,7 +273,8 @@ class OpenIdServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "wait")
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConfig: OpenIdServiceTests.mockConfig) { result in
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: OpenIdServiceTests.mockParameters) { result in
                 defer { expectation.fulfill() }
                 guard case .cancelled = result else {
                     XCTFail("expected a cancelled result")
@@ -262,7 +283,8 @@ class OpenIdServiceTests: XCTestCase {
         }
         openIdService.authorize(
             fromViewController: UIViewController(),
-            authorizationConfig: OpenIdServiceTests.mockConfig) { _ in }
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: OpenIdServiceTests.mockParameters) { _ in }
 
         wait(for: [expectation], timeout: timeout)
     }
@@ -270,55 +292,64 @@ class OpenIdServiceTests: XCTestCase {
     // MARK: - Request Building
 
     func testBuildsCorrectRequestFromConfig() {
-        let authConfig = OpenIdAuthorizationConfig(
-            simInfo: MockSIMs.tmobile,
+        let parameters = OpenIdAuthorizationParameters(
             clientId: "1234",
-            authorizationEndpoint: URL.mocked,
-            tokenEndpoint: URL.mocked,
-            formattedScopes: "openid profile email",
             redirectURL: URL.mocked,
-            loginHintToken: nil,
-            state: "foo")
+            formattedScopes: "openid profile email",
+            state: nil,
+            nonce: nil,
+            acrValues: nil,
+            prompt: nil,
+            correlationId: nil,
+            context: nil,
+            loginHintToken: nil
+        )
+
         let serviceConfig = OIDServiceConfiguration(
             authorizationEndpoint: URL.mocked,
             tokenEndpoint: URL.mocked
         )
+
         let request = OpenIdService.createAuthorizationRequest(
             openIdServiceConfiguration: serviceConfig,
-            authorizationConfig: authConfig
+            authorizationParameters: parameters
         )
 
         let url: URL = request.authorizationRequestURL()
         let expectdURL = URL(
             // swiftlint:disable:next line_length
-            string: "rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=rightpoint.com&state=foo&response_type=code"
+            string: "https://rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://rightpoint.com&state=\(parameters.state!)&nonce=\(parameters.nonce!)&response_type=code"
         )!
+
         XCTAssertEqual(url, expectdURL)
     }
 
-    func testBuildsCorrectRequestFromConfigWithLoginHint() {
-        let authConfig = OpenIdAuthorizationConfig(
-            simInfo: MockSIMs.tmobile,
+    func testBuildsCorrectRequestWithOptionalParameters() {
+        let parameters = OpenIdAuthorizationParameters(
             clientId: "1234",
-            authorizationEndpoint: URL.mocked,
-            tokenEndpoint: URL.mocked,
-            formattedScopes: "openid profile email",
             redirectURL: URL.mocked,
-            loginHintToken: "mocktoken",
-            state: "foo")
+            formattedScopes: "openid profile email",
+            state: "foo",
+            nonce: "bar",
+            acrValues: [.aal1],
+            prompt: .consent,
+            correlationId: "fizz",
+            context: "buzz",
+            loginHintToken: "boo"
+        )
         let serviceConfig = OIDServiceConfiguration(
             authorizationEndpoint: URL.mocked,
             tokenEndpoint: URL.mocked
         )
         let request = OpenIdService.createAuthorizationRequest(
             openIdServiceConfiguration: serviceConfig,
-            authorizationConfig: authConfig
+            authorizationParameters: parameters
         )
 
         let url: URL = request.authorizationRequestURL()
         let expectdURL = URL(
             // swiftlint:disable:next line_length
-            string: "rightpoint.com?client_id=1234&login_hint_token=mocktoken&redirect_uri=rightpoint.com&scope=openid%20profile%20email&state=foo&response_type=code"
+            string: "https://rightpoint.com?correlation_id=fizz&prompt=consent&response_type=code&nonce=bar&scope=openid%20profile%20email&context=buzz&acr_values=aal1&login_hint_token=boo&redirect_uri=https://rightpoint.com&client_id=1234&state=foo"
         )!
         XCTAssertEqual(url, expectdURL)
     }
