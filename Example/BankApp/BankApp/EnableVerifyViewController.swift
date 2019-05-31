@@ -94,7 +94,7 @@ class EnableVerifyViewController: UIViewController {
     
     @objc func enableVerify(_ sender: Any) {
         let scopes: [Scope] = [.profile, .email]
-        authService.connectWithProjectVerify(
+        authService.authorize(
             scopes: scopes,
             fromViewController: self) { result in
                 // handle the result of the authorization call

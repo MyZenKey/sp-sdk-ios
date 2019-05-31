@@ -272,7 +272,7 @@ class LoginViewController {
     func loginWithProjectVerify() {
         // in response to some UI, perform an authorization using the AuthorizationService
         let scopes: [Scope] = [.profile, .email]
-        authService.connectWithProjectVerify(
+        authService.authorize(
             scopes: scopes,
             fromViewController: self) { result in
 

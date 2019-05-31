@@ -144,7 +144,7 @@ class CheckoutViewController: UIViewController {
     @IBAction func onUseVerifyKeyAddressTapped(_ sender: Any) {
         // Request an authorization code from Project Verify:
         let scopes: [Scope] = [.profile, .email]
-        authService.connectWithProjectVerify(
+        authService.authorize(
             scopes: scopes,
             fromViewController: self) { result in
                 // handle the result of the authorization call

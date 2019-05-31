@@ -13,9 +13,9 @@ class ServiceAPI: NSObject {
 
     /// Log in.
     ///
-    /// - Parameter code: The auth code returned by by `connectWithProjectVerify`.
-    /// - Parameter mcc: The mcc returned by by `connectWithProjectVerify`
-    /// - Parameter mnc: The mnc returned by by `connectWithProjectVerify`
+    /// - Parameter code: The auth code returned by by `authorize`.
+    /// - Parameter mcc: The mcc returned by by `authorize`
+    /// - Parameter mnc: The mnc returned by by `authorize`
     func login(
         withAuthCode code: String,
         mcc: String,

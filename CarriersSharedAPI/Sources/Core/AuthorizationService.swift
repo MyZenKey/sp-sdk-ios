@@ -33,7 +33,7 @@ public enum AuthorizationResult {
 public typealias AuthorizationCompletion = (AuthorizationResult) -> Void
 
 /// The AuthorizationService interface.
-protocol AuthorizationServiceProtocol {
+public protocol AuthorizationServiceProtocol {
     // swiftlint:disable function_parameter_count
 
     /// Requests authorization for the specified scopes from Project Verify.
@@ -84,7 +84,7 @@ protocol AuthorizationServiceProtocol {
     // swiftlint:enable function_parameter_count
 }
 
-extension AuthorizationServiceProtocol {
+public extension AuthorizationServiceProtocol {
     func authorize(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
@@ -129,7 +129,7 @@ public class AuthorizationService {
 
 extension AuthorizationService: AuthorizationServiceProtocol {
     // swiftlint:disable:next function_parameter_count
-    func authorize(
+    public func authorize(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
         acrValues: [ACRValue]?,
