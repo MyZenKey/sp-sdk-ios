@@ -41,8 +41,8 @@ struct OpenIdAuthorizationParameters: Equatable {
         self.clientId = clientId
         self.redirectURL = redirectURL
         self.formattedScopes = formattedScopes
-        self.state = state ?? OIDAuthorizationRequest.generateState()
-        self.nonce = nonce ?? OIDAuthorizationRequest.generateState()
+        self.state = state ?? String.generateRequestState()
+        self.nonce = nonce ?? String.generateRequestState()
         self.acrValues = acrValues
         self.prompt = prompt
         self.correlationId = correlationId
