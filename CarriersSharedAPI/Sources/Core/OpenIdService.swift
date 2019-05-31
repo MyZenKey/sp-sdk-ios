@@ -26,23 +26,22 @@ struct OpenIdAuthorizationParameters: Equatable {
     let context: String?
     var loginHintToken: String?
 
-    init(
-        clientId: String,
-        redirectURL: URL,
-        formattedScopes: String,
-        state: String?,
-        nonce: String?,
-        acrValues: [ACRValue]?,
-        prompt: PromptValue?,
-        correlationId: String?,
-        context: String?,
-        loginHintToken: String?
-    ) {
+    init(clientId: String,
+         redirectURL: URL,
+         formattedScopes: String,
+         state: String?,
+         nonce: String?,
+         acrValues: [ACRValue]?,
+         prompt: PromptValue?,
+         correlationId: String?,
+         context: String?,
+         loginHintToken: String?) {
+
         self.clientId = clientId
         self.redirectURL = redirectURL
         self.formattedScopes = formattedScopes
-        self.state = state ?? String.generateRequestState()
-        self.nonce = nonce ?? String.generateRequestState()
+        self.state = state
+        self.nonce = nonce
         self.acrValues = acrValues
         self.prompt = prompt
         self.correlationId = correlationId
@@ -54,6 +53,7 @@ struct OpenIdAuthorizationParameters: Equatable {
 enum OpenIdServiceError: Error {
     case urlResponseError(URLResponseError)
     case urlResolverError(Error?)
+    case stateError(RequestStateError)
 }
 
 enum OpenIdServiceResult {
@@ -195,7 +195,8 @@ extension OpenIdService: OpenIdServiceProtocol {
 
         let response = ResponseURL(url: url)
         guard let state = request.state else {
-            fatalError("no requests should be sent without a valid state")
+            concludeAuthorizationFlow(result: .error(.stateError(.generationFailed)))
+            return
         }
 
         // validate state
@@ -208,7 +209,7 @@ extension OpenIdService: OpenIdServiceProtocol {
         switch validatedCode {
         case .value(let code):
             concludeAuthorizationFlow(result: .code(
-                AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
+                    AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
                 )
             )
         case .error(let error):

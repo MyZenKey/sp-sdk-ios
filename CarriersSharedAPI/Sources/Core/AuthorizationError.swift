@@ -105,6 +105,15 @@ extension URLResponseError: AuthorizationErrorConvertible {
     }
 }
 
+extension RequestStateError: AuthorizationErrorConvertible {
+    var asAuthorizationError: AuthorizationError {
+        return AuthorizationError(
+            rawErrorCode: "state_generation_error",
+            description: "unable to generate a state parameter, try again"
+        )
+    }
+}
+
 extension DiscoveryServiceError: AuthorizationErrorConvertible {
     var asAuthorizationError: AuthorizationError {
         switch self {
@@ -133,6 +142,9 @@ extension OpenIdServiceError: AuthorizationErrorConvertible {
             )
         case .urlResponseError(let urlError):
             return urlError.asAuthorizationError
+
+        case .stateError(let stateError):
+            return stateError.asAuthorizationError
         }
     }
 }
@@ -152,6 +164,9 @@ extension MobileNetworkSelectionError: AuthorizationErrorConvertible {
             )
         case .urlResponseError(let urlError):
             return urlError.asAuthorizationError
+
+        case .stateError(let stateError):
+            return stateError.asAuthorizationError
         }
     }
 }

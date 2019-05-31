@@ -1,5 +1,5 @@
 //
-//  RequestUtilities.swift
+//  StateGenerator.swift
 //  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 5/31/19.
@@ -9,8 +9,12 @@
 import Foundation
 import AppAuth
 
-extension String {
-    static func generateRequestState() -> String? {
+struct StateGenerator {
+    static func generate() -> String? {
         return OIDAuthorizationRequest.generateState()
     }
+}
+
+enum RequestStateError: Error {
+    case generationFailed
 }

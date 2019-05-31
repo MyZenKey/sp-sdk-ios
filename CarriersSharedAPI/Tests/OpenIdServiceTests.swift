@@ -139,6 +139,40 @@ class OpenIdServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
+    func testConcludeWithStateGenerationError() {
+        let params = OpenIdAuthorizationParameters(
+            clientId: OpenIdServiceTests.mockParameters.clientId,
+            redirectURL: OpenIdServiceTests.mockParameters.redirectURL,
+            formattedScopes: OpenIdServiceTests.mockParameters.formattedScopes,
+            state: nil,
+            nonce: nil,
+            acrValues: nil,
+            prompt: nil,
+            correlationId: nil,
+            context: nil,
+            loginHintToken: nil)
+
+        let expectation = XCTestExpectation(description: "wait")
+        openIdService.authorize(
+            fromViewController: UIViewController(),
+            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
+            authorizationParameters: params) { result in
+                defer { expectation.fulfill() }
+                guard
+                    case .error(let error) = result,
+                    case .stateError(let stateError) = error,
+                    case .generationFailed = stateError else {
+                    XCTFail("expected state generation error")
+                    return
+                }
+        }
+
+        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"
+        let handled = openIdService.resolve(url: URL(string: urlString)!)
+        XCTAssertTrue(handled)
+        wait(for: [expectation], timeout: timeout)
+    }
+
     func testConcludeWithURLNoRequestInProgressError() {
         let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"
         let handled = openIdService.resolve(url: URL(string: urlString)!)
@@ -322,7 +356,7 @@ class AuthorizationURLBuilderTests: XCTestCase {
         let url: URL = request.authorizationRequestURL()
         let expectdURL = URL(
             // swiftlint:disable:next line_length
-            string: "https://rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://rightpoint.com&state=\(parameters.state!)&nonce=\(parameters.nonce!)&response_type=code"
+            string: "https://rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://rightpoint.com&response_type=code"
         )!
 
         XCTAssertEqual(url, expectdURL)
