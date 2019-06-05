@@ -64,7 +64,8 @@ public protocol AuthorizationServiceProtocol {
     ///     associate a Client session with an ID Token, and to mitigate replay attacks. The value
     ///     is passed through unmodified from the Authentication Request to the ID Token. Sufficient
     ///     entropy MUST be present in the nonce values used to prevent attackers from guessing
-    ///     values. If `nil` is passed, a random string will be used.
+    ///     values. The nonce is optional and the default value is `nil`. The
+    ///     `RandomStringGenerator` class exposes a method suitable for generating this value.
     ///   - completion: an escaping block executed asynchronously, on the main thread. This
     ///    block will take one parameter, a result, see `AuthorizationResult` for more information.
     ///

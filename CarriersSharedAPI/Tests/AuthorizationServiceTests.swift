@@ -129,6 +129,19 @@ extension AuthorizationServiceTests {
         wait(for: [expectation], timeout: timeout)
     }
 
+    func testGeneratesStateIfNonePassed() {
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
+        let expectedController = UIViewController()
+        let expectation = XCTestExpectation(description: "async authorization")
+        authorizationService.authorize(
+            scopes: self.scopes,
+            fromViewController: expectedController) { _ in
+                XCTAssertNotNil(self.mockOpenIdService.lastParameters?.state)
+                expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
     func testPassesOptionalParameters() {
         mockCarrierInfo.primarySIM = MockSIMs.unknown
         let expectedController = UIViewController()

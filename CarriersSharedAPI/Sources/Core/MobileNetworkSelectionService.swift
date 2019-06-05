@@ -45,7 +45,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
 
     init(sdkConfig: SDKConfig,
          mobileNetworkSelectionUI: MobileNetworkSelectionUIProtocol,
-         stateGenerator: @escaping () -> String? = StateGenerator.generate) {
+         stateGenerator: @escaping () -> String? = RandomStringGenerator.generateStateSuitableString) {
         self.sdkConfig = sdkConfig
         self.mobileNetworkSelectionUI = mobileNetworkSelectionUI
         self.stateGenerator = stateGenerator
