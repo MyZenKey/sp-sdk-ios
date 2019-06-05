@@ -247,7 +247,11 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
 }
 ```
 
-### Set Scopes (optional) 
+### Request Parameters
+
+There are several parameters that you may wish to configure for your authorization request:
+
+#### Scopes
 
 By default, authorization requests made with the Project Verify SDK include the OpenId scope. To use additional scopes, set them on the button and they will be added to the request. 
 
@@ -256,6 +260,19 @@ By default, authorization requests made with the Project Verify SDK include the 
 ```
 
 For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/blob/develop/CarriersSharedAPI/Sources/Core/Scope.swift).
+
+#### Additional Parameters
+
+Additionally it is possible to configure the following parameters:
+
+- ACR Values
+- Request State
+- Nonce
+- Correlation Id
+- Context
+- Prompt
+
+For more information about each of these parameters and instructions on how to use them, view the documentation for the `ProjectVerifyAuthorizeButton`.
 
 ## Request Authorization Code Manually
 
