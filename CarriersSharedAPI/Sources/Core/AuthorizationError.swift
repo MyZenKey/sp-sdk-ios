@@ -109,7 +109,7 @@ extension RequestStateError: AuthorizationErrorConvertible {
     var asAuthorizationError: AuthorizationError {
         return AuthorizationError(
             rawErrorCode: "state_generation_error",
-            description: "unable to generate a state parameter, try again"
+            description: "Unable to generate a state parameter. Please try again."
         )
     }
 }
