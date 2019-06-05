@@ -38,12 +38,12 @@ public protocol AuthorizationServiceProtocol {
 
     /// Requests authorization for the specified scopes from Project Verify.
     /// - Parameters:
-    ///   - scopes: an array of scopes to be authorized for access. See the predefined
+    ///   - scopes: An array of scopes to be authorized for access. See the predefined
     ///     `Scope` for a list of supported scope types.
     ///   - viewController: the UI context from which the authorization request originated
     ///    this is used as the presentation view controller if additional ui is required for resolving
     ///    the request.
-    ///   - acrValues: an array of authentication context class refernces. Service Providers may ask
+    ///   - acrValues: An array of authentication context class refernces. Service Providers may ask
     ///     for more than one, and will get the first one the user has achieved. Values returned in
     ///     id_token will contain aalx. Service Providers should not ask for any deprecated values
     ///     (loax). The default acrValue is aal1.
@@ -59,7 +59,7 @@ public protocol AuthorizationServiceProtocol {
     ///     Maximum size will be <280> characters. Any request with a context that is too large will
     ///     result in an OIDC error. (invalid request).
     ///     The default value is `nil`.
-    ///   - prompt: a `PromptValue` or `nil`. If nil is passed the default behavior will be used.
+    ///   - prompt: A `PromptValue` or `nil`. If nil is passed the default behavior will be used.
     ///   - nonce: Any Service Provider specified string or `nil`. The string value is used to
     ///     associate a Client session with an ID Token, and to mitigate replay attacks. The value
     ///     is passed through unmodified from the Authentication Request to the ID Token. Sufficient
