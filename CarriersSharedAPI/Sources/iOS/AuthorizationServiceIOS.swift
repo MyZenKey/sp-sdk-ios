@@ -42,29 +42,40 @@ class AuthorizationServiceIOS {
 }
 
 extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
-    public func connectWithProjectVerify(
+    public func authorize(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
+        acrValues: [ACRValue]? = [.aal1],
+        state: String? = nil,
+        correlationId: String? = nil,
+        context: String? = nil,
+        prompt: PromptValue? = nil,
+        nonce: String? = nil,
         completion: @escaping AuthorizationCompletion) {
 
+        let parameters = OpenIdAuthorizationParameters(
+            clientId: sdkConfig.clientId,
+            redirectURL: sdkConfig.redirectURL(forRoute: .authorize),
+            formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
+            state: state ?? RandomStringGenerator.generateStateSuitableString(),
+            nonce: nonce,
+            acrValues: acrValues,
+            prompt: prompt,
+            correlationId: correlationId,
+            context: context,
+            loginHintToken: nil
+        )
+
         performDiscovery(
-            forSIMInfo: carrierInfoService.primarySIM,
-            scopes: scopes,
+            withSIMInfo: carrierInfoService.primarySIM,
+            authorizationParameters: parameters,
             fromViewController: viewController,
-            authorizationContextParameters: .none,
             completion: completion
         )
     }
 }
 
 extension AuthorizationServiceIOS {
-
-    struct AuthorizationContextParameters {
-        let loginHintToken: String?
-
-        static let none = AuthorizationContextParameters(loginHintToken: nil)
-    }
-
     // TODO: Remove this, just for qa
     func showConsolation(_ text: String, on viewController: UIViewController) {
         let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)
@@ -72,26 +83,25 @@ extension AuthorizationServiceIOS {
         viewController.present(controller, animated: true, completion: nil)
     }
 
-    func performDiscovery(forSIMInfo simInfo: SIMInfo?,
-                          scopes: [ScopeProtocol],
-                          fromViewController viewController: UIViewController,
-                          authorizationContextParameters: AuthorizationContextParameters,
-                          completion: @escaping AuthorizationCompletion) {
+    func performDiscovery(
+        withSIMInfo simInfo: SIMInfo?,
+        authorizationParameters: OpenIdAuthorizationParameters,
+        fromViewController viewController: UIViewController,
+        completion: @escaping AuthorizationCompletion) {
 
         discoveryService.discoverConfig(forSIMInfo: simInfo) { [weak self] result in
             switch result {
             case .knownMobileNetwork(let config):
                 self?.showAuthorizationUI(
                     usingConfig: config,
-                    scopes: scopes,
+                    withAuthorizationParameters: authorizationParameters,
                     fromViewController: viewController,
-                    authorizationContextParameters: authorizationContextParameters,
                     completion: completion
                 )
             case .unknownMobileNetwork(let redirect):
                 self?.showDiscoveryUI(
                     usingResource: redirect.redirectURI,
-                    scopes: scopes,
+                    withAuthorizationParameters: authorizationParameters,
                     fromViewController: viewController,
                     completion: completion
                 )
@@ -105,31 +115,22 @@ extension AuthorizationServiceIOS {
     }
 
     func showAuthorizationUI(usingConfig config: CarrierConfig,
-                             scopes: [ScopeProtocol],
+                             withAuthorizationParameters parameters: OpenIdAuthorizationParameters,
                              fromViewController viewController: UIViewController,
-                             authorizationContextParameters: AuthorizationContextParameters,
                              completion: @escaping AuthorizationCompletion) {
-
-        let authorizationConfig = OpenIdAuthorizationConfig(
-            simInfo: config.simInfo,
-            clientId: sdkConfig.clientId,
-            authorizationEndpoint: config.openIdConfig.authorizationEndpoint,
-            tokenEndpoint: config.openIdConfig.tokenEndpoint,
-            formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
-            redirectURL: sdkConfig.redirectURL(forRoute: .authorize),
-            loginHintToken: authorizationContextParameters.loginHintToken,
-            state: "demo-app-state"
-        )
 
         openIdService.authorize(
             fromViewController: viewController,
-            authorizationConfig: authorizationConfig) { result in
+            carrierConfig: config,
+            authorizationParameters: parameters) { [weak self] result in
                 switch result {
                 case .code(let response):
                     completion(.code(response))
                 case .error(let error):
                     let authorizationError = error.asAuthorizationError
                     completion(.error(authorizationError))
+                    // TODO: -
+                    self?.showConsolation("an error occurred during discovery \(error)", on: viewController)
                 case .cancelled:
                     completion(.cancelled)
                 }
@@ -137,7 +138,7 @@ extension AuthorizationServiceIOS {
     }
 
     func showDiscoveryUI(usingResource resource: URL,
-                         scopes: [ScopeProtocol],
+                         withAuthorizationParameters parameters: OpenIdAuthorizationParameters,
                          fromViewController viewController: UIViewController,
                          completion: @escaping AuthorizationCompletion) {
 
@@ -147,19 +148,19 @@ extension AuthorizationServiceIOS {
         ) { [weak self] result in
             switch result {
             case .networkInfo(let response):
-                let contextParams = AuthorizationContextParameters(
-                    loginHintToken: response.loginHintToken
-                )
+                var updatedParameters = parameters
+                updatedParameters.loginHintToken = response.loginHintToken
                 self?.performDiscovery(
-                    forSIMInfo: response.simInfo,
-                    scopes: scopes,
+                    withSIMInfo: response.simInfo,
+                    authorizationParameters: updatedParameters,
                     fromViewController: viewController,
-                    authorizationContextParameters: contextParams,
                     completion: completion
                 )
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
                 completion(.error(authorizationError))
+                // TODO: -
+                self?.showConsolation("an error occurred during discovery \(error)", on: viewController)
             case .cancelled:
                 completion(.cancelled)
             }

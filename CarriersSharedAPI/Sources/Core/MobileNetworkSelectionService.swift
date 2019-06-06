@@ -23,6 +23,7 @@ enum MobileNetworkSelectionError: Error {
     case viewControllerNotInHeirarchy
     case invalidMCCMNC
     case urlResponseError(URLResponseError)
+    case stateError(RequestStateError)
 }
 
 typealias MobileNetworkSelectionCompletion = (MobileNetworkSelectionResult) -> Void
@@ -40,10 +41,14 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
     private var state: State = .idle
     private let sdkConfig: SDKConfig
     private let mobileNetworkSelectionUI: MobileNetworkSelectionUIProtocol
+    private let stateGenerator: () -> String?
 
-    init(sdkConfig: SDKConfig, mobileNetworkSelectionUI: MobileNetworkSelectionUIProtocol) {
+    init(sdkConfig: SDKConfig,
+         mobileNetworkSelectionUI: MobileNetworkSelectionUIProtocol,
+         stateGenerator: @escaping () -> String? = RandomStringGenerator.generateStateSuitableString) {
         self.sdkConfig = sdkConfig
         self.mobileNetworkSelectionUI = mobileNetworkSelectionUI
+        self.stateGenerator = stateGenerator
         super.init()
     }
 
@@ -64,7 +69,12 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
         }
 
         guard viewController.view?.window != nil else {
-            self.conclude(result: .error(.viewControllerNotInHeirarchy))
+            completion(.error(.viewControllerNotInHeirarchy))
+            return
+        }
+
+        guard let stateParam = stateGenerator() else {
+            completion(.error(.stateError(.generationFailed)))
             return
         }
 
@@ -72,8 +82,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
             resource: resource,
             clientId: sdkConfig.clientId,
             redirectURI: sdkConfig.redirectURL(forRoute: .discoveryUI).absoluteString,
-            // TODO: better states:
-            state: "test-state"
+            state: stateParam
         )
 
         state = .requesting(request, completion)
@@ -188,7 +197,6 @@ extension MobileNetworkSelectionService.Request {
             URLQueryItem(name: Params.redirectURI.rawValue, value: redirectURI),
             URLQueryItem(name: Params.state.rawValue, value: state),
         ]
-        
 
         guard
             let components = builder,

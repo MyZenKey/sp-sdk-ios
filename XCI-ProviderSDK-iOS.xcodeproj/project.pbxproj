@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		23196D9322309173005393AB /* OpenIdURLResolverIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23196D9222309173005393AB /* OpenIdURLResolverIOS.swift */; };
-		231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */; };
 		231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */; };
 		231FFB9C221C6DE500E2B1BA /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */; };
 		233A502F22287DD10089BA0D /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233A502E22287DD10089BA0D /* Dependencies.swift */; };
@@ -30,7 +29,6 @@
 		8A37A010226142CC001FE65D /* CurrentControllerContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A00F226142CC001FE65D /* CurrentControllerContextProvider.swift */; };
 		8A37A013226659A5001FE65D /* ProjectVerifyNetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A012226659A5001FE65D /* ProjectVerifyNetworkConfig.swift */; };
 		8A37A022226659B3001FE65D /* MobileNetworkSelectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37A021226659B3001FE65D /* MobileNetworkSelectionService.swift */; };
-		8A38A919228DD40900B5A159 /* MockViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A38A918228DD40900B5A159 /* MockViewControllers.swift */; };
 		8A3FAB1C224055DD00767A03 /* ConfigCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */; };
 		8A48895122555345006337EC /* ProjectVerifyAuthorizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48895022555345006337EC /* ProjectVerifyAuthorizeButton.swift */; };
 		8A5C3F8B225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5C3F8A225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift */; };
@@ -51,7 +49,6 @@
 		8A6C13932282531300F42E3A /* ProjectVerifyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B524EC22152129002124D4 /* ProjectVerifyAppDelegate.swift */; };
 		8A6C13942282531300F42E3A /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */; };
 		8A6C13952282531300F42E3A /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5F2226086600A5F5D9 /* Scope.swift */; };
-		8A6C13962282531300F42E3A /* DictionaryUrlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */; };
 		8A6C13972282531300F42E3A /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5D2225AD6500A5F5D9 /* Result.swift */; };
 		8A6C13982282531300F42E3A /* URLHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABF7547226A0BD900A81F50 /* URLHandling.swift */; };
 		8A6C13992282531300F42E3A /* ResponseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABF75452268FF9200A81F50 /* ResponseURL.swift */; };
@@ -71,6 +68,7 @@
 		8A6C13A72282531300F42E3A /* ProjectVerifyBrandedButton+Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5C3F8A225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift */; };
 		8A6C13A82282531300F42E3A /* ProjectVerifyAuthorizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48895022555345006337EC /* ProjectVerifyAuthorizeButton.swift */; };
 		8A6C13A92282531300F42E3A /* Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6C135D22820C1F00F42E3A /* Branding.swift */; };
+		8A6FCE4B22A1741D0012DC1C /* RandomStringGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6FCE4A22A1741D0012DC1C /* RandomStringGenerator.swift */; };
 		8A80823B2257C8F700FCF691 /* ProjectVerify.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A80823A2257C8F700FCF691 /* ProjectVerify.xcassets */; };
 		8A80823D2257CBBF00FCF691 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A80823C2257CBBF00FCF691 /* Localizable.strings */; };
 		8A80823F2257CDF100FCF691 /* LocalizationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A80823E2257CDF100FCF691 /* LocalizationUtils.swift */; };
@@ -94,6 +92,12 @@
 		8AB30A0B228614E2003E08D8 /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5522247A3500A5F5D9 /* MockNetworkService.swift */; };
 		8AB30A0C228614E2003E08D8 /* MockMobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5722247A4600A5F5D9 /* MockMobileNetworkInfoProvider.swift */; };
 		8AB30A0D228614E2003E08D8 /* MockCarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233A50302228831A0089BA0D /* MockCarrierInfoService.swift */; };
+		8AB8A96122A05D0300E8AEB3 /* ACRValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8A96022A05D0300E8AEB3 /* ACRValue.swift */; };
+		8AB8A96322A05D2100E8AEB3 /* PromptValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8A96222A05D2000E8AEB3 /* PromptValue.swift */; };
+		8AB8A96A22A06F2400E8AEB3 /* MockNetworkSelectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8A96622A06EA800E8AEB3 /* MockNetworkSelectionService.swift */; };
+		8AB8A97022A06F2B00E8AEB3 /* MockViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A38A918228DD40900B5A159 /* MockViewControllers.swift */; };
+		8AB8A97122A06F2B00E8AEB3 /* MockOpenIdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8A96422A06E8500E8AEB3 /* MockOpenIdService.swift */; };
+		8AB8A97222A06F2B00E8AEB3 /* MockDiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8A96822A06ED900E8AEB3 /* MockDiscoveryService.swift */; };
 		8ABF75462268FF9200A81F50 /* ResponseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABF75452268FF9200A81F50 /* ResponseURL.swift */; };
 		8ABF7548226A0BD900A81F50 /* URLHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABF7547226A0BD900A81F50 /* URLHandling.swift */; };
 		8AD167BC224EB8D3005C1CA3 /* OpenIdConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD167BB224EB8D3005C1CA3 /* OpenIdConfig.swift */; };
@@ -225,7 +229,6 @@
 /* Begin PBXFileReference section */
 		23196D9022306E29005393AB /* OpenIdServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdServiceTests.swift; sourceTree = "<group>"; };
 		23196D9222309173005393AB /* OpenIdURLResolverIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdURLResolverIOS.swift; sourceTree = "<group>"; };
-		231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryUrlQuery.swift; sourceTree = "<group>"; };
 		231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationService.swift; sourceTree = "<group>"; };
 		231FFB9B221C6DE500E2B1BA /* SDKConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKConfig.swift; sourceTree = "<group>"; };
 		233A502E22287DD10089BA0D /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
@@ -276,6 +279,7 @@
 		8A6C136A2282521B00F42E3A /* CarriersSharedAPI_tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarriersSharedAPI_tvOS.h; sourceTree = "<group>"; };
 		8A6C136B2282521B00F42E3A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A6C13822282524300F42E3A /* CarriersSharedAPI_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CarriersSharedAPI_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A6FCE4A22A1741D0012DC1C /* RandomStringGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomStringGenerator.swift; sourceTree = "<group>"; };
 		8A7ACDBC22444AB90015D031 /* ConfigCacheServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCacheServiceTests.swift; sourceTree = "<group>"; };
 		8A80823A2257C8F700FCF691 /* ProjectVerify.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ProjectVerify.xcassets; sourceTree = "<group>"; };
 		8A80823C2257CBBF00FCF691 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -283,6 +287,11 @@
 		8A8FAC902282017A003278C6 /* OpenIdURLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdURLResolver.swift; sourceTree = "<group>"; };
 		8A9DEC41224A9B2A00E010EB /* AppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AB309E5228614AA003E08D8 /* CarriersSharedAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CarriersSharedAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AB8A96022A05D0300E8AEB3 /* ACRValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACRValue.swift; sourceTree = "<group>"; };
+		8AB8A96222A05D2000E8AEB3 /* PromptValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptValue.swift; sourceTree = "<group>"; };
+		8AB8A96422A06E8500E8AEB3 /* MockOpenIdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOpenIdService.swift; sourceTree = "<group>"; };
+		8AB8A96622A06EA800E8AEB3 /* MockNetworkSelectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkSelectionService.swift; sourceTree = "<group>"; };
+		8AB8A96822A06ED900E8AEB3 /* MockDiscoveryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDiscoveryService.swift; sourceTree = "<group>"; };
 		8ABF75452268FF9200A81F50 /* ResponseURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseURL.swift; sourceTree = "<group>"; };
 		8ABF7547226A0BD900A81F50 /* URLHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLHandling.swift; sourceTree = "<group>"; };
 		8ABF7549226A1C9F00A81F50 /* MobileNetworkSelectionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionServiceTests.swift; sourceTree = "<group>"; };
@@ -370,6 +379,9 @@
 				23F88F5722247A4600A5F5D9 /* MockMobileNetworkInfoProvider.swift */,
 				23F88F5522247A3500A5F5D9 /* MockNetworkService.swift */,
 				8A38A918228DD40900B5A159 /* MockViewControllers.swift */,
+				8AB8A96422A06E8500E8AEB3 /* MockOpenIdService.swift */,
+				8AB8A96622A06EA800E8AEB3 /* MockNetworkSelectionService.swift */,
+				8AB8A96822A06ED900E8AEB3 /* MockDiscoveryService.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -465,6 +477,7 @@
 		8AE7F643227B7269009B4358 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				8AB8A96022A05D0300E8AEB3 /* ACRValue.swift */,
 				2399F3F82227702A007D3613 /* AuthorizationError.swift */,
 				231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */,
 				8A6C135D22820C1F00F42E3A /* Branding.swift */,
@@ -473,7 +486,6 @@
 				8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */,
 				8A37A00F226142CC001FE65D /* CurrentControllerContextProvider.swift */,
 				233A502E22287DD10089BA0D /* Dependencies.swift */,
-				231FFB9722174DE800E2B1BA /* DictionaryUrlQuery.swift */,
 				23F88F43222080C800A5F5D9 /* DiscoveryService.swift */,
 				2365C04C2236D31F00E0ED4A /* ErrorCodes.swift */,
 				8A5C3F99225E93EE0013DEC3 /* ImageUtils.swift */,
@@ -489,6 +501,8 @@
 				8A5C3F8A225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift */,
 				8A5C3F9B225E9B190013DEC3 /* ProjectVerifyBrandedButton.swift */,
 				8A37A012226659A5001FE65D /* ProjectVerifyNetworkConfig.swift */,
+				8AB8A96222A05D2000E8AEB3 /* PromptValue.swift */,
+				8A6FCE4A22A1741D0012DC1C /* RandomStringGenerator.swift */,
 				8ABF75452268FF9200A81F50 /* ResponseURL.swift */,
 				23F88F5D2225AD6500A5F5D9 /* Result.swift */,
 				8A378EC6227CB9A300B63612 /* Router.swift */,
@@ -789,11 +803,11 @@
 				8A378ED6227D0FBC00B63612 /* AuthorizationServiceIOS.swift in Sources */,
 				8A3FAB1C224055DD00767A03 /* ConfigCacheService.swift in Sources */,
 				8AD167BC224EB8D3005C1CA3 /* OpenIdConfig.swift in Sources */,
-				8A38A919228DD40900B5A159 /* MockViewControllers.swift in Sources */,
 				23F88F3E221F433900A5F5D9 /* MobileNetworkInfoProvider.swift in Sources */,
 				8A8FAC912282017A003278C6 /* OpenIdURLResolver.swift in Sources */,
 				23196D9322309173005393AB /* OpenIdURLResolverIOS.swift in Sources */,
 				8A37A022226659B3001FE65D /* MobileNetworkSelectionService.swift in Sources */,
+				8A6FCE4B22A1741D0012DC1C /* RandomStringGenerator.swift in Sources */,
 				8A5C3F8B225E84280013DEC3 /* ProjectVerifyBrandedButton+Branding.swift in Sources */,
 				2365C04D2236D31F00E0ED4A /* ErrorCodes.swift in Sources */,
 				8A378EC7227CB9A300B63612 /* Router.swift in Sources */,
@@ -802,6 +816,7 @@
 				231FFB9A221C6DD800E2B1BA /* AuthorizationService.swift in Sources */,
 				8A48895122555345006337EC /* ProjectVerifyAuthorizeButton.swift in Sources */,
 				8A6C135E22820C1F00F42E3A /* Branding.swift in Sources */,
+				8AB8A96322A05D2100E8AEB3 /* PromptValue.swift in Sources */,
 				23F88F3C221F31B800A5F5D9 /* Carrier.swift in Sources */,
 				8A37A013226659A5001FE65D /* ProjectVerifyNetworkConfig.swift in Sources */,
 				8A5C3F9C225E9B190013DEC3 /* ProjectVerifyBrandedButton.swift in Sources */,
@@ -813,10 +828,10 @@
 				23B524ED22152129002124D4 /* ProjectVerifyAppDelegate.swift in Sources */,
 				8ABF7548226A0BD900A81F50 /* URLHandling.swift in Sources */,
 				8A6C135C228203E700F42E3A /* MobileNetworkSelectionUI.swift in Sources */,
-				231FFB9822174DE800E2B1BA /* DictionaryUrlQuery.swift in Sources */,
 				23F88F602226086600A5F5D9 /* Scope.swift in Sources */,
 				236AC638222720E600E7C900 /* OpenIdService.swift in Sources */,
 				8A6C136022820CDC00F42E3A /* CurrentSIMBrandingProvider.swift in Sources */,
+				8AB8A96122A05D0300E8AEB3 /* ACRValue.swift in Sources */,
 				2399F3F92227702A007D3613 /* AuthorizationError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -849,7 +864,6 @@
 				8A6C139D2282531300F42E3A /* OpenIdConfig.swift in Sources */,
 				8A6C13A42282531300F42E3A /* OpenIdURLResolver.swift in Sources */,
 				8A6C13A62282531300F42E3A /* ProjectVerifyBrandedButton.swift in Sources */,
-				8A6C13962282531300F42E3A /* DictionaryUrlQuery.swift in Sources */,
 				8A6C138B2282531300F42E3A /* MobileNetworkSelectionService.swift in Sources */,
 				8A6C13A12282531300F42E3A /* DiscoveryService.swift in Sources */,
 				8A6C13902282531300F42E3A /* AuthorizationError.swift in Sources */,
@@ -862,19 +876,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AB8A97222A06F2B00E8AEB3 /* MockDiscoveryService.swift in Sources */,
 				8AB30A01228614DE003E08D8 /* DiscoveryServiceTests.swift in Sources */,
 				8AB30A09228614DE003E08D8 /* AuthorizationErrorParsing.swift in Sources */,
 				8AB30A04228614DE003E08D8 /* OpenIdServiceTests.swift in Sources */,
 				8AB30A06228614DE003E08D8 /* ConfigCacheServiceTests.swift in Sources */,
+				8AB8A97122A06F2B00E8AEB3 /* MockOpenIdService.swift in Sources */,
 				8AB30A00228614DE003E08D8 /* CarrierInfoServiceTests.swift in Sources */,
 				8AB30A08228614DE003E08D8 /* MobileNetworkSelectionServiceTests.swift in Sources */,
 				8AB30A02228614DE003E08D8 /* SIMInfoTests.swift in Sources */,
 				8AB309FD228614DE003E08D8 /* ScopeTests.swift in Sources */,
 				8AB30A0D228614E2003E08D8 /* MockCarrierInfoService.swift in Sources */,
+				8AB8A97022A06F2B00E8AEB3 /* MockViewControllers.swift in Sources */,
 				8AB30A0B228614E2003E08D8 /* MockNetworkService.swift in Sources */,
 				8AB30A05228614DE003E08D8 /* SDKConfigTests.swift in Sources */,
 				8AB30A07228614DE003E08D8 /* ProjectVerifyAuthorizeButtonTests.swift in Sources */,
 				8AB309FE228614DE003E08D8 /* CarriersSharedAPITests.swift in Sources */,
+				8AB8A96A22A06F2400E8AEB3 /* MockNetworkSelectionService.swift in Sources */,
 				8AB30A0C228614E2003E08D8 /* MockMobileNetworkInfoProvider.swift in Sources */,
 				8AB309FC228614DE003E08D8 /* AuthorizationServiceTests.swift in Sources */,
 				8AB30A03228614DE003E08D8 /* Constants.swift in Sources */,

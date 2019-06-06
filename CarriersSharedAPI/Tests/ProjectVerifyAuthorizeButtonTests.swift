@@ -18,22 +18,51 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
     var mockResult: AuthorizationResult = .cancelled
 
     var lastScopes: [ScopeProtocol]?
+    var lastACRValues: [ACRValue]?
+    var lastState: String?
+    var lastCorrelationId: String?
+    var lastContext: String?
+    var lastPrompt: PromptValue?
+    var lastNonce: String?
+
     var lastViewController: UIViewController?
     var lastCompletion: AuthorizationCompletion?
 
     func clear() {
         mockResult = .cancelled
+
         lastScopes = nil
+        lastACRValues = nil
+        lastState = nil
+        lastCorrelationId = nil
+        lastContext = nil
+        lastPrompt = nil
+        lastNonce = nil
+
         lastViewController = nil
         lastCompletion = nil
     }
 
-    func connectWithProjectVerify(
+    // swiftlint:disable:next function_parameter_count
+    func authorize(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
+        acrValues: [ACRValue]?,
+        state: String?,
+        correlationId: String?,
+        context: String?,
+        prompt: PromptValue?,
+        nonce: String?,
         completion: @escaping AuthorizationCompletion) {
 
         lastScopes = scopes
+        lastACRValues = acrValues
+        lastState = state
+        lastCorrelationId = correlationId
+        lastContext = context
+        lastPrompt = prompt
+        lastNonce = nonce
+
         lastViewController = viewController
         lastCompletion = completion
 
@@ -122,11 +151,31 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         XCTAssertNotNil(mockAuthorizationService.lastCompletion)
     }
 
-    func testRequestSetScopes() {
+    func testRequestSetProperties() {
         let testScopes: [Scope] = [.secondFactor]
+        let testAcrValues: [ACRValue]? = [.aal3, .aal2]
+        let testRequestState: String? = "test-request-state"
+        let testCorrelationId: String? = "test-correlation-id"
+        let testContext: String? = "test-context"
+        let testPrompt: PromptValue? = .consent
+        let testNonce: String? = "test-nonce"
+
         button.scopes = testScopes
+        button.acrValues = testAcrValues
+        button.requestState = testRequestState
+        button.correlationId = testCorrelationId
+        button.context = testContext
+        button.prompt = testPrompt
+        button.nonce = testNonce
+
         button.handlePress(sender: button)
         XCTAssertEqual(mockAuthorizationService.lastScopes as? [Scope], testScopes)
+        XCTAssertEqual(mockAuthorizationService.lastACRValues, testAcrValues)
+        XCTAssertEqual(mockAuthorizationService.lastState, testRequestState)
+        XCTAssertEqual(mockAuthorizationService.lastCorrelationId, testCorrelationId)
+        XCTAssertEqual(mockAuthorizationService.lastContext, testContext)
+        XCTAssertEqual(mockAuthorizationService.lastPrompt, testPrompt)
+        XCTAssertEqual(mockAuthorizationService.lastNonce, testNonce)
     }
 
     func testGetsCurrentViewController() {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-// swiflint:disable unused_setter_value
+// swiftlint:disable unused_setter_value
 
 class MockWindowView: UIView {
     override var window: UIWindow? {
@@ -23,4 +23,4 @@ class MockWindowViewController: UIViewController {
     }
 }
 
-// swiflint:enable unused_setter_value
+// swiftlint:enable unused_setter_value

@@ -117,7 +117,10 @@ class SDKConfigTests: XCTestCase {
         mockBundle.urlSchemes = ["bar", "biz", clientId, "bah"]
         do {
             let config = try SDKConfig.load(fromBundle: mockBundle)
-            XCTAssertEqual(config.redirectURL(forRoute: .authorize), URL(string: "foo://com.xci.provider.sdk/projectverify/authorize")!)
+            XCTAssertEqual(
+                config.redirectURL(forRoute: .authorize),
+                URL(string: "foo://com.xci.provider.sdk/projectverify/authorize")!
+            )
         } catch {
             XCTFail("expected not to throw")
         }
@@ -129,7 +132,10 @@ class SDKConfigTests: XCTestCase {
         mockBundle.urlSchemes = ["bar", "biz", clientId, "bah"]
         do {
             let config = try SDKConfig.load(fromBundle: mockBundle)
-            XCTAssertEqual(config.redirectURL(forRoute: .discoveryUI), URL(string: "foo://com.xci.provider.sdk/projectverify/discoveryui")!)
+            XCTAssertEqual(
+                config.redirectURL(forRoute: .discoveryUI),
+                URL(string: "foo://com.xci.provider.sdk/projectverify/discoveryui")!
+            )
         } catch {
             XCTFail("expected not to throw")
         }

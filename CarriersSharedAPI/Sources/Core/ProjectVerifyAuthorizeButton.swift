@@ -32,10 +32,48 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 
     /// The scopes the button will request when pressed. Assign this property before the button
     /// issues its request.
+    ///
+    /// - SeeAlso: ScopeProtocol
+    /// - SeeAlso: Scopes
     public var scopes: [ScopeProtocol] = []
 
+    /// An array of authentication context class refernces. Service Providers may ask
+    /// for more than one, and will get the first one the user has achieved. Values returned in
+    /// id_token will contain aalx. Service Providers should not ask for any deprecated values
+    /// (loax). The default acrValue is aal1.
+    public var acrValues: [ACRValue]? = [.aal1]
+
+    /// An opaque value used to maintain state between the request and the callback. If
+    /// `nil` is passed, a random string will be used.
+    /// Maximum size will be <280> characters. Any request with a context that is too large will
+    /// result in an OIDC error. (invalid request).
+    /// The default value is `nil`.
+    public var requestState: String?
+
+    /// A string value or `nil`. Service Providers may send a tracking ID used
+    /// for transaction logging. SP’s will need to use the service portal for access to any
+    /// individual log entries. The default value is `nil`.
+    public var correlationId: String?
+
+    /// A string value or `nil`. Service Providers will be able to submit
+    /// “text string” for authorization by the user. Best practice is a server-initiated request
+    /// should contain a context parameter, so that a user understands the reason for the
+    /// interaction.
+    public var context: String?
+
+    /// A `PromptValue` or `nil`. If nil is passed the default behavior will be used.
+    public var prompt: PromptValue?
+
+    /// Any Service Provider specified string or `nil`. The string value is used to
+    /// associate a Client session with an ID Token, and to mitigate replay attacks. The value
+    /// is passed through unmodified from the Authentication Request to the ID Token. Sufficient
+    /// entropy MUST be present in the nonce values used to prevent attackers from guessing
+    /// values. The nonce is optional and the default value is `nil`. The
+    /// `RandomStringGenerator` class exposes a method suitable for generating this value.
+    public var nonce: String?
+
     /// the button's delegate
-    /// @SeeAlso: ProjectVerifyAuthorizeButtonDelegate
+    /// - SeeAlso: ProjectVerifyAuthorizeButtonDelegate
     public weak var delegate: ProjectVerifyAuthorizeButtonDelegate?
 
     private var authorizationService: AuthorizationServiceProtocol
@@ -79,9 +117,15 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 
         delegate?.buttonWillBeginAuthorizing(self)
 
-        authorizationService.connectWithProjectVerify(
+        authorizationService.authorize(
             scopes: scopes,
-            fromViewController: currentViewController) { [weak self] result in
+            fromViewController: currentViewController,
+            acrValues: acrValues,
+            state: requestState,
+            correlationId: correlationId,
+            context: context,
+            prompt: prompt,
+            nonce: nonce) { [weak self] result in
                 self?.handle(result: result)
         }
     }

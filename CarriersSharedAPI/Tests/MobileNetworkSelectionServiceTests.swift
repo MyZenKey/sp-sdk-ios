@@ -33,6 +33,19 @@ class MockMobileNetworkSelectionUI: MobileNetworkSelectionUIProtocol {
     }
 }
 
+class MockStateGenerator {
+
+    static var returnValue: String? = "test-state"
+
+    static func clear() {
+        returnValue = "test-state"
+    }
+
+    static func generate() -> String? {
+        return MockStateGenerator.returnValue
+    }
+}
+
 class MobileNetworkSelectionServiceTests: XCTestCase {
 
     static let resource = URL(string: "https://app.xcijv.com/ui/discovery-ui")!
@@ -52,8 +65,14 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
 
     lazy var mobileNetworkSelectionService = MobileNetworkSelectionService(
         sdkConfig: mockSDKConfig,
-        mobileNetworkSelectionUI: mockMobileNetworkSelectionUI
+        mobileNetworkSelectionUI: mockMobileNetworkSelectionUI,
+        stateGenerator: MockStateGenerator.generate
     )
+
+    override func setUp() {
+        super.setUp()
+        MockStateGenerator.clear()
+    }
 
     func testCallsMobileNetworkSelectionUIWithViewController() {
         let controller = MockWindowViewController()
@@ -89,6 +108,25 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
     func testResolveURLReturnsFalseWhenNoRequestInflight() {
         let url = URL.mocked
         XCTAssertFalse(mobileNetworkSelectionService.resolve(url: url))
+    }
+
+    func testConcludesWithErrorForUnableToGenerateState() {
+        MockStateGenerator.returnValue = nil
+        let expectation = XCTestExpectation(description: "wait")
+        mobileNetworkSelectionService.requestUserNetworkSelection(
+            fromResource: MobileNetworkSelectionServiceTests.resource,
+            fromCurrentViewController: MockWindowViewController()) { result in
+                defer { expectation.fulfill() }
+                guard
+                    case .error(let error) = result,
+                    case .stateError(let stateError) = error,
+                    case .generationFailed = stateError else {
+                        XCTFail("expected state generation error")
+                        return
+                }
+        }
+
+        wait(for: [expectation], timeout: timeout)
     }
 
     func testConcludesWithErrorForMismatchState() {

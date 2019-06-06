@@ -34,7 +34,7 @@ struct MockSIMs {
 
 extension URL {
     static var mocked: URL {
-        return URL(string: "rightpoint.com")!
+        return URL(string: "https://rightpoint.com")!
     }
 }
 
