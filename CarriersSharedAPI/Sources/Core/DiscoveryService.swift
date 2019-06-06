@@ -39,6 +39,7 @@ protocol DiscoveryServiceProtocol {
     ///   - simInfo: the sim info to pass to the discovery service
     ///   - completion: the closure invoked with the result of the Discovery.
     func discoverConfig(forSIMInfo simInfo: SIMInfo?,
+                        prompt: Bool,
                         completion: @escaping DiscoveryServiceCompletion)
 }
 
@@ -62,9 +63,10 @@ class DiscoveryService: DiscoveryServiceProtocol {
     }
 
     func discoverConfig(forSIMInfo simInfo: SIMInfo?,
+                        prompt: Bool = false,
                         completion: @escaping DiscoveryServiceCompletion) {
 
-        openIdConfig(forSIMInfo: simInfo) { [weak self] result in
+        openIdConfig(forSIMInfo: simInfo, prompt: prompt) { [weak self] result in
 
             var outcome = result
             // if we have an error, attempt to recover from cache
@@ -96,10 +98,11 @@ class DiscoveryService: DiscoveryServiceProtocol {
 
 private extension DiscoveryService {
     func openIdConfig(forSIMInfo simInfo: SIMInfo?,
+                      prompt: Bool = false,
                       completion: @escaping DiscoveryServiceCompletion) {
 
-        // if we have sim identifers, we can attempt to use the cache:
-        if let simInfo = simInfo {
+        // if we have sim identifers, and aren't prompting we can attempt to use the cache:
+        if let simInfo = simInfo, !prompt {
             let cachedConfig = recoverFromCache(simInfo: simInfo)
             guard cachedConfig == nil else {
                 completion(.knownMobileNetwork(
@@ -113,7 +116,7 @@ private extension DiscoveryService {
         }
 
         // last resort – go over the network again:
-        performDiscovery(forSIMInfo: simInfo, completion: completion)
+        performDiscovery(forSIMInfo: simInfo, prompt: prompt, completion: completion)
     }
 
     func recoverFromCache(simInfo: SIMInfo,
@@ -123,11 +126,13 @@ private extension DiscoveryService {
     }
 
     func performDiscovery(forSIMInfo simInfo: SIMInfo?,
+                          prompt: Bool = false,
                           completion: @escaping DiscoveryServiceCompletion) {
 
-        let discoveryURL = discoveryEndpoint(forSIMInfo: simInfo)
+        let discoveryURL = discoveryEndpoint(forSIMInfo: simInfo, prompt: prompt)
         var request = URLRequest(url: discoveryURL)
         request.httpMethod = "GET"
+
         networkService.requestJSON(
             request: request
         ) { [weak self] (result: Result<IssuerResponse, NetworkServiceError>) in
@@ -173,13 +178,18 @@ private extension DiscoveryService {
     enum Params: String {
         case clientId = "client_id"
         case mccmnc
+        case prompt
     }
 
-    func discoveryEndpoint(forSIMInfo simInfo: SIMInfo?) -> URL {
+    func discoveryEndpoint(forSIMInfo simInfo: SIMInfo?, prompt: Bool = false) -> URL {
 
         var params: [String: String] = [
             Params.clientId.rawValue: sdkConfig.clientId,
         ]
+
+        if prompt {
+            params[Params.prompt.rawValue] = String(prompt)
+        }
 
         if let simInfo = simInfo {
             params[Params.mccmnc.rawValue] = simInfo.networkString

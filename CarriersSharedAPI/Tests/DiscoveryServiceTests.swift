@@ -102,6 +102,24 @@ class DiscoveryServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
+    func testCorrectlyFormatsURLWithPromptValue() {
+        let expectation = XCTestExpectation(description: "async discovery")
+        discoveryService.discoverConfig(forSIMInfo: nil, prompt: true) { _ in
+            let request = self.mockNetworkService.lastRequest
+
+            XCTAssertEqual(request?.httpMethod, "GET")
+            XCTAssertEqual(request?.url?.scheme, "https")
+            XCTAssertEqual(request?.url?.host, ProjectVerifyNetworkConfig.Host.production.rawValue)
+            XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
+            XCTAssertFalse(request?.url?.query?.contains("mccmnc") ?? false)
+            XCTAssertTrue(request?.url?.query?.contains("client_id=\(self.mockClientId)") ?? false)
+            XCTAssertTrue(request?.url?.query?.contains("prompt=true") ?? false)
+
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
     func testUnknownCarrierEndpointErrorReturnsError() {
         let error = NSError(domain: "", code: 1, userInfo: [:])
         mockNetworkService.mockError(.networkError(error))

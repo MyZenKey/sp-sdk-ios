@@ -14,16 +14,21 @@ class MockOpenIdService: OpenIdServiceProtocol {
     static let mockSuccess = AuthorizedResponse(code: "abc123", mcc: "123", mnc: "456")
     var lastParameters: OpenIdAuthorizationParameters?
     var lastViewController: UIViewController?
-    var mockResponse: OpenIdServiceResult = .code(
-        MockOpenIdService.mockSuccess
-    )
+
+    var mockResponse: OpenIdServiceResult = .code(MockOpenIdService.mockSuccess) {
+        didSet {
+            responseQueue.mockResponses = [mockResponse]
+        }
+    }
+
+    var responseQueue = MockResponseQueue<OpenIdServiceResult>([
+        .code(MockOpenIdService.mockSuccess),
+    ])
 
     func clear() {
         lastParameters = nil
         lastViewController = nil
-        mockResponse = .code(
-            MockOpenIdService.mockSuccess
-        )
+        responseQueue.clear()
     }
 
     func authorize(
@@ -36,7 +41,7 @@ class MockOpenIdService: OpenIdServiceProtocol {
         self.lastParameters = authorizationParameters
 
         DispatchQueue.main.async {
-            completion(self.mockResponse)
+            completion(self.responseQueue.getResponse())
         }
     }
 

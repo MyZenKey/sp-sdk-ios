@@ -46,7 +46,7 @@ extension AuthorizationServiceTests {
 
     func testMultipleCallsCancelsPreviousCalls() {
         mockCarrierInfo.primarySIM = MockSIMs.att
-        mockDiscoveryService.mockResponses = [
+        mockDiscoveryService.responseQueue.mockResponses = [
             .knownMobileNetwork(MockDiscoveryService.mockSuccess),
             .knownMobileNetwork(MockDiscoveryService.mockSuccess),
             .knownMobileNetwork(MockDiscoveryService.mockSuccess),
@@ -99,7 +99,7 @@ extension AuthorizationServiceTests {
 
     // MARK: Inputs
 
-    func testDiscoveryServiceRecivesSIMWhenPresent() {
+    func testDiscoveryServiceReceivesSIMWhenPresent() {
         mockCarrierInfo.primarySIM = MockSIMs.att
         authorizationService.authorize(
             scopes: self.scopes,
@@ -143,7 +143,7 @@ extension AuthorizationServiceTests {
     func testDiscoverError() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
         let mockError: DiscoveryServiceError = .networkError(.networkError(NSError.mocked))
-        mockDiscoveryService.mockResponses = [ .error(mockError) ]
+        mockDiscoveryService.responseQueue.mockResponses = [ .error(mockError) ]
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.authorize(
             scopes: self.scopes,
@@ -370,11 +370,11 @@ extension AuthorizationServiceTests {
         authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: expectedViewController) { result in
+                defer { expectation.fulfill() }
                 guard case .cancelled = result else {
                     XCTFail("expected an cancelled response")
                     return
                 }
-                expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
     }
@@ -385,7 +385,7 @@ extension AuthorizationServiceTests {
 private extension AuthorizationServiceTests {
     func mockSecondaryDeviceFlow() {
         mockCarrierInfo.primarySIM = nil
-        mockDiscoveryService.mockResponses = [
+        mockDiscoveryService.responseQueue.mockResponses = [
             .unknownMobileNetwork(MockDiscoveryService.mockRedirect),
             .knownMobileNetwork(MockDiscoveryService.mockSuccess),
         ]

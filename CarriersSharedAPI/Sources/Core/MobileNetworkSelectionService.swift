@@ -32,6 +32,7 @@ protocol MobileNetworkSelectionServiceProtocol: URLHandling {
     func requestUserNetworkSelection(
         fromResource resource: URL,
         fromCurrentViewController viewController: UIViewController,
+        prompt: Bool,
         completion: @escaping MobileNetworkSelectionCompletion
     )
 }
@@ -55,6 +56,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
     func requestUserNetworkSelection(
         fromResource resource: URL,
         fromCurrentViewController viewController: UIViewController,
+        prompt: Bool = false,
         completion: @escaping ((MobileNetworkSelectionResult) -> Void)) {
 
         guard case .idle = state else {
@@ -82,7 +84,8 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
             resource: resource,
             clientId: sdkConfig.clientId,
             redirectURI: sdkConfig.redirectURL(forRoute: .discoveryUI).absoluteString,
-            state: stateParam
+            state: stateParam,
+            prompt: prompt
         )
 
         state = .requesting(request, completion)
@@ -125,6 +128,7 @@ extension MobileNetworkSelectionService {
         let clientId: String
         let redirectURI: String
         let state: String
+        let prompt: Bool
     }
 }
 
@@ -188,6 +192,7 @@ extension MobileNetworkSelectionService.Request {
         case clientId = "client_id"
         case redirectURI = "redirect_uri"
         case state
+        case prompt
     }
 
     var url: URL {
@@ -197,6 +202,12 @@ extension MobileNetworkSelectionService.Request {
             URLQueryItem(name: Params.redirectURI.rawValue, value: redirectURI),
             URLQueryItem(name: Params.state.rawValue, value: state),
         ]
+
+        if prompt {
+            builder?.queryItems?.append(
+                URLQueryItem(name: Params.prompt.rawValue, value: String(prompt))
+            )
+        }
 
         guard
             let components = builder,

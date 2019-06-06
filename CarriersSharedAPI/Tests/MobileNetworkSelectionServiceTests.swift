@@ -50,9 +50,10 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
 
     static let resource = URL(string: "https://app.xcijv.com/ui/discovery-ui")!
 
+     // swiftlint:disable:next line_length
+    static let validRequestString = "https://app.xcijv.com/ui/discovery-ui?client_id=mockClientId&redirect_uri=mockClientId://com.xci.provider.sdk/projectverify/discoveryui&state=test-state"
     static let validRequestURL = URL(
-        // swiftlint:disable:next line_length
-        string: "https://app.xcijv.com/ui/discovery-ui?client_id=mockClientId&redirect_uri=mockClientId://com.xci.provider.sdk/projectverify/discoveryui&state=test-state"
+        string: MobileNetworkSelectionServiceTests.validRequestString
     )!
 
     static let mockClientId = "mockClientId"
@@ -88,6 +89,20 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
             fromResource: MobileNetworkSelectionServiceTests.resource,
             fromCurrentViewController: controller) { _ in }
         let expectedURL = MobileNetworkSelectionServiceTests.validRequestURL
+        XCTAssertEqual(mockMobileNetworkSelectionUI.lastURL, expectedURL)
+    }
+
+    func testCorrectSafariControllerURLWithPrompt() {
+        let controller = MockWindowViewController()
+        mobileNetworkSelectionService.requestUserNetworkSelection(
+            fromResource: MobileNetworkSelectionServiceTests.resource,
+            fromCurrentViewController: controller,
+            prompt: true) { _ in }
+        var urlString = MobileNetworkSelectionServiceTests.validRequestString
+        urlString.append("&prompt=true")
+        let expectedURL = URL(
+            string: urlString
+        )!
         XCTAssertEqual(mockMobileNetworkSelectionUI.lastURL, expectedURL)
     }
 
@@ -226,11 +241,27 @@ class MobileNetworkSelectionServiceRequestTests: XCTestCase {
             resource: URL(string: "https://rightpoint")!,
             clientId: "foobar",
             redirectURI: "foo://pv",
-            state: "?@=$somechars"
+            state: "?@=$somechars",
+            prompt: false
         )
 
         let expectedURL = URL(
             string: "https://rightpoint?client_id=foobar&redirect_uri=foo://pv&state=?@%3D$somechars"
+            )!
+        XCTAssertEqual(request.url, expectedURL)
+    }
+
+    func testRequestCretatesAppropriatelyFormattedURLWithPrompt() {
+        let request = MobileNetworkSelectionService.Request(
+            resource: URL(string: "https://rightpoint")!,
+            clientId: "foobar",
+            redirectURI: "foo://pv",
+            state: "?@=$somechars",
+            prompt: true
+        )
+
+        let expectedURL = URL(
+            string: "https://rightpoint?client_id=foobar&redirect_uri=foo://pv&state=?@%3D$somechars&prompt=true"
             )!
         XCTAssertEqual(request.url, expectedURL)
     }

@@ -50,23 +50,46 @@ extension AuthorizationServiceIOS {
         case requesting(Request)
     }
 
-    enum Step {
-        case discovery(SIMInfo?)
-        case mobileNetworkSelection(URL)
-        case authorization(CarrierConfig)
-        case conclusion(AuthorizationResult)
-    }
-
     class Request {
-        private(set) var isFinished: Bool = false
-        private(set) var isCancelled: Bool = false {
-            didSet {
-                conclude(withOutcome: .cancelled)
+        enum State {
+            case undefined
+            case discovery(SIMInfo?)
+            case mobileNetworkSelection(URL)
+            case authorization(CarrierConfig)
+            case missingUserRecovery
+            case concluding(AuthorizationResult)
+            case finished
+        }
+
+        var isFinished: Bool {
+            if case .finished = state {
+                return true
+            } else {
+                return false
             }
         }
 
-        let viewController: UIViewController
+        var passPrompt: Bool {
+            return isAttemptingRecovery
+        }
+
+        /// If this flag is set on the request the prompt flag should be sent to all disocvery
+        /// endpoints and all cookies should be ignored. If this flag is already set for a request
+        /// recovery should not be attempted a second time.
+        private(set) var isAttemptingRecovery: Bool = false
+
+        private(set) var state: State = .undefined {
+            didSet {
+                if case .missingUserRecovery = state {
+                    // set a flat to indicate we're attempting user recovery:
+                    isAttemptingRecovery = true
+                }
+            }
+        }
+
         var authorizationParameters: OpenIdAuthorizationParameters
+
+        let viewController: UIViewController
         private let completion: AuthorizationCompletion
 
         init(viewController: UIViewController,
@@ -77,54 +100,21 @@ extension AuthorizationServiceIOS {
             self.completion = completion
         }
 
-        func cancel() {
-            isCancelled = true
-        }
-
-        func conclude(withOutcome outcome: AuthorizationResult) {
-            guard !isFinished else { return }
-            completion(outcome)
-            isFinished = true
-        }
-    }
-}
-
-private extension AuthorizationServiceIOS {
-
-    /// This function wraps step transitions and ensures that the request should continue before
-    /// advancing to the next step.
-    func transition(request: Request, toStep step: Step) {
-        guard Thread.isMainThread else {
-            DispatchQueue.main.async {
-                self.transition(request: request, toStep: step)
+        func update(state: State) {
+            guard !isFinished else {
+                return
             }
-            return
+            self.state = state
         }
 
-        guard !request.isFinished else {
-            // if the request has previously been concluded, we can assume that any further commands
-            // should be ignored and can return
-            return
+        func executeCompletion() {
+            guard case .concluding(let outcome) = state else {
+                return
+            }
+
+            state = .finished
+            completion(outcome)
         }
-
-        switch step {
-        case .discovery(let simInfo):
-            performDiscovery(withSIMInfo: simInfo)
-
-        case .mobileNetworkSelection(let resource):
-            showDiscoveryUI(usingResource: resource)
-
-        case .authorization(let discoveredConfig):
-            showAuthorizationUI(usingConfig: discoveredConfig)
-
-        case .conclusion(let result):
-            conclude(request: request, withOutcome: result)
-        }
-    }
-
-    func conclude(request: Request, withOutcome outcome: AuthorizationResult) {
-        request.conclude(withOutcome: outcome)
-        state = .idle
     }
 }
 
@@ -140,7 +130,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
         nonce: String? = nil,
         completion: @escaping AuthorizationCompletion) {
 
-        precondition(Thread.isMainThread, "You should call `authorize` from the main thread.")
+        precondition(Thread.isMainThread, "You should only call `authorize` from the main thread.")
 
         let parameters = OpenIdAuthorizationParameters(
             clientId: sdkConfig.clientId,
@@ -167,15 +157,61 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
 
         self.state = .requesting(request)
 
-        transition(request: request, toStep: .discovery(carrierInfoService.primarySIM))
+        request.update(state: .discovery(carrierInfoService.primarySIM))
+        next(forRequest: request)
     }
 
     func cancel() {
+        precondition(Thread.isMainThread, "You should only call `cancel` from the main thread.")
         guard case .requesting(let request) = state else {
             return
         }
 
-        transition(request: request, toStep: .conclusion(.cancelled))
+        request.update(state: .concluding(.cancelled))
+        next(forRequest: request)
+    }
+}
+
+private extension AuthorizationServiceIOS {
+
+    /// This function wraps step transitions and ensures that the request should continue before
+    /// advancing to the next step.
+    func next(forRequest request: Request) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.next(forRequest: request)
+            }
+            return
+        }
+
+        guard !request.isFinished else {
+            // if the request has previously been concluded, we can assume that any further commands
+            // should be ignored and we can return
+            return
+        }
+
+        // if the request is still in progress
+        // begin the next appropriate step in the autorization process
+        switch request.state {
+        case .undefined, .finished:
+            break
+
+        case .discovery(let simInfo):
+            performDiscovery(withSIMInfo: simInfo)
+
+        case .mobileNetworkSelection(let resource):
+            showDiscoveryUI(usingResource: resource)
+
+        case .authorization(let discoveredConfig):
+            showAuthorizationUI(usingConfig: discoveredConfig)
+
+        case .missingUserRecovery:
+            performDiscovery(withSIMInfo: nil)
+
+        case .concluding:
+            request.executeCompletion()
+            state = .idle
+        }
     }
 }
 
@@ -185,18 +221,23 @@ extension AuthorizationServiceIOS {
             return
         }
 
-        discoveryService.discoverConfig(forSIMInfo: simInfo) { [weak self] result in
+        discoveryService.discoverConfig(
+            forSIMInfo: simInfo,
+            prompt: request.passPrompt) { [weak self] result in
+
+            defer { self?.next(forRequest: request) }
+
             switch result {
             case .knownMobileNetwork(let config):
-                self?.transition(request: request, toStep: .authorization(config))
+                request.update(state: .authorization(config))
 
             case .unknownMobileNetwork(let redirect):
-                self?.transition(request: request, toStep: .mobileNetworkSelection(redirect.redirectURI))
+                // TODO: - Limit the number of times this flow can be executed.
+                request.update(state: .mobileNetworkSelection(redirect.redirectURI))
 
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
-                self?.transition(request: request, toStep: .conclusion(.error(authorizationError)))
-
+                request.update(state: .concluding(.error(authorizationError)))
                 // TODO: -
                 self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
             }
@@ -212,18 +253,30 @@ extension AuthorizationServiceIOS {
             fromViewController: request.viewController,
             carrierConfig: config,
             authorizationParameters: request.authorizationParameters) { [weak self] result in
+
+                defer { self?.next(forRequest: request) }
+
+                guard let `self` = self else {
+                    return
+                }
+
                 switch result {
                 case .code(let response):
-                    self?.transition(request: request, toStep: .conclusion(.code(response)))
+                    request.update(state: .concluding(.code(response)))
 
                 case .error(let error):
                     let authorizationError = error.asAuthorizationError
-                    self?.transition(request: request, toStep: .conclusion(.error(authorizationError)))
+
+                    guard !self.recover(fromError: authorizationError, duringRequest: request) else {
+                        return
+                    }
+
+                    request.update(state: .concluding(.error(authorizationError)))
                     // TODO: -
-                    self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
+                    self.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
                 case .cancelled:
-                    self?.transition(request: request, toStep: .conclusion(.cancelled))
+                    request.update(state: .concluding(.cancelled))
                 }
         }
     }
@@ -235,33 +288,45 @@ extension AuthorizationServiceIOS {
 
         self.mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: resource,
-            fromCurrentViewController: request.viewController
+            fromCurrentViewController: request.viewController,
+            prompt: request.passPrompt
         ) { [weak self] result in
+
+            defer { self?.next(forRequest: request) }
+
             switch result {
             case .networkInfo(let response):
                 request.authorizationParameters.loginHintToken = response.loginHintToken
-                self?.transition(request: request, toStep: .discovery(response.simInfo))
+                request.update(state: .discovery(response.simInfo))
 
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
-                self?.transition(request: request, toStep: .conclusion(.error(authorizationError)))
+                request.update(state: .concluding(.error(authorizationError)))
                 // TODO: -
                 self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
             case .cancelled:
-                self?.transition(request: request, toStep: .conclusion(.cancelled))
+                request.update(state: .concluding(.cancelled))
             }
         }
     }
 }
 
 private extension AuthorizationServiceIOS {
-    func canRecover(fromError error: AuthorizationError) -> Bool {
-        return false
-    }
+    func recover(fromError error: AuthorizationError, duringRequest request: Request) -> Bool {
+        switch error.code {
+        case ProjectVerifyErrorCode.userNotFound.rawValue:
+            guard !request.isAttemptingRecovery else {
+                return false
+            }
 
-    func recover(fromError error: AuthorizationError) {
+            request.update(state: .missingUserRecovery)
+            next(forRequest: request)
+            return true
 
+        default:
+            return false
+        }
     }
 }
 
