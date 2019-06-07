@@ -70,6 +70,13 @@ class AuthorizationRequest {
     }
 
     func update(state: State) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.update(state: state)
+            }
+            return
+        }
+
         // No state transition are valid after finshed is reached.
         guard !isFinished else {
             return
