@@ -47,74 +47,7 @@ class AuthorizationServiceIOS {
 extension AuthorizationServiceIOS {
     enum State {
         case idle
-        case requesting(Request)
-    }
-
-    class Request {
-        enum State {
-            case undefined
-            case discovery(SIMInfo?)
-            case mobileNetworkSelection(URL)
-            case authorization(CarrierConfig)
-            case missingUserRecovery
-            case concluding(AuthorizationResult)
-            case finished
-        }
-
-        var isFinished: Bool {
-            if case .finished = state {
-                return true
-            } else {
-                return false
-            }
-        }
-
-        var passPrompt: Bool {
-            return isAttemptingRecovery
-        }
-
-        /// If this flag is set on the request the prompt flag should be sent to all disocvery
-        /// endpoints and all cookies should be ignored. If this flag is already set for a request
-        /// recovery should not be attempted a second time.
-        private(set) var isAttemptingRecovery: Bool = false
-
-        private(set) var state: State = .undefined {
-            didSet {
-                if case .missingUserRecovery = state {
-                    // set a flat to indicate we're attempting user recovery:
-                    isAttemptingRecovery = true
-                }
-            }
-        }
-
-        var authorizationParameters: OpenIdAuthorizationParameters
-
-        let viewController: UIViewController
-        private let completion: AuthorizationCompletion
-
-        init(viewController: UIViewController,
-             authorizationParameters: OpenIdAuthorizationParameters,
-             completion: @escaping AuthorizationCompletion) {
-            self.viewController = viewController
-            self.authorizationParameters = authorizationParameters
-            self.completion = completion
-        }
-
-        func update(state: State) {
-            guard !isFinished else {
-                return
-            }
-            self.state = state
-        }
-
-        func executeCompletion() {
-            guard case .concluding(let outcome) = state else {
-                return
-            }
-
-            state = .finished
-            completion(outcome)
-        }
+        case requesting(AuthorizationRequest)
     }
 }
 
@@ -145,7 +78,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
             loginHintToken: nil
         )
 
-        let request = Request(
+        let request = AuthorizationRequest(
             viewController: viewController,
             authorizationParameters: parameters,
             completion: completion
@@ -176,7 +109,7 @@ private extension AuthorizationServiceIOS {
 
     /// This function wraps step transitions and ensures that the request should continue before
     /// advancing to the next step.
-    func next(forRequest request: Request) {
+    func next(forRequest request: AuthorizationRequest) {
         guard Thread.isMainThread else {
             DispatchQueue.main.async {
                 self.next(forRequest: request)
@@ -209,8 +142,9 @@ private extension AuthorizationServiceIOS {
             performDiscovery(withSIMInfo: nil)
 
         case .concluding:
-            request.executeCompletion()
+            request.update(state: .finished)
             state = .idle
+            // no next steps.
         }
     }
 }
@@ -313,10 +247,10 @@ extension AuthorizationServiceIOS {
 }
 
 private extension AuthorizationServiceIOS {
-    func recover(fromError error: AuthorizationError, duringRequest request: Request) -> Bool {
+    func recover(fromError error: AuthorizationError, duringRequest request: AuthorizationRequest) -> Bool {
         switch error.code {
         case ProjectVerifyErrorCode.userNotFound.rawValue:
-            guard !request.isAttemptingRecovery else {
+            guard !request.isAttemptingMissingUserRecovery else {
                 return false
             }
 
