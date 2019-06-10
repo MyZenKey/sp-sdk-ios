@@ -69,14 +69,12 @@ class AuthorizationRequest {
         self.completion = completion
     }
 
+    /// Updates the state to the request value if possible. If the request has already finished
+    /// this function has no action.
+    ///
+    /// This method is not thread safe and it is up to the developer to ensure consistency in
+    /// updates.
     func update(state: State) {
-        guard Thread.isMainThread else {
-            DispatchQueue.main.async {
-                self.update(state: state)
-            }
-            return
-        }
-
         // No state transition are valid after finshed is reached.
         guard !isFinished else {
             return

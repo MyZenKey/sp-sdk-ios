@@ -90,7 +90,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
 
         self.state = .requesting(request)
 
-        request.update(state: .discovery(carrierInfoService.primarySIM))
+        request.mainQueueUpdate(state: .discovery(carrierInfoService.primarySIM))
         next(forRequest: request)
     }
 
@@ -100,7 +100,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
             return
         }
 
-        request.update(state: .concluding(.cancelled))
+        request.mainQueueUpdate(state: .concluding(.cancelled))
         next(forRequest: request)
     }
 }
@@ -163,15 +163,15 @@ extension AuthorizationServiceIOS {
 
             switch result {
             case .knownMobileNetwork(let config):
-                request.update(state: .authorization(config))
+                request.mainQueueUpdate(state: .authorization(config))
 
             case .unknownMobileNetwork(let redirect):
                 // TODO: - Limit the number of times this flow can be executed.
-                request.update(state: .mobileNetworkSelection(redirect.redirectURI))
+                request.mainQueueUpdate(state: .mobileNetworkSelection(redirect.redirectURI))
 
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
-                request.update(state: .concluding(.error(authorizationError)))
+                request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
                 // TODO: -
                 self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
             }
@@ -196,7 +196,7 @@ extension AuthorizationServiceIOS {
 
                 switch result {
                 case .code(let response):
-                    request.update(state: .concluding(.code(response)))
+                    request.mainQueueUpdate(state: .concluding(.code(response)))
 
                 case .error(let error):
                     let authorizationError = error.asAuthorizationError
@@ -205,12 +205,12 @@ extension AuthorizationServiceIOS {
                         return
                     }
 
-                    request.update(state: .concluding(.error(authorizationError)))
+                    request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
                     // TODO: -
                     self.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
                 case .cancelled:
-                    request.update(state: .concluding(.cancelled))
+                    request.mainQueueUpdate(state: .concluding(.cancelled))
                 }
         }
     }
@@ -231,16 +231,16 @@ extension AuthorizationServiceIOS {
             switch result {
             case .networkInfo(let response):
                 request.authorizationParameters.loginHintToken = response.loginHintToken
-                request.update(state: .discovery(response.simInfo))
+                request.mainQueueUpdate(state: .discovery(response.simInfo))
 
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
-                request.update(state: .concluding(.error(authorizationError)))
+                request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
                 // TODO: -
                 self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
             case .cancelled:
-                request.update(state: .concluding(.cancelled))
+                request.mainQueueUpdate(state: .concluding(.cancelled))
             }
         }
     }
@@ -254,13 +254,26 @@ private extension AuthorizationServiceIOS {
                 return false
             }
 
-            request.update(state: .missingUserRecovery)
+            request.mainQueueUpdate(state: .missingUserRecovery)
             next(forRequest: request)
             return true
 
         default:
             return false
         }
+    }
+}
+
+private extension AuthorizationRequest {
+    func mainQueueUpdate(state: AuthorizationRequest.State) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.update(state: state)
+            }
+            return
+        }
+
+        self.update(state: state)
     }
 }
 
