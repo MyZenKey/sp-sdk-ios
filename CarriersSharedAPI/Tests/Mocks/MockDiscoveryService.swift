@@ -25,34 +25,31 @@ class MockDiscoveryService: DiscoveryServiceProtocol {
     )
 
     var lastSIMInfo: SIMInfo?
+    var lastPromptFlag: Bool?
     var lastCompletion: DiscoveryServiceCompletion?
 
     /// FIFO responses
-    var mockResponses: [DiscoveryServiceResult] = [
+    var responseQueue = MockResponseQueue<DiscoveryServiceResult>([
         .knownMobileNetwork(MockDiscoveryService.mockSuccess),
-    ]
+    ])
 
     func clear() {
         lastSIMInfo = nil
         lastCompletion = nil
-        mockResponses = [
-            .knownMobileNetwork(MockDiscoveryService.mockSuccess),
-        ]
+        lastPromptFlag = nil
+        responseQueue.clear()
     }
 
     func discoverConfig(
         forSIMInfo simInfo: SIMInfo?,
+        prompt: Bool,
         completion: @escaping DiscoveryServiceCompletion) {
         lastSIMInfo = simInfo
         lastCompletion = completion
+        lastPromptFlag = prompt
 
         DispatchQueue.main.async {
-            guard let result = self.mockResponses.first else {
-                XCTFail("not enough reponses configured")
-                return
-            }
-            self.mockResponses = Array(self.mockResponses.dropFirst())
-            completion(result)
+            completion(self.responseQueue.getResponse())
         }
     }
 }

@@ -20,21 +20,25 @@ class MockMobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol {
 
     var lastResource: URL?
     var lastViewController: UIViewController?
+    var lastPromptFlag: Bool?
     var lastCompletion: MobileNetworkSelectionCompletion?
 
     func clear() {
         lastResource = nil
         lastViewController = nil
+        lastPromptFlag = nil
         lastCompletion = nil
     }
 
     func requestUserNetworkSelection(
         fromResource resource: URL,
         fromCurrentViewController viewController: UIViewController,
+        prompt: Bool = false,
         completion: @escaping MobileNetworkSelectionCompletion) {
 
         self.lastResource = resource
         self.lastViewController = viewController
+        self.lastPromptFlag = prompt
         self.lastCompletion = completion
 
         DispatchQueue.main.async {

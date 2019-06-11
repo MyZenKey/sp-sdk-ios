@@ -42,13 +42,64 @@ class AuthorizationServiceTests: XCTestCase {
     }
 }
 
+extension AuthorizationServiceTests {
+
+    func testMultipleCallsCancelsPreviousCalls() {
+        mockCarrierInfo.primarySIM = MockSIMs.att
+        mockDiscoveryService.responseQueue.mockResponses = [
+            .knownMobileNetwork(MockDiscoveryService.mockSuccess),
+            .knownMobileNetwork(MockDiscoveryService.mockSuccess),
+            .knownMobileNetwork(MockDiscoveryService.mockSuccess),
+        ]
+        let expectationA = XCTestExpectation(description: "async authorization one")
+        let expectationB = XCTestExpectation(description: "async authorization two")
+        let expectationC = XCTestExpectation(description: "async authorization three")
+
+        let controller = UIViewController()
+        authorizationService.authorize(
+            scopes: self.scopes,
+            fromViewController: controller,
+            correlationId: "foo") { result in
+                defer { expectationA.fulfill() }
+                guard case .cancelled = result else {
+                    XCTFail("expected to cancel")
+                    return
+                }
+        }
+
+        authorizationService.authorize(
+            scopes: self.scopes,
+            fromViewController: controller,
+            correlationId: "bar") { result in
+                defer { expectationB.fulfill() }
+                guard case .cancelled = result else {
+                    XCTFail("expected to cancel")
+                    return
+                }
+        }
+
+        authorizationService.authorize(
+            scopes: self.scopes,
+            fromViewController: controller,
+            correlationId: "bah") { result in
+                defer { expectationC.fulfill() }
+                guard case .code = result else {
+                    XCTFail("expected success")
+                    return
+                }
+        }
+
+        wait(for: [expectationA, expectationB, expectationC], timeout: timeout)
+    }
+}
+
 // MARK: - DiscoveryService
 
 extension AuthorizationServiceTests {
 
     // MARK: Inputs
 
-    func testDiscoveryServiceRecivesSIMWhenPresent() {
+    func testDiscoveryServiceReceivesSIMWhenPresent() {
         mockCarrierInfo.primarySIM = MockSIMs.att
         authorizationService.authorize(
             scopes: self.scopes,
@@ -92,7 +143,7 @@ extension AuthorizationServiceTests {
     func testDiscoverError() {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
         let mockError: DiscoveryServiceError = .networkError(.networkError(NSError.mocked))
-        mockDiscoveryService.mockResponses = [ .error(mockError) ]
+        mockDiscoveryService.responseQueue.mockResponses = [ .error(mockError) ]
         let expectation = XCTestExpectation(description: "async authorization")
         authorizationService.authorize(
             scopes: self.scopes,
@@ -319,11 +370,11 @@ extension AuthorizationServiceTests {
         authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: expectedViewController) { result in
+                defer { expectation.fulfill() }
                 guard case .cancelled = result else {
                     XCTFail("expected an cancelled response")
                     return
                 }
-                expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
     }
@@ -334,7 +385,7 @@ extension AuthorizationServiceTests {
 private extension AuthorizationServiceTests {
     func mockSecondaryDeviceFlow() {
         mockCarrierInfo.primarySIM = nil
-        mockDiscoveryService.mockResponses = [
+        mockDiscoveryService.responseQueue.mockResponses = [
             .unknownMobileNetwork(MockDiscoveryService.mockRedirect),
             .knownMobileNetwork(MockDiscoveryService.mockSuccess),
         ]

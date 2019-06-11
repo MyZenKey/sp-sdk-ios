@@ -50,11 +50,6 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
 
     static let resource = URL(string: "https://app.xcijv.com/ui/discovery-ui")!
 
-    static let validRequestURL = URL(
-        // swiftlint:disable:next line_length
-        string: "https://app.xcijv.com/ui/discovery-ui?client_id=mockClientId&redirect_uri=mockClientId://com.xci.provider.sdk/projectverify/discoveryui&state=test-state"
-    )!
-
     static let mockClientId = "mockClientId"
     let mockSDKConfig = SDKConfig(
         clientId: MobileNetworkSelectionServiceTests.mockClientId,
@@ -87,8 +82,29 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
         mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: MobileNetworkSelectionServiceTests.resource,
             fromCurrentViewController: controller) { _ in }
-        let expectedURL = MobileNetworkSelectionServiceTests.validRequestURL
-        XCTAssertEqual(mockMobileNetworkSelectionUI.lastURL, expectedURL)
+
+        let lastURL = mockMobileNetworkSelectionUI.lastURL
+        XCTAssertEqual(lastURL?.host, "app.xcijv.com")
+        XCTAssertEqual(lastURL?.path, "/ui/discovery-ui")
+        AssertHasQueryItemPair(url: lastURL, key: "client_id", value: "mockClientId")
+        AssertHasQueryItemPair(url: lastURL, key: "state", value: "test-state")
+        AssertHasQueryItemPair(
+            url: lastURL,
+            key: "redirect_uri",
+            value: "mockClientId://com.xci.provider.sdk/projectverify/discoveryui"
+        )
+        AssertDoesntContainQueryItem(url: lastURL, key: "prompt")
+    }
+
+    func testCorrectSafariControllerURLWithPrompt() {
+        let controller = MockWindowViewController()
+        mobileNetworkSelectionService.requestUserNetworkSelection(
+            fromResource: MobileNetworkSelectionServiceTests.resource,
+            fromCurrentViewController: controller,
+            prompt: true) { _ in }
+
+        let lastURL = mockMobileNetworkSelectionUI.lastURL
+        AssertHasQueryItemPair(url: lastURL, key: "prompt", value: "true")
     }
 
     func testDuplicateRequestsCancelsPrevious() {
@@ -226,11 +242,27 @@ class MobileNetworkSelectionServiceRequestTests: XCTestCase {
             resource: URL(string: "https://rightpoint")!,
             clientId: "foobar",
             redirectURI: "foo://pv",
-            state: "?@=$somechars"
+            state: "?@=$somechars",
+            prompt: false
         )
 
         let expectedURL = URL(
             string: "https://rightpoint?client_id=foobar&redirect_uri=foo://pv&state=?@%3D$somechars"
+            )!
+        XCTAssertEqual(request.url, expectedURL)
+    }
+
+    func testRequestCretatesAppropriatelyFormattedURLWithPrompt() {
+        let request = MobileNetworkSelectionService.Request(
+            resource: URL(string: "https://rightpoint")!,
+            clientId: "foobar",
+            redirectURI: "foo://pv",
+            state: "?@=$somechars",
+            prompt: true
+        )
+
+        let expectedURL = URL(
+            string: "https://rightpoint?client_id=foobar&redirect_uri=foo://pv&state=?@%3D$somechars&prompt=true"
             )!
         XCTAssertEqual(request.url, expectedURL)
     }
