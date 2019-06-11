@@ -28,8 +28,11 @@ class AuthorizationServiceIOS {
     let carrierInfoService: CarrierInfoServiceProtocol
     let mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol
 
-    /// always update on main thread
-    private var state: State = .idle
+    private var state: State = .idle {
+        willSet {
+            precondition(Thread.isMainThread)
+        }
+    }
 
     init(sdkConfig: SDKConfig,
          discoveryService: DiscoveryServiceProtocol,
@@ -110,12 +113,8 @@ private extension AuthorizationServiceIOS {
     /// This function wraps step transitions and ensures that the request should continue before
     /// advancing to the next step.
     func next(forRequest request: AuthorizationRequest) {
-        guard Thread.isMainThread else {
-            DispatchQueue.main.async {
-                self.next(forRequest: request)
-            }
-            return
-        }
+
+        precondition(Thread.isMainThread)
 
         guard !request.isFinished else {
             // if the request has previously been concluded, we can assume that any further commands
@@ -144,7 +143,6 @@ private extension AuthorizationServiceIOS {
         case .concluding:
             request.update(state: .finished)
             state = .idle
-            // no next steps.
         }
     }
 }
@@ -172,7 +170,6 @@ extension AuthorizationServiceIOS {
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
                 request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
-                // TODO: -
                 self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
             }
         }
@@ -206,7 +203,6 @@ extension AuthorizationServiceIOS {
                     }
 
                     request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
-                    // TODO: -
                     self.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
                 case .cancelled:
@@ -236,7 +232,6 @@ extension AuthorizationServiceIOS {
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
                 request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
-                // TODO: -
                 self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
             case .cancelled:
@@ -266,18 +261,12 @@ private extension AuthorizationServiceIOS {
 
 private extension AuthorizationRequest {
     func mainQueueUpdate(state: AuthorizationRequest.State) {
-        guard Thread.isMainThread else {
-            DispatchQueue.main.async {
-                self.update(state: state)
-            }
-            return
-        }
-
+        precondition(Thread.isMainThread)
         self.update(state: state)
     }
 }
 
-// TODO: Remove this, just for qa
+// FIXME: Remove this, just for qa
 private extension AuthorizationServiceIOS {
     func showConsolation(_ text: String, on viewController: UIViewController) {
         let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)

@@ -77,8 +77,8 @@ class DiscoveryServiceTests: XCTestCase {
             XCTAssertEqual(request?.url?.scheme, "https")
             XCTAssertEqual(request?.url?.host, ProjectVerifyNetworkConfig.Host.production.rawValue)
             XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
-            XCTAssertTrue(request?.url?.query?.contains("mccmnc=123456") ?? false)
-            XCTAssertTrue(request?.url?.query?.contains("client_id=\(self.mockClientId)") ?? false)
+            AssertHasQueryItemPair(url: request?.url, key: "mccmnc", value: "123456")
+            AssertHasQueryItemPair(url: request?.url, key: "client_id", value: self.mockClientId)
 
             expectation.fulfill()
         }
@@ -94,8 +94,8 @@ class DiscoveryServiceTests: XCTestCase {
             XCTAssertEqual(request?.url?.scheme, "https")
             XCTAssertEqual(request?.url?.host, ProjectVerifyNetworkConfig.Host.production.rawValue)
             XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
-            XCTAssertFalse(request?.url?.query?.contains("mccmnc") ?? false)
-            XCTAssertTrue(request?.url?.query?.contains("client_id=\(self.mockClientId)") ?? false)
+            AssertHasQueryItemPair(url: request?.url, key: "client_id", value: self.mockClientId)
+            AssertDoesntContainQueryItem(url: request?.url, key: "mccmnc")
 
             expectation.fulfill()
         }
@@ -111,9 +111,9 @@ class DiscoveryServiceTests: XCTestCase {
             XCTAssertEqual(request?.url?.scheme, "https")
             XCTAssertEqual(request?.url?.host, ProjectVerifyNetworkConfig.Host.production.rawValue)
             XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
-            XCTAssertFalse(request?.url?.query?.contains("mccmnc") ?? false)
-            XCTAssertTrue(request?.url?.query?.contains("client_id=\(self.mockClientId)") ?? false)
-            XCTAssertTrue(request?.url?.query?.contains("prompt=true") ?? false)
+            AssertHasQueryItemPair(url: request?.url, key: "client_id", value: self.mockClientId)
+            AssertHasQueryItemPair(url: request?.url, key: "prompt", value: "true")
+            AssertDoesntContainQueryItem(url: request?.url, key: "mccmnc")
 
             expectation.fulfill()
         }

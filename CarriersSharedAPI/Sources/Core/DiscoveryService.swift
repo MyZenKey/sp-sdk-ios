@@ -36,8 +36,10 @@ protocol DiscoveryServiceProtocol {
     ///
     /// This method will always execute the provided closure on the MainThread.
     /// - Parameters:
-    ///   - simInfo: the sim info to pass to the discovery service
-    ///   - completion: the closure invoked with the result of the Discovery.
+    ///   - simInfo: The sim info to pass to the discovery service
+    ///   - prompt: When true, the discovery service will always re-direct the user to the
+    ///         discovery-ui experience. The default value is false.
+    ///   - completion: The closure invoked with the result of the Discovery.
     func discoverConfig(forSIMInfo simInfo: SIMInfo?,
                         prompt: Bool,
                         completion: @escaping DiscoveryServiceCompletion)

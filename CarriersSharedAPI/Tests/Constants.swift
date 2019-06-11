@@ -26,6 +26,30 @@ func UnwrapAndAssertNotNil<T>(_ variable: T?,
     return variable
 }
 
+// swiftlint:disable:next identifier_name
+func AssertHasQueryItemPair(url: URL?, key: String, value: String) {
+    guard
+        let existingURL = url,
+        let components = URLComponents(url: existingURL, resolvingAgainstBaseURL: false),
+        let queryItems = components.queryItems,
+        queryItems.contains(URLQueryItem(name: key, value: value)) else {
+            XCTFail("expected valid url with valid query pair. instead got: \(url.debugDescription)")
+            return
+    }
+}
+
+// swiftlint:disable:next identifier_name
+func AssertDoesntContainQueryItem(url: URL?, key: String) {
+    guard
+        let existingURL = url,
+        let components = URLComponents(url: existingURL, resolvingAgainstBaseURL: false),
+        let queryItems = components.queryItems,
+        !queryItems.contains(where: { item in item.name == key }) else {
+            XCTFail("expected valid url without the query param. instead got: \(url.debugDescription)")
+            return
+    }
+}
+
 struct MockSIMs {
     static let unknown = SIMInfo(mcc: "123", mnc: "456")
     static let tmobile = SIMInfo(mcc: "310", mnc: "210")

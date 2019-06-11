@@ -50,12 +50,6 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
 
     static let resource = URL(string: "https://app.xcijv.com/ui/discovery-ui")!
 
-     // swiftlint:disable:next line_length
-    static let validRequestString = "https://app.xcijv.com/ui/discovery-ui?client_id=mockClientId&redirect_uri=mockClientId://com.xci.provider.sdk/projectverify/discoveryui&state=test-state"
-    static let validRequestURL = URL(
-        string: MobileNetworkSelectionServiceTests.validRequestString
-    )!
-
     static let mockClientId = "mockClientId"
     let mockSDKConfig = SDKConfig(
         clientId: MobileNetworkSelectionServiceTests.mockClientId,
@@ -88,8 +82,18 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
         mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: MobileNetworkSelectionServiceTests.resource,
             fromCurrentViewController: controller) { _ in }
-        let expectedURL = MobileNetworkSelectionServiceTests.validRequestURL
-        XCTAssertEqual(mockMobileNetworkSelectionUI.lastURL, expectedURL)
+
+        let lastURL = mockMobileNetworkSelectionUI.lastURL
+        XCTAssertEqual(lastURL?.host, "app.xcijv.com")
+        XCTAssertEqual(lastURL?.path, "/ui/discovery-ui")
+        AssertHasQueryItemPair(url: lastURL, key: "client_id", value: "mockClientId")
+        AssertHasQueryItemPair(url: lastURL, key: "state", value: "test-state")
+        AssertHasQueryItemPair(
+            url: lastURL,
+            key: "redirect_uri",
+            value: "mockClientId://com.xci.provider.sdk/projectverify/discoveryui"
+        )
+        AssertDoesntContainQueryItem(url: lastURL, key: "prompt")
     }
 
     func testCorrectSafariControllerURLWithPrompt() {
@@ -98,12 +102,9 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
             fromResource: MobileNetworkSelectionServiceTests.resource,
             fromCurrentViewController: controller,
             prompt: true) { _ in }
-        var urlString = MobileNetworkSelectionServiceTests.validRequestString
-        urlString.append("&prompt=true")
-        let expectedURL = URL(
-            string: urlString
-        )!
-        XCTAssertEqual(mockMobileNetworkSelectionUI.lastURL, expectedURL)
+
+        let lastURL = mockMobileNetworkSelectionUI.lastURL
+        AssertHasQueryItemPair(url: lastURL, key: "prompt", value: "true")
     }
 
     func testDuplicateRequestsCancelsPrevious() {
