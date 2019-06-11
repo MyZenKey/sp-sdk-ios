@@ -86,3 +86,21 @@ class ServiceAPI: NSObject {
         DispatchQueue.main.async { userInfoResponse(JsonDocument(object: userInfoJSON)) }
     }
 }
+
+// MARK: - Bank App
+
+extension ServiceAPI {
+    func completeTransfer(withAuthCode code: String,
+                          mcc: String,
+                          mnc: String,
+                          completionHandler transferResponse: @escaping ((JsonDocument) -> Void)) {
+
+
+        let transferJSON: [String: Any] = [
+            "transferId": "1234",
+            "transferState": "complete"
+        ]
+
+        DispatchQueue.main.async { transferResponse(JsonDocument(object: transferJSON)) }
+    }
+}

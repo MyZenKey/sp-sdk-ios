@@ -27,7 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         
         if let window = window {
-            let mainVC = LoginViewController()
+
+            let mainVC: UIViewController
+            if AccountManager.isLoggedIn {
+                mainVC = HomeViewController()
+            } else {
+                mainVC = LoginViewController()
+            }
             navigationController = UINavigationController(rootViewController: mainVC)
             navigationController?.isNavigationBarHidden = true
             window.rootViewController = navigationController
@@ -63,53 +69,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    // MARK: Universal linking
-    
-    /// Tells the delegate that the data for continuing an activity is available.
-    ///
-    /// - Parameters:
-    ///   - application: The shared app object that controls and coordinates your app.
-    ///   - userActivity: The activity object containing the data associated with the task the user was performing. Use the data to continue the user's activity in your iOS app.
-    ///   - restorationHandler: A block to execute if your app creates objects to perform the task. Calling this block is optional.
-    /// - Returns: true to indicate that your app handled the activity or false to let iOS know that your app did not handle the activity.
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Swift.Void) -> Bool {
-        
-        print("Universal link attempt detected: \(String(describing: userActivity.webpageURL))")
-        if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
-            //guard let url = userActivity.webpageURL else { return false }
-            
-            launchHomeScreen()
-            
-            return true
-        }
-        
-        return false
-    }
-
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
 
         guard !ProjectVerifyAppDelegate.shared.application(app, open: url, options: options) else {
             return true
         }
 
-        if let components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            if components.host == "transaction_completed" {
-                // Show the transaction completed screen
-                launchTransferCompleteScreen()
-            } else if components.host == "transaction_denied" {
-                // Log out to login screen
-                UserDefaults.standard.set(true, forKey: "transaction_denied");
-                UserDefaults.standard.synchronize();
-
-                launchLoginScreen()
-            } else if !launchTransferCompleteScreenIfNeeded() {
-                launchLoginScreen()
-            }
-        } else if !launchTransferCompleteScreenIfNeeded() {
-            launchLoginScreen()
-        }
-
         return true
+    }
+
+    func logout() {
+        AccountManager.logout()
+        launchLoginScreen()
     }
 
     // MARK: Launch root screen flows
@@ -127,11 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationController?.isNavigationBarHidden = true
         self.window?.rootViewController = navigationController
     }
-    
-    func logout() {
-       
-    }
-    
+
     func launchLoginScreen() {
         let loginVC = LoginViewController()
         navigationController = UINavigationController(rootViewController: loginVC)

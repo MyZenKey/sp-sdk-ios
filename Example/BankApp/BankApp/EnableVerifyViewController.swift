@@ -123,7 +123,9 @@ class EnableVerifyViewController: UIViewController {
                         print("error no token returned")
                         return
                 }
-                UserDefaults.standard.set(tokenString, forKey: "AccountToken")
+
+                AccountManager.login(withToken: tokenString)
+                self.launchHomeScreen()
         })
     }
 
@@ -131,6 +133,12 @@ class EnableVerifyViewController: UIViewController {
         // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
         let appDelegate = UIApplication.shared.delegate! as! AppDelegate
         appDelegate.launchLoginScreen()
+    }
+
+    func launchHomeScreen() {
+        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
+        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+        appDelegate.launchHomeScreen()
     }
 
     func layoutView() {

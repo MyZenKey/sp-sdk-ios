@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CarriersSharedAPI
 
 class ApproveViewController: UIViewController {
     
@@ -49,7 +50,10 @@ class ApproveViewController: UIViewController {
         button.backgroundColor = AppTheme.primaryBlue
         return button
     }()
-    
+
+    let authService = AuthorizationService()
+    let serviceAPI = ServiceAPI()
+
     let illustrationPurposes: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -95,35 +99,60 @@ class ApproveViewController: UIViewController {
     }
     
     @objc func initiateTransfer(_ sender: Any) {
-        //self.view.showActivityIndicator()
-        navigationController?.pushViewController(EnterPINViewController(), animated: true)
-//        let authService = AuthService()
-//
-//        authService.authorize(serialNumber: AppConfig.UUID, sucess: { [weak self] (success) in
-//
-//            self?.view.hideActivityIndicator()
-//            if  let status = success["status"] as? Bool{
-//                UserDefaults.standard.set(true, forKey: "initiatedTransfer");
-//                UserDefaults.standard.set(false, forKey: "transaction_denied")
-//
-//                UserDefaults.standard.synchronize()
-//                self?.handleNotification()
-//                if status{
-//                    //Call Verify App
-//                }else{
-//
-//                }
-//            }
-//        }) { (error) in
-//
-//        }
-//        EnterPINViewController.presentPINScreen(on: self) { [weak self] (success) in
-//            if success {
-//                self?.performSegue(withIdentifier: "segueTransferComplete", sender: self)
-//            }
-//        }
+        self.view.showActivityIndicator()
+
+        let scopes: [Scope] = [.secondFactor]
+        authService.authorize(
+            scopes: scopes,
+            fromViewController: self,
+            acrValues: [.aal2]) { [weak self] result in
+
+                self?.view.hideActivityIndicator()
+                switch result {
+                case .code(let response):
+                    self?.completeFlow(withAuthChode: response.code,
+                                       mcc: response.mcc,
+                                       mnc: response.mnc)
+
+                case .error(let error):
+                    self?.completeFlow(withError: error)
+
+                case .cancelled:
+                    self?.cancelFlow()
+                }
+        }
     }
-    
+
+    func completeFlow(withAuthChode code: String, mcc: String, mnc: String) {
+        serviceAPI.completeTransfer(
+            withAuthCode: code,
+            mcc: mcc,
+            mnc: mnc,
+            completionHandler: { _ in
+                self.showAlert(title: "Success", message: "Your transfer has succeeded")
+        })
+    }
+
+    func completeFlow(withError: Error) {
+        showAlert(title: "Error", message: "An error occured")
+    }
+
+    func cancelFlow() {
+        showAlert(title: "Cancelled", message: "The transaction was cancelled")
+    }
+
+    func showAlert(title: String, message: String) {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        controller.addAction(
+            UIAlertAction(title: "Okay",
+                          style: .default,
+                          handler: { [weak self] _ in
+                            self?.dismiss(animated: true, completion: nil)
+            })
+        )
+        present(controller, animated: true, completion: nil)
+    }
+
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
