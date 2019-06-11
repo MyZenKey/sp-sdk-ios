@@ -56,7 +56,7 @@ class HomeViewController: UIViewController {
     }
 
     @objc func logoutButtonTouched(_ sender: Any) {
-        navigationController?.popToRootViewController(animated: true)
+        (UIApplication.shared.delegate as? AppDelegate)?.logout()
     }
     
     @objc func sendMoneyTouched(_ sender: Any) {

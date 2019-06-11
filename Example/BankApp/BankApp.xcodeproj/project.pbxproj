@@ -18,9 +18,9 @@
 		7D89C9DB1FFE82F400AE1EF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DA1FFE82F400AE1EF4 /* Assets.xcassets */; };
 		7D89C9DE1FFE82F400AE1EF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DC1FFE82F400AE1EF4 /* LaunchScreen.storyboard */; };
 		7D89C9E61FFE8DD300AE1EF4 /* DictionaryUrlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D89C9E51FFE8DD300AE1EF4 /* DictionaryUrlQuery.swift */; };
+		8A55D6CA22B026D700655884 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A55D6C922B026D700655884 /* AccountManager.swift */; };
 		8C103E7C210787E600E232EE /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C103E7B210787E600E232EE /* AppConfig.swift */; };
 		8C6E736E212338F4003B15A4 /* DotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6E736D212338F3003B15A4 /* DotView.swift */; };
-		8C6E737021233B59003B15A4 /* EnterPINViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6E736F21233B58003B15A4 /* EnterPINViewController.swift */; };
 		8C6E737321233C88003B15A4 /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6E737221233C88003B15A4 /* extension.swift */; };
 		8C87BE0C212666A900B24707 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C87BE0B212666A900B24707 /* LoginViewController.swift */; };
 		8C87BE0E212669DF00B24707 /* BankAppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C87BE0D212669DE00B24707 /* BankAppButton.swift */; };
@@ -62,9 +62,9 @@
 		810CAC5E21FE9686007F8A22 /* CarriersSharedAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CarriersSharedAPI.framework; sourceTree = "<group>"; };
 		81289E4E2199D2A600063A76 /* AppAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppAuth.framework; sourceTree = "<group>"; };
 		89F9A01A772197F60C3FF63C /* Pods-BankApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BankApp/Pods-BankApp.debug.xcconfig"; sourceTree = "<group>"; };
+		8A55D6C922B026D700655884 /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
 		8C103E7B210787E600E232EE /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		8C6E736D212338F3003B15A4 /* DotView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DotView.swift; sourceTree = "<group>"; };
-		8C6E736F21233B58003B15A4 /* EnterPINViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnterPINViewController.swift; sourceTree = "<group>"; };
 		8C6E737221233C88003B15A4 /* extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
 		8C87BE0B212666A900B24707 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8C87BE0D212669DE00B24707 /* BankAppButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BankAppButton.swift; sourceTree = "<group>"; };
@@ -140,7 +140,6 @@
 				233B616D220C98E8008A0E27 /* Resources */,
 				8CDE44DB212DCC1B00F403A2 /* Views */,
 				8C6E737121233C3F003B15A4 /* Extensions */,
-				8C6E736F21233B58003B15A4 /* EnterPINViewController.swift */,
 				7D89C9D31FFE82F400AE1EF4 /* AppDelegate.swift */,
 				8CFE96FE2121F22900542F46 /* ApproveViewController.swift */,
 				6682E1AB21228F9400DBE3C5 /* EnableVerifyViewController.swift */,
@@ -152,6 +151,7 @@
 				8C87BE0B212666A900B24707 /* LoginViewController.swift */,
 				8C87BE0F21266A8B00B24707 /* AppTheme.swift */,
 				8C87BE1121268FD500B24707 /* HomeViewController.swift */,
+				8A55D6C922B026D700655884 /* AccountManager.swift */,
 			);
 			path = BankApp;
 			sourceTree = "<group>";
@@ -336,8 +336,8 @@
 				8C103E7C210787E600E232EE /* AppConfig.swift in Sources */,
 				8C87BE1221268FD500B24707 /* HomeViewController.swift in Sources */,
 				8C87BE0E212669DF00B24707 /* BankAppButton.swift in Sources */,
-				8C6E737021233B59003B15A4 /* EnterPINViewController.swift in Sources */,
 				8CFE96FF2121F22900542F46 /* ApproveViewController.swift in Sources */,
+				8A55D6CA22B026D700655884 /* AccountManager.swift in Sources */,
 				8CDE44DD212DCC4C00F403A2 /* GradientView.swift in Sources */,
 				8C6E736E212338F4003B15A4 /* DotView.swift in Sources */,
 				8C6E737321233C88003B15A4 /* extension.swift in Sources */,
