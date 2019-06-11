@@ -166,6 +166,17 @@ extension AuthorizationServiceTests {
 
     // MARK: Inputs
 
+    func testPassesDefaultScopeToOpenIdService() {
+        mockCarrierInfo.primarySIM = MockSIMs.unknown
+        let expectedController = UIViewController()
+        let expectation = XCTestExpectation(description: "async authorization")
+        authorizationService.authorize(fromViewController: expectedController) { _ in
+                XCTAssertEqual(self.mockOpenIdService.lastParameters?.formattedScopes, "openid")
+                expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
     func testPassesViewControllerAndScopeToOpenIdService() {
         mockCarrierInfo.primarySIM = MockSIMs.unknown
         let expectedController = UIViewController()
