@@ -20,6 +20,6 @@ class ScopeTests: XCTestCase {
 
     func testPrependRequiredOpenIdScope() {
         let formattedString = OpenIdScopes(requestedScopes: dupeScopes).networkFormattedString
-        XCTAssertEqual(formattedString, "openid authorize match score")
+        XCTAssertEqual(formattedString, "authorize match score")
     }
 }

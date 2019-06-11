@@ -16,6 +16,9 @@ public protocol ScopeProtocol {
 
 /// The predefined scopes supported by Project Verify.
 public enum Scope: String, ScopeProtocol, Equatable {
+    /// This scope will return an ID_token from the Token endpoint. Future updates may include
+    /// additional data claims in the ID_token.  Note: even the access token is a JWT.
+    case openid
     /// Service providers that wish to have a combination of all the profile attributes (email,
     /// address, phone, postal_code) can request the single profile Scope. Additional data
     /// attributes when they are ready will also appear under the profile (photo, birthdate, location).
@@ -88,7 +91,7 @@ public enum Scope: String, ScopeProtocol, Equatable {
 
 struct OpenIdScopes {
     var networkFormattedString: String {
-        return "openid \(requestedScopes.toOpenIdScopes)"
+        return requestedScopes.toOpenIdScopes
     }
     let requestedScopes: [ScopeProtocol]
     init(requestedScopes: [ScopeProtocol]) {

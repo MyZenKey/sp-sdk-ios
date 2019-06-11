@@ -87,7 +87,7 @@ public protocol AuthorizationServiceProtocol {
 
 public extension AuthorizationServiceProtocol {
     func authorize(
-        scopes: [ScopeProtocol],
+        scopes: [ScopeProtocol] = [Scope.openid],
         fromViewController viewController: UIViewController,
         acrValues: [ACRValue]? = [.aal1],
         state: String? = nil,

@@ -101,7 +101,7 @@ class ApproveViewController: UIViewController {
     @objc func initiateTransfer(_ sender: Any) {
         self.view.showActivityIndicator()
 
-        let scopes: [Scope] = [.secondFactor]
+        let scopes: [Scope] = [.openid, .secondFactor]
         authService.authorize(
             scopes: scopes,
             fromViewController: self,
