@@ -69,6 +69,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     lazy var verifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
         button.delegate = self
+        let scopes: [Scope] = [.openid, .profile]
+        button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

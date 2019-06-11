@@ -32,7 +32,7 @@ class AuthorizationServiceTests: XCTestCase {
         mobileNetworkSelectionService: mockNetworkSelectionService
     )
 
-    let scopes: [Scope] = [.address, .address, .email]
+    let scopes: [Scope] = [.openid, .address, .address, .email]
 
     override func setUp() {
         super.setUp()
@@ -174,7 +174,7 @@ extension AuthorizationServiceTests {
             scopes: self.scopes,
             fromViewController: expectedController) { _ in
                 XCTAssertEqual(self.mockOpenIdService.lastViewController, expectedController)
-                XCTAssertEqual(self.mockOpenIdService.lastParameters?.formattedScopes, "openid address email")
+                XCTAssertEqual(self.mockOpenIdService.lastParameters?.formattedScopes, "address email openid")
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
@@ -201,7 +201,7 @@ extension AuthorizationServiceTests {
         let expected = OpenIdAuthorizationParameters(
             clientId: mockSDKConfig.clientId,
             redirectURL: mockSDKConfig.redirectURL(forRoute: .authorize),
-            formattedScopes: "openid address email",
+            formattedScopes: "address email openid",
             state: "foo",
             nonce: "bar",
             acrValues: [.aal2],

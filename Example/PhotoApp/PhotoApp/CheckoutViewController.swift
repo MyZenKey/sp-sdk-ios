@@ -143,7 +143,7 @@ class CheckoutViewController: UIViewController {
     
     @IBAction func onUseVerifyKeyAddressTapped(_ sender: Any) {
         // Request an authorization code from Project Verify:
-        let scopes: [Scope] = [.profile, .email]
+        let scopes: [Scope] = [.openid, .profile, .email]
         authService.authorize(
             scopes: scopes,
             fromViewController: self) { result in
