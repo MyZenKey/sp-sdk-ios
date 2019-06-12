@@ -170,3 +170,21 @@ extension MobileNetworkSelectionError: AuthorizationErrorConvertible {
         }
     }
 }
+
+extension AuthorizationRequestError: AuthorizationErrorConvertible {
+    var asAuthorizationError: AuthorizationError {
+        switch self {
+        case .tooManyRedirects:
+            return AuthorizationError(
+                rawErrorCode: SDKErrorCode.tooManyUIRedirects.rawValue,
+                description: "Discovery redirected to ui too many times. Please retry discovery"
+            )
+        case .tooManyRecoveries:
+            return AuthorizationError(
+                rawErrorCode: ProjectVerifyErrorCode.userNotFound.rawValue,
+                description: "Discovery was unable to recover from a user not found error. Please retry discovery"
+            )
+
+        }
+    }
+}

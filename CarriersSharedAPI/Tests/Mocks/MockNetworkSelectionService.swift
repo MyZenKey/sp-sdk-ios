@@ -16,6 +16,7 @@ class MockMobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol {
         loginHintToken: nil
     )
 
+    private(set) var requestNetworkSelectionCallCount = 0
     var mockResponse: MobileNetworkSelectionResult = .networkInfo(MockMobileNetworkSelectionService.mockSuccess)
 
     var lastResource: URL?
@@ -28,6 +29,7 @@ class MockMobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol {
         lastViewController = nil
         lastPromptFlag = nil
         lastCompletion = nil
+        requestNetworkSelectionCallCount = 0
     }
 
     func requestUserNetworkSelection(
@@ -36,6 +38,7 @@ class MockMobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol {
         prompt: Bool = false,
         completion: @escaping MobileNetworkSelectionCompletion) {
 
+        requestNetworkSelectionCallCount += 1
         self.lastResource = resource
         self.lastViewController = viewController
         self.lastPromptFlag = prompt

@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum AuthorizationRequestError {
+    case tooManyRedirects
+    case tooManyRecoveries
+}
+
 /// This class captures the state and information required during the life time of an authorization
 /// request. It defines the state and validates changes to state to ensure those changes maintain
 /// consistencey with the request's current state.
@@ -23,19 +28,17 @@ class AuthorizationRequest {
         case authorization(CarrierConfig)
         ///  Any state is a valid transition.
         case missingUserRecovery
-        ///  The only valid tranistion is to  state is a valid transition.
+        ///  The only valid tranistion is to the finished state.
         case concluding(AuthorizationResult)
         ///  No other state tranistions are valid.
         case finished
     }
 
     var isFinished: Bool {
-        if case .finished = state {
-            return true
-        } else {
-            return false
-        }
+        return self.state.isFinishedState
     }
+
+    private var canRedirectToDiscoveryUI = true
 
     /// Whether the `prompt` flag should be passed to discovery and discovery-ui
     var passPrompt: Bool {
@@ -69,30 +72,80 @@ class AuthorizationRequest {
         self.completion = completion
     }
 
-    /// Updates the state to the request value if possible. If the request has already finished
-    /// this function has no action.
+    /// Updates the state to the requested value if possible. If the requested state is invalid
+    /// it may update to a concluding state contining an error value in which case the request
+    /// should error out.
+    /// If the request has already entered a finished state, this function has no action.
     ///
     /// This method is not thread safe and it is up to the developer to ensure consistency in
     /// updates.
-    func update(state: State) {
+    func update(state newState: State) {
         // No state transition are valid after finshed is reached.
         guard !isFinished else {
             return
         }
 
-        if case .finished = state {
+        // If we've entered the concluding state, the only valid state is `.finished`
+        guard !self.state.isConcludingState || newState.isFinishedState else {
+            fatalError("The only valid transition from concluding state is to a finsihed state.")
+        }
+
+        switch newState {
+        case .undefined, .discovery, .authorization, .concluding:
+            // no special state managment required
+            self.state = newState
+
+        case .missingUserRecovery:
+            // enusre we haven't redirected through ui before:
+            guard !isAttemptingMissingUserRecovery else {
+                let error = AuthorizationRequestError.tooManyRecoveries.asAuthorizationError
+                self.state = .concluding(.error(error))
+                return
+            }
+
+            // we're attemting to recover – permit redirects to discovery ui
+            canRedirectToDiscoveryUI = true
+            self.state = newState
+
+        case .mobileNetworkSelection:
+            // enusre we haven't redirected through ui before:
+            guard canRedirectToDiscoveryUI else {
+                let error = AuthorizationRequestError.tooManyRedirects.asAuthorizationError
+                self.state = .concluding(.error(error))
+                return
+            }
+
+            // only permit this re-direction one time:
+            canRedirectToDiscoveryUI = false
+
+            self.state = newState
+
+        case .finished:
             // If we are moving to a finished state, establish we have previously entered a
             // concluding state and extract the outcome.
             guard case .concluding(let outcome) = self.state else {
                 fatalError("You must transition to a concluding state before a finished state.")
             }
-
             // ensure consistency so update state before calling completion.
-            self.state = state
+            self.state = newState
             // send the completion:
             completion(outcome)
-        } else {
-            self.state = state
         }
+    }
+}
+
+private extension AuthorizationRequest.State {
+    var isConcludingState: Bool {
+        guard case .concluding = self else {
+            return false
+        }
+        return true
+    }
+
+    var isFinishedState: Bool {
+        guard case .finished = self else {
+            return false
+        }
+        return true
     }
 }

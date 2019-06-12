@@ -197,12 +197,8 @@ extension AuthorizationServiceIOS {
 
                 case .error(let error):
                     let authorizationError = error.asAuthorizationError
-
-                    guard !self.recover(fromError: authorizationError, duringRequest: request) else {
-                        return
-                    }
-
-                    request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
+                    let nextState = AuthorizationServiceIOS.recoveryState(forError: authorizationError)
+                    request.mainQueueUpdate(state: nextState)
                     self.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
                 case .cancelled:
@@ -242,19 +238,13 @@ extension AuthorizationServiceIOS {
 }
 
 private extension AuthorizationServiceIOS {
-    func recover(fromError error: AuthorizationError, duringRequest request: AuthorizationRequest) -> Bool {
+    static func recoveryState(forError error: AuthorizationError) -> AuthorizationRequest.State {
         switch error.code {
         case ProjectVerifyErrorCode.userNotFound.rawValue:
-            guard !request.isAttemptingMissingUserRecovery else {
-                return false
-            }
-
-            request.mainQueueUpdate(state: .missingUserRecovery)
-            next(forRequest: request)
-            return true
+            return .missingUserRecovery
 
         default:
-            return false
+            return .concluding(.error(error))
         }
     }
 }
