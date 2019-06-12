@@ -145,6 +145,8 @@ public enum SDKErrorCode: String {
     case missingParameter = "sdk_missing_parameter"
     /// The SDK received a response with a parameter which did not pass validation.
     case invalidParameter = "sdk_invalid_parameter"
+    /// The SDK has been redirected to the discovery-ui too many times.
+    case tooManyUIRedirects = "sdk_too_many_redirects"
 }
 
 extension SDKErrorCode: AuthorizationErrorTypeMappable {
@@ -152,6 +154,8 @@ extension SDKErrorCode: AuthorizationErrorTypeMappable {
         switch self {
         case .stateMismatch, .missingParameter, .invalidParameter:
             return .unknownError
+        case .tooManyUIRedirects:
+            return .discoveryStateError
         case .networkError:
             return .networkFailure
         }

@@ -24,6 +24,7 @@ class MockDiscoveryService: DiscoveryServiceProtocol {
         error: "foo", redirectURI: URL.mocked
     )
 
+    private(set) var discoveryCallCount = 0
     var lastSIMInfo: SIMInfo?
     var lastPromptFlag: Bool?
     var lastCompletion: DiscoveryServiceCompletion?
@@ -38,12 +39,14 @@ class MockDiscoveryService: DiscoveryServiceProtocol {
         lastCompletion = nil
         lastPromptFlag = nil
         responseQueue.clear()
+        discoveryCallCount = 0
     }
 
     func discoverConfig(
         forSIMInfo simInfo: SIMInfo?,
         prompt: Bool,
         completion: @escaping DiscoveryServiceCompletion) {
+        discoveryCallCount += 1
         lastSIMInfo = simInfo
         lastCompletion = completion
         lastPromptFlag = prompt

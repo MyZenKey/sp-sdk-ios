@@ -2,7 +2,7 @@
 //  AuthorizationServiceTests+UserNotFoundError.swift
 //  CarriersSharedAPI
 //
-//  Created by Adam Tierney on 6/6/19.
+//  Created by Adam Tierney on 6/12/19.
 //  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
@@ -39,6 +39,38 @@ extension AuthorizationServiceTests {
                 XCTAssertEqual(self.mockDiscoveryService.lastPromptFlag, true)
                 XCTAssertEqual(self.mockNetworkSelectionService.lastPromptFlag, true)
 
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    func testUserNotFoundSendPerformsDiscoveryEvenIfUIShownPrevious() {
+        mockCarrierInfo.primarySIM = nil
+        mockDiscoveryService.responseQueue.mockResponses = [
+            .unknownMobileNetwork(MockDiscoveryService.mockRedirect),
+            .knownMobileNetwork(MockDiscoveryService.mockSuccess),
+            .unknownMobileNetwork(MockDiscoveryService.mockRedirect),
+            .knownMobileNetwork(MockDiscoveryService.mockSuccess),
+        ]
+
+        mockOpenIdService.responseQueue.mockResponses = [
+            .error(
+                .urlResponseError(.errorResponse(ProjectVerifyErrorCode.userNotFound.rawValue, nil))
+            ),
+            .code(MockOpenIdService.mockSuccess),
+        ]
+
+        let expectation = XCTestExpectation(description: "async authorization")
+        authorizationService.authorize(
+            scopes: self.scopes,
+            fromViewController: UIViewController()) { result in
+                defer { expectation.fulfill() }
+                guard case .code = result else {
+                    XCTFail("expected a successful outcome")
+                    return
+                }
+
+                XCTAssertEqual(self.mockDiscoveryService.discoveryCallCount, 4)
+                XCTAssertEqual(self.mockNetworkSelectionService.requestNetworkSelectionCallCount, 2)
         }
         wait(for: [expectation], timeout: timeout)
     }
