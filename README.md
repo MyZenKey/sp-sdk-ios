@@ -41,7 +41,7 @@ Since applications must get authorization to access user information, scopes are
 
 ## Add Project Verify SDK 
 
-During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify (and its dependency `AppAuth`) in your project: as a submodule of CocoaPods or manually. Additionally, Carthage may be supported in the future. 
+During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify (and its dependency `AppAuth`) in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future. 
 
 ### CocoaPods
 
