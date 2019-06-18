@@ -10,7 +10,7 @@ Project Verify is a joint undertaking of the Mobile Authentication Taskforce. Th
 
 ### OpenID Connect
 
-OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0  specification. It uses JSON Web Tokens (JWTs) that are obtained using OAuth 2.0 flows. You can read more about OIDC [here](https://openid.net/specs/openid-connect-core-1_0.html).
+OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0 specification. It uses JSON Web Tokens (JWTs) that are obtained using OAuth 2.0 flows. You can read more about OIDC [here](https://openid.net/specs/openid-connect-core-1_0.html).
 
 Project Verify SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to Mobile Network Operator (MNO) for authorization. Upon successful authorization, the user is redirected to your backend with an authorization code, which your backend exchanges for an ID token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
 
@@ -45,7 +45,7 @@ During development, include the ProjectVerifyLogin SDK in your project. There ar
 
 ### CocoaPods
 
-You can include the ProjectVerifyLogin SDK in your project as a development Cocoapod. After you place the source code in your repository, add the following to your Podfile.
+You can include the ProjectVerifyLogin SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following to your Podfile.
 
 ```ruby
   pod 'CarriersSharedAPI', path: '{your-relative-path}/CarriersSharedAPI.podspec'
