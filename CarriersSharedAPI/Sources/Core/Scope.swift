@@ -19,10 +19,31 @@ public enum Scope: String, ScopeProtocol, Equatable {
     /// This scope will return an ID_token from the Token endpoint. Future updates may include
     /// additional data claims in the ID_token.  Note: even the access token is a JWT.
     case openid
-    /// Service providers that wish to have a combination of all the profile attributes (email,
-    /// address, phone, postal_code) can request the single profile Scope. Additional data
-    /// attributes when they are ready will also appear under the profile (photo, birthdate, location).
-    case profile
+
+    /// The user's name
+    ///
+    /// This is a data scope. It will enable a Service Provider to access data from the userinfo
+    /// (or other endpoints). See the user info documentation to see example data exposed with each
+    /// scope.
+    case name
+    /// The user's birthdate
+    ///
+    /// This is a data scope. It will enable a Service Provider to access data from the userinfo
+    /// (or other endpoints). See the user info documentation to see example data exposed with each
+    /// scope.
+    case birthdate
+    /// If the user is 18 years or older when known
+    ///
+    /// This is a data scope. It will enable a Service Provider to access data from the userinfo
+    /// (or other endpoints). See the user info documentation to see example data exposed with each
+    /// scope.
+    case isAdult = "is_adult"
+    /// A url for a profile piucture.
+    ///
+    /// This is a data scope. It will enable a Service Provider to access data from the userinfo
+    /// (or other endpoints). See the user info documentation to see example data exposed with each
+    /// scope.
+    case picture
     /// User email
     case email
     /// User address
@@ -47,8 +68,6 @@ public enum Scope: String, ScopeProtocol, Equatable {
     //// An service provider may ask to verify users data. After securing the consent the RP may
     /// submit attributes to the IDV engine to receive a match response
     case match
-    /// TODO: docs
-    case callVerification = "Call_verification" // TODO: is this case correct?
     /// Indicates an authorization flow request
     /// When the authorize scope is present the user will be stopped to confirm the transaction
     /// (even if the scopes have been approved before)
