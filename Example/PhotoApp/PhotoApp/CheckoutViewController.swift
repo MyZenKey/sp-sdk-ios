@@ -143,7 +143,7 @@ class CheckoutViewController: UIViewController {
     
     @IBAction func onUseVerifyKeyAddressTapped(_ sender: Any) {
         // Request an authorization code from Project Verify:
-        let scopes: [Scope] = [.openid, .profile, .email]
+        let scopes: [Scope] = [.authorize, .openid, .name, .email, .address, .postalCode]
         authService.authorize(
             scopes: scopes,
             fromViewController: self) { result in
@@ -212,30 +212,13 @@ class CheckoutViewController: UIViewController {
         }
         if let zip = json["postal_code"].toString {
             zipField.text = String(zip.prefix(5))
-            var dummyAddress = ""
-            let googleapiURL = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?address=\(zip.prefix(5))&sensor=false&key=laksdfjkjahsdfjhqfjw")
-            URLSession.shared.dataTask(with:googleapiURL!, completionHandler: {(data, response, error) in
-                guard let data = data, error == nil else {return}
-                
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                        let blogs = json["results"] as? [[String: Any]] {
-                        for iteration in blogs {
-                            
-                            if let address = (iteration["formatted_address"]) as? String {
-                                print("The address extracted from ZIP code is \(address)")
-                                dummyAddress = address.replacingOccurrences(of: " \(zip.prefix(5))", with: "")
-                            
-                                DispatchQueue.main.async {
-                                    self.cityField.text = dummyAddress
-                                }
-                            }
-                        }
-                    }
-                } catch let error as NSError {
-                    print("Error deserializing JSON: \(error)")
-                }
-            }).resume()
+        }
+        if let addressInfo = json["address"].toDict {
+            let locality = addressInfo["locality"]
+            let region = addressInfo["region"]
+            cityField.text = [locality, region]
+                .compactMap({ $0?.toString })
+                .joined(separator: ", ")
         }
     }
     

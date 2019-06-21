@@ -119,7 +119,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     lazy var verifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
-        let scopes: [Scope] = [.register, .openid, .name, .email, .phone]
+        let scopes: [Scope] = [.authorize, .openid, .name, .email, .phone, .postalCode]
         button.scopes = scopes
         button.delegate = self
         button.translatesAutoresizingMaskIntoConstraints = false
