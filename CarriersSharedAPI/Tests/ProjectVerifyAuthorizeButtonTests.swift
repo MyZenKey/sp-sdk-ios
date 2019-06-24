@@ -70,6 +70,8 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
             completion(self.mockResult)
         }
     }
+
+    func cancel() { }
 }
 
 class MockAuthorizationButtonDelegate: ProjectVerifyAuthorizeButtonDelegate {

@@ -24,12 +24,21 @@ class MockMobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol {
     var lastPromptFlag: Bool?
     var lastCompletion: MobileNetworkSelectionCompletion?
 
+    var holdCompletionUntilURL: Bool = false
+    var lastURL: URL?
+
+    var didCallRequestUserNetworkHook: (() -> Void)?
+
     func clear() {
         lastResource = nil
         lastViewController = nil
         lastPromptFlag = nil
         lastCompletion = nil
         requestNetworkSelectionCallCount = 0
+
+        lastURL = nil
+        holdCompletionUntilURL = false
+        didCallRequestUserNetworkHook = nil
     }
 
     func requestUserNetworkSelection(
@@ -44,10 +53,25 @@ class MockMobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol {
         self.lastPromptFlag = prompt
         self.lastCompletion = completion
 
-        DispatchQueue.main.async {
-            completion(self.mockResponse)
+        if !holdCompletionUntilURL {
+            DispatchQueue.main.async {
+                completion(self.mockResponse)
+            }
+        }
+        didCallRequestUserNetworkHook?()
+    }
+
+    func resolve(url: URL) -> Bool {
+        lastURL = url
+        if lastCompletion != nil {
+            complete()
+            return true
+        } else {
+            return false
         }
     }
 
-    func resolve(url: URL) -> Bool { return true }
+    private func complete() {
+        lastCompletion?(mockResponse)
+    }
 }

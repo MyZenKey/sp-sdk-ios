@@ -33,7 +33,7 @@ public enum AuthorizationResult {
 public typealias AuthorizationCompletion = (AuthorizationResult) -> Void
 
 /// The AuthorizationService interface.
-public protocol AuthorizationServiceProtocol {
+public protocol AuthorizationServiceProtocol: AnyObject {
     // swiftlint:disable function_parameter_count
 
     /// Requests authorization for the specified scopes from Project Verify.
@@ -69,6 +69,11 @@ public protocol AuthorizationServiceProtocol {
     ///   - completion: an escaping block executed asynchronously, on the main thread. This
     ///    block will take one parameter, a result, see `AuthorizationResult` for more information.
     ///
+    /// Your application should only ever make one authorization request at a time. To enusre a
+    /// consistent user experience you should wait for the request to conclude or cancel any pending
+    /// requests before starting another.
+    /// You should only call this method from the main thread.
+    ///
     /// - SeeAlso: ScopeProtocol
     /// - SeeAlso: Scopes
     /// - SeeAlso: AuthorizationResult
@@ -81,6 +86,11 @@ public protocol AuthorizationServiceProtocol {
                    prompt: PromptValue?,
                    nonce: String?,
                    completion: @escaping AuthorizationCompletion)
+
+    /// Cancels the current authorization request, if any.
+    ///
+    /// You should only call this method from the main thread.
+    func cancel()
 
     // swiftlint:enable function_parameter_count
 }
@@ -114,12 +124,12 @@ public extension AuthorizationServiceProtocol {
 /// An appropriate factory is registerd per-platform to vend the correct authorization service
 /// when creating new instances.
 protocol AuthorizationServiceFactory {
-    func createAuthorizationService() -> AuthorizationServiceProtocol
+    func createAuthorizationService() -> AuthorizationServiceProtocol & URLHandling
 }
 
 /// This service provides an interface for authorizing an application with Project Verify.
 public class AuthorizationService {
-    let backingService: AuthorizationServiceProtocol
+    let backingService: AuthorizationServiceProtocol & URLHandling
 
     public init() {
         let container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies
@@ -140,6 +150,13 @@ extension AuthorizationService: AuthorizationServiceProtocol {
         prompt: PromptValue?,
         nonce: String?,
         completion: @escaping AuthorizationCompletion) {
+
+        if let previousRequest = AuthorizationServiceCurrentRequestStorage.shared.currentRequestingService {
+            // if there is a previous request in flight, cancel it. There should only ever be one.
+            previousRequest.cancel()
+        }
+
+        AuthorizationServiceCurrentRequestStorage.shared.currentRequestingService = backingService
         backingService.authorize(
             scopes: scopes,
             fromViewController: viewController,
@@ -151,5 +168,9 @@ extension AuthorizationService: AuthorizationServiceProtocol {
             nonce: nonce,
             completion: completion
         )
+    }
+
+    public func cancel() {
+        backingService.cancel()
     }
 }

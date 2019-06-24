@@ -9,7 +9,7 @@
 import Foundation
 
 class AuthorizationServiceIOSFactory: AuthorizationServiceFactory {
-    func createAuthorizationService() -> AuthorizationServiceProtocol {
+    func createAuthorizationService() -> AuthorizationServiceProtocol & URLHandling {
         let container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies
         return AuthorizationServiceIOS(
             sdkConfig: container.resolve(),
@@ -70,7 +70,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
 
         let parameters = OpenIdAuthorizationParameters(
             clientId: sdkConfig.clientId,
-            redirectURL: sdkConfig.redirectURL(forRoute: .authorize),
+            redirectURL: sdkConfig.redirectURL,
             formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
             state: state ?? RandomStringGenerator.generateStateSuitableString(),
             nonce: nonce,
@@ -97,7 +97,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
         next(forRequest: request)
     }
 
-    func cancel() {
+    public func cancel() {
         precondition(Thread.isMainThread, "You should only call `cancel` from the main thread.")
         guard case .requesting(let request) = state else {
             return
@@ -108,8 +108,26 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
     }
 }
 
-private extension AuthorizationServiceIOS {
+extension AuthorizationServiceIOS: URLHandling {
+    func resolve(url: URL) -> Bool {
+        guard case .requesting(let request) = state else {
+            return false
+        }
 
+        switch request.state {
+        case .authorization:
+            return openIdService.resolve(url: url)
+
+        case .mobileNetworkSelection:
+            return mobileNetworkSelectionService.resolve(url: url)
+
+        default:
+            return false
+        }
+    }
+}
+
+private extension AuthorizationServiceIOS {
     /// This function wraps step transitions and ensures that the request should continue before
     /// advancing to the next step.
     func next(forRequest request: AuthorizationRequest) {
@@ -147,7 +165,7 @@ private extension AuthorizationServiceIOS {
     }
 }
 
-extension AuthorizationServiceIOS {
+private extension AuthorizationServiceIOS {
     func performDiscovery(withSIMInfo simInfo: SIMInfo?) {
         guard case .requesting(let request) = state else {
             return

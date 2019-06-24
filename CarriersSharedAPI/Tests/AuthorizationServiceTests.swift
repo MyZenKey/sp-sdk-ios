@@ -144,7 +144,7 @@ extension AuthorizationServiceTests {
 
         let expected = OpenIdAuthorizationParameters(
             clientId: mockSDKConfig.clientId,
-            redirectURL: mockSDKConfig.redirectURL(forRoute: .authorize),
+            redirectURL: mockSDKConfig.redirectURL,
             formattedScopes: "address email openid",
             state: "foo",
             nonce: "bar",
@@ -225,6 +225,60 @@ extension AuthorizationServiceTests {
                 }
                 expectation.fulfill()
         }
+        wait(for: [expectation], timeout: timeout)
+    }
+}
+
+// MARK: - URL Hanlding
+
+extension AuthorizationServiceTests {
+    func testDoesntHandleURLsByDefault() {
+        let url = URL.mocked
+        let result = authorizationService.resolve(url: url)
+        XCTAssertNil(mockNetworkSelectionService.lastURL)
+        XCTAssertNil(mockOpenIdService.lastURL)
+        XCTAssertFalse(result)
+    }
+
+    func testURLConcludesMobileNetworkSelectionStep() {
+        let url = URL.mocked
+        mockNetworkSelectionService.holdCompletionUntilURL = true
+        let expectation = XCTestExpectation(description: "async authorization")
+        authorizationService.authorize(
+            scopes: self.scopes,
+            fromViewController: UIViewController()) { _ in
+                expectation.fulfill()
+        }
+
+        mockNetworkSelectionService.didCallRequestUserNetworkHook = {
+            let result = self.authorizationService.resolve(url: url)
+            XCTAssertNotNil(self.mockNetworkSelectionService.lastURL)
+            XCTAssertNil(self.mockOpenIdService.lastURL)
+            XCTAssertTrue(result)
+        }
+
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    func testURLDoesntConcludesAuthorizationStep() {
+        let url = URL.mocked
+        mockOpenIdService.holdCompletionUntilURL = true
+
+        let expectation = XCTestExpectation(description: "async authorization")
+        authorizationService.authorize(
+            scopes: self.scopes,
+            fromViewController: UIViewController()) { _ in
+                expectation.fulfill()
+        }
+
+        mockOpenIdService.didCallAuthorizeHook = {
+            let result = self.authorizationService.resolve(url: url)
+            XCTAssertNil(self.mockNetworkSelectionService.lastURL)
+            XCTAssertNotNil(self.mockOpenIdService.lastURL)
+            XCTAssertTrue(result)
+
+        }
+
         wait(for: [expectation], timeout: timeout)
     }
 }
