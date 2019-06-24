@@ -15,22 +15,28 @@ public enum BundleLoadingErrors: Error, Equatable {
 
 struct SDKConfig: Equatable {
 
-    private static let defaultHost = "com.xci.provider.sdk"
+    enum Default: String {
+        case host = "com.xci.provider.sdk"
+        case path = ""
+    }
 
     public private(set) var isLoaded: Bool = false
     public private(set) var clientId: String!
     private(set) var redirectScheme: String!
     private(set) var redirectHost: String!
+    private(set) var redirectPath: String!
 
     init() {}
 
     init(clientId: String,
          redirectScheme: String,
-         redirectHost: String = SDKConfig.defaultHost) {
+         redirectHost: String = Default.host.rawValue,
+         redirectPath: String = Default.path.rawValue) {
         self.clientId = clientId
         self.isLoaded = true
         self.redirectScheme = redirectScheme
         self.redirectHost = redirectHost
+        self.redirectPath = redirectPath
     }
 
     static func load(fromBundle bundle: ProjectVerifyBundleProtocol) throws -> SDKConfig {
@@ -49,7 +55,14 @@ struct SDKConfig: Equatable {
         if let customURLHost = bundle.customURLHost {
             redirectHost = customURLHost
         } else {
-            redirectHost = SDKConfig.defaultHost
+            redirectHost = Default.host.rawValue
+        }
+
+        let redirectPath: String
+        if let customURLPath = bundle.customURLPath {
+            redirectPath = customURLPath
+        } else {
+            redirectPath = Default.path.rawValue
         }
 
         guard bundle.urlSchemes.contains(redirectScheme) ||
@@ -61,14 +74,15 @@ struct SDKConfig: Equatable {
         return SDKConfig(
             clientId: clientId,
             redirectScheme: redirectScheme,
-            redirectHost: redirectHost
+            redirectHost: redirectHost,
+            redirectPath: redirectPath
         )
     }
 }
 
 extension SDKConfig {
-    func redirectURL(forRoute route: Route) -> URL {
-        return URL(string: "\(redirectScheme!)://\(redirectHost!)\(route.rawValue)")!
+    var redirectURL: URL {
+        return URL(string: "\(redirectScheme!)://\(redirectHost!)\(redirectPath!)")!
     }
 }
 
@@ -77,12 +91,14 @@ protocol ProjectVerifyBundleProtocol {
     var urlSchemes: [String] { get }
     var customURLScheme: String? { get }
     var customURLHost: String? { get }
+    var customURLPath: String? { get }
 }
 
 private enum PlistKeys: String {
     case clientId = "ProjectVerifyClientId"
     case customScheme = "ProjectVerifyCustomScheme"
     case customHost = "ProjectVerifyCustomHost"
+    case customPath = "ProjectVerifyCustomPath"
     case bundleURLTypes = "CFBundleURLTypes"
 }
 
@@ -97,6 +113,10 @@ extension Bundle: ProjectVerifyBundleProtocol {
 
     var customURLHost: String? {
         return object(forInfoDictionaryKey: PlistKeys.customHost.rawValue) as? String
+    }
+
+    var customURLPath: String? {
+        return object(forInfoDictionaryKey: PlistKeys.customPath.rawValue) as? String
     }
 
     var urlSchemes: [String] {

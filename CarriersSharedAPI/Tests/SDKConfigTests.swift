@@ -14,6 +14,7 @@ class MockBundle: ProjectVerifyBundleProtocol {
     var urlSchemes: [String] = []
     var customURLScheme: String?
     var customURLHost: String?
+    var customURLPath: String?
 
     func clear() {
         clientId = nil
@@ -57,7 +58,29 @@ class SDKConfigTests: XCTestCase {
         }
     }
 
-    func testRedirectSchemeIsCustomSchemeIfProvided() {
+    func testRedirectURLUsesDefaultHost() {
+        mockBundle.clientId = "foo"
+        mockBundle.customURLScheme = "https"
+        do {
+            let config = try SDKConfig.load(fromBundle: mockBundle)
+            XCTAssertEqual(config.redirectHost, SDKConfig.Default.host.rawValue)
+        } catch {
+            XCTFail("expected not to throw")
+        }
+    }
+
+    func testRedirectURLUsesDefaultPath() {
+        mockBundle.clientId = "foo"
+        mockBundle.customURLScheme = "https"
+        do {
+            let config = try SDKConfig.load(fromBundle: mockBundle)
+            XCTAssertEqual(config.redirectPath, SDKConfig.Default.path.rawValue)
+        } catch {
+            XCTFail("expected not to throw")
+        }
+    }
+
+    func testRedirectSchemeIsCustomIfProvided() {
         let customScheme = "https"
         mockBundle.clientId = "foo"
         mockBundle.customURLScheme = customScheme
@@ -70,7 +93,7 @@ class SDKConfigTests: XCTestCase {
         }
     }
 
-    func testHostIsCustomHostIfProvided() {
+    func testHostIsCustomIfProvided() {
         let customHost = "customhost"
         mockBundle.clientId = "foo"
         mockBundle.customURLScheme = "https"
@@ -83,6 +106,20 @@ class SDKConfigTests: XCTestCase {
         }
     }
 
+    func testPathIsCustomIfProvided() {
+        let customPath = "/my/custom/path"
+        mockBundle.clientId = "foo"
+        mockBundle.customURLScheme = "https"
+        mockBundle.customURLPath = customPath
+
+        do {
+            let config = try SDKConfig.load(fromBundle: mockBundle)
+            XCTAssertEqual(config.redirectPath, customPath)
+        } catch {
+            XCTFail("expected not to throw")
+        }
+    }
+
     func testURLBuilderUsesRedirectScheme() {
         let customScheme = "https"
         mockBundle.clientId = "foo"
@@ -90,7 +127,7 @@ class SDKConfigTests: XCTestCase {
         mockBundle.customURLScheme = customScheme
         do {
             let config = try SDKConfig.load(fromBundle: mockBundle)
-            let url = config.redirectURL(forRoute: .authorize)
+            let url = config.redirectURL
             XCTAssertEqual(url.scheme, mockBundle.customURLScheme)
         } catch {
             XCTFail("expected not to throw")
@@ -104,38 +141,22 @@ class SDKConfigTests: XCTestCase {
         mockBundle.customURLHost = customHost
         do {
             let config = try SDKConfig.load(fromBundle: mockBundle)
-            let url = config.redirectURL(forRoute: .authorize)
+            let url = config.redirectURL
             XCTAssertEqual(url.host, mockBundle.customURLHost)
         } catch {
             XCTFail("expected not to throw")
         }
     }
 
-    func testCodeRedirectURLFormatsCorrectly() {
-        let clientId = "foo"
-        mockBundle.clientId = clientId
-        mockBundle.urlSchemes = ["bar", "biz", clientId, "bah"]
+    func testURLBuilderUsesRedirectPath() {
+        let customPath = "/my/custom/path"
+        mockBundle.clientId = "foo"
+        mockBundle.customURLScheme = "https"
+        mockBundle.customURLPath = customPath
         do {
             let config = try SDKConfig.load(fromBundle: mockBundle)
-            XCTAssertEqual(
-                config.redirectURL(forRoute: .authorize),
-                URL(string: "foo://com.xci.provider.sdk/projectverify/authorize")!
-            )
-        } catch {
-            XCTFail("expected not to throw")
-        }
-    }
-
-    func testDiscoveryRedirectURLFormatsCorrectly() {
-        let clientId = "foo"
-        mockBundle.clientId = clientId
-        mockBundle.urlSchemes = ["bar", "biz", clientId, "bah"]
-        do {
-            let config = try SDKConfig.load(fromBundle: mockBundle)
-            XCTAssertEqual(
-                config.redirectURL(forRoute: .discoveryUI),
-                URL(string: "foo://com.xci.provider.sdk/projectverify/discoveryui")!
-            )
+            let url = config.redirectURL
+            XCTAssertEqual(url.path, mockBundle.customURLPath)
         } catch {
             XCTFail("expected not to throw")
         }

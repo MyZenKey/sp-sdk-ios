@@ -118,7 +118,7 @@ private extension DiscoveryService {
         }
 
         // last resort – go over the network again:
-        performDiscovery(forSIMInfo: simInfo, prompt: prompt, completion: completion)
+        performDiscovery(for: simInfo, prompt: prompt, completion: completion)
     }
 
     func recoverFromCache(simInfo: SIMInfo,
@@ -127,7 +127,7 @@ private extension DiscoveryService {
                                          allowStaleRecords: allowStaleRecords)
     }
 
-    func performDiscovery(forSIMInfo simInfo: SIMInfo?,
+    func performDiscovery(for simInfo: SIMInfo?,
                           prompt: Bool = false,
                           completion: @escaping DiscoveryServiceCompletion) {
 

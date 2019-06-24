@@ -36,8 +36,6 @@ class Dependencies {
             configCacheService: configCacheService
         )
 
-        let router = Router()
-
         #if os(iOS)
             let carrierInfoService = CarrierInfoService(
                 mobileNetworkInfoProvder: CTTelephonyNetworkInfo()
@@ -67,7 +65,6 @@ class Dependencies {
                 discoveryService,
                 mobileNetworkSelectionService,
                 openIdService,
-                router,
                 authorizationServiceFactoryIOS,
                 brandingProvider,
             ]
@@ -98,7 +95,6 @@ class Dependencies {
             hostConfig,
             configCacheService,
             discoveryService,
-            router,
 //            mobileNetworkSelectionService,
 //            openIdService,
 //            iosAuthorizationServiceFactory,

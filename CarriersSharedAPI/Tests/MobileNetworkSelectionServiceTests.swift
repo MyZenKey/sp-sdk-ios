@@ -91,7 +91,7 @@ class MobileNetworkSelectionServiceTests: XCTestCase {
         AssertHasQueryItemPair(
             url: lastURL,
             key: "redirect_uri",
-            value: "mockClientId://com.xci.provider.sdk/projectverify/discoveryui"
+            value: "mockClientId://com.xci.provider.sdk"
         )
         AssertDoesntContainQueryItem(url: lastURL, key: "prompt")
     }
