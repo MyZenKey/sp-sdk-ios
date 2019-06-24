@@ -94,7 +94,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
         self.state = .requesting(request)
 
         request.mainQueueUpdate(state: .discovery(carrierInfoService.primarySIM))
-        next(forRequest: request)
+        next(for: request)
     }
 
     public func cancel() {
@@ -104,7 +104,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
         }
 
         request.mainQueueUpdate(state: .concluding(.cancelled))
-        next(forRequest: request)
+        next(for: request)
     }
 }
 
@@ -130,7 +130,7 @@ extension AuthorizationServiceIOS: URLHandling {
 private extension AuthorizationServiceIOS {
     /// This function wraps step transitions and ensures that the request should continue before
     /// advancing to the next step.
-    func next(forRequest request: AuthorizationRequest) {
+    func next(for request: AuthorizationRequest) {
 
         precondition(Thread.isMainThread)
 
@@ -147,7 +147,7 @@ private extension AuthorizationServiceIOS {
             break
 
         case .discovery(let simInfo):
-            performDiscovery(withSIMInfo: simInfo)
+            performDiscovery(with: simInfo)
 
         case .mobileNetworkSelection(let resource):
             showDiscoveryUI(usingResource: resource)
@@ -156,7 +156,7 @@ private extension AuthorizationServiceIOS {
             showAuthorizationUI(usingConfig: discoveredConfig)
 
         case .missingUserRecovery:
-            performDiscovery(withSIMInfo: nil)
+            performDiscovery(with: nil)
 
         case .concluding:
             request.update(state: .finished)
@@ -166,7 +166,7 @@ private extension AuthorizationServiceIOS {
 }
 
 private extension AuthorizationServiceIOS {
-    func performDiscovery(withSIMInfo simInfo: SIMInfo?) {
+    func performDiscovery(with simInfo: SIMInfo?) {
         guard case .requesting(let request) = state else {
             return
         }
@@ -175,7 +175,7 @@ private extension AuthorizationServiceIOS {
             forSIMInfo: simInfo,
             prompt: request.passPrompt) { [weak self] result in
 
-            defer { self?.next(forRequest: request) }
+            defer { self?.next(for: request) }
 
             switch result {
             case .knownMobileNetwork(let config):
@@ -203,7 +203,7 @@ private extension AuthorizationServiceIOS {
             carrierConfig: config,
             authorizationParameters: request.authorizationParameters) { [weak self] result in
 
-                defer { self?.next(forRequest: request) }
+                defer { self?.next(for: request) }
 
                 guard let `self` = self else {
                     return
@@ -236,7 +236,7 @@ private extension AuthorizationServiceIOS {
             prompt: request.passPrompt
         ) { [weak self] result in
 
-            defer { self?.next(forRequest: request) }
+            defer { self?.next(for: request) }
 
             switch result {
             case .networkInfo(let response):
