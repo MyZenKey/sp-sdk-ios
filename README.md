@@ -10,11 +10,11 @@ Project Verify is a joint undertaking of the Mobile Authentication Taskforce. Th
 
 ### OpenID Connect
 
-OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0  specification. It uses JSON Web Tokens (JWTs) that are obtained using OAuth 2.0 flows. You can read more about OIDC [here](https://openid.net/specs/openid-connect-core-1_0.html).
+OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0 specification. It uses JSON Web Tokens (JWTs) that are obtained using OAuth 2.0 flows. You can read more about OIDC [here](https://openid.net/specs/openid-connect-core-1_0.html).
 
 Project Verify SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to Mobile Network Operator (MNO) for authorization. Upon successful authorization, the user is redirected to your backend with an authorization code, which your backend exchanges for an ID token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
 
-Because each carrier operates its own authorization servers, we determine the user's MNO prior to authentication. This process is called MNO Discovery (MNO Discovery is an OIDC discovery with extra parameters). MNO Discovery returns the OIDC of the user's MNO. This ensures that the discovery document from Project Verify is for the correct MNO. 
+Because each carrier operates its own authorization servers, we determine the user's MNO prior to authentication. This process is called MNO Discovery (MNO Discovery is an OIDC discovery with extra parameters). MNO Discovery returns the OIDC info of the user's MNO. This ensures that the discovery document from Project Verify is for the correct MNO. 
 
 ## Getting Started
 
@@ -22,7 +22,7 @@ Before you integrate with Project Verify, you need to register an application an
 
 ### Open ID Connect Client
 
-This SDK relies on *AppAuth* as an Open Id Connect client.
+This SDK relies on *AppAuth* as an OIDC client.
 For more information about AppAuth, see the repository [here](https://github.com/openid/AppAuth-iOS).
 
 ### Pre-Release Git Access
@@ -37,15 +37,15 @@ git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 
 Service providers decide how much client information they obtain from the user. In your setup, you can choose to have an experience with or without requiring a PIN or a biometric.
 
-Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented by the OpenID Connect protocol and can be set to request profile information (email address, name, phone ...) to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
+Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented via OIDC and can be set to request profile information (email address, name, phone ...) to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
 
 ## Add Project Verify SDK 
 
-During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify (and its dependency `AppAuth`) in your project: as a submodule of CocoaPods or manually. Additionally, Carthage may be supported in the future. 
+During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify (and its dependency `AppAuth`) in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future. 
 
 ### CocoaPods
 
-You can include the ProjectVerifyLogin SDK in your project as a development Cocoapod. After you place the source code in your repository, add the following to your Podfile.
+You can include the ProjectVerifyLogin SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following to your Podfile.
 
 ```ruby
   pod 'CarriersSharedAPI', path: '{your-relative-path}/CarriersSharedAPI.podspec'
