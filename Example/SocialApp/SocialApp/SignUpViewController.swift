@@ -119,7 +119,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     
     lazy var verifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
-        let scopes: [Scope] = [.openid, .profile]
+        let scopes: [Scope] = [.authorize, .openid, .name, .email, .phone, .postalCode]
         button.scopes = scopes
         button.delegate = self
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -233,7 +233,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
         contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
 
-        
         contentView.addSubview(titleLabel)
         contentView.addSubview(nameField)
         contentView.addSubview(emailField)

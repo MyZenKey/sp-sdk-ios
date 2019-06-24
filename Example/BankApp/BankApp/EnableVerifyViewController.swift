@@ -93,7 +93,7 @@ class EnableVerifyViewController: UIViewController {
     }
     
     @objc func enableVerify(_ sender: Any) {
-        let scopes: [Scope] = [.openid, .profile, .email]
+        let scopes: [Scope] = [.authenticate, .openid, .name, .email, .phone, .postalCode]
         authService.authorize(
             scopes: scopes,
             fromViewController: self) { result in
