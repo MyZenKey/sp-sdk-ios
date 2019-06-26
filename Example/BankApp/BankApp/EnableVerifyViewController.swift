@@ -23,16 +23,7 @@ class EnableVerifyViewController: UIViewController {
         logo.contentMode = .scaleAspectFit
         return logo
     }()
-    
-    let enableButton: BankAppButton = {
-        let button = BankAppButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("YES", for: .normal)
-        button.addTarget(self, action: #selector(enableVerify(_:)), for: .touchUpInside)
-        button.backgroundColor = UIColor(red: 0.36, green: 0.56, blue: 0.93, alpha: 1.0)
-        return button
-    }()
-    
+
     let cancelButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +66,16 @@ class EnableVerifyViewController: UIViewController {
         return label
     }()
 
-    let authService = AuthorizationService()
+    lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
+        let button = ProjectVerifyAuthorizeButton()
+        button.style = .dark
+        let scopes: [Scope] = [.authenticate, .openid, .name, .email, .phone, .postalCode]
+        button.scopes = scopes
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.delegate = self
+        return button
+    }()
+
     let serviceAPI = ServiceAPI()
 
     override func viewDidLoad() {
@@ -90,55 +90,6 @@ class EnableVerifyViewController: UIViewController {
 
     @objc func cancelVerify(_ sender: Any) {
         navigationController?.popToRootViewController(animated: true)
-    }
-    
-    @objc func enableVerify(_ sender: Any) {
-        let scopes: [Scope] = [.authenticate, .openid, .name, .email, .phone, .postalCode]
-        authService.authorize(
-            scopes: scopes,
-            fromViewController: self) { result in
-                // handle the result of the authorization call
-                switch result {
-                case .code(let authorizedResponse):
-                    self.authorizeUser(authorizedResponse: authorizedResponse)
-                case .error:
-                    self.launchLoginScreen()
-                case .cancelled:
-                    self.launchLoginScreen()
-                }
-        }
-    }
-
-    func authorizeUser(authorizedResponse: AuthorizedResponse) {
-        let code = authorizedResponse.code
-        UserDefaults.standard.set(code, forKey: "AuthZCode")
-        self.serviceAPI.login(
-            withAuthCode: code,
-            mcc: authorizedResponse.mcc,
-            mnc: authorizedResponse.mnc,
-            completionHandler: { json, error in
-                guard
-                    let accountToken = json?["token"],
-                    let tokenString = accountToken.toString else {
-                        print("error no token returned")
-                        return
-                }
-
-                AccountManager.login(withToken: tokenString)
-                self.launchHomeScreen()
-        })
-    }
-
-    func launchLoginScreen() {
-        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-        appDelegate.launchLoginScreen()
-    }
-
-    func launchHomeScreen() {
-        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-        appDelegate.launchHomeScreen()
     }
 
     func layoutView() {
@@ -156,9 +107,10 @@ class EnableVerifyViewController: UIViewController {
         view.addSubview(logo)
         view.addSubview(titleLabel)
         view.addSubview(descriptionLabel)
-        view.addSubview(enableButton)
+//        view.addSubview(enableButton)
         view.addSubview(cancelButton)
         view.addSubview(illustrationPurposes)
+        view.addSubview(projectVerifyButton)
         
         constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
         constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
@@ -181,16 +133,49 @@ class EnableVerifyViewController: UIViewController {
         constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
         constraints.append(cancelButton.heightAnchor.constraint(equalToConstant: 48))
         
-        constraints.append(enableButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -25))
-        constraints.append(enableButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(enableButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(enableButton.heightAnchor.constraint(equalToConstant: 48))
-        
+        constraints.append(projectVerifyButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -25))
+        constraints.append(projectVerifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(projectVerifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+
         constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
         constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
         constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
         
         NSLayoutConstraint.activate(constraints)
         
+    }
+}
+
+extension EnableVerifyViewController: ProjectVerifyAuthorizeButtonDelegate {
+
+    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) { }
+
+    func buttonDidFinish(_ button: ProjectVerifyAuthorizeButton, withResult result: AuthorizationResult) {
+        switch result {
+        case .code(let authorizedResponse):
+            authorizeUser(authorizedResponse: authorizedResponse)
+        case .error:
+            launchLoginScreen()
+        case .cancelled:
+            launchLoginScreen()
+        }
+    }
+
+    func authorizeUser(authorizedResponse: AuthorizedResponse) {
+        let code = authorizedResponse.code
+        serviceAPI.login(
+            withAuthCode: code,
+            mcc: authorizedResponse.mcc,
+            mnc: authorizedResponse.mnc,
+            completionHandler: { json, error in
+                guard
+                    let accountToken = json?["token"],
+                    let tokenString = accountToken.toString else {
+                        print("error no token returned")
+                        return
+                }
+                AccountManager.login(withToken: tokenString)
+                self.launchHomeScreen()
+        })
     }
 }

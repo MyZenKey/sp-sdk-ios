@@ -190,13 +190,11 @@ private extension AuthorizationServiceIOS {
                 request.mainQueueUpdate(state: .authorization(config))
 
             case .unknownMobileNetwork(let redirect):
-                // TODO: - Limit the number of times this flow can be executed.
                 request.mainQueueUpdate(state: .mobileNetworkSelection(redirect.redirectURI))
 
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
                 request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
-                self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
             }
         }
     }
@@ -213,10 +211,6 @@ private extension AuthorizationServiceIOS {
 
                 defer { self?.next(for: request) }
 
-                guard let `self` = self else {
-                    return
-                }
-
                 switch result {
                 case .code(let response):
                     request.mainQueueUpdate(state: .concluding(.code(response)))
@@ -225,7 +219,6 @@ private extension AuthorizationServiceIOS {
                     let authorizationError = error.asAuthorizationError
                     let nextState = AuthorizationServiceIOS.recoveryState(forError: authorizationError)
                     request.mainQueueUpdate(state: nextState)
-                    self.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
                 case .cancelled:
                     request.mainQueueUpdate(state: .concluding(.cancelled))
@@ -254,7 +247,6 @@ private extension AuthorizationServiceIOS {
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
                 request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
-                self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
             case .cancelled:
                 request.mainQueueUpdate(state: .concluding(.cancelled))
@@ -279,14 +271,5 @@ private extension AuthorizationRequest {
     func mainQueueUpdate(state: AuthorizationRequest.State) {
         precondition(Thread.isMainThread)
         self.update(state: state)
-    }
-}
-
-// FIXME: Remove this, just for qa
-private extension AuthorizationServiceIOS {
-    func showConsolation(_ text: String, on viewController: UIViewController) {
-        let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)
-        controller.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
-        viewController.present(controller, animated: true, completion: nil)
     }
 }

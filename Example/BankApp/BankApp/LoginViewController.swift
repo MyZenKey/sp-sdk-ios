@@ -174,11 +174,11 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
     func buttonDidFinish(_ button: ProjectVerifyAuthorizeButton, withResult result: AuthorizationResult) {
         switch result {
         case .code(let authorizedResponse):
-            self.authorizeUser(authorizedResponse: authorizedResponse)
+            authorizeUser(authorizedResponse: authorizedResponse)
         case .error:
-            self.launchLoginScreen()
+            launchLoginScreen()
         case .cancelled:
-            self.launchLoginScreen()
+            launchLoginScreen()
         }
     }
 
@@ -198,17 +198,5 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
                 AccountManager.login(withToken: tokenString)
                 self.launchHomeScreen()
         })
-    }
-
-    func launchHomeScreen() {
-        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-        appDelegate.launchHomeScreen()
-    }
-
-    func launchLoginScreen() {
-        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-        appDelegate.launchLoginScreen()
     }
 }

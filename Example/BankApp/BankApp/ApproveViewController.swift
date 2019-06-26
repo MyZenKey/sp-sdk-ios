@@ -94,7 +94,6 @@ class ApproveViewController: UIViewController {
             scopes: scopes,
             fromViewController: self,
             acrValues: [.aal2]) { [weak self] result in
-
                 defer {
                     self?.hideActivityIndicator()
                     self?.yesButton.isEnabled = true
@@ -123,26 +122,6 @@ class ApproveViewController: UIViewController {
             completionHandler: { _ in
                 self.showAlert(title: "Success", message: "Your transfer has succeeded")
         })
-    }
-
-    func completeFlow(withError: Error) {
-        showAlert(title: "Error", message: "An error occured")
-    }
-
-    func cancelFlow() {
-        showAlert(title: "Cancelled", message: "The transaction was cancelled")
-    }
-
-    func showAlert(title: String, message: String) {
-        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        controller.addAction(
-            UIAlertAction(title: "Okay",
-                          style: .default,
-                          handler: { [weak self] _ in
-                            self?.dismiss(animated: true, completion: nil)
-            })
-        )
-        present(controller, animated: true, completion: nil)
     }
 
     func showActivityIndicator() {
