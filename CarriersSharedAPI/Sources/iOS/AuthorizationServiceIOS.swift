@@ -1,5 +1,5 @@
 //
-//  IOSAuthorizationService.swift
+//  AuthorizationServiceIOS.swift
 //  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 5/3/19.
@@ -27,6 +27,14 @@ class AuthorizationServiceIOS {
     let openIdService: OpenIdServiceProtocol
     let carrierInfoService: CarrierInfoServiceProtocol
     let mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol
+
+    public var isAuthorizing: Bool {
+        if case .idle = state {
+            return false
+        } else {
+            return true
+        }
+    }
 
     private var state: State = .idle {
         willSet {

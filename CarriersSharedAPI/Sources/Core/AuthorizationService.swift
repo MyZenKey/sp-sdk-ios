@@ -36,6 +36,10 @@ public typealias AuthorizationCompletion = (AuthorizationResult) -> Void
 public protocol AuthorizationServiceProtocol: AnyObject {
     // swiftlint:disable function_parameter_count
 
+    /// True if the authorization service is currently performing an authorization flow, else
+    /// false.
+    var isAuthorizing: Bool { get }
+
     /// Requests authorization for the specified scopes from Project Verify.
     /// - Parameters:
     ///   - scopes: An array of scopes to be authorized for access. See the predefined
@@ -139,6 +143,10 @@ public class AuthorizationService {
 }
 
 extension AuthorizationService: AuthorizationServiceProtocol {
+    public var isAuthorizing: Bool {
+        return backingService.isAuthorizing
+    }
+
     // swiftlint:disable:next function_parameter_count
     public func authorize(
         scopes: [ScopeProtocol],

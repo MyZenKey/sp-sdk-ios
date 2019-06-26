@@ -51,9 +51,6 @@ class ApproveViewController: UIViewController {
         return button
     }()
 
-    let authService = AuthorizationService()
-    let serviceAPI = ServiceAPI()
-
     let illustrationPurposes: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -61,7 +58,17 @@ class ApproveViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
-    
+
+    let authService = AuthorizationService()
+    let serviceAPI = ServiceAPI()
+
+    let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.stopAnimating()
+        return indicator
+    }()
+
     private var notification: NSObjectProtocol?
     
     override func viewDidLoad() {
@@ -69,45 +76,30 @@ class ApproveViewController: UIViewController {
 
         layoutView()
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    @objc func cancelTransaction(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    func handleNotification() {
-        notification = NotificationCenter.default.addObserver(forName: .UIApplicationWillEnterForeground, object: nil, queue: .main) {
-            [unowned self] notification in
-            
-//            if UserDefaults.standard.bool(forKey: "initiatedTransfer") {
-//                UserDefaults.standard.set(false, forKey: "initiatedTransfer")
-//                UserDefaults.standard.synchronize()
-//                //self.performSegue(withIdentifier: "segueTransferComplete", sender: nil)
-//            }
-            // do whatever you want when the app is brought back to the foreground
-        }
-    }
-    deinit {
-        // make sure to remove the observer when this view controller is dismissed/deallocated
-        if let notification = notification {
-            NotificationCenter.default.removeObserver(notification)
-        }
-    }
-    
-    @objc func initiateTransfer(_ sender: Any) {
-        self.view.showActivityIndicator()
 
-        let scopes: [Scope] = [.openid, .secondFactor]
+    @objc func cancelTransaction(_ sender: Any) {
+        if authService.isAuthorizing {
+            authService.cancel()
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
+    }
+
+    @objc func initiateTransfer(_ sender: Any) {
+        showActivityIndicator()
+        yesButton.isEnabled = false
+
+        let scopes: [Scope] = [.openid, .authorize]
         authService.authorize(
             scopes: scopes,
             fromViewController: self,
             acrValues: [.aal2]) { [weak self] result in
 
-                self?.view.hideActivityIndicator()
+                defer {
+                    self?.hideActivityIndicator()
+                    self?.yesButton.isEnabled = true
+                }
+
                 switch result {
                 case .code(let response):
                     self?.completeFlow(withAuthChode: response.code,
@@ -153,6 +145,14 @@ class ApproveViewController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
 
+    func showActivityIndicator() {
+        activityIndicator.startAnimating()
+    }
+
+    func hideActivityIndicator() {
+        activityIndicator.stopAnimating()
+    }
+
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
@@ -170,7 +170,8 @@ class ApproveViewController: UIViewController {
         view.addSubview(yesButton)
         view.addSubview(cancelButton)
         view.addSubview(illustrationPurposes)
-        
+        view.addSubview(activityIndicator)
+
         constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
         constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
         constraints.append(gradientView.heightAnchor.constraint(equalToConstant: 70))
@@ -196,9 +197,10 @@ class ApproveViewController: UIViewController {
         constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
         constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
         constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
-        
-        NSLayoutConstraint.activate(constraints)
-        
-    }
 
+        constraints.append(activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+
+        NSLayoutConstraint.activate(constraints)
+    }
 }
