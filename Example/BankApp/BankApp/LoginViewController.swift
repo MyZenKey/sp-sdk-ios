@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import CarriersSharedAPI
 
 class LoginViewController: UIViewController {
     
@@ -67,6 +68,18 @@ class LoginViewController: UIViewController {
         return button
     }()
 
+    lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
+        let button = ProjectVerifyAuthorizeButton()
+        button.style = .light
+        let scopes: [Scope] = [.authenticate, .register, .name, .email]
+        button.scopes = scopes
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.delegate = self
+        return button
+    }()
+
+    let serviceAPI = ServiceAPI()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -79,7 +92,7 @@ class LoginViewController: UIViewController {
         
         idTextField.becomeFirstResponder()
     }
-    
+
     @objc func loginButtonTouched(_ sender: Any) {
         // TODO: see UX section 2.3.1 in design doc
         // Does SP have this ID associated with CCID (Verify)?
@@ -106,6 +119,7 @@ class LoginViewController: UIViewController {
             // Fallback on earlier versions
             safeAreaGuide = view.layoutMarginsGuide
         }
+
         view.addSubview(gradientBackground)
         view.addSubview(logo)
         view.addSubview(idTextField)
@@ -113,6 +127,7 @@ class LoginViewController: UIViewController {
         view.addSubview(signInButton)
         view.addSubview(forgotButton)
         view.addSubview(registerButton)
+        view.addSubview(projectVerifyButton)
         
         gradientBackground.frame = view.frame
         
@@ -143,9 +158,57 @@ class LoginViewController: UIViewController {
         constraints.append(registerButton.leadingAnchor.constraint(equalTo: forgotButton.trailingAnchor, constant: 10))
         constraints.append(registerButton.trailingAnchor.constraint(equalTo: signInButton.trailingAnchor, constant: 0))
         constraints.append(registerButton.heightAnchor.constraint(equalToConstant: 39))
-        
+
+        constraints.append(projectVerifyButton.topAnchor.constraint(equalTo: forgotButton.bottomAnchor, constant: 20.0))
+        constraints.append(projectVerifyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(projectVerifyButton.widthAnchor.constraint(equalTo: signInButton.widthAnchor))
+
         NSLayoutConstraint.activate(constraints)
-        
+    }
+}
+
+extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
+
+    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) { }
+
+    func buttonDidFinish(_ button: ProjectVerifyAuthorizeButton, withResult result: AuthorizationResult) {
+        switch result {
+        case .code(let authorizedResponse):
+            self.authorizeUser(authorizedResponse: authorizedResponse)
+        case .error:
+            self.launchLoginScreen()
+        case .cancelled:
+            self.launchLoginScreen()
+        }
     }
 
+    func authorizeUser(authorizedResponse: AuthorizedResponse) {
+        let code = authorizedResponse.code
+        serviceAPI.login(
+            withAuthCode: code,
+            mcc: authorizedResponse.mcc,
+            mnc: authorizedResponse.mnc,
+            completionHandler: { json, error in
+                guard
+                    let accountToken = json?["token"],
+                    let tokenString = accountToken.toString else {
+                        print("error no token returned")
+                        return
+                }
+                AccountManager.login(withToken: tokenString)
+                self.launchHomeScreen()
+        })
+    }
+
+    func launchHomeScreen() {
+        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
+        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+        appDelegate.launchHomeScreen()
+    }
+
+    func launchLoginScreen() {
+        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
+        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
+        appDelegate.launchLoginScreen()
+    }
 }
