@@ -24,6 +24,7 @@ class ApproveViewController: UIViewController {
         return logo
     }()
     
+    
     let promptLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
