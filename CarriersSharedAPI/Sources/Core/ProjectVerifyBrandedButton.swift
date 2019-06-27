@@ -148,7 +148,10 @@ public class ProjectVerifyBrandedButton: UIButton {
     }
 
     public override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
-        // TODO: - this could probably be a bit smarter:
+        guard !contentRect.isEmpty else {
+            return .zero
+        }
+        // #NTH: - potentially add title scaling behavior to support smaller buttons:
         let titleRect = super.titleRect(forContentRect: contentRect)
         let offset: CGFloat = spaceTitleAndImageRects ? 8 : 0
         return titleRect.offsetBy(dx: offset, dy: 0)
@@ -199,6 +202,11 @@ public class ProjectVerifyBrandedButton: UIButton {
 }
 
 public extension ProjectVerifyBrandedButton {
+    /// Prefer this method for updating the text of the BrandedButton. This method implemnts an
+    /// expected, branded behavior for multiple control states by applying the branded attributes
+    /// to the provided string.
+    ///
+    /// - Parameter text: The text for the button's title label.
     func updateBrandedText(_ text: String) {
         setAttributedTitle(
             attributedTitle(

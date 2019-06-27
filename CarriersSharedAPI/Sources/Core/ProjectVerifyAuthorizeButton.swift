@@ -30,6 +30,13 @@ public protocol ProjectVerifyAuthorizeButtonDelegate: AnyObject {
 /// via a delegeate.
 public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 
+    /// A boolean indicating whether the backing autorization service is currently making a request
+    ///
+    /// - SeeAlso: `AuthorizationService`
+    public var isAuthorizing: Bool {
+        return authorizationService.isAuthorizing
+    }
+
     /// The scopes the button will request when pressed. Assign this property before the button
     /// issues its request.
     ///
@@ -111,6 +118,11 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
         self.controllerContextProvider = DefaultCurrentControllerContextProvider()
         super.init(coder: aDecoder)
         configureSelectors()
+    }
+
+    /// Cancels the current authorization request, if any.
+    public func cancel() {
+        authorizationService.cancel()
     }
 
     @objc func handlePress(sender: Any) {
