@@ -35,7 +35,12 @@ public class ProjectVerifyBrandedButton: UIButton {
     var branding: Branding = .default {
         didSet {
             updateBranding()
+            invalidateIntrinsicContentSize()
         }
+    }
+
+    override public var intrinsicContentSize: CGSize {
+        return sizeThatFits(.zero)
     }
 
     // NOTE: dependencies are resolved automatically for all of the button initalizers.
@@ -79,16 +84,145 @@ public class ProjectVerifyBrandedButton: UIButton {
         configureButton()
     }
 
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        updateInsets()
+    private var spaceTitleAndImageRects: Bool {
+        if attributedTitle(for: state) != nil && branding.icon != nil {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    private func trueContentSize() -> CGSize {
+        let greatestSize = CGSize(width: CGFloat.greatestFiniteMagnitude,
+                                  height: CGFloat.greatestFiniteMagnitude)
+        let titleSize: CGSize = attributedTitle(for: state)?
+            .boundingRect(
+                with: greatestSize,
+                options: [.usesFontLeading, .usesLineFragmentOrigin],
+                context: nil
+            ).size ?? .zero
+
+        let iconSize = branding.icon?.size ?? .zero
+
+        let contentWidth =
+            iconSize.width +
+            titleSize.width +
+            CGFloat(spaceTitleAndImageRects ? Constants.interitemSpacing : 0.0)
+
+        return CGSize(width: contentWidth, height: max(titleSize.height, iconSize.height))
     }
 
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         guard !isHidden else { return .zero }
+        let contentSize = trueContentSize()
+        return CGSize(
+            width: contentSize.width + (2 * Insets.horizontal),
+            height: contentSize.height + (2 * Insets.vertical)
+        )
+    }
 
-        let fittingSize = super.sizeThatFits(size)
-        return CGSize(width: max(fittingSize.width, size.width), height: Constants.height)
+    public override func contentRect(forBounds bounds: CGRect) -> CGRect {
+        guard !bounds.isEmpty else {
+            return .zero
+        }
+
+        guard
+            bounds.size.width >= 2 * Insets.Minimum.horizontal,
+            bounds.size.height >= 2 * Insets.Minimum.vertical else {
+                return .zero
+        }
+
+        let size = bounds.size
+
+        let contentSize = trueContentSize()
+        let fitMargins = CGSize(
+            width: max( (size.width - contentSize.width), 0 ),
+            height: max( size.height - contentSize.height, 0 )
+        )
+
+        return CGRect(x: fitMargins.width / 2,
+                      y: fitMargins.height / 2,
+                      width: bounds.size.width - fitMargins.width,
+                      height: bounds.size.height - fitMargins.height
+        )
+    }
+
+    public override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
+        // TODO: - this could probably be a bit smarter:
+        let titleRect = super.titleRect(forContentRect: contentRect)
+        let offset: CGFloat = spaceTitleAndImageRects ? 8 : 0
+        return titleRect.offsetBy(dx: offset, dy: 0)
+    }
+
+    public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+        let imageSize = branding.icon?.size ?? .zero
+
+        guard imageSize.width != 0, imageSize.height != 0 else {
+            return .zero
+        }
+
+        // preserve aspect ratio if scaled down
+        // constraining axis is delta with greater abs:
+        let deltaX = contentRect.size.width - imageSize.width
+        let deltaY = contentRect.size.height - imageSize.height
+
+        // use image size if it will fit
+        guard deltaX <= 0 || deltaY <= 0 else {
+            return CGRect(
+                x: contentRect.minX,
+                y: contentRect.midY - imageSize.height / 2,
+                width: imageSize.width,
+                height: imageSize.height
+            )
+        }
+
+        let aspectRatio = imageSize.width / imageSize.height
+        let width: CGFloat
+        let height: CGFloat
+        if deltaX < deltaY {
+            // constrained on width
+            width = imageSize.width + deltaX
+            height = width / aspectRatio
+        } else {
+            // constrined on height
+            height = imageSize.height + deltaY
+            width = height * aspectRatio
+        }
+
+        return CGRect(
+            x: contentRect.minX,
+            y: contentRect.midY - height / 2,
+            width: width,
+            height: height
+        )
+    }
+}
+
+public extension ProjectVerifyBrandedButton {
+    func updateBrandedText(_ text: String) {
+        setAttributedTitle(
+            attributedTitle(
+                forTitle: text,
+                withColor: appearance.normal.title
+            ),
+            for: .normal
+        )
+
+        setAttributedTitle(
+            attributedTitle(
+                forTitle: text,
+                withColor: appearance.highlighted.title
+            ),
+            for: .highlighted
+        )
+
+        setAttributedTitle(
+            attributedTitle(
+                forTitle: text,
+                withColor: appearance.highlighted.title
+            ),
+            for: .disabled
+        )
     }
 }
 
@@ -129,10 +263,6 @@ private extension ProjectVerifyBrandedButton {
 
         titleLabel?.lineBreakMode = .byTruncatingTail
 
-        contentEdgeInsets = .projectVerifyButtonContentInsets
-        titleEdgeInsets = .projectVerifyButtonTitleEdgeInsets
-        imageEdgeInsets = .projectVerifyButtonImageEdgeInsets
-
         branding = brandingProvider.branding
 
         if bounds.isEmpty {
@@ -141,32 +271,7 @@ private extension ProjectVerifyBrandedButton {
     }
 
     func updateBranding() {
-        setAttributedTitle(
-            attributedTitle(
-                forTitle: branding.primaryText,
-                withColor: appearance.normal.title
-            ),
-            for: .normal
-        )
-
-        setAttributedTitle(
-            attributedTitle(
-                forTitle: branding.primaryText,
-                withColor: appearance.highlighted.title
-            ),
-            for: .highlighted
-        )
-
-        setAttributedTitle(
-            attributedTitle(
-                forTitle: branding.primaryText,
-                withColor: appearance.highlighted.title
-            ),
-            for: .disabled
-        )
-
         setImage(branding.icon, for: .normal)
-
         updateTinting()
     }
 
@@ -192,30 +297,6 @@ private extension ProjectVerifyBrandedButton {
         let attributedString = NSAttributedString(string: title, attributes: attributes)
         return attributedString
     }
-
-    func updateInsets() {
-        let size = frame.size
-        let imageSize = branding.icon?.size ?? .zero
-        let defaultInsets: UIEdgeInsets = .projectVerifyButtonContentInsets
-
-        let horizontal = floor(
-            max(
-                Constants.minimumHorizontalContentInset, (defaultInsets.left - imageSize.width) / 2
-            )
-        )
-        let vertical = floor(
-            max(
-                Constants.minimumVerticalContentInset, (size.height - imageSize.height) / 2
-            )
-        )
-
-        contentEdgeInsets = UIEdgeInsets(
-            top: vertical,
-            left: horizontal,
-            bottom: vertical,
-            right: horizontal
-        )
-    }
 }
 
 // MARK: - Geometery exetensions
@@ -223,40 +304,15 @@ private extension ProjectVerifyBrandedButton {
 private extension ProjectVerifyBrandedButton {
     enum Constants {
         static let cornerRadius: CGFloat = 8
-
-        /// The default height of the button
-        static let height: CGFloat = 52
-
-        /// The vertical content inset assuming a height of `Constants.height`
-        static let verticalContentInset: CGFloat = 16
-        static let horizontalContentInset: CGFloat = 42
-
-        static let minimumVerticalContentInset: CGFloat = 5
-        static let minimumHorizontalContentInset: CGFloat = 15
-    }
-}
-
-private extension UIEdgeInsets {
-    static let xOffset: CGFloat = 5
-
-    static var projectVerifyButtonContentInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: 16, left: 42, bottom: 16, right: 42)
+        static let interitemSpacing: CGFloat = 8
     }
 
-    static var projectVerifyButtonTitleEdgeInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: xOffset, bottom: 0, right: -xOffset)
-    }
-
-    static var projectVerifyButtonImageEdgeInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: -xOffset, bottom: 0, right: xOffset)
-    }
-
-    func scaleProportionally(vertical: CGFloat = 1, horizontal: CGFloat = 1) -> UIEdgeInsets {
-        return UIEdgeInsets(
-            top: top * vertical,
-            left: left * horizontal,
-            bottom: bottom * vertical,
-            right: right * horizontal
-        )
+    enum Insets {
+        static let vertical: CGFloat = 16
+        static let horizontal: CGFloat = 42
+        enum Minimum {
+            static let vertical: CGFloat = 5
+            static let horizontal: CGFloat = 15
+        }
     }
 }

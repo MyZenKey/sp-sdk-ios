@@ -35,7 +35,11 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     ///
     /// - SeeAlso: ScopeProtocol
     /// - SeeAlso: Scopes
-    public var scopes: [ScopeProtocol] = []
+    public var scopes: [ScopeProtocol] = [] {
+        didSet {
+            updateButtonText()
+        }
+    }
 
     /// An array of authentication context class refernces. Service Providers may ask
     /// for more than one, and will get the first one the user has achieved. Values returned in
@@ -138,5 +142,16 @@ private extension ProjectVerifyAuthorizeButton {
 
     func handle(result: AuthorizationResult) {
         delegate?.buttonDidFinish(self, withResult: result)
+    }
+
+    func updateButtonText() {
+        let scopesSet = Set<String>(scopes.map { $0.scopeString })
+        if  scopesSet.contains(Scope.authenticate.rawValue) ||
+            scopesSet.contains(Scope.register.rawValue) {
+            updateBrandedText(Localization.Buttons.signInWithProjectVerify)
+        } else if scopesSet.contains(Scope.authorize.rawValue) ||
+                  scopesSet.contains(Scope.secondFactor.rawValue){
+            updateBrandedText(Localization.Buttons.continueWithProjectVerify)
+        }
     }
 }
