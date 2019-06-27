@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CarriersSharedAPI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,6 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window.rootViewController = navigationController
             window.makeKeyAndVisible()
         }
+
+        ProjectVerifyAppDelegate.shared
+            .application(application, didFinishLaunchingWithOptions: launchOptions)
         
         return true
     }

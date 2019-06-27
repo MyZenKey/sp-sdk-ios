@@ -43,6 +43,8 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
         lastCompletion = nil
     }
 
+    var isAuthorizing: Bool = false
+
     // swiftlint:disable:next function_parameter_count
     func authorize(
         scopes: [ScopeProtocol],
@@ -66,7 +68,10 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
         lastViewController = viewController
         lastCompletion = completion
 
+        isAuthorizing = true
+
         DispatchQueue.main.async {
+            self.isAuthorizing = false
             completion(self.mockResult)
         }
     }

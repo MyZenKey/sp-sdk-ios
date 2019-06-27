@@ -79,6 +79,11 @@ public class ProjectVerifyBrandedButton: UIButton {
         configureButton()
     }
 
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        updateInsets()
+    }
+
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         guard !isHidden else { return .zero }
 
@@ -121,6 +126,8 @@ private extension ProjectVerifyBrandedButton {
         adjustsImageWhenDisabled = false
 
         layer.cornerRadius = Constants.cornerRadius
+
+        titleLabel?.lineBreakMode = .byTruncatingTail
 
         contentEdgeInsets = .projectVerifyButtonContentInsets
         titleEdgeInsets = .projectVerifyButtonTitleEdgeInsets
@@ -185,6 +192,30 @@ private extension ProjectVerifyBrandedButton {
         let attributedString = NSAttributedString(string: title, attributes: attributes)
         return attributedString
     }
+
+    func updateInsets() {
+        let size = frame.size
+        let imageSize = branding.icon?.size ?? .zero
+        let defaultInsets: UIEdgeInsets = .projectVerifyButtonContentInsets
+
+        let horizontal = floor(
+            max(
+                Constants.minimumHorizontalContentInset, (defaultInsets.left - imageSize.width) / 2
+            )
+        )
+        let vertical = floor(
+            max(
+                Constants.minimumVerticalContentInset, (size.height - imageSize.height) / 2
+            )
+        )
+
+        contentEdgeInsets = UIEdgeInsets(
+            top: vertical,
+            left: horizontal,
+            bottom: vertical,
+            right: horizontal
+        )
+    }
 }
 
 // MARK: - Geometery exetensions
@@ -192,7 +223,16 @@ private extension ProjectVerifyBrandedButton {
 private extension ProjectVerifyBrandedButton {
     enum Constants {
         static let cornerRadius: CGFloat = 8
+
+        /// The default height of the button
         static let height: CGFloat = 52
+
+        /// The vertical content inset assuming a height of `Constants.height`
+        static let verticalContentInset: CGFloat = 16
+        static let horizontalContentInset: CGFloat = 42
+
+        static let minimumVerticalContentInset: CGFloat = 5
+        static let minimumHorizontalContentInset: CGFloat = 15
     }
 }
 
@@ -209,5 +249,14 @@ private extension UIEdgeInsets {
 
     static var projectVerifyButtonImageEdgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: -xOffset, bottom: 0, right: xOffset)
+    }
+
+    func scaleProportionally(vertical: CGFloat = 1, horizontal: CGFloat = 1) -> UIEdgeInsets {
+        return UIEdgeInsets(
+            top: top * vertical,
+            left: left * horizontal,
+            bottom: bottom * vertical,
+            right: right * horizontal
+        )
     }
 }
