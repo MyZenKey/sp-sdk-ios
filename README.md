@@ -20,7 +20,7 @@ Because each carrier operates its own authorization servers, we determine the us
 
 ### High Level Architecture
 
-The architecture is based on CCID authentication design providing user authentication backed by mobile carrier device authentication. Two main flows occur at initial launch (app and web). The app flow is for an on-device launched Service Provider (SP) native app or a SP-browser loaded website. The web flow shows secondary device support when the SP website is accessed from a device other than a user’s primary phone.
+Project Verify brings the four main US phone carriers together with a common user authentication experience backed by carrier device authentication. The solution enables two main flows at initial launch (app and web). The app flow is for  service provider (SP) native apps or a SP-browser based websites that are on the same device as Project Verify. The web flow shows secondary device support when the SP website is accessed from a device other than a user’s primary phone.
 
 As the first image shows, consumers from their primary phone access Project Verify either from the SP app or SP website. As a service provider developer, you sign up and log in thru the Project Verify portal, then write code in your backend. The architecture looks like this:
 
@@ -32,7 +32,7 @@ As the second image shows, consumers from their secondary device (such as a lapt
 
  <img src="image/high_level_flow_web_sec.png" alt="High Level Flow - Web" width="550">
 
-The user confirms their identity with their primary phone, then they can log in with their secondary device. This provides the convenience of using a device with a larger screen.
+The user receives a visual or numeric code with which to confirm their identity with their primary phone. Once they have done this  they can log in with their secondary device
 
 Consumer verification and authorization flows to MNO auth, the service provider backend, Project Verify platform and mobile carrier as follows:
 
@@ -67,9 +67,9 @@ Service providers decide how much client information they obtain from the user. 
 
 Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented by the OpenID Connect protocol and can be set to request profile information (email address, name, phone ...) to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
 
-## Add Project Verify SDK 
+## Add Project Verify SDK
 
-During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify (and its dependency `AppAuth`) in your project: as a submodule of CocoaPods or manually. Additionally, Carthage may be supported in the future. 
+During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify (and its dependency `AppAuth`) in your project: as a submodule of CocoaPods or manually. Additionally, Carthage may be supported in the future.
 
 ### CocoaPods
 
@@ -95,7 +95,7 @@ You can add the ProjectVerifyLogin SDK to your project manually. For an example 
 
 3. If you cannot access submodules, then you must separately clone `AppAuth` and set your working copy to the release tag you would like to target. This SDK currently supports version [0.95.0](https://github.com/openid/AppAuth-iOS/releases/tag/0.95.0).
 
-## Configure Project Verify SDK 
+## Configure Project Verify SDK
 
 After you add the source via submodule or manually, then configure the Project Verify SDK as follows:
 
@@ -201,7 +201,7 @@ The SDK provides a branded button called `ProjectVerifyAuthorizationButton` that
 
 ### Add Verify Button
 
-Add the Project Verify  `ProjectVerifyAuthorizationButton` to your UIView. 
+Add the Project Verify  `ProjectVerifyAuthorizationButton` to your UIView.
 
 ```swift
 import CarriersSharedAPI
@@ -215,7 +215,7 @@ class LoginViewController {
         let scopes: [Scope] = [.profile, .email]
         projectVerifyButton.scopes = scopes
         projectVerifyButton.delegate = self
-        
+
         view.addSubview(projectVerifyButton)
     }
 }
@@ -227,7 +227,7 @@ For examples of how the button works with both Interface Builder and Autolayout,
 You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the Project Verify button uses the dark style specified as follows:
 
 ```swift
-    projectVerifyButton 
+    projectVerifyButton
 ```
 The dark button style looks like this:
 
@@ -235,13 +235,13 @@ The dark button style looks like this:
 
 #### Light Button
 
-A light button style is appropriate to use with dark backgrounds. For the light style, add the light parameter specified as follows: 
+A light button style is appropriate to use with dark backgrounds. For the light style, add the light parameter specified as follows:
 
 ```swift
     projectVerifyButton.style = .light
 ```
 The light button style looks like this:
- 
+
 <img src="image/verify_button_light.png" alt="Verify Button Light" width="360">
 
 ### Receive Callbacks
@@ -281,7 +281,7 @@ There are several parameters that you may wish to configure for your authorizati
 
 #### Scopes
 
-By default, authorization requests made with the Project Verify SDK include the OpenId scope. To use additional scopes, set them on the button and they will be added to the request. 
+By default, authorization requests made with the Project Verify SDK include the OpenId scope. To use additional scopes, set them on the button and they will be added to the request.
 
 ```swift
     let scopes: [Scope] = [.profile, .email]
@@ -304,7 +304,7 @@ For more information about each of these parameters and instructions on how to u
 
 ## Request Authorization Code Manually
 
-For a more hands-on approach, you can perform a manual authorization request with `AuthorizationService`. 
+For a more hands-on approach, you can perform a manual authorization request with `AuthorizationService`.
 Pass the code and associated identifiers to your secure server to complete the token request flow.
 
 ```swift
@@ -341,12 +341,10 @@ class LoginViewController {
 * [projectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
 * [appAuth](https://github.com/openid/AppAuth-iOS)
 
-## Service Provider Server Calls 
-You can setup server calls made by the Service Provider to coordinate with Project Verify. 
 
 ## Next Steps
 
-On your secure server, you perform discovery and use the discovered token endpoint to request an access token from Project Verify with the processes already detailed: 
+On your secure server, you perform discovery and use the discovered token endpoint to request an access token from Project Verify with the processes already detailed:
 
 * Auth Code
 * MCC
@@ -354,7 +352,41 @@ On your secure server, you perform discovery and use the discovered token endpoi
 
 The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the Project Verify User Info Endpoint.
 
-The Project Verify User Info Endpoint should pass information through your server's authenticated endpoints in a way that makes sense for your application. 
+The Project Verify User Info Endpoint should pass information through your server's authenticated endpoints in a way that makes sense for your application.
+
+
+# Example Apps
+
+There are several example apps which demonstrate different pieces of project verify functionality. These flows demonstrate how to make a request for a set of scopes from Project Verify and demonstrate how that information might be transported back to your server. These flows mock and simplify the server contract, which will ultimately be up to you to implement. For guidance on how to implement Project Verify on the server, see the [Project Verify Web Integration Guidelines]().
+
+## SocialApp (iOS)
+
+This app simulates a social network. It demonstrates:
+- Signing in with Project Verify.
+- Signing up with Project Verify.
+- How to use the ProjectVerifyAuthorizeButton.
+
+A social network might leverage Project Verify to make registration and login easier for the user. The sign up / sign in flow is comprised of the social network requesting the necessary scopes from Project Verify. The social app receives an authorization code and mcc/mnc identifer from Project Verify. It passes this back to the mock social app server where the assumption would be that the token exchange is completed. Once the server has a token, it can access the user info endpoint for the information authorized in the scopes.
+
+## BankApp (iOS)
+
+This app simulates a banking app. It demonstrates:
+- How to link Project Verify to an existing user account.
+- How to use Project Verify as a second factor to authorize a transaction.
+
+A bank or financial institution might leverage Project Verify to provide a second factor for large or risky transactions. The authorization flow demonstrates how to request the second factor scope to authorize a money transfer. The bank app receives an authorization code and mcc/mnc identifer from Project Verify. It passes this back to the mock bank app server where the assumption would be that the token exchange is completed. Once the server has a token, it can proceed with the transaction with the knowledge that the user has provided the second factor authorization.
+
+## PhotoApp (iOS)
+
+This app simulates a commerce app. It demonstrates:
+- How to use Project Verify to fill out a form.
+- How to configure custom redirect URLs.
+
+An e-commerce app might leverage Project Verify to retrieve user information from a trusted source before the user has created a profile. The social app demonstrates how to authorize the required scopes to complete a form. The photo app receives an authorization code and mcc/mnc identifer from Project Verify. It passes this back to the mock photo app server where the assumption would be that the token exchange is completed. Once the server has a token, it can access the user info endpoint for the information authorized in the scopes.
+
+## Branding Guidelines (iOS)
+
+This app has some simple UI to showcase Project Verify branding guidelines. It demonstrates how to layout the branded buttons using different UI paradigms.
 
 ## Support
 
