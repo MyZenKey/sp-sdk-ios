@@ -136,8 +136,8 @@ public class ProjectVerifyBrandedButton: UIButton {
 
         let contentSize = trueContentSize()
         let fitMargins = CGSize(
-            width: max( (size.width - contentSize.width), 0 ),
-            height: max( size.height - contentSize.height, 0 )
+            width: max( size.width - contentSize.width, Insets.Minimum.horizontal * 2 ),
+            height: max( size.height - contentSize.height, Insets.Minimum.vertical * 2 )
         )
 
         return CGRect(x: fitMargins.width / 2,
@@ -281,6 +281,9 @@ private extension ProjectVerifyBrandedButton {
     func updateBranding() {
         setImage(branding.icon, for: .normal)
         updateTinting()
+        if let title = attributedTitle(for: .normal)?.string {
+            updateBrandedText(title)
+        }
     }
 
     func updateTinting() {
@@ -318,6 +321,7 @@ private extension ProjectVerifyBrandedButton {
     enum Insets {
         static let vertical: CGFloat = 16
         static let horizontal: CGFloat = 42
+        // swiftlint:disable:next nesting
         enum Minimum {
             static let vertical: CGFloat = 5
             static let horizontal: CGFloat = 15
