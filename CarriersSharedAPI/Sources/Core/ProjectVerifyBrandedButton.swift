@@ -151,10 +151,16 @@ public class ProjectVerifyBrandedButton: UIButton {
         guard !contentRect.isEmpty else {
             return .zero
         }
+
         // #NTH: - potentially add title scaling behavior to support smaller buttons:
-        let titleRect = super.titleRect(forContentRect: contentRect)
+        let imageRect = self.imageRect(forContentRect: contentRect)
         let offset: CGFloat = spaceTitleAndImageRects ? 8 : 0
-        return titleRect.offsetBy(dx: offset, dy: 0)
+        let xOrign = imageRect.maxX + offset
+        return CGRect(
+            x: xOrign,
+            y: contentRect.minY,
+            width: contentRect.size.width - xOrign + contentRect.origin.x,
+            height: contentRect.height)
     }
 
     public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
