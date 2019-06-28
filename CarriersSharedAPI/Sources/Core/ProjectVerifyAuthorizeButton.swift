@@ -30,12 +30,23 @@ public protocol ProjectVerifyAuthorizeButtonDelegate: AnyObject {
 /// via a delegeate.
 public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 
+    /// A boolean indicating whether the backing autorization service is currently making a request
+    ///
+    /// - SeeAlso: `AuthorizationService`
+    public var isAuthorizing: Bool {
+        return authorizationService.isAuthorizing
+    }
+
     /// The scopes the button will request when pressed. Assign this property before the button
     /// issues its request.
     ///
     /// - SeeAlso: ScopeProtocol
     /// - SeeAlso: Scopes
-    public var scopes: [ScopeProtocol] = []
+    public var scopes: [ScopeProtocol] = [] {
+        didSet {
+            updateButtonText()
+        }
+    }
 
     /// An array of authentication context class refernces. Service Providers may ask
     /// for more than one, and will get the first one the user has achieved. Values returned in
@@ -83,7 +94,7 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
         self.authorizationService = AuthorizationService()
         self.controllerContextProvider = DefaultCurrentControllerContextProvider()
         super.init()
-        configureSelectors()
+        configureButton()
     }
 
     init(authorizationService: AuthorizationServiceProtocol,
@@ -92,21 +103,26 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
         self.authorizationService = authorizationService
         self.controllerContextProvider = controllerContextProvider
         super.init(brandingProvider: brandingProvider)
-        configureSelectors()
+        configureButton()
     }
 
     public override init(frame: CGRect) {
         self.authorizationService = AuthorizationService()
         self.controllerContextProvider = DefaultCurrentControllerContextProvider()
         super.init(frame: frame)
-        configureSelectors()
+        configureButton()
     }
 
     public required init?(coder aDecoder: NSCoder) {
         self.authorizationService = AuthorizationService()
         self.controllerContextProvider = DefaultCurrentControllerContextProvider()
         super.init(coder: aDecoder)
-        configureSelectors()
+        configureButton()
+    }
+
+    /// Cancels the current authorization request, if any.
+    public func cancel() {
+        authorizationService.cancel()
     }
 
     @objc func handlePress(sender: Any) {
@@ -132,11 +148,30 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 }
 
 private extension ProjectVerifyAuthorizeButton {
+    func configureButton() {
+        configureSelectors()
+        updateButtonText()
+    }
+
     func configureSelectors() {
         addTarget(self, action: #selector(handlePress(sender:)), for: .touchUpInside)
     }
 
     func handle(result: AuthorizationResult) {
         delegate?.buttonDidFinish(self, withResult: result)
+    }
+
+    func updateButtonText() {
+        let scopesSet = Set<String>(scopes.map { $0.scopeString })
+        if  scopesSet.contains(Scope.authenticate.rawValue) ||
+            scopesSet.contains(Scope.register.rawValue) {
+            updateBrandedText(Localization.Buttons.signInWithProjectVerify)
+        } else if scopesSet.contains(Scope.authorize.rawValue) ||
+                  scopesSet.contains(Scope.secondFactor.rawValue) {
+            updateBrandedText(Localization.Buttons.continueWithProjectVerify)
+        } else {
+            // use generic 'continue' message by default.
+            updateBrandedText(Localization.Buttons.continueWithProjectVerify)
+        }
     }
 }

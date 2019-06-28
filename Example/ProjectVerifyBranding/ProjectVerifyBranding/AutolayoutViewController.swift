@@ -14,6 +14,7 @@ class AutolayoutViewController: UIViewController {
     let buttonOne: ProjectVerifyBrandedButton = {
         let button = ProjectVerifyBrandedButton()
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.updateBrandedText("Some Longer Sample Text")
         return button
     }()
     
@@ -21,6 +22,7 @@ class AutolayoutViewController: UIViewController {
         let button = ProjectVerifyBrandedButton()
         button.style = .light
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.updateBrandedText("Sample Text")
         return button
     }()
     
@@ -51,7 +53,6 @@ class AutolayoutViewController: UIViewController {
 
             // checkout landscape mode to view the resizing behavior:
             // flexible width anchor:
-            buttonTwo.widthAnchor.constraint(greaterThanOrEqualTo: buttonOne.widthAnchor),
             buttonTwoWidthPreference,
             // strict leading anchor:
             buttonThree.leadingAnchor.constraint(equalTo: buttonTwo.leadingAnchor)
