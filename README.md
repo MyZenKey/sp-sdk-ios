@@ -12,9 +12,37 @@ Project Verify is a joint undertaking of the Mobile Authentication Taskforce. Th
 
 OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0  specification. It uses JSON Web Tokens (JWTs) that are obtained using OAuth 2.0 flows. You can read more about OIDC [here](https://openid.net/specs/openid-connect-core-1_0.html).
 
+### Authorization Code Flow and MNO Discovery
+
 Project Verify SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to Mobile Network Operator (MNO) for authorization. Upon successful authorization, the user is redirected to your backend with an authorization code, which your backend exchanges for an ID token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
 
-Because each carrier operates its own authorization servers, we determine the user's MNO prior to authentication. This process is called MNO Discovery (MNO Discovery is an OIDC discovery with extra parameters). MNO Discovery returns the OIDC of the user's MNO. This ensures that the discovery document from Project Verify is for the correct MNO. 
+Because each carrier operates its own authorization servers, we determine the user's MNO prior to authentication. This process is called MNO Discovery (MNO Discovery is an OIDC discovery with extra parameters). MNO Discovery returns the OIDC of the user's MNO. This ensures that the discovery document from Project Verify is for the correct MNO.
+
+### High Level Architecture
+
+The architecture is based on CCID authentication design providing user authentication backed by mobile carrier device authentication. Two main flows occur at initial launch (app and web). The app flow is for an on-device launched Service Provider (SP) native app or a SP-browser loaded website. The web flow shows secondary device support when the SP website is accessed from a device other than a user’s primary phone.
+
+As the first image shows, consumers from their primary phone access Project Verify either from the SP app or SP website. As a service provider developer, you sign up and log in thru the Project Verify portal, then write code in your backend. The architecture looks like this:
+
+ <img src="image/high_level_flow_app_pri.png" alt="High Level Flow - App" width="550">
+
+The flow goes from consumer thru service provider website to service provider backend to mobile carrier to Project Verify and back.
+
+As the second image shows, consumers from their secondary device (such as a laptop) can access Project Verify from the SP website. The architecture looks like this:
+
+ <img src="image/high_level_flow_web_sec.png" alt="High Level Flow - Web" width="550">
+
+The user confirms their identity with their primary phone, then they can log in with their secondary device. This provides the convenience of using a device with a larger screen.
+
+Consumer verification and authorization flows to MNO auth, the service provider backend, Project Verify platform and mobile carrier as follows:
+
+* discovery
+* auth code request, universal link captured
+* sim and user authentication, explicit user consent (via the primary device)
+* auth code returned, deep or universal link
+* service provider integrated clients
+* token request
+* userinfo mobile carrier resource
 
 ## Getting Started
 
@@ -308,11 +336,10 @@ class LoginViewController {
     }
 }
 ```
-For more information, see the following:  
 
-* [submodules](https://git-scm.com/docs/git-submodule)
-* [projectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
-* [appAuth](https://github.com/openid/AppAuth-iOS)
+## Service Provider Server Calls 
+You can setup server calls made by the Service Provider to coordinate with ZenKey. 
+
 
 ## Next Steps
 
@@ -326,6 +353,13 @@ The token should be used as the basis for accessing or creating a token within t
 
 The Project Verify User Info Endpoint should pass information through your server's authenticated endpoints in a way that makes sense for your application. 
 
+For more information, see the following:  
+
+* [submodules](https://git-scm.com/docs/git-submodule)
+* [projectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
+* [appAuth](https://github.com/openid/AppAuth-iOS)
+
+
 ## Support
 
 For technical questions, contact [support](mailto:support@mobileauthtaskforce.com).
@@ -335,4 +369,4 @@ For technical questions, contact [support](mailto:support@mobileauthtaskforce.co
 NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND CONFIDENTIAL. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.  NO RECIPIENT MAY DISCLOSE, DISTRIBUTE, OR POST THIS DOCUMENT WITHOUT XCI JV, LLC’S EXPRESS WRITTEN AUTHORIZATION.
 
 <sub> Last Update:
-Document Version 0.9.6 - May 28, 2019</sub>
+Document Version 0.9.7 - June 28, 2019</sub>
