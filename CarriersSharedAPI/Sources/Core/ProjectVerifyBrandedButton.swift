@@ -237,6 +237,8 @@ public extension ProjectVerifyBrandedButton {
             ),
             for: .disabled
         )
+
+        invalidateIntrinsicContentSize()
     }
 }
 
