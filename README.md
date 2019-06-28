@@ -337,9 +337,12 @@ class LoginViewController {
 }
 ```
 
-## Service Provider Server Calls 
-You can setup server calls made by the Service Provider to coordinate with ZenKey. 
+* [submodules](https://git-scm.com/docs/git-submodule)
+* [projectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
+* [appAuth](https://github.com/openid/AppAuth-iOS)
 
+## Service Provider Server Calls 
+You can setup server calls made by the Service Provider to coordinate with Project Verify. 
 
 ## Next Steps
 
@@ -352,13 +355,6 @@ On your secure server, you perform discovery and use the discovered token endpoi
 The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the Project Verify User Info Endpoint.
 
 The Project Verify User Info Endpoint should pass information through your server's authenticated endpoints in a way that makes sense for your application. 
-
-For more information, see the following:  
-
-* [submodules](https://git-scm.com/docs/git-submodule)
-* [projectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
-* [appAuth](https://github.com/openid/AppAuth-iOS)
-
 
 ## Support
 
