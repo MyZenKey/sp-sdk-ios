@@ -94,7 +94,7 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
         self.authorizationService = AuthorizationService()
         self.controllerContextProvider = DefaultCurrentControllerContextProvider()
         super.init()
-        configureSelectors()
+        configureButton()
     }
 
     init(authorizationService: AuthorizationServiceProtocol,
@@ -103,21 +103,21 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
         self.authorizationService = authorizationService
         self.controllerContextProvider = controllerContextProvider
         super.init(brandingProvider: brandingProvider)
-        configureSelectors()
+        configureButton()
     }
 
     public override init(frame: CGRect) {
         self.authorizationService = AuthorizationService()
         self.controllerContextProvider = DefaultCurrentControllerContextProvider()
         super.init(frame: frame)
-        configureSelectors()
+        configureButton()
     }
 
     public required init?(coder aDecoder: NSCoder) {
         self.authorizationService = AuthorizationService()
         self.controllerContextProvider = DefaultCurrentControllerContextProvider()
         super.init(coder: aDecoder)
-        configureSelectors()
+        configureButton()
     }
 
     /// Cancels the current authorization request, if any.
@@ -148,6 +148,11 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 }
 
 private extension ProjectVerifyAuthorizeButton {
+    func configureButton() {
+        configureSelectors()
+        updateButtonText()
+    }
+
     func configureSelectors() {
         addTarget(self, action: #selector(handlePress(sender:)), for: .touchUpInside)
     }
@@ -162,7 +167,10 @@ private extension ProjectVerifyAuthorizeButton {
             scopesSet.contains(Scope.register.rawValue) {
             updateBrandedText(Localization.Buttons.signInWithProjectVerify)
         } else if scopesSet.contains(Scope.authorize.rawValue) ||
-                  scopesSet.contains(Scope.secondFactor.rawValue){
+                  scopesSet.contains(Scope.secondFactor.rawValue) {
+            updateBrandedText(Localization.Buttons.continueWithProjectVerify)
+        } else {
+            // use generic 'continue' message by default.
             updateBrandedText(Localization.Buttons.continueWithProjectVerify)
         }
     }
