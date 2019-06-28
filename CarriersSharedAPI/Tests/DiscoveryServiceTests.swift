@@ -166,7 +166,7 @@ class DiscoveryServiceTests: XCTestCase {
                 return
             }
 
-            XCTAssertEqual(redirect.redirectURI.absoluteString, "http://app.xcijv.com/ui/discovery-ui")
+            XCTAssertEqual(redirect.redirectURI.absoluteString, "https://app.xcijv.com/ui/discovery-ui")
 
         }
         wait(for: [expectation], timeout: timeout)

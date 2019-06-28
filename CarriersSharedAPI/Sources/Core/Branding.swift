@@ -29,11 +29,6 @@ extension OpenIdConfig {
 }
 
 extension Branding {
-    /// the buttons title label text.
-    var primaryText: String {
-        return Localization.Buttons.signInWithProjectVerify
-    }
-
     /// The button's icon. Icons should be provided as a template image.
     var icon: UIImage? {
         return ImageUtils.image(named: "pv-icon-connect")

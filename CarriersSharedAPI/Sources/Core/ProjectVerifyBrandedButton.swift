@@ -35,7 +35,12 @@ public class ProjectVerifyBrandedButton: UIButton {
     var branding: Branding = .default {
         didSet {
             updateBranding()
+            invalidateIntrinsicContentSize()
         }
+    }
+
+    override public var intrinsicContentSize: CGSize {
+        return sizeThatFits(.zero)
     }
 
     // NOTE: dependencies are resolved automatically for all of the button initalizers.
@@ -79,11 +84,161 @@ public class ProjectVerifyBrandedButton: UIButton {
         configureButton()
     }
 
+    private var spaceTitleAndImageRects: Bool {
+        if attributedTitle(for: state) != nil && branding.icon != nil {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    private func trueContentSize() -> CGSize {
+        let greatestSize = CGSize(width: CGFloat.greatestFiniteMagnitude,
+                                  height: CGFloat.greatestFiniteMagnitude)
+        let titleSize: CGSize = attributedTitle(for: state)?
+            .boundingRect(
+                with: greatestSize,
+                options: [.usesFontLeading, .usesLineFragmentOrigin],
+                context: nil
+            ).size ?? .zero
+
+        let iconSize = branding.icon?.size ?? .zero
+
+        let contentWidth =
+            iconSize.width +
+            titleSize.width +
+            CGFloat(spaceTitleAndImageRects ? Constants.interitemSpacing : 0.0)
+
+        return CGSize(width: contentWidth, height: max(titleSize.height, iconSize.height))
+    }
+
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         guard !isHidden else { return .zero }
+        let contentSize = trueContentSize()
+        return CGSize(
+            width: contentSize.width + (2 * Insets.horizontal),
+            height: contentSize.height + (2 * Insets.vertical)
+        )
+    }
 
-        let fittingSize = super.sizeThatFits(size)
-        return CGSize(width: max(fittingSize.width, size.width), height: Constants.height)
+    public override func contentRect(forBounds bounds: CGRect) -> CGRect {
+        guard !bounds.isEmpty else {
+            return .zero
+        }
+
+        guard
+            bounds.size.width >= 2 * Insets.Minimum.horizontal,
+            bounds.size.height >= 2 * Insets.Minimum.vertical else {
+                return .zero
+        }
+
+        let size = bounds.size
+
+        let contentSize = trueContentSize()
+        let fitMargins = CGSize(
+            width: max( size.width - contentSize.width, Insets.Minimum.horizontal * 2 ),
+            height: max( size.height - contentSize.height, Insets.Minimum.vertical * 2 )
+        )
+
+        return CGRect(x: fitMargins.width / 2,
+                      y: fitMargins.height / 2,
+                      width: bounds.size.width - fitMargins.width,
+                      height: bounds.size.height - fitMargins.height
+        )
+    }
+
+    public override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
+        guard !contentRect.isEmpty else {
+            return .zero
+        }
+
+        // #NTH: - potentially add title scaling behavior to support smaller buttons:
+        let imageRect = self.imageRect(forContentRect: contentRect)
+        let offset: CGFloat = spaceTitleAndImageRects ? 8 : 0
+        let xOrign = imageRect.maxX + offset
+        return CGRect(
+            x: xOrign,
+            y: contentRect.minY,
+            width: contentRect.size.width - xOrign + contentRect.origin.x,
+            height: contentRect.height)
+    }
+
+    public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+        let imageSize = branding.icon?.size ?? .zero
+
+        guard imageSize.width != 0, imageSize.height != 0 else {
+            return .zero
+        }
+
+        // preserve aspect ratio if scaled down
+        // constraining axis is delta with greater abs:
+        let deltaX = contentRect.size.width - imageSize.width
+        let deltaY = contentRect.size.height - imageSize.height
+
+        // use image size if it will fit
+        guard deltaX <= 0 || deltaY <= 0 else {
+            return CGRect(
+                x: contentRect.minX,
+                y: contentRect.midY - imageSize.height / 2,
+                width: imageSize.width,
+                height: imageSize.height
+            )
+        }
+
+        let aspectRatio = imageSize.width / imageSize.height
+        let width: CGFloat
+        let height: CGFloat
+        if deltaX < deltaY {
+            // constrained on width
+            width = imageSize.width + deltaX
+            height = width / aspectRatio
+        } else {
+            // constrined on height
+            height = imageSize.height + deltaY
+            width = height * aspectRatio
+        }
+
+        return CGRect(
+            x: contentRect.minX,
+            y: contentRect.midY - height / 2,
+            width: width,
+            height: height
+        )
+    }
+}
+
+public extension ProjectVerifyBrandedButton {
+    /// Prefer this method for updating the text of the BrandedButton. This method implemnts an
+    /// expected, branded behavior for multiple control states by applying the branded attributes
+    /// to the provided string.
+    ///
+    /// - Parameter text: The text for the button's title label.
+    func updateBrandedText(_ text: String) {
+        setAttributedTitle(
+            attributedTitle(
+                forTitle: text,
+                withColor: appearance.normal.title
+            ),
+            for: .normal
+        )
+
+        setAttributedTitle(
+            attributedTitle(
+                forTitle: text,
+                withColor: appearance.highlighted.title
+            ),
+            for: .highlighted
+        )
+
+        setAttributedTitle(
+            attributedTitle(
+                forTitle: text,
+                withColor: appearance.highlighted.title
+            ),
+            for: .disabled
+        )
+
+        invalidateIntrinsicContentSize()
     }
 }
 
@@ -122,9 +277,7 @@ private extension ProjectVerifyBrandedButton {
 
         layer.cornerRadius = Constants.cornerRadius
 
-        contentEdgeInsets = .projectVerifyButtonContentInsets
-        titleEdgeInsets = .projectVerifyButtonTitleEdgeInsets
-        imageEdgeInsets = .projectVerifyButtonImageEdgeInsets
+        titleLabel?.lineBreakMode = .byTruncatingTail
 
         branding = brandingProvider.branding
 
@@ -134,33 +287,11 @@ private extension ProjectVerifyBrandedButton {
     }
 
     func updateBranding() {
-        setAttributedTitle(
-            attributedTitle(
-                forTitle: branding.primaryText,
-                withColor: appearance.normal.title
-            ),
-            for: .normal
-        )
-
-        setAttributedTitle(
-            attributedTitle(
-                forTitle: branding.primaryText,
-                withColor: appearance.highlighted.title
-            ),
-            for: .highlighted
-        )
-
-        setAttributedTitle(
-            attributedTitle(
-                forTitle: branding.primaryText,
-                withColor: appearance.highlighted.title
-            ),
-            for: .disabled
-        )
-
         setImage(branding.icon, for: .normal)
-
         updateTinting()
+        if let title = attributedTitle(for: .normal)?.string {
+            updateBrandedText(title)
+        }
     }
 
     func updateTinting() {
@@ -192,22 +323,16 @@ private extension ProjectVerifyBrandedButton {
 private extension ProjectVerifyBrandedButton {
     enum Constants {
         static let cornerRadius: CGFloat = 8
-        static let height: CGFloat = 52
-    }
-}
-
-private extension UIEdgeInsets {
-    static let xOffset: CGFloat = 5
-
-    static var projectVerifyButtonContentInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: 16, left: 42, bottom: 16, right: 42)
+        static let interitemSpacing: CGFloat = 8
     }
 
-    static var projectVerifyButtonTitleEdgeInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: xOffset, bottom: 0, right: -xOffset)
-    }
-
-    static var projectVerifyButtonImageEdgeInsets: UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: -xOffset, bottom: 0, right: xOffset)
+    enum Insets {
+        static let vertical: CGFloat = 16
+        static let horizontal: CGFloat = 42
+        // swiftlint:disable:next nesting
+        enum Minimum {
+            static let vertical: CGFloat = 5
+            static let horizontal: CGFloat = 15
+        }
     }
 }

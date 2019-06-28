@@ -12,6 +12,8 @@ import CarriersSharedAPI
 class ManualViewController: UIViewController {
     let buttonOne: ProjectVerifyBrandedButton = {
         let button = ProjectVerifyBrandedButton()
+        button.updateBrandedText("Sample Text")
+        button.sizeToFit()
         return button
     }()
 
@@ -21,6 +23,8 @@ class ManualViewController: UIViewController {
         let button = ProjectVerifyBrandedButton()
         button.style = .light
         button.autoresizingMask = [.flexibleWidth]
+        button.updateBrandedText("Some Longer Sample Text")
+        button.sizeToFit()
         return button
     }()
     

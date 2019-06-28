@@ -11,6 +11,7 @@ import Foundation
 enum Localization {
     enum Buttons {
         static let signInWithProjectVerify = LocalizationUtils.localizedString("Sign in with Project Verify")
+        static let continueWithProjectVerify = LocalizationUtils.localizedString("Continue with Project Verify")
     }
 }
 

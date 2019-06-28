@@ -1,5 +1,5 @@
 //
-//  IOSAuthorizationService.swift
+//  AuthorizationServiceIOS.swift
 //  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 5/3/19.
@@ -9,7 +9,7 @@
 import Foundation
 
 class AuthorizationServiceIOSFactory: AuthorizationServiceFactory {
-    func createAuthorizationService() -> AuthorizationServiceProtocol {
+    func createAuthorizationService() -> AuthorizationServiceProtocol & URLHandling {
         let container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies
         return AuthorizationServiceIOS(
             sdkConfig: container.resolve(),
@@ -27,6 +27,14 @@ class AuthorizationServiceIOS {
     let openIdService: OpenIdServiceProtocol
     let carrierInfoService: CarrierInfoServiceProtocol
     let mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol
+
+    public var isAuthorizing: Bool {
+        if case .idle = state {
+            return false
+        } else {
+            return true
+        }
+    }
 
     private var state: State = .idle {
         willSet {
@@ -70,7 +78,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
 
         let parameters = OpenIdAuthorizationParameters(
             clientId: sdkConfig.clientId,
-            redirectURL: sdkConfig.redirectURL(forRoute: .authorize),
+            redirectURL: sdkConfig.redirectURL,
             formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
             state: state ?? RandomStringGenerator.generateStateSuitableString(),
             nonce: nonce,
@@ -94,25 +102,43 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
         self.state = .requesting(request)
 
         request.mainQueueUpdate(state: .discovery(carrierInfoService.primarySIM))
-        next(forRequest: request)
+        next(for: request)
     }
 
-    func cancel() {
+    public func cancel() {
         precondition(Thread.isMainThread, "You should only call `cancel` from the main thread.")
         guard case .requesting(let request) = state else {
             return
         }
 
         request.mainQueueUpdate(state: .concluding(.cancelled))
-        next(forRequest: request)
+        next(for: request)
+    }
+}
+
+extension AuthorizationServiceIOS: URLHandling {
+    func resolve(url: URL) -> Bool {
+        guard case .requesting(let request) = state else {
+            return false
+        }
+
+        switch request.state {
+        case .authorization:
+            return openIdService.resolve(url: url)
+
+        case .mobileNetworkSelection:
+            return mobileNetworkSelectionService.resolve(url: url)
+
+        default:
+            return false
+        }
     }
 }
 
 private extension AuthorizationServiceIOS {
-
     /// This function wraps step transitions and ensures that the request should continue before
     /// advancing to the next step.
-    func next(forRequest request: AuthorizationRequest) {
+    func next(for request: AuthorizationRequest) {
 
         precondition(Thread.isMainThread)
 
@@ -129,7 +155,7 @@ private extension AuthorizationServiceIOS {
             break
 
         case .discovery(let simInfo):
-            performDiscovery(withSIMInfo: simInfo)
+            performDiscovery(with: simInfo)
 
         case .mobileNetworkSelection(let resource):
             showDiscoveryUI(usingResource: resource)
@@ -138,7 +164,7 @@ private extension AuthorizationServiceIOS {
             showAuthorizationUI(usingConfig: discoveredConfig)
 
         case .missingUserRecovery:
-            performDiscovery(withSIMInfo: nil)
+            performDiscovery(with: nil)
 
         case .concluding:
             request.update(state: .finished)
@@ -147,8 +173,8 @@ private extension AuthorizationServiceIOS {
     }
 }
 
-extension AuthorizationServiceIOS {
-    func performDiscovery(withSIMInfo simInfo: SIMInfo?) {
+private extension AuthorizationServiceIOS {
+    func performDiscovery(with simInfo: SIMInfo?) {
         guard case .requesting(let request) = state else {
             return
         }
@@ -157,20 +183,18 @@ extension AuthorizationServiceIOS {
             forSIMInfo: simInfo,
             prompt: request.passPrompt) { [weak self] result in
 
-            defer { self?.next(forRequest: request) }
+            defer { self?.next(for: request) }
 
             switch result {
             case .knownMobileNetwork(let config):
                 request.mainQueueUpdate(state: .authorization(config))
 
             case .unknownMobileNetwork(let redirect):
-                // TODO: - Limit the number of times this flow can be executed.
                 request.mainQueueUpdate(state: .mobileNetworkSelection(redirect.redirectURI))
 
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
                 request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
-                self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
             }
         }
     }
@@ -185,11 +209,7 @@ extension AuthorizationServiceIOS {
             carrierConfig: config,
             authorizationParameters: request.authorizationParameters) { [weak self] result in
 
-                defer { self?.next(forRequest: request) }
-
-                guard let `self` = self else {
-                    return
-                }
+                defer { self?.next(for: request) }
 
                 switch result {
                 case .code(let response):
@@ -199,7 +219,6 @@ extension AuthorizationServiceIOS {
                     let authorizationError = error.asAuthorizationError
                     let nextState = AuthorizationServiceIOS.recoveryState(forError: authorizationError)
                     request.mainQueueUpdate(state: nextState)
-                    self.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
                 case .cancelled:
                     request.mainQueueUpdate(state: .concluding(.cancelled))
@@ -218,7 +237,7 @@ extension AuthorizationServiceIOS {
             prompt: request.passPrompt
         ) { [weak self] result in
 
-            defer { self?.next(forRequest: request) }
+            defer { self?.next(for: request) }
 
             switch result {
             case .networkInfo(let response):
@@ -228,7 +247,6 @@ extension AuthorizationServiceIOS {
             case .error(let error):
                 let authorizationError = error.asAuthorizationError
                 request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
-                self?.showConsolation("an error occurred during discovery \(error)", on: request.viewController)
 
             case .cancelled:
                 request.mainQueueUpdate(state: .concluding(.cancelled))
@@ -253,14 +271,5 @@ private extension AuthorizationRequest {
     func mainQueueUpdate(state: AuthorizationRequest.State) {
         precondition(Thread.isMainThread)
         self.update(state: state)
-    }
-}
-
-// FIXME: Remove this, just for qa
-private extension AuthorizationServiceIOS {
-    func showConsolation(_ text: String, on viewController: UIViewController) {
-        let controller = UIAlertController(title: "Demo", message: text, preferredStyle: .alert)
-        controller.addAction(UIAlertAction(title: "okay", style: .default, handler: nil))
-        viewController.present(controller, animated: true, completion: nil)
     }
 }

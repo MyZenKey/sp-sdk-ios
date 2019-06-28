@@ -13,7 +13,13 @@ class MockOpenIdService: OpenIdServiceProtocol {
 
     static let mockSuccess = AuthorizedResponse(code: "abc123", mcc: "123", mnc: "456")
     var lastParameters: OpenIdAuthorizationParameters?
+    var lastCompletion: OpenIdServiceCompletion?
     var lastViewController: UIViewController?
+
+    var holdCompletionUntilURL: Bool = false
+    var lastURL: URL?
+
+    var didCallAuthorizeHook: (() -> Void)?
 
     private(set) var authorizeCallCount = 0
 
@@ -32,6 +38,10 @@ class MockOpenIdService: OpenIdServiceProtocol {
         lastViewController = nil
         responseQueue.clear()
         authorizeCallCount = 0
+
+        lastURL = nil
+        holdCompletionUntilURL = false
+        didCallAuthorizeHook = nil
     }
 
     func authorize(
@@ -43,17 +53,33 @@ class MockOpenIdService: OpenIdServiceProtocol {
         authorizeCallCount += 1
         self.lastViewController = viewController
         self.lastParameters = authorizationParameters
+        self.lastCompletion = completion
 
-        DispatchQueue.main.async {
-            completion(self.responseQueue.getResponse())
+        if !holdCompletionUntilURL {
+            DispatchQueue.main.async {
+                self.complete()
+            }
         }
+        didCallAuthorizeHook?()
     }
 
     var authorizationInProgress: Bool = false
 
     func cancelCurrentAuthorizationSession() { }
 
-    func resolve(url: URL) -> Bool { return true }
+    func resolve(url: URL) -> Bool {
+        lastURL = url
+        if lastCompletion != nil {
+            complete()
+            return true
+        } else {
+            return false
+        }
+    }
 
     func concludeAuthorizationFlow(result: AuthorizationResult) { }
+
+    private func complete() {
+        lastCompletion?(responseQueue.getResponse())
+    }
 }

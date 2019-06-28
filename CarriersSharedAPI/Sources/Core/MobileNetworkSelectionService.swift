@@ -83,7 +83,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
         let request = Request(
             resource: resource,
             clientId: sdkConfig.clientId,
-            redirectURI: sdkConfig.redirectURL(forRoute: .discoveryUI).absoluteString,
+            redirectURI: sdkConfig.redirectURL.absoluteString,
             state: stateParam,
             prompt: prompt
         )

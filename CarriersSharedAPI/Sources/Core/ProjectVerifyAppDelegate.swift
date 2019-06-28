@@ -77,7 +77,11 @@ public class ProjectVerifyAppDelegate {
             return false
         }
 
-        let router: RouterServiceProtocol = dependencies.resolve()
-        return router.application(app, open: url, options: options)
+        guard let currentAuthorizationService =
+            AuthorizationServiceCurrentRequestStorage.shared.currentRequestingService else {
+            return false
+        }
+
+        return currentAuthorizationService.resolve(url: url)
     }
 }

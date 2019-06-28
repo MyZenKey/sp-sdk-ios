@@ -8,11 +8,6 @@
 
 import Foundation
 
-enum Route: String {
-    case authorize = "/projectverify/authorize"
-    case discoveryUI = "/projectverify/discoveryui"
-}
-
 protocol URLHandling {
     func resolve(url: URL) -> Bool
 }

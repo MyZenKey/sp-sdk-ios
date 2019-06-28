@@ -27,6 +27,23 @@ class BankAppButton: UIButton {
         }
     }
 
+    private var stashedBackground: UIColor?
+    override var backgroundColor: UIColor? {
+        didSet {
+            if isEnabled {
+                stashedBackground = backgroundColor
+            }
+        }
+    }
+
+    override var isEnabled: Bool {
+        didSet {
+            backgroundColor = isEnabled ?
+                stashedBackground :
+                UIColor.lightGray.withAlphaComponent(0.6)
+        }
+    }
+
     override public init(frame: CGRect) {
         super.init(frame: frame)
         myInit()

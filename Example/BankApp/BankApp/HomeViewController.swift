@@ -103,7 +103,5 @@ class HomeViewController: UIViewController {
         constraints.append(logoutButton.heightAnchor.constraint(equalToConstant: 48))
         
         NSLayoutConstraint.activate(constraints)
-        
     }
-
 }
