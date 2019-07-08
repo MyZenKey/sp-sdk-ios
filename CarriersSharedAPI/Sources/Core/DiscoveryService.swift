@@ -72,11 +72,8 @@ class DiscoveryService: DiscoveryServiceProtocol {
 
             var outcome = result
             // if we have an error, attempt to recover from cache
-            if case .error = result {
-                // FIXME: this nil sim issue needs to be solved sysemically:
-                let simInfo = simInfo ?? SIMInfo(mcc: "999", mnc: "999")
-
-                if let fallBackConfig = self?.recoverFromCache(simInfo: simInfo ,
+            if case .error = result, let simInfo = simInfo {
+                if let fallBackConfig = self?.recoverFromCache(simInfo: simInfo,
                                                                allowStaleRecords: true) {
                     let config = CarrierConfig(
                         simInfo: simInfo,
@@ -144,23 +141,14 @@ private extension DiscoveryService {
                 // Because the endpoint can return either a config _or_ an error, we need to parse the
                 // "inner" result and flatten the success or error.
                 switch configResult {
-                case .config(let openIdConfig):
-
-                    // FIXME: this an invalid place holder sim, we need to solve this null sim
-                    // info case systemically.
-                    let simInfo = simInfo ?? SIMInfo(mcc: "999", mnc: "999")
+                case .config(let carrierConfig):
 
                     self?.configCacheService.cacheConfig(
-                        openIdConfig,
-                        forSIMInfo: simInfo
+                        carrierConfig.openIdConfig,
+                        forSIMInfo: carrierConfig.simInfo
                     )
 
-                    completion(.knownMobileNetwork(
-                        CarrierConfig(
-                            simInfo: simInfo,
-                            openIdConfig: openIdConfig
-                        )
-                    ))
+                    completion(.knownMobileNetwork(carrierConfig))
 
                 case .redirect(let redirect):
                     completion(.unknownMobileNetwork(redirect))

@@ -45,15 +45,39 @@ enum IssuerResponse {
         let errorDescription: String?
     }
 
-    case config(OpenIdConfig)
+    case config(CarrierConfig)
     case redirect(Redirect)
     case error(Error)
 }
 
+struct DiscoverySimInfo {
+    let simInfo: SIMInfo
+}
+
+extension DiscoverySimInfo: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case mccmnc
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let mccmncNumericValue = try container.decode(Int.self, forKey: .mccmnc)
+        let mccmnc = String(mccmncNumericValue)
+        let simInfoResult =  mccmnc.toSIMInfo()
+        switch simInfoResult {
+        case .value(let simInfo):
+            self = DiscoverySimInfo(simInfo: simInfo)
+        case .error(let error):
+            throw error
+        }
+    }
+}
+
 extension IssuerResponse: Decodable {
     init(from decoder: Decoder) throws {
-        if let config = try? OpenIdConfig(from: decoder) {
-            self = .config(config)
+        if  let config = try? OpenIdConfig(from: decoder),
+            let discoverdSIMInfo = try? DiscoverySimInfo(from: decoder) {
+            self = .config(CarrierConfig(simInfo: discoverdSIMInfo.simInfo, openIdConfig: config))
         } else if let redirect = try? Redirect(from: decoder) {
             self = .redirect(redirect)
         } else {
