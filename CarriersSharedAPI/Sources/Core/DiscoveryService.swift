@@ -9,7 +9,7 @@
 import UIKit
 import Foundation
 
-struct CarrierConfig {
+struct CarrierConfig: Equatable {
     let simInfo: SIMInfo
     let openIdConfig: OpenIdConfig
 }
