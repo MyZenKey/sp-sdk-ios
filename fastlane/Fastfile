@@ -50,6 +50,7 @@ TEST_SCHEME = "CarriersSharedAPITests"
 
 platform :ios do
   before_all do
+    setup_circle_ci
     if ENV['RZ_ARTIFACTS'] && ENV['RZ_ARTIFACTS'].length > 0
       sh 'rm -rf $RZ_ARTIFACTS && mkdir $RZ_ARTIFACTS'
     end
