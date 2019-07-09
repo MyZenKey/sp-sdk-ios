@@ -6,7 +6,7 @@ default_platform :ios
 
 # Set by build environment
 # FL_HOCKEY_API_TOKEN
-# RZ_KEYCHAIN_PASSWORD
+# MATCH_PASSWORD
 # CIRCLE_API_TOKEN
 # SLACK_URL - set the hook URL in the CircleCI environment
 
@@ -53,12 +53,11 @@ platform :ios do
     if ENV['RZ_ARTIFACTS'] && ENV['RZ_ARTIFACTS'].length > 0
       sh 'rm -rf $RZ_ARTIFACTS && mkdir $RZ_ARTIFACTS'
     end
-    install_provisioning_profiles(override_provisioning_profiles: true)
   end
 
   desc "Runs tests"
   lane :test do
-    unlock_keychain(path: './Signing/Raizlabs-DemoApps.keychain', password: ENV['RZ_KEYCHAIN_PASSWORD'] )
+    match(type: "enterprise", readonly: true)
     scan(
       project: TEST_PROJCET_PATH,
       output_types: 'junit,html',
@@ -205,7 +204,6 @@ platform :ios do
       buildDemoApp(productName, buildName, 'enterprise', {
         teamID: "XRTVVR644Y",
         signingCertificate: "iPhone Distribution",
-        provisioningProfiles: { "com.att.ent.cso.haloc.#{productName.downcase}.develop" => "Raizlabs Generic Enterprise Distribution Profile" }
       })
       hockey(
         ipa: productIPA(productName),
@@ -224,7 +222,6 @@ platform :ios do
       buildDemoApp(productName, buildName, 'enterprise', {
         teamID: "XRTVVR644Y",
         signingCertificate: "iPhone Distribution",
-        provisioningProfiles: { "com.att.ent.cso.haloc.#{productName.downcase}.sprint" => "Raizlabs Generic Enterprise Distribution Profile" }
       })
       hockey(
         ipa: productIPA(productName),
@@ -268,7 +265,7 @@ platform :ios do
 
   def buildDemoApp(name, scheme, export_method, export_options)
     workspacePath = File.expand_path("../Example/#{name}/#{name}.xcworkspace")
-    unlock_keychain(path: './Signing/Raizlabs-DemoApps.keychain', password: ENV['RZ_KEYCHAIN_PASSWORD'] )
+    match(type: "enterprise", readonly: true)
     gym(
       workspace: workspacePath,
       output_directory: "#{ENV['RZ_ARTIFACTS']}",
