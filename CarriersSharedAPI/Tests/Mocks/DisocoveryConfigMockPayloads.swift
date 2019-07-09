@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@testable import CarriersSharedAPI
 
 enum DiscoveryConfigMockPayloads {
     static let success: [String: Any] = [
@@ -47,6 +48,7 @@ enum DiscoveryConfigMockPayloads {
             "client_secret_basic",
         ],
         "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
+        "mccmnc": Int(MockSIMs.tmobile.networkString)!,
     ]
 
     static let carrierNotFound: [String: Any] = [

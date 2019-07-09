@@ -177,26 +177,53 @@ class DiscoveryServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { result in
             let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
-            let expectedResult = OpenIdConfig(
-                tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
-                authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
-                issuer: URL(string: "https://brass.account.t-mobile.com")!
+            let expectedResult = CarrierConfig(
+                simInfo: MockSIMs.tmobile,
+                openIdConfig: OpenIdConfig(
+                    tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
+                    authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
+                    issuer: URL(string: "https://brass.account.t-mobile.com")!
+                )
             )
 
             XCTAssertEqual(
-                config.openIdConfig,
+                config,
                 expectedResult
             )
 
             let lastParams = try! UnwrapAndAssertNotNil(self.mockConfigCacheService.lastCacheParams)
             XCTAssertEqual(
                 lastParams.0,
-                expectedResult
+                expectedResult.openIdConfig
             )
 
             XCTAssertEqual(
                 lastParams.1,
                 MockSIMs.tmobile
+            )
+
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    func testKnownCarrierEndpointReturnsMCCMNCEvenIfNoInfoPassed() {
+        mockNetworkService.mockJSON(DiscoveryConfigMockPayloads.success)
+        let expectation = XCTestExpectation(description: "async discovery")
+        discoveryService.discoverConfig(forSIMInfo: nil) { result in
+            let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
+            let expectedResult = CarrierConfig(
+                simInfo: MockSIMs.tmobile,
+                openIdConfig: OpenIdConfig(
+                    tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
+                    authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
+                    issuer: URL(string: "https://brass.account.t-mobile.com")!
+                )
+            )
+
+            XCTAssertEqual(
+                config,
+                expectedResult
             )
 
             expectation.fulfill()
