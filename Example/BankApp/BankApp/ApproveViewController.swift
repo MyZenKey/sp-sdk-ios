@@ -9,11 +9,14 @@ import UIKit
 import CarriersSharedAPI
 
 class ApproveViewController: BankAppViewController {
-    
+
+    static let userName = "nmel1234"
+    static let amount = "$100.00"
+
     let promptLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Would you like to transfer $100.00 to nmel1234?"
+        label.text = "Would you like to transfer \(ApproveViewController.amount) to \(ApproveViewController.userName)?"
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -45,6 +48,7 @@ class ApproveViewController: BankAppViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.delegate = self
         button.acrValues = [.aal2]
+        button.context = "Confirm you would like to transfer \(ApproveViewController.amount) to \(ApproveViewController.userName)."
         return button
     }()
 
