@@ -11,19 +11,30 @@ import Foundation
 import CoreTelephony
 #endif
 
+public enum ProjectVerifyOptionKeys: String {
+    case qaHost
+}
+
+public typealias ProjectVerifyOptions = [ProjectVerifyOptionKeys: Any]
+
 class Dependencies {
     let sdkConfig: SDKConfig
+    let options: ProjectVerifyOptions
 
     private(set) var all: [Any] = []
 
-    init(sdkConfig: SDKConfig) {
+    init(sdkConfig: SDKConfig, options: ProjectVerifyOptions = [:]) {
         self.sdkConfig = sdkConfig
+        self.options = options
         self.buildDependencies()
     }
 
     private func buildDependencies() {
+        let host: ProjectVerifyNetworkConfig.Host = (options[.qaHost] as? Bool ?? false) ?
+            .qa :
+            .production
 
-        let hostConfig = ProjectVerifyNetworkConfig(host: .production)
+        let hostConfig = ProjectVerifyNetworkConfig(host: host)
 
         let configCacheService = ConfigCacheService(
             networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup

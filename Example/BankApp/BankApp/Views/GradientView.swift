@@ -46,3 +46,46 @@ class GradientView: UIView {
         updateColors()
     }
 }
+
+
+class LogoGradientView: GradientView {
+    let logo: UIImageView = {
+        let logo = UIImageView()
+        logo.translatesAutoresizingMaskIntoConstraints = false
+        logo.image = UIImage(named: "applogo_white")
+        logo.contentMode = .scaleAspectFit
+        return logo
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        sharedInit()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        sharedInit()
+    }
+
+    func sharedInit() {
+
+        if (bounds.isEmpty) {
+            sizeToFit()
+        }
+
+        addSubview(logo)
+
+        let yAdjustment: CGFloat
+        if #available(iOS 11.0, *) {
+            yAdjustment = 0
+        } else {
+            yAdjustment = UIApplication.shared.statusBarFrame.height
+        }
+
+        addConstraints([
+            logo.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor),
+            logo.centerYAnchor.constraint(equalTo: layoutMarginsGuide.centerYAnchor,
+                                          constant: yAdjustment / 2),
+        ])
+    }
+}

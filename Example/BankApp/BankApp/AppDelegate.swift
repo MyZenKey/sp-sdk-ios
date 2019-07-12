@@ -18,7 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         ProjectVerifyAppDelegate.shared.application(
             application,
-            didFinishLaunchingWithOptions: launchOptions
+            didFinishLaunchingWithOptions: launchOptions,
+            projectVerifyOptions: BuildInfo.projectVerifyOptions
         )
 
         // Override point for customization after application launch.
