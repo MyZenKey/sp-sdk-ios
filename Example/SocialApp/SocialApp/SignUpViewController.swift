@@ -135,44 +135,14 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         return label
     }()
     
-    let illustrationPurposes: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "For illustration purposes only"
-        label.textAlignment = .center
-        return label
-    }()
+    let illustrationPurposes: UILabel = BuildInfo.makeWatermarkLabel()
 
     let serviceAPI = ServiceAPI()
-    var token: String?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         layoutView()
-
-        // set up powered by
-        let carrier = Carrier()
-        print("Found carrier - " + carrier.name)
-        if let logo = UIImage(named: "carrier-logo") {
-            let imageView = UIImageView(image: logo)
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
-            imageView.setContentCompressionResistancePriority(.required, for: .vertical)
-            poweredByLabel.addSubview(imageView)
-
-            imageView.leadingAnchor.constraint(equalTo: poweredByLabel.trailingAnchor, constant: 4).isActive = true
-            imageView.heightAnchor.constraint(equalTo: poweredByLabel.heightAnchor).isActive = true
-            imageView.centerYAnchor.constraint(equalTo: poweredByLabel.centerYAnchor).isActive = true
-        } else {
-            poweredByLabel.text = "Powered by \(carrier.name)"
-        }
-        
-        if let token = token {
-            serviceAPI.getUserInfo(with: token, completionHandler: { (userInfoResponse) in
-                self.displayUserInfo(from: userInfoResponse)
-            })
-        }
 
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(backButtonAction(sender:)))
@@ -212,7 +182,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide = view.safeAreaLayoutGuide
+        let safeAreaGuide = getSafeLayoutGuide()
         
         nameField.delegate = self
         emailField.delegate = self
@@ -302,7 +272,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: contentView.trailingAnchor))
         
         NSLayoutConstraint.activate(constraints)
-        
     }
 }
 
@@ -335,7 +304,8 @@ extension SignUpViewController: ProjectVerifyAuthorizeButtonDelegate {
                         print("error no token returned")
                         return
                 }
-                UserDefaults.standard.set(tokenString, forKey: "AccountToken")
+
+                AccountManager.login(withToken: tokenString)
                 self.serviceAPI.getUserInfo(with: tokenString) { userInfo in
                     self.displayUserInfo(from: userInfo)
                 }

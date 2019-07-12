@@ -1,6 +1,6 @@
 //
 //  BuildInfoUtilities.swift
-//  BankApp
+//  Example Apps
 //
 //  Created by Adam Tierney on 7/11/19.
 //  Copyright © 2019 AT&T. All rights reserved.
@@ -11,7 +11,7 @@ import CarriersSharedAPI
 
 struct BuildInfo {
 
-    private static let hostToggleKey =  "qaHost"
+    private static let hostToggleKey = "qaHost"
 
     static var isQAHost: Bool {
         return UserDefaults.standard.value(forKey: hostToggleKey) != nil

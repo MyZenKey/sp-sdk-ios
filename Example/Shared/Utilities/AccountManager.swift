@@ -1,6 +1,6 @@
 //
 //  AccountManager.swift
-//  BankApp
+//  Example Apps
 //
 //  Created by Adam Tierney on 6/11/19.
 //  Copyright © 2019 AT&T. All rights reserved.
@@ -13,6 +13,10 @@ struct AccountManager {
 
     static var isLoggedIn: Bool {
         return UserDefaults.standard.value(forKey: accountKey) != nil
+    }
+
+    static var token: String? {
+        return UserDefaults.standard.string(forKey: accountKey)
     }
 
     static func login(withToken token: String) {
