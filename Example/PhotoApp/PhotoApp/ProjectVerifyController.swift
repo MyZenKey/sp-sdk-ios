@@ -51,14 +51,8 @@ class ProjectVerifyController: UIViewController {
         return button
     }()
     
-    let illustrationPurposes: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "For illustration purposes only"
-        label.textAlignment = .center
-        return label
-    }()
-    
+    let illustrationPurposes: UILabel = BuildInfo.makeWatermarkLabel()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         
         if let window = window {
-            let mainVC = ViewController()
+            let mainVC = CartViewController()
             navigationController = UINavigationController(rootViewController: mainVC)
             navigationController?.navigationBar.backgroundColor = AppTheme.themeColor
             navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
@@ -74,7 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     func launchLoginScreen() {
-        let loginVC = ViewController()
+        let loginVC = CartViewController()
         self.window?.rootViewController = loginVC
     }
 
