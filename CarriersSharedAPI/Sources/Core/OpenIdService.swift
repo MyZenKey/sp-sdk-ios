@@ -48,6 +48,15 @@ struct OpenIdAuthorizationParameters: Equatable {
         self.context = context
         self.loginHintToken = loginHintToken
     }
+
+    var base64EncodedContext: String? {
+        guard let context = context else {
+                return nil
+        }
+        // utf8 will encode all for all swift strings:
+        return context.data(using: .utf8)!
+            .base64EncodedString()
+    }
 }
 
 enum OpenIdServiceError: Error {
@@ -249,7 +258,7 @@ extension OpenIdService {
                 .map() { $0.rawValue }
                 .joined(separator: " "),
             Keys.correlationId.rawValue: authorizationParameters.correlationId,
-            Keys.context.rawValue: authorizationParameters.context,
+            Keys.context.rawValue: authorizationParameters.base64EncodedContext,
             Keys.prompt.rawValue: authorizationParameters.prompt?.rawValue,
         ].compactMapValues() { return $0 }
 

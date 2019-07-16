@@ -103,10 +103,10 @@ extension EnableVerifyViewController: ProjectVerifyAuthorizeButtonDelegate {
         switch result {
         case .code(let authorizedResponse):
             authorizeUser(authorizedResponse: authorizedResponse)
-        case .error:
-            launchLoginScreen()
+        case .error(let error):
+            completeFlow(withError: error)
         case .cancelled:
-            launchLoginScreen()
+            cancelFlow()
         }
     }
 
