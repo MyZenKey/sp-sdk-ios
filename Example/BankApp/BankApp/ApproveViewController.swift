@@ -8,22 +8,8 @@
 import UIKit
 import CarriersSharedAPI
 
-class ApproveViewController: UIViewController {
+class ApproveViewController: BankAppViewController {
     
-    let gradientView: GradientView = {
-        let gradientView = GradientView()
-        gradientView.translatesAutoresizingMaskIntoConstraints = false
-        return gradientView
-    }()
-    
-    let logo: UIImageView = {
-        let logo = UIImageView()
-        logo.translatesAutoresizingMaskIntoConstraints = false
-        logo.image = UIImage(named: "applogo_white")
-        logo.contentMode = .scaleAspectFit
-        return logo
-    }()
-
     let promptLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -40,14 +26,6 @@ class ApproveViewController: UIViewController {
         button.addTarget(self, action: #selector(cancelTransaction(_:)), for: .touchUpInside)
         button.backgroundColor = AppTheme.primaryBlue
         return button
-    }()
-
-    let illustrationPurposes: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "For illustration purposes only"
-        label.textAlignment = .center
-        return label
     }()
 
     let serviceAPI = ServiceAPI()
@@ -107,46 +85,25 @@ class ApproveViewController: UIViewController {
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide: UILayoutGuide
-        if #available(iOS 11.0, *) {
-            safeAreaGuide = view.safeAreaLayoutGuide
-        } else {
-            // Fallback on earlier versions
-            safeAreaGuide = view.layoutMarginsGuide
-        }
+        let safeAreaGuide = getSafeLayoutGuide()
         
-        view.addSubview(gradientView)
-        view.addSubview(logo)
         view.addSubview(promptLabel)
         view.addSubview(projectVerifyButton)
         view.addSubview(cancelButton)
-        view.addSubview(illustrationPurposes)
         view.addSubview(activityIndicator)
 
-        constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
-        constraints.append(gradientView.heightAnchor.constraint(equalToConstant: 70))
-        
-        constraints.append(logo.centerYAnchor.constraint(equalTo: gradientView.centerYAnchor))
-        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
-        constraints.append(logo.heightAnchor.constraint(equalToConstant: 60))
-        
         constraints.append(promptLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
         constraints.append(promptLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(promptLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        
-        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -30))
-        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(cancelButton.heightAnchor.constraint(equalToConstant: 48))
-        
+
         constraints.append(projectVerifyButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -10))
         constraints.append(projectVerifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
         constraints.append(projectVerifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
 
-        constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
-        constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
-        constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
+        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -30))
+        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+        constraints.append(cancelButton.heightAnchor.constraint(equalTo: projectVerifyButton.heightAnchor))
 
         constraints.append(activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))

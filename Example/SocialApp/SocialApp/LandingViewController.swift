@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LandingViewController.swift
 //
 //  © 2018 AT&T INTELLECTUAL PROPERTY. ALL RIGHTS RESERVED. AT&T PROPRIETARY / CONFIDENTIAL MATERIALS AND AN AT&T CONTRIBUTED ITEM UNDER THE EXPENSE AND INFORMATION SHARING AGREEMENT DATED FEBRUARY 7, 2018.
 //
@@ -7,7 +7,7 @@
 import UIKit
 import CarriersSharedAPI
 
-class ViewController: UIViewController, UITextFieldDelegate {
+class LandingViewController: UIViewController, UITextFieldDelegate {
     
     let logo: UIImageView = {
         let img = UIImageView()
@@ -74,25 +74,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    let poweredByLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.text = "POWERED BY"
-        label.font = UIFont.systemFont(ofSize: 10)
-        return label
+
+    lazy var toggleEnv: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let currentHost = BuildInfo.isQAHost ? "QA" : "Prod"
+        button.setTitle("Toggle Host: current host \(currentHost)", for: .normal)
+        button.addTarget(self, action: #selector(toggleHost), for: .touchUpInside)
+        button.setTitleColor(.black, for: .normal)
+        return button
     }()
+
+    let illustrationPurposes: UILabel = BuildInfo.makeWatermarkLabel()
     
-    let illustrationPurposes: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "For illustration purposes only"
-        label.textAlignment = .center
-        return label
-    }()
-    
-    var window: UIWindow?
     let authService = AuthorizationService()
     let serviceAPI = ServiceAPI()
 
@@ -100,23 +94,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutView()
-        
-        // set up powered by
-        let carrier = Carrier()
-        if let logo = UIImage(named: "carrier-logo") {
-            let imageView = UIImageView(image: logo)
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
-            imageView.setContentCompressionResistancePriority(.required, for: .vertical)
-            poweredByLabel.addSubview(imageView)
-
-            imageView.leadingAnchor.constraint(equalTo: poweredByLabel.trailingAnchor, constant: 4).isActive = true
-            imageView.trailingAnchor.constraint(equalTo: poweredByLabel.trailingAnchor).isActive = true
-            imageView.heightAnchor.constraint(equalTo: poweredByLabel.heightAnchor).isActive = true
-            imageView.centerYAnchor.constraint(equalTo: poweredByLabel.centerYAnchor).isActive = true
-        } else {
-            poweredByLabel.text = "Powered by \(carrier.name)"
-        }
         updateNavigationThemeColor()
     }
     
@@ -124,74 +101,24 @@ class ViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-    
+
+    @objc func toggleHost(_ sender: Any) {
+        BuildInfo.toggleHost()
+        showAlert(
+            title: "Host Updated",
+            message: "The app will now exit, restart for the new host to take effect.") {
+                fatalError("restarting app")
+        }
+    }
+
     @objc func signUpPressed(_: UIButton) {
         navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
 
-        // TODO: reimplement this once we have a demo backend
-        // old post auth logic for fetching user:
-//                /*//init view controller for user info
-//                let url = self.redirectUri! + "?code=" + authorizationCode!
-//                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "UserInfoViewController") as! UserInfoViewController
-//                vc.url = URL(string: url)
-//                self.navigationController?.viewControllers.removeAll()
-//                self.navigationController?.viewControllers.append(vc)
-//                print("view controller loaded")*/
-//
-//                //perform a simple GET request to gather the user information
-//                let userInfoUrl = URL(string: self.carrierConfig!["userinfo_endpoint"] as! String)
-//                let request = NSMutableURLRequest(url: userInfoUrl! as URL)
-//                request.httpMethod = "GET"
-//                request.setValue("Bearer " + accessToken!, forHTTPHeaderField: "Authorization")
-//                let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-//                    print("User information response has returned - ")
-//                    if(error == nil) {
-//                        if let res = response as? HTTPURLResponse {
-//                            print(res)
-//                            let responseString = String(data: data!, encoding:String.Encoding.utf8) as String!
-//                            print(responseString)
-//
-//                            do{
-//                                //convert the json string to pure json
-//                                if let json = responseString!.data(using: String.Encoding.utf8){
-//                                    let jsonDocument:JsonDocument = JsonDocument(data: json)
-//                                    //perform async task to update UI
-//                                    DispatchQueue.main.async {
-//                                        //redirect to the user view controller
-//                                        print("Redirecting to userinfo view controller")
-//                                        let vc = UserInfoViewController()
-//                                        vc.userInfoJson = jsonDocument
-//                                        self.navigationController?.pushViewController(vc, animated: true)
-//                                    }
-//                                }
-//                            }catch {
-//                                print(error.localizedDescription)
-//                            }
-//                        }
-//                    }
-//                    else {
-//                        print(error)
-//                    }
-//                }
-//                task.resume()
-
-//    //this function will convert the incoming json string to dictionary
-//    func convertToDictionary(text: String) -> [String: Any]? {
-//        if let data = text.data(using: .utf8) {
-//            do {
-//                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//        }
-//        return nil
-//    }
-
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide = view.safeAreaLayoutGuide
+        let safeAreaGuide = getSafeLayoutGuide()
         
         view.addSubview(logo)
         view.addSubview(nameField)
@@ -200,8 +127,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(loginButton)
         view.addSubview(orLabel)
         view.addSubview(verifyButton)
-        view.addSubview(poweredByLabel)
         view.addSubview(illustrationPurposes)
+        view.addSubview(toggleEnv)
         
         constraints.append(logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 100))
         constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
@@ -233,11 +160,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
         constraints.append(verifyButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 25))
         constraints.append(verifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(verifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        
-        constraints.append(poweredByLabel.topAnchor.constraint(equalTo: verifyButton.bottomAnchor, constant: 5))
-        constraints.append(poweredByLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
-        constraints.append(poweredByLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        
+
+        constraints.append(toggleEnv.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(toggleEnv.topAnchor.constraint(equalTo: verifyButton.bottomAnchor, constant: 20.0))
+
         constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
         constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
         constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
@@ -247,7 +173,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
-extension ViewController: ProjectVerifyAuthorizeButtonDelegate {
+extension LandingViewController: ProjectVerifyAuthorizeButtonDelegate {
     
     func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) { }
     
@@ -276,9 +202,8 @@ extension ViewController: ProjectVerifyAuthorizeButtonDelegate {
                         print("error no token returned")
                         return
                 }
-                UserDefaults.standard.set(tokenString, forKey: "AccountToken")
+                AccountManager.login(withToken: tokenString)
                 let vc = UserInfoViewController()
-                vc.token = tokenString
                 self.navigationController?.viewControllers = [vc]
         })
     }

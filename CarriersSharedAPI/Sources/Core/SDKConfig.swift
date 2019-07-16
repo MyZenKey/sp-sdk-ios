@@ -14,7 +14,6 @@ public enum BundleLoadingErrors: Error, Equatable {
 }
 
 struct SDKConfig: Equatable {
-
     enum Default: String {
         case host = "com.xci.provider.sdk"
         case path = ""

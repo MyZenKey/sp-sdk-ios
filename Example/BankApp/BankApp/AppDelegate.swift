@@ -12,13 +12,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var navigationController: UINavigationController?
-    var launchMapViewFlag: Bool = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         ProjectVerifyAppDelegate.shared.application(
             application,
-            didFinishLaunchingWithOptions: launchOptions
+            didFinishLaunchingWithOptions: launchOptions,
+            projectVerifyOptions: BuildInfo.projectVerifyOptions
         )
 
         // Override point for customization after application launch.

@@ -65,16 +65,6 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
         return activity
     }()
     
-    let debugButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-        button.backgroundColor = AppTheme.themeColor
-        button.setTitle("Debug", for: .normal)
-        button.addTarget(self, action: #selector(debug), for: .touchUpInside)
-        return button
-    }()
-    
     let logoutButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -84,17 +74,13 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
         return button
     }()
     
-    let illustrationPurposes: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "For illustration purposes only"
-        label.textAlignment = .center
-        return label
-    }()
+    let illustrationPurposes: UILabel = BuildInfo.makeWatermarkLabel()
     
     var selectedPinMapItem: MKMapItem?
     var userInfoJson: JsonDocument?
-    var token: String?
+    var token: String? {
+        return AccountManager.token
+    }
     let serviceAPI = ServiceAPI()
 
     /// Do any additional setup after loading the view.
@@ -117,12 +103,6 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
                 self.displayUserInfo(from: userInfoResponse)
             }
         }
-    }
-
-    @IBAction func debug() {
-//        let vc = DebugViewController()
-//        vc.finalInit(with: DebugViewController.Info(token: self.token, userInfo: self.userInfo, code: nil))
-//        present(vc, animated: true, completion: nil)
     }
 
     var geocoder: CLGeocoder?
@@ -153,16 +133,15 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
             let googleapiURL = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?address=\(zipCode)&sensor=false&key=laksjdf;kqwe;lf")
             URLSession.shared.dataTask(with:googleapiURL!, completionHandler: {(data, response, error) in
                 guard let data = data, error == nil else {return}
-                
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                         let blogs = json["results"] as? [[String: Any]] {
                         for iteration in blogs {
-                            
+
                             if let address = (iteration["formatted_address"]) as? String {
                                 print("The address extracted from ZIP code is \(address)")
                                 dummyAddress = address
-                                
+
                                 DispatchQueue.main.async {
                                     self.addressLabel.text = dummyAddress
                                 }
@@ -174,20 +153,20 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
                                         let placemark = MKPlacemark(placemark: topResult)
                                         mapView.mapType = MKMapType.standard
                                         mapView.setCenter(placemark.coordinate, animated: true)
-                                        
+
                                         let span = MKCoordinateSpanMake(0.05, 0.05)
                                         let mkRegion = MKCoordinateRegionMake(placemark.coordinate, span)
-                                        
+
                                         let request = MKLocalSearchRequest()
-                                        request.naturalLanguageQuery = AppConfig.searchQuery
+                                        request.naturalLanguageQuery = ""
                                         request.region = mkRegion
-                                        
-                                        self.searchQueryLabel.text = "\(AppConfig.searchQuery) near \(zipCode)"
-                                        
+
+                                        self.searchQueryLabel.text = "\("") near \(zipCode)"
+
                                         let search = MKLocalSearch(request: request)
-                                        
+
                                         search.start(completionHandler: { (results, error) in
-                                            
+
                                             if let err = error {
                                                 print("Error occurred in search: \(err.localizedDescription)")
                                             } else if results?.mapItems.count == 0 {
@@ -196,12 +175,12 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
                                                 print("Matches found")
                                                 var matchingItems: [MKMapItem] = [MKMapItem]()
                                                 for item in (results?.mapItems)!{
-                                                    
+
                                                     print("Name = \(item.name ?? "No match")")
                                                     matchingItems.append(item as MKMapItem)
-                                                   
+
                                                     self.selectedPinMapItem = item
-                                        
+
                                                     let annotation = MKPointAnnotation()
                                                     annotation.coordinate = item.placemark.coordinate
                                                     annotation.title = item.name
@@ -209,13 +188,13 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
                                                     self.mapView.addAnnotation(annotation)
                                                 }
                                                 print("Matching items = \(matchingItems.count)")
-                                                
+
                                             }
                                         })
-                                        
+
                                         mapView.setRegion(mkRegion, animated: true)
-                                        
-                                        DispatchQueue.main.async {    
+
+                                        DispatchQueue.main.async {
                                              self.activity.stopAnimating()
                                         }
                                     }
@@ -264,8 +243,6 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
             button.addTarget(self, action: #selector(getDirections), for: .touchUpInside)
             pinView?.leftCalloutAccessoryView = button
 
-
-
         } else {
             pinView?.annotation = annotation
         }
@@ -275,7 +252,7 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide = view.safeAreaLayoutGuide
+        let safeAreaGuide = getSafeLayoutGuide()
         
         navigationController?.isNavigationBarHidden = true
         
@@ -285,7 +262,6 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
         view.addSubview(phoneLabel)
         view.addSubview(searchQueryLabel)
         view.addSubview(mapView)
-        view.addSubview(debugButton)
         view.addSubview(logoutButton)
         view.addSubview(illustrationPurposes)
         
@@ -308,11 +284,7 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
         constraints.append(mapView.widthAnchor.constraint(equalTo: safeAreaGuide.widthAnchor))
         constraints.append(mapView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
         
-        constraints.append(debugButton.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 10))
-        constraints.append(debugButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 10))
-        constraints.append(debugButton.heightAnchor.constraint(equalToConstant: 44))
-
-        constraints.append(logoutButton.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -25))
+        constraints.append(logoutButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -25))
         constraints.append(logoutButton.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
         constraints.append(logoutButton.heightAnchor.constraint(equalToConstant: 44))
         constraints.append(logoutButton.widthAnchor.constraint(equalToConstant: 100))

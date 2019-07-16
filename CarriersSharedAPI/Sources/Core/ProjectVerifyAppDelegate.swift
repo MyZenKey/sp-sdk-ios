@@ -34,6 +34,7 @@ public class ProjectVerifyAppDelegate {
     ///   - application: The UIApplication instance received by your application's app
     ///     delegate
     ///   - launchOptions: The launchOptions received by your applicaiton's app delegate
+    ///   - projectVerifyOptions: Project verify specific options.
     ///
     /// This method is responsible for configuring the ProjectVerifyLogin SDK and should be called
     /// before performing any other actions with the SDK.
@@ -41,13 +42,12 @@ public class ProjectVerifyAppDelegate {
     /// - SeeAlso: UIApplicationDelegate.application(_:didFinishLaunchingWithOptions:)
     public func application(
         _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?,
+        projectVerifyOptions: ProjectVerifyOptions = [:]) {
         // initialize sdk config
         do {
-
             let sdkConfig = try SDKConfig.load(fromBundle: Bundle.main)
-            self.dependencies = Dependencies(sdkConfig: sdkConfig)
-
+            self.dependencies = Dependencies(sdkConfig: sdkConfig, options: projectVerifyOptions)
         } catch {
             fatalError("Bundle configuration error: \(error)")
         }

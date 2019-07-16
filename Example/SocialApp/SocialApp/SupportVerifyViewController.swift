@@ -79,7 +79,7 @@ class SupportVerifyViewController: UIViewController {
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide = view.safeAreaLayoutGuide
+        let safeAreaGuide = getSafeLayoutGuide()
         
         navigationItem.titleView = titleViewImage
         navigationController?.isNavigationBarHidden =  false

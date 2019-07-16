@@ -8,29 +8,13 @@
 import UIKit
 import CarriersSharedAPI
 
-class EnableVerifyViewController: UIViewController {
-
-    let gradientView: GradientView = {
-        let gradientView = GradientView()
-        gradientView.translatesAutoresizingMaskIntoConstraints = false
-        return gradientView
-    }()
-    
-    let logo: UIImageView = {
-        let logo = UIImageView()
-        logo.translatesAutoresizingMaskIntoConstraints = false
-        logo.image = UIImage(named: "applogo_white")
-        logo.contentMode = .scaleAspectFit
-        return logo
-    }()
-
+class EnableVerifyViewController: BankAppViewController {
     let cancelButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("No, thanks", for: .normal)
         button.addTarget(self, action: #selector(cancelVerify(_:)), for: .touchUpInside)
         button.setTitleColor(UIColor(red: 0.36, green: 0.56, blue: 0.93, alpha: 1.0), for: .normal)
-
         return button
     }()
     
@@ -57,14 +41,6 @@ class EnableVerifyViewController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
-    
-    let illustrationPurposes: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "For illustration purposes only"
-        label.textAlignment = .center
-        return label
-    }()
 
     lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
@@ -83,11 +59,6 @@ class EnableVerifyViewController: UIViewController {
         layoutView()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     @objc func cancelVerify(_ sender: Any) {
         navigationController?.popToRootViewController(animated: true)
     }
@@ -95,30 +66,12 @@ class EnableVerifyViewController: UIViewController {
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide: UILayoutGuide
-        if #available(iOS 11.0, *) {
-            safeAreaGuide = view.safeAreaLayoutGuide
-        } else {
-            // Fallback on earlier versions
-            safeAreaGuide = view.layoutMarginsGuide
-        }
+        let safeAreaGuide = getSafeLayoutGuide()
         
-        view.addSubview(gradientView)
-        view.addSubview(logo)
         view.addSubview(titleLabel)
         view.addSubview(descriptionLabel)
-//        view.addSubview(enableButton)
         view.addSubview(cancelButton)
-        view.addSubview(illustrationPurposes)
         view.addSubview(projectVerifyButton)
-        
-        constraints.append(gradientView.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(gradientView.widthAnchor.constraint(equalTo: view.widthAnchor))
-        constraints.append(gradientView.heightAnchor.constraint(equalToConstant: 70))
-        
-        constraints.append(logo.centerYAnchor.constraint(equalTo: gradientView.centerYAnchor))
-        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
-        constraints.append(logo.heightAnchor.constraint(equalToConstant: 60))
         
         constraints.append(titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
         constraints.append(titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
@@ -127,20 +80,16 @@ class EnableVerifyViewController: UIViewController {
         constraints.append(descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20))
         constraints.append(descriptionLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(descriptionLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        
-        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -25))
-        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(cancelButton.heightAnchor.constraint(equalToConstant: 48))
-        
+
         constraints.append(projectVerifyButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -25))
         constraints.append(projectVerifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
         constraints.append(projectVerifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
 
-        constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
-        constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
-        constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
-        
+        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -25))
+        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+        constraints.append(cancelButton.heightAnchor.constraint(equalToConstant: 48))
+
         NSLayoutConstraint.activate(constraints)
         
     }

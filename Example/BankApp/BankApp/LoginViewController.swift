@@ -78,18 +78,33 @@ class LoginViewController: UIViewController {
         return button
     }()
 
+    lazy var toggleEnv: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let currentHost = BuildInfo.isQAHost ? "QA" : "Prod"
+        button.setTitle("Toggle Host: current host \(currentHost)", for: .normal)
+        button.addTarget(self, action: #selector(toggleHost), for: .touchUpInside)
+        return button
+    }()
+
+    lazy var inputToolbar: UIToolbar = {
+        let toolbar = UIToolbar()
+        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
+        toolbar.items = [flex, doneButton]
+        toolbar.sizeToFit()
+        return toolbar
+    }()
+
     let serviceAPI = ServiceAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         layoutView()
-        idTextField.becomeFirstResponder()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         idTextField.becomeFirstResponder()
     }
 
@@ -108,17 +123,25 @@ class LoginViewController: UIViewController {
         //   Yes - go directly to sub-flow 2.0.3 in Verify
         self.navigationController?.pushViewController(EnableVerifyViewController(), animated: true)
     }
+
+    @objc func toggleHost(_ sender: Any) {
+        BuildInfo.toggleHost()
+        showAlert(
+            title: "Host Updated",
+            message: "The app will now exit, restart for the new host to take effect.") {
+            fatalError("restarting app")
+        }
+    }
+
+    @objc func dismissKeyboard() {
+        idTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+    }
     
     func layoutView() {
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide: UILayoutGuide
-        if #available(iOS 11.0, *) {
-            safeAreaGuide = view.safeAreaLayoutGuide
-        } else {
-            // Fallback on earlier versions
-            safeAreaGuide = view.layoutMarginsGuide
-        }
+        let safeAreaGuide = getSafeLayoutGuide()
 
         view.addSubview(gradientBackground)
         view.addSubview(logo)
@@ -128,9 +151,13 @@ class LoginViewController: UIViewController {
         view.addSubview(forgotButton)
         view.addSubview(registerButton)
         view.addSubview(projectVerifyButton)
-        
+        view.addSubview(toggleEnv)
+
         gradientBackground.frame = view.frame
-        
+
+        idTextField.inputAccessoryView = inputToolbar
+        passwordTextField.inputAccessoryView = inputToolbar
+
         constraints.append(logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 80))
         constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
         constraints.append(logo.heightAnchor.constraint(equalToConstant: 20))
@@ -162,6 +189,9 @@ class LoginViewController: UIViewController {
         constraints.append(projectVerifyButton.topAnchor.constraint(equalTo: forgotButton.bottomAnchor, constant: 20.0))
         constraints.append(projectVerifyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(projectVerifyButton.widthAnchor.constraint(equalTo: signInButton.widthAnchor))
+
+        constraints.append(toggleEnv.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(toggleEnv.topAnchor.constraint(equalTo: projectVerifyButton.bottomAnchor, constant: 20.0))
 
         NSLayoutConstraint.activate(constraints)
     }

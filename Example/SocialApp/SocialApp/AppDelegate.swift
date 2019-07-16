@@ -9,7 +9,6 @@ import CarriersSharedAPI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var window: UIWindow?
     var navigationController: UINavigationController?
     var launchMapViewFlag: Bool = true
@@ -18,13 +17,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         ProjectVerifyAppDelegate.shared.application(
             application,
-            didFinishLaunchingWithOptions: launchOptions
+            didFinishLaunchingWithOptions: launchOptions,
+            projectVerifyOptions: BuildInfo.projectVerifyOptions
         )
 
         window = UIWindow(frame: UIScreen.main.bounds)
-        
+
         if let window = window {
-            let mainVC = ViewController()
+
+            let mainVC: UIViewController
+            if AccountManager.isLoggedIn {
+                mainVC = UserInfoViewController()
+            } else {
+                mainVC = LandingViewController()
+            }
             navigationController = UINavigationController(rootViewController: mainVC)
             navigationController?.isNavigationBarHidden = true
             window.rootViewController = navigationController
@@ -32,35 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         return true
-    }
-
-    /// Tells the delegate that the data for continuing an activity is available.
-    ///
-    /// - Parameters:
-    ///   - application: The shared app object that controls and coordinates your app.
-    ///   - userActivity: The activity object containing the data associated with the task the user was performing. Use the data to continue the user's activity in your iOS app.
-    ///   - restorationHandler: A block to execute if your app creates objects to perform the task. Calling this block is optional.
-    /// - Returns: true to indicate that your app handled the activity or false to let iOS know that your app did not handle the activity.
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Swift.Void) -> Bool {
-
-        // TODO: There isn't a use case for this yet – re-enable this if one emerges
-//        print("Universal link attempt detected: \(String(describing: userActivity.webpageURL))")
-//
-//        if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
-//            guard let url = userActivity.webpageURL else { return false }
-//
-//            let vc = UserInfoViewController()
-//            vc.url = url
-//
-//            navigationController = UINavigationController(rootViewController: vc)
-//            navigationController?.isNavigationBarHidden = true
-//            window?.rootViewController = navigationController
-//            window?.makeKeyAndVisible()
-//
-//            return true
-//        }
-
-        return false
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
@@ -95,8 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func launchMapScreen(token: String) {
         let vc = UserInfoViewController()
-        vc.token = token
-        
+
         navigationController = UINavigationController(rootViewController: vc)
         navigationController?.isNavigationBarHidden = true
         window?.rootViewController = navigationController
@@ -106,7 +82,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func launchSignUpScreen(token: String) {
         print("Launching signup screen")
         let vc = SignUpViewController()
-        vc.token = token
         navigationController = UINavigationController(rootViewController: vc)
         navigationController?.isNavigationBarHidden = true
         window?.rootViewController = navigationController
@@ -121,25 +96,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func logout() {
-        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
-        UserDefaults.resetStandardUserDefaults()
-        
-        let dictionary = UserDefaults.standard.dictionaryRepresentation()
-        dictionary.keys.forEach { key in
-            UserDefaults.standard.removeObject(forKey: key)
-        }
-        UserDefaults.standard.synchronize()
-        
-        NSLog("Reset UserDefaults is successful")
+        AccountManager.logout()
         launchLoginScreen()
     }
     
     func launchLoginScreen() {
         print("Launching login screen")
-        navigationController = UINavigationController(rootViewController: ViewController())
+        navigationController = UINavigationController(rootViewController: LandingViewController())
         navigationController?.isNavigationBarHidden = true
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
 }
-

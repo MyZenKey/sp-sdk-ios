@@ -9,36 +9,25 @@
 import UIKit
 import CarriersSharedAPI
 
-extension UIViewController {
+// MARK: - View Helpers
 
-    func completeFlow(withError error: AuthorizationError) {
-        switch error.errorType {
-        case .requestDenied:
-            showAlert(
-                title: "The User Cancelled the Request",
-                message: "Comeback later if you change your mind."
-            )
-        default:
-            showAlert(title: "Error", message: "An error occured")
+extension UIViewController {
+    struct Constants {
+        static var gradientHeaderHeight: CGFloat {
+            let base: CGFloat = 70
+            if #available(iOS 11.0, *) {
+                return base
+            } else {
+                // before ios 11, account for status bar (automatically accounted for in safe area)
+                return  base + UIApplication.shared.statusBarFrame.height
+            }
         }
     }
+}
 
-    func cancelFlow() {
-        showAlert(title: "Cancelled", message: "The transaction was cancelled")
-    }
+// MARK: - Navigation
 
-    func showAlert(title: String, message: String) {
-        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        controller.addAction(
-            UIAlertAction(title: "Okay",
-                          style: .default,
-                          handler: { [weak self] _ in
-                            self?.dismiss(animated: true, completion: nil)
-            })
-        )
-        present(controller, animated: true, completion: nil)
-    }
-
+extension UIViewController {
     func launchHomeScreen() {
         // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
         let appDelegate = UIApplication.shared.delegate! as! AppDelegate

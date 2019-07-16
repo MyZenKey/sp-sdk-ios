@@ -84,22 +84,7 @@ class CheckoutViewController: UIViewController {
         return button
     }()
     
-    let poweredByLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.text = "POWERED BY"
-        label.font = UIFont.systemFont(ofSize: 10)
-        return label
-    }()
-    
-    let illustrationPurposes: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "For illustration purposes only"
-        label.textAlignment = .center
-        return label
-    }()
+    let illustrationPurposes: UILabel = BuildInfo.makeWatermarkLabel()
 
     var authzCode: String?
     var tokenInfo: String?
@@ -117,31 +102,9 @@ class CheckoutViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         layoutView()
-        
-        if let logo = UIImage(named: "carrier-logo") {
-            let imageView = UIImageView(image: logo)
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
-            imageView.setContentCompressionResistancePriority(.required, for: .vertical)
-            poweredByLabel.addSubview(imageView)
-            
-            imageView.leadingAnchor.constraint(equalTo: poweredByLabel.trailingAnchor, constant: 4).isActive = true
-            imageView.trailingAnchor.constraint(equalTo: poweredByLabel.trailingAnchor).isActive = true
-            imageView.heightAnchor.constraint(equalTo: poweredByLabel.heightAnchor).isActive = true
-            imageView.centerYAnchor.constraint(equalTo: poweredByLabel.centerYAnchor).isActive = true
-        } else {
-            poweredByLabel.text = "Powered by \(carrier ?? "")"
-        }
-        
-        print("Checking for non-null url passed from app delegate")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func onUseVerifyKeyAddressTapped(_ sender: Any) {
+    @objc func onUseVerifyKeyAddressTapped(_ sender: Any) {
         // Request an authorization code from Project Verify:
         let scopes: [Scope] = [.authorize, .openid, .name, .email, .address, .postalCode]
         authService.authorize(
@@ -237,7 +200,6 @@ class CheckoutViewController: UIViewController {
         view.addSubview(requiredLabel)
         view.addSubview(checkoutButton)
         view.addSubview(verifyButton)
-        view.addSubview(poweredByLabel)
         view.addSubview(illustrationPurposes)
         
         constraints.append(nameField.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 20))
@@ -278,11 +240,7 @@ class CheckoutViewController: UIViewController {
         constraints.append(verifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(verifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
         constraints.append(verifyButton.heightAnchor.constraint(equalToConstant: 44))
-        
-        constraints.append(poweredByLabel.topAnchor.constraint(equalTo: verifyButton.bottomAnchor, constant: 5))
-        constraints.append(poweredByLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
-        constraints.append(poweredByLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        
+
         constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -5))
         constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
         constraints.append(illustrationPurposes.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
