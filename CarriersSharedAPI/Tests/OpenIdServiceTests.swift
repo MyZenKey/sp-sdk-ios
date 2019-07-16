@@ -10,44 +10,6 @@ import XCTest
 import AppAuth
 @testable import CarriersSharedAPI
 
-class MockURLResolver: OpenIdURLResolverProtocol {
-
-    var lastStorage: OpenIdExternalSessionStateStorage?
-    var lastRequest: OIDAuthorizationRequest?
-    var lastViewController: UIViewController?
-    var lastParameters: OpenIdAuthorizationParameters?
-    var lastCompletion: OpenIdURLResolverCompletion?
-
-    func clear() {
-        lastStorage = nil
-        lastRequest = nil
-        lastViewController = nil
-        lastParameters = nil
-        lastCompletion = nil
-    }
-
-    func resolve(
-        request: OIDAuthorizationRequest,
-        usingStorage storage: OpenIdExternalSessionStateStorage,
-        fromViewController viewController: UIViewController,
-        authorizationParameters: OpenIdAuthorizationParameters,
-        completion: @escaping OpenIdURLResolverCompletion) {
-        lastStorage = storage
-        lastRequest = request
-        lastViewController = viewController
-        lastParameters = authorizationParameters
-        lastCompletion = completion
-    }
-
-    func performCCIDAuthorization(
-        request: OIDAuthorizationRequest,
-        storage: OpenIdExternalSessionStateStorage,
-        authorizationParameters: OpenIdAuthorizationParameters,
-        completion: @escaping OpenIdURLResolverCompletion) {
-
-    }
-}
-
 class OpenIdServiceTests: XCTestCase {
     var mockURLResolver = MockURLResolver()
     lazy var openIdService: OpenIdService = {
@@ -362,6 +324,23 @@ class AuthorizationURLBuilderTests: XCTestCase {
         XCTAssertEqual(url, expectdURL)
     }
 
+    func testBase64EncodesContextCorrectly() {
+        let parameters = OpenIdAuthorizationParameters(
+            clientId: "1234",
+            redirectURL: URL.mocked,
+            formattedScopes: "openid profile email",
+            state: "foo",
+            nonce: "bar",
+            acrValues: [.aal1],
+            prompt: .consent,
+            correlationId: "fizz",
+            context: "buzz",
+            loginHintToken: "boo"
+        )
+
+        XCTAssertEqual(parameters.base64EncodedContext, "YnV6eg==")
+    }
+
     func testBuildsCorrectRequestWithOptionalParameters() {
         let parameters = OpenIdAuthorizationParameters(
             clientId: "1234",
@@ -387,7 +366,7 @@ class AuthorizationURLBuilderTests: XCTestCase {
         let url: URL = request.authorizationRequestURL()
         let expectdURL = URL(
             // swiftlint:disable:next line_length
-            string: "https://rightpoint.com?correlation_id=fizz&prompt=consent&response_type=code&nonce=bar&scope=openid%20profile%20email&context=buzz&acr_values=aal1&login_hint_token=boo&redirect_uri=https://rightpoint.com&client_id=1234&state=foo"
+            string: "https://rightpoint.com?correlation_id=fizz&prompt=consent&response_type=code&nonce=bar&scope=openid%20profile%20email&context=YnV6eg%3D%3D&acr_values=aal1&login_hint_token=boo&redirect_uri=https://rightpoint.com&client_id=1234&state=foo"
         )!
         XCTAssertEqual(url, expectdURL)
     }

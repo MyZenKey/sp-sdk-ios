@@ -50,12 +50,12 @@ struct OpenIdAuthorizationParameters: Equatable {
     }
 
     var base64EncodedContext: String? {
-        guard let context = context else  {
+        guard let context = context else {
                 return nil
         }
-
         // utf8 will encode all for all swift strings:
-        return context.data(using: .utf8)!.base64EncodedString()
+        return context.data(using: .utf8)!
+            .base64EncodedString()
     }
 }
 
