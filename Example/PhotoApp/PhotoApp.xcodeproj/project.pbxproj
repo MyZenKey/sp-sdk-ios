@@ -12,20 +12,17 @@
 		233B6168220BAADB008A0E27 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B6165220BAADB008A0E27 /* Debug.xcconfig */; };
 		233B6169220BAADB008A0E27 /* Develop.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B6166220BAADB008A0E27 /* Develop.xcconfig */; };
 		233B616A220BAADB008A0E27 /* Sprint.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B6167220BAADB008A0E27 /* Sprint.xcconfig */; };
-		56ECBCFF220BA6E300AEC6CE /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ECBCFE220BA6E300AEC6CE /* AppTheme.swift */; };
 		56ECBD01220BA73200AEC6CE /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ECBD00220BA73200AEC6CE /* Extension.swift */; };
-		662387E2212FCF9000494A81 /* ProjectVerifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662387E1212FCF9000494A81 /* ProjectVerifyController.swift */; };
 		7D073C17202A640500E163E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D073C16202A640500E163E4 /* AppDelegate.swift */; };
 		7D073C19202A640500E163E4 /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D073C18202A640500E163E4 /* CartViewController.swift */; };
 		7D073C1E202A640500E163E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D073C1D202A640500E163E4 /* Assets.xcassets */; };
 		7D073C21202A640500E163E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D073C1F202A640500E163E4 /* LaunchScreen.storyboard */; };
 		7D073C2D202A674C00E163E4 /* DictionaryUrlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D073C2B202A674C00E163E4 /* DictionaryUrlQuery.swift */; };
 		7D073C2E202A674C00E163E4 /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D073C2C202A674C00E163E4 /* JsonDocument.swift */; };
-		7D073C30202A676000E163E4 /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D073C2F202A675F00E163E4 /* DebugViewController.swift */; };
+		8A8A581022DFD8CD0078BAB1 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56ECBCFE220BA6E300AEC6CE /* AppTheme.swift */; };
 		8AC2A3A222D9271D00B72551 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2A39F22D9271C00B72551 /* AccountManager.swift */; };
 		8AC2A3A322D9271D00B72551 /* BuildInfoUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2A3A022D9271D00B72551 /* BuildInfoUtilities.swift */; };
 		8AC2A3A422D9271D00B72551 /* UIViewController+ExampleApps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2A3A122D9271D00B72551 /* UIViewController+ExampleApps.swift */; };
-		8C103E7E21078EC200E232EE /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C103E7D21078EC200E232EE /* AppConfig.swift */; };
 		8C94CE1720F3135000805089 /* CheckoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C94CE1620F3135000805089 /* CheckoutViewController.swift */; };
 		8CC5A0DA21431CD2006D6735 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC5A0D921431CD2006D6735 /* UIViewController+Ext.swift */; };
 /* End PBXBuildFile section */
@@ -53,7 +50,6 @@
 		2453F4C6F268DEC8E29D0D6F /* Pods-PhotoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoApp/Pods-PhotoApp.debug.xcconfig"; sourceTree = "<group>"; };
 		56ECBCFE220BA6E300AEC6CE /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		56ECBD00220BA73200AEC6CE /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
-		662387E1212FCF9000494A81 /* ProjectVerifyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectVerifyController.swift; sourceTree = "<group>"; };
 		7AA8624BA9434A1B5AFA1C6E /* Pods_PhotoApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PhotoApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D073C13202A640500E163E4 /* PhotoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D073C16202A640500E163E4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -63,12 +59,10 @@
 		7D073C22202A640500E163E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D073C2B202A674C00E163E4 /* DictionaryUrlQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryUrlQuery.swift; sourceTree = "<group>"; };
 		7D073C2C202A674C00E163E4 /* JsonDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonDocument.swift; sourceTree = "<group>"; };
-		7D073C2F202A675F00E163E4 /* DebugViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugViewController.swift; sourceTree = "<group>"; };
 		7D073C31202A679E00E163E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8AC2A39F22D9271C00B72551 /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountManager.swift; path = ../../Shared/Utilities/AccountManager.swift; sourceTree = "<group>"; };
 		8AC2A3A022D9271D00B72551 /* BuildInfoUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BuildInfoUtilities.swift; path = ../../Shared/Utilities/BuildInfoUtilities.swift; sourceTree = "<group>"; };
 		8AC2A3A122D9271D00B72551 /* UIViewController+ExampleApps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+ExampleApps.swift"; path = "../../Shared/Utilities/UIViewController+ExampleApps.swift"; sourceTree = "<group>"; };
-		8C103E7D21078EC200E232EE /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		8C94CE1620F3135000805089 /* CheckoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewController.swift; sourceTree = "<group>"; };
 		8CC5A0D921431CD2006D6735 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 		9C7CE2B2CB60B9FC6B3533DE /* Pods-PhotoApp.sprint.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoApp.sprint.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoApp/Pods-PhotoApp.sprint.xcconfig"; sourceTree = "<group>"; };
@@ -152,14 +146,11 @@
 				8CC5A0D921431CD2006D6735 /* UIViewController+Ext.swift */,
 				7D073C16202A640500E163E4 /* AppDelegate.swift */,
 				7D073C18202A640500E163E4 /* CartViewController.swift */,
-				7D073C2F202A675F00E163E4 /* DebugViewController.swift */,
 				8C94CE1620F3135000805089 /* CheckoutViewController.swift */,
-				662387E1212FCF9000494A81 /* ProjectVerifyController.swift */,
 				7D073C1D202A640500E163E4 /* Assets.xcassets */,
 				7D073C1F202A640500E163E4 /* LaunchScreen.storyboard */,
 				7D073C22202A640500E163E4 /* Info.plist */,
 				7D073C2A202A673300E163E4 /* Utilities */,
-				8C103E7D21078EC200E232EE /* AppConfig.swift */,
 				56ECBCFE220BA6E300AEC6CE /* AppTheme.swift */,
 				23196D8E2230583D005393AB /* ServiceAPI.swift */,
 			);
@@ -315,21 +306,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D073C30202A676000E163E4 /* DebugViewController.swift in Sources */,
-				56ECBCFF220BA6E300AEC6CE /* AppTheme.swift in Sources */,
 				8CC5A0DA21431CD2006D6735 /* UIViewController+Ext.swift in Sources */,
 				8AC2A3A322D9271D00B72551 /* BuildInfoUtilities.swift in Sources */,
 				56ECBD01220BA73200AEC6CE /* Extension.swift in Sources */,
-				8C103E7E21078EC200E232EE /* AppConfig.swift in Sources */,
 				7D073C19202A640500E163E4 /* CartViewController.swift in Sources */,
 				7D073C2D202A674C00E163E4 /* DictionaryUrlQuery.swift in Sources */,
 				7D073C17202A640500E163E4 /* AppDelegate.swift in Sources */,
 				8AC2A3A222D9271D00B72551 /* AccountManager.swift in Sources */,
 				8AC2A3A422D9271D00B72551 /* UIViewController+ExampleApps.swift in Sources */,
 				7D073C2E202A674C00E163E4 /* JsonDocument.swift in Sources */,
+				8A8A581022DFD8CD0078BAB1 /* AppTheme.swift in Sources */,
 				8C94CE1720F3135000805089 /* CheckoutViewController.swift in Sources */,
 				23196D8F2230583D005393AB /* ServiceAPI.swift in Sources */,
-				662387E2212FCF9000494A81 /* ProjectVerifyController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

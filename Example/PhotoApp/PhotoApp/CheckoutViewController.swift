@@ -82,14 +82,6 @@ class CheckoutViewController: UIViewController {
     
     let illustrationPurposes: UILabel = BuildInfo.makeWatermarkLabel()
 
-    var authzCode: String?
-    var tokenInfo: String?
-    var userInfo: String?
-    let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: Foundation.OperationQueue.main)
-    var dataTask: URLSessionDataTask?
-    var window: UIWindow?
-
-    var carrier: String? = "TODO: Carrier"
     let authService = AuthorizationService()
     let serviceAPI = ServiceAPI()
 
@@ -106,9 +98,6 @@ class CheckoutViewController: UIViewController {
     }
 
     func displayUserInfo(from json: JsonDocument){
-        print("Populating user information..")
-        self.userInfo = json.description
-       
         if let family_name = json["family_name"].toString, let given_name = json["given_name"].toString {
             self.nameField.text = "\(given_name) \(family_name)"
         }
