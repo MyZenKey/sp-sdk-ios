@@ -81,7 +81,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func launchCheckOutScreen(code: String) {
         let checkoutViewController = CheckoutViewController()
         let navigationController = UINavigationController(rootViewController: checkoutViewController)
-        checkoutViewController.authzCode = code
 
         UIApplication.shared.keyWindow?.rootViewController?.present(navigationController, animated: true, completion: nil)
     }
