@@ -292,7 +292,6 @@ extension SignUpViewController: ProjectVerifyAuthorizeButtonDelegate {
 
     func authorizeUser(authorizedResponse: AuthorizedResponse) {
         let code = authorizedResponse.code
-        UserDefaults.standard.set(code, forKey: "AuthZCode")
         self.serviceAPI.login(
             withAuthCode: code,
             mcc: authorizedResponse.mcc,

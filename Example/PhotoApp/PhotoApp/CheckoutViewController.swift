@@ -71,16 +71,12 @@ class CheckoutViewController: UIViewController {
         return button
     }()
     
-    let verifyButton: UIButton = {
-        let button = UIButton()
+    lazy private(set) var verifyButton: ProjectVerifyAuthorizeButton = {
+        let button = ProjectVerifyAuthorizeButton()
+        let scopes: [Scope] = [.authorize, .openid, .name, .email, .address, .postalCode]
+        button.scopes = scopes
+        button.delegate = self
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
-        button.setImage(UIImage(named: "buttonlogo"), for: .normal)
-        button.setTitle("Fill form with VERIFY", for: .normal)
-        button.backgroundColor = AppTheme.verifyGreen
-        button.layer.masksToBounds = true
-        button.layer.cornerRadius = 22
-        button.addTarget(self, action: #selector(onUseVerifyKeyAddressTapped(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -100,64 +96,13 @@ class CheckoutViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
         layoutView()
-    }
-    
-    @objc func onUseVerifyKeyAddressTapped(_ sender: Any) {
-        // Request an authorization code from Project Verify:
-        let scopes: [Scope] = [.authorize, .openid, .name, .email, .address, .postalCode]
-        authService.authorize(
-            scopes: scopes,
-            fromViewController: self) { result in
-                // handle the result of the authorization call
-                switch result {
-                case .code(let authorizedResponse):
-                    self.authorizeUser(authorizedResponse: authorizedResponse)
-                case .error:
-                    self.launchLoginScreen()
-                case .cancelled:
-                    self.launchLoginScreen()
-                }
-        }
-    }
-
-    func authorizeUser(authorizedResponse: AuthorizedResponse) {
-        let code = authorizedResponse.code
-        UserDefaults.standard.set(code, forKey: "AuthZCode")
-        self.serviceAPI.login(
-            withAuthCode: code,
-            mcc: authorizedResponse.mcc,
-            mnc: authorizedResponse.mnc,
-            completionHandler: { json, error in
-                guard
-                    let accountToken = json?["token"],
-                    let tokenString = accountToken.toString else {
-                        print("error no token returned")
-                        return
-                }
-                UserDefaults.standard.set(tokenString, forKey: "AccessToken")
-
-                self.requestUserInfo(token: tokenString)
-        })
     }
 
     func requestUserInfo(token: String) {
         self.serviceAPI.getUserInfo(with: token) { userJSON in
             self.displayUserInfo(from: userJSON)
         }
-    }
-
-    func launchLoginScreen() {
-        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-        appDelegate.launchLoginScreen()
-    }
-
-    @IBAction func debug() {
-        let vc = DebugViewController()
-        vc.finalInit(with: DebugViewController.Info(token: tokenInfo, userInfo: userInfo, code: authzCode))
-        navigationController?.pushViewController(vc, animated: true)
     }
 
     func displayUserInfo(from json: JsonDocument){
@@ -239,7 +184,6 @@ class CheckoutViewController: UIViewController {
         constraints.append(verifyButton.topAnchor.constraint(equalTo: checkoutButton.bottomAnchor, constant: 80))
         constraints.append(verifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(verifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        constraints.append(verifyButton.heightAnchor.constraint(equalToConstant: 44))
 
         constraints.append(illustrationPurposes.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -5))
         constraints.append(illustrationPurposes.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
@@ -249,4 +193,39 @@ class CheckoutViewController: UIViewController {
         
     }
     
+}
+
+extension CheckoutViewController: ProjectVerifyAuthorizeButtonDelegate {
+
+    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) { }
+
+    func buttonDidFinish(_ button: ProjectVerifyAuthorizeButton, withResult result: AuthorizationResult) {
+        // handle the result of the authorization call
+        switch result {
+        case .code(let authorizedResponse):
+            self.authorizeUser(authorizedResponse: authorizedResponse)
+        case .error(let error):
+            self.completeFlow(withError: error)
+        case .cancelled:
+            self.cancelFlow()
+        }
+    }
+
+    func authorizeUser(authorizedResponse: AuthorizedResponse) {
+        let code = authorizedResponse.code
+        serviceAPI.login(
+            withAuthCode: code,
+            mcc: authorizedResponse.mcc,
+            mnc: authorizedResponse.mnc,
+            completionHandler: { json, error in
+                guard
+                    let accountToken = json?["token"],
+                    let tokenString = accountToken.toString else {
+                        self.showAlert(title: "Error", message: "Error logging in.", onDismiss: nil)
+                        return
+                }
+
+                self.requestUserInfo(token: tokenString)
+        })
+    }
 }
