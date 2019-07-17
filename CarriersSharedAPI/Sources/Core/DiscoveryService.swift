@@ -73,8 +73,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
             var outcome = result
             // if we have an error, attempt to recover from cache
             if case .error = result, let simInfo = simInfo {
-                if let fallBackConfig = self?.recoverFromCache(simInfo: simInfo,
-                                                               allowStaleRecords: true) {
+                if let fallBackConfig = self?.recoverFromCache(simInfo: simInfo) {
                     let config = CarrierConfig(
                         simInfo: simInfo,
                         openIdConfig: fallBackConfig)
@@ -118,10 +117,8 @@ private extension DiscoveryService {
         performDiscovery(for: simInfo, prompt: prompt, completion: completion)
     }
 
-    func recoverFromCache(simInfo: SIMInfo,
-                          allowStaleRecords: Bool = false) -> OpenIdConfig? {
-        return configCacheService.config(forSIMInfo: simInfo,
-                                         allowStaleRecords: allowStaleRecords)
+    func recoverFromCache(simInfo: SIMInfo) -> OpenIdConfig? {
+        return configCacheService.config(forSIMInfo: simInfo)
     }
 
     func performDiscovery(for simInfo: SIMInfo?,

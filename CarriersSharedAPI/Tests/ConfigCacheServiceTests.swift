@@ -22,7 +22,7 @@ class ConfigCacheServiceTests: XCTestCase {
         let config = randomMockOIDConfig()
         let tmoSIM = MockSIMs.tmobile
         configCacheService.cacheConfig(config, forSIMInfo: tmoSIM)
-        let result = configCacheService.config(forSIMInfo: tmoSIM, allowStaleRecords: false)
+        let result = configCacheService.config(forSIMInfo: tmoSIM)
         XCTAssertEqual(config, result)
     }
 
@@ -37,45 +37,16 @@ class ConfigCacheServiceTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "async cache access")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(delay)) {
-            let result = self.configCacheService.config(forSIMInfo: tmoSIM, allowStaleRecords: false)
+            let result = self.configCacheService.config(forSIMInfo: tmoSIM)
             XCTAssertNil(result)
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
     }
 
-    func testAllowStaleRecordsReturnCached() {
-        let config = randomMockOIDConfig()
-        let tmoSIM = MockSIMs.tmobile
-        configCacheService.cacheConfig(config, forSIMInfo: tmoSIM)
-
-        let cacheMilliseconds = 100
-        configCacheService.cacheTTL = TimeInterval(cacheMilliseconds) / 1000
-        let delay = cacheMilliseconds * 2
-
-        let expectation = XCTestExpectation(description: "async cache access")
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(delay)) {
-            let result = self.configCacheService.config(forSIMInfo: tmoSIM, allowStaleRecords: true)
-            XCTAssertEqual(config, result)
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: timeout)
-    }
-
-    func testAllowStaleRecordsFallBackToBundled() {
-        let tmoSIM = MockSIMs.tmobile
-        let result = self.configCacheService.config(forSIMInfo: tmoSIM, allowStaleRecords: true)
-        let expectedFromBundle = OpenIdConfig(
-            tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
-            authorizationEndpoint: URL(string: "https://account.t-mobile.com/oauth2/v1/auth")!,
-            issuer: URL(string: "https://ppd.account.t-mobile.com")!
-        )
-        XCTAssertEqual(result, expectedFromBundle)
-    }
-
-    func testAllowStaleRecordsReturnsNothingForUnknownSIM() {
+    func testReturnsNothingForUnknownSIM() {
         let unknownSIM = MockSIMs.unknown
-        let result = self.configCacheService.config(forSIMInfo: unknownSIM, allowStaleRecords: true)
+        let result = self.configCacheService.config(forSIMInfo: unknownSIM)
         XCTAssertNil(result)
     }
 
