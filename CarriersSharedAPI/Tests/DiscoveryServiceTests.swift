@@ -14,7 +14,7 @@ class MockConfigCacheService: ConfigCacheServiceProtocol {
     var implementation = MockConfigCacheService.newImplementation()
 
     var lastCacheParams: (OpenIdConfig, SIMInfo)?
-    var lastConfigForParams: (SIMInfo, Bool)?
+    var lastConfigForParams: SIMInfo?
 
     var cacheTTL: TimeInterval {
         get { return implementation.cacheTTL }
@@ -33,9 +33,9 @@ class MockConfigCacheService: ConfigCacheServiceProtocol {
         implementation.cacheConfig(config, forSIMInfo: simInfo)
     }
 
-    func config(forSIMInfo simInfo: SIMInfo, allowStaleRecords: Bool) -> OpenIdConfig? {
-        lastConfigForParams = (simInfo, allowStaleRecords)
-        return implementation.config(forSIMInfo: simInfo, allowStaleRecords: allowStaleRecords)
+    func config(forSIMInfo simInfo: SIMInfo) -> OpenIdConfig? {
+        lastConfigForParams = simInfo
+        return implementation.config(forSIMInfo: simInfo)
     }
 
     private static func newImplementation() -> ConfigCacheService {
@@ -136,21 +136,42 @@ class DiscoveryServiceTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    func testKnownCarrierEndpointErrorFallbackToBundledConfigByDefault() {
+    func testKnownCarrierEndpointErrorReturnsError() {
         let error = NSError(domain: "", code: 1, userInfo: [:])
         mockNetworkService.mockError(.networkError(error))
         let expectation = XCTestExpectation(description: "async discovery")
         discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { result in
-            let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
-            XCTAssertEqual(
-                config.openIdConfig,
-                OpenIdConfig(
-                    tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
-                    authorizationEndpoint: URL(string: "https://account.t-mobile.com/oauth2/v1/auth")!,
-                    issuer: URL(string: "https://ppd.account.t-mobile.com")!
-                )
-            )
-            expectation.fulfill()
+            defer { expectation.fulfill() }
+            guard case .error = result else {
+                XCTFail("expected error")
+                return
+            }
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    func testKnownCarrierEndpointErrorFallbackToCacheIfValid() {
+        let error = NSError(domain: "", code: 1, userInfo: [:])
+        mockNetworkService.mockError(.networkError(error))
+        let expectedConfig = OpenIdConfig(
+            tokenEndpoint: URL.mocked,
+            authorizationEndpoint: URL.mocked,
+            issuer: URL.mocked
+        )
+        mockConfigCacheService.cacheConfig(
+            expectedConfig,
+            forSIMInfo: MockSIMs.tmobile
+        )
+
+        let expectation = XCTestExpectation(description: "async discovery")
+        discoveryService.discoverConfig(forSIMInfo: MockSIMs.tmobile) { result in
+            defer { expectation.fulfill() }
+            guard case .knownMobileNetwork(let config) = result else {
+                XCTFail("expected cached result")
+                return
+            }
+
+            XCTAssertEqual(config.openIdConfig, expectedConfig)
         }
         wait(for: [expectation], timeout: timeout)
     }

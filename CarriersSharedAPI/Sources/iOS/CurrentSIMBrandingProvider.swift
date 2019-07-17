@@ -17,8 +17,7 @@ class CurrentSIMBrandingProvider: BrandingProvider {
         guard
             let primarySIM = carrierInfoService.primarySIM,
             let config = configCacheService.config(
-                forSIMInfo: primarySIM,
-                allowStaleRecords: true)
+                forSIMInfo: primarySIM)
             else {
                 return .default
         }

@@ -68,28 +68,14 @@ class DiscoveryService: DiscoveryServiceProtocol {
                         prompt: Bool = false,
                         completion: @escaping DiscoveryServiceCompletion) {
 
-        openIdConfig(forSIMInfo: simInfo, prompt: prompt) { [weak self] result in
-
-            var outcome = result
-            // if we have an error, attempt to recover from cache
-            if case .error = result, let simInfo = simInfo {
-                if let fallBackConfig = self?.recoverFromCache(simInfo: simInfo,
-                                                               allowStaleRecords: true) {
-                    let config = CarrierConfig(
-                        simInfo: simInfo,
-                        openIdConfig: fallBackConfig)
-
-                    outcome = .knownMobileNetwork(config)
-                }
-            }
-
+        openIdConfig(forSIMInfo: simInfo, prompt: prompt) { result in
             guard !Thread.isMainThread else {
-                completion(outcome)
+                completion(result)
                 return
             }
 
             DispatchQueue.main.async {
-                completion(outcome)
+                completion(result)
             }
         }
     }
@@ -118,10 +104,8 @@ private extension DiscoveryService {
         performDiscovery(for: simInfo, prompt: prompt, completion: completion)
     }
 
-    func recoverFromCache(simInfo: SIMInfo,
-                          allowStaleRecords: Bool = false) -> OpenIdConfig? {
-        return configCacheService.config(forSIMInfo: simInfo,
-                                         allowStaleRecords: allowStaleRecords)
+    func recoverFromCache(simInfo: SIMInfo) -> OpenIdConfig? {
+        return configCacheService.config(forSIMInfo: simInfo)
     }
 
     func performDiscovery(for simInfo: SIMInfo?,
