@@ -2,7 +2,7 @@
 
 # iOS Integration Guide
 
-This guide is for developers integrating Project Verify into their iOS applications.
+This guide is for developers integrating Project Verify with their iOS applications.
 
 ## Background
 
@@ -12,46 +12,45 @@ Project Verify is a joint undertaking of the Mobile Authentication Taskforce. Th
 
 OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0 specification. It uses JSON Web Tokens (JWTs) that are obtained using OAuth 2.0 flows. You can read more about OIDC [here](https://openid.net/specs/openid-connect-core-1_0.html).
 
-### Authorization Code Flow and MNO Discovery
+### Authorization Code Flow and Carrier Discovery
 
-Project Verify SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to Mobile Network Operator (MNO) for authorization. Upon successful authorization, the user is redirected to your backend with an authorization code, which your backend exchanges for an ID token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
+Project Verify SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to the carrier for authorization. Upon successful authorization, the user is redirected to your backend with an authorization code, which your backend exchanges for an ID token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
 
-Because each carrier operates its own authorization servers, we determine the user's MNO prior to authentication. This process is called MNO Discovery (MNO Discovery is an OIDC discovery with extra parameters). MNO Discovery returns the OIDC of the user's MNO. This ensures that the discovery document from Project Verify is for the correct MNO.
+Because each carrier operates its own authorization servers, we determine the user's carrier prior to authentication. This process is called Carrier Discovery (this is an OIDC Discovery with extra parameters). This ensures that the discovery document from Project Verify is for the correct carrier.
 
 ### High Level Architecture
 
 Project Verify brings the four main US phone carriers together with a common user authentication experience backed by carrier device authentication. The solution enables two main flows at initial launch (app and web). The app flow is for  service provider (SP) native apps or a SP-browser based websites that are on the same device as Project Verify. The web flow shows secondary device support when the SP website is accessed from a device other than a user’s primary phone.
 
-As the first image shows, consumers from their primary phone access Project Verify either from the SP app or SP website. As a service provider developer, you sign up and log in thru the Project Verify portal, then write code in your backend. The architecture looks like this:
+As the first image shows, consumers from their primary phone access Project Verify either from the SP app or SP website. As a service provider developer, you sign up and log in through the Project Verify portal, then write code in your backend. The architecture looks like this:
 
  <img src="image/high_level_flow_app_pri.png" alt="High Level Flow - App" width="550">
 
-The flow goes from consumer thru service provider website to service provider backend to mobile carrier to Project Verify and back.
+The flow goes from consumer through service provider website, to service provider backend, to mobile carrier, to Project Verify and back again.
 
 As the second image shows, consumers from their secondary device (such as a laptop) can access Project Verify from the SP website. The architecture looks like this:
 
  <img src="image/high_level_flow_web_sec.png" alt="High Level Flow - Web" width="550">
 
-The user receives a visual or numeric code with which to confirm their identity with their primary phone. Once they have done this  they can log in with their secondary device
+The user receives a visual or numeric code with which to confirm their identity with their primary phone. Once they have done this  they can log in with their secondary device.
 
-Consumer verification and authorization flows to MNO auth, the service provider backend, Project Verify platform and mobile carrier as follows:
+Consumer verification and authorization flows to Carrier auth, the service provider backend, Project Verify platform and mobile carrier as follows:
 
-* discovery
-* auth code request, universal link captured
-* sim and user authentication, explicit user consent (via the primary device)
-* auth code returned, deep or universal link
-* service provider integrated clients
-* token request
-* userinfo mobile carrier resource
+* Discovery
+* Auth code request, universal link captured
+* Sim and user authentication, explicit user consent (via the primary device)
+* Auth code returned, deep or universal link
+* Service provider integrated clients
+* Token request
+* Userinfo mobile carrier resource
 
 ## Getting Started
 
-Before you integrate with Project Verify, you need to register an application and obtain valid `clientId` and `clientSecret` from the Portal or by contacting a Customer Operation Specialist. If you choose to use a custom redirect URI, then ensure that you specify a valid URI.  
+Before you integrate with Project Verify, register your application and obtain valid `clientId` and `clientSecret` from the portal or by contacting a Customer Operation Specialist. If you choose to use a custom redirect URI, then ensure that you specify a valid URI.  
 
 ### Open ID Connect Client
 
-This SDK relies on *AppAuth* as an OIDC client.
-For more information about AppAuth, see the repository [here](https://github.com/openid/AppAuth-iOS).
+This SDK relies on *AppAuth* as an OIDC client. For more information about AppAuth, see the repository [here](https://github.com/openid/AppAuth-iOS).
 
 ### Pre-Release Git Access
 
@@ -65,11 +64,11 @@ git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 
 Service providers decide how much client information they obtain from the user. In your setup, you can choose to have an experience with or without requiring a PIN or a biometric.
 
-Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented via OIDC and can be set to request profile information (email address, name, phone ...) to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
+Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented via OIDC and can be set to request profile information (such as email address, name, phone) to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
 
 ## Add Project Verify SDK
 
-During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify (and its dependency `AppAuth`) in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future. 
+During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify (and its dependency `AppAuth`) in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future.
 
 ### CocoaPods
 
@@ -87,7 +86,7 @@ More information coming soon - *Carthage* may be supported in the future.
 
 ### Adding Project Verify SDK Manually
 
-You can add the ProjectVerifyLogin SDK to your project manually. For an example of a project that links ProjectVerifyLogin manually, see  [SocialApp](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/SocialApp).
+You can add the ProjectVerifyLogin SDK to your project manually:
 
 1. Retrieve the source for `ProjectVerifyLogin`. We recommend adding it as a [submodule](#pre-release-git-access).
 
@@ -97,7 +96,7 @@ You can add the ProjectVerifyLogin SDK to your project manually. For an example 
 
 ## Configure Project Verify SDK
 
-After you add the source via submodule or manually, then configure the Project Verify SDK as follows:
+After you add the source via a submodule or manually, configure the Project Verify SDK as follows:
 
 1. Add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
 
@@ -105,17 +104,17 @@ After you add the source via submodule or manually, then configure the Project V
 
 3. Ensure that `AppAuth` is linked to `CarriersSharedAPI` and included as a "Target Dependency" in the `CarrierSharedAPI` build phases.
 
-4. View your project's "Embedded Binaries" under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks. Be sure to select the corresponding framework for the platform you're targeting (the iOS framework for an iOS target).
+4. View your project's "Embedded Binaries" under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
 
-Build and run to ensure that everything is working correctly.
+5. Build and run to ensure that everything is working correctly.
 
 ## Integration
 
-To integrate Project Verify into your iOS application, configure your Info.plist with ClientId and instantiate Project Verify in your application delegate.  
+To integrate Project Verify into your iOS application, configure your *Info.plist* with `ClientId` and instantiate Project Verify in your application delegate.  
 
 ### Configure Property List
 
-Retrieve your application's `clientId` from the Project Verify dashboard. Add the following keys to Info.plist in your application:
+Retrieve your application's `clientId` from the Project Verify dashboard. Add the following keys to *Info.plist* in your application:
 
 ```xml
 	<key>ProjectVerifyClientId</key>
@@ -135,8 +134,6 @@ Retrieve your application's `clientId` from the Project Verify dashboard. Add th
 	</array>
 ```
 
-For examples of how to configure the property list, see the [Social App](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/SocialApp), and [Bank App](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/BankApp).
-
 ### Using a Custom Redirect URI
 
 If you would like to use universal links for your redirect scheme, it is possible to configure a custom URL scheme and a custom URL host.
@@ -151,8 +148,6 @@ The following keys are made available for you to customize the structure of the 
 ```
 
 **Note:** For schemes other than `https`, you must add the scheme to your application's `CFBundleURLTypes` list.
-
-For an example of how to configure property lists for these custom keys, see the [Photo App](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/PhotoApp).
 
 Redirect URLs will require the universal links to route the following paths to the application: `/authorize` and `/discoveryui`.
 For more information about universal links, read Apple's [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links).
@@ -220,7 +215,6 @@ class LoginViewController {
     }
 }
 ```
-For examples of how the button works with both Interface Builder and Autolayout, see the example [Branding Project](https://git.xcijv.net/sp-sdk/sp-sdk-ios/tree/develop/Example/ProjectVerifyBranding).
 
 #### Dark Button
 
@@ -277,11 +271,11 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
 
 ### Request Parameters
 
-There are several parameters that you may wish to configure for your authorization request:
+There are several parameters that you may wish to configure for your authorization request, as noted in this section.
 
 #### Scopes
 
-By default, authorization requests made with the Project Verify SDK include the OpenId scope. To use additional scopes, set them on the button and they will be added to the request.
+By default, authorization requests made with the Project Verify SDK include the `OpenId` scope. To use additional scopes, set them on the button and they will be added to the request.
 
 ```swift
     let scopes: [Scope] = [.profile, .email]
@@ -291,14 +285,14 @@ For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/
 
 #### Additional Parameters
 
-Additionally it is possible to configure the following parameters:
+Additionally, it is possible to configure the following parameters:
 
-- ACR Values
-- Request State
-- Nonce
-- Correlation Id
-- Context
-- Prompt
+* ACR Values
+* Request State
+* Nonce
+* Correlation Id
+* Context
+* Prompt
 
 For more information about each of these parameters and instructions on how to use them, view the documentation for the `ProjectVerifyAuthorizeButton`.
 
@@ -337,56 +331,20 @@ class LoginViewController {
 }
 ```
 
-* [submodules](https://git-scm.com/docs/git-submodule)
-* [projectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
-* [appAuth](https://github.com/openid/AppAuth-iOS)
-
+Refer to:
+* [Submodules](https://git-scm.com/docs/git-submodule)
+* [ProjectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
+* [AppAuth](https://github.com/openid/AppAuth-iOS)
 
 ## Next Steps
 
-On your secure server, you perform discovery and use the discovered token endpoint to request an access token from Project Verify with the processes already detailed:
+On your secure server, perform discovery and use the discovered token endpoint to request an access token from Project Verify with the processes already detailed:
 
 * Auth Code
-* MCC
-* MNC
+* MCC (Mobile Country Code)
+* MNC (Mobile Network Code)
 
-The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the Project Verify User Info Endpoint.
-
-The Project Verify User Info Endpoint should pass information through your server's authenticated endpoints in a way that makes sense for your application.
-
-
-# Example Apps
-
-There are several example apps which demonstrate different pieces of project verify functionality. These flows demonstrate how to make a request for a set of scopes from Project Verify and demonstrate how that information might be transported back to your server. These flows mock and simplify the server contract, which will ultimately be up to you to implement. For guidance on how to implement Project Verify on the server, see the [Project Verify Web Integration Guidelines]().
-
-## SocialApp (iOS)
-
-This app simulates a social network. It demonstrates:
-- Signing in with Project Verify.
-- Signing up with Project Verify.
-- How to use the ProjectVerifyAuthorizeButton.
-
-A social network might leverage Project Verify to make registration and login easier for the user. The sign up / sign in flow is comprised of the social network requesting the necessary scopes from Project Verify. The social app receives an authorization code and mcc/mnc identifer from Project Verify. It passes this back to the mock social app server where the assumption would be that the token exchange is completed. Once the server has a token, it can access the user info endpoint for the information authorized in the scopes.
-
-## BankApp (iOS)
-
-This app simulates a banking app. It demonstrates:
-- How to link Project Verify to an existing user account.
-- How to use Project Verify as a second factor to authorize a transaction.
-
-A bank or financial institution might leverage Project Verify to provide a second factor for large or risky transactions. The authorization flow demonstrates how to request the second factor scope to authorize a money transfer. The bank app receives an authorization code and mcc/mnc identifer from Project Verify. It passes this back to the mock bank app server where the assumption would be that the token exchange is completed. Once the server has a token, it can proceed with the transaction with the knowledge that the user has provided the second factor authorization.
-
-## PhotoApp (iOS)
-
-This app simulates a commerce app. It demonstrates:
-- How to use Project Verify to fill out a form.
-- How to configure custom redirect URLs.
-
-An e-commerce app might leverage Project Verify to retrieve user information from a trusted source before the user has created a profile. The social app demonstrates how to authorize the required scopes to complete a form. The photo app receives an authorization code and mcc/mnc identifer from Project Verify. It passes this back to the mock photo app server where the assumption would be that the token exchange is completed. Once the server has a token, it can access the user info endpoint for the information authorized in the scopes.
-
-## Branding Guidelines (iOS)
-
-This app has some simple UI to showcase Project Verify branding guidelines. It demonstrates how to layout the branded buttons using different UI paradigms.
+The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the Project Verify User Info Endpoint, which should pass information through your server's authenticated endpoints in a way that makes sense for your application.
 
 ## Support
 
