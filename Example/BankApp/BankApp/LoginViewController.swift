@@ -103,11 +103,6 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         layoutView()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        idTextField.becomeFirstResponder()
-    }
 
     @objc func loginButtonTouched(_ sender: Any) {
         // TODO: see UX section 2.3.1 in design doc
