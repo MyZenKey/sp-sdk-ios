@@ -75,6 +75,7 @@ class LoginViewController: UIViewController {
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.delegate = self
+        button.accessibilityIdentifier = "Project Verify Button"
         return button
     }()
 
