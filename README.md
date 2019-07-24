@@ -348,11 +348,11 @@ The token should be used as the basis for accessing or creating a token within t
 
 ## Support
 
-For technical questions, contact [support](mailto:support@mobileauthtaskforce.com).
+For technical questions, contact [support](mailto:techsupport@mobileauthtaskforce.com).
 
 ## Proprietary and Confidential
 
 NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND CONFIDENTIAL. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.  NO RECIPIENT MAY DISCLOSE, DISTRIBUTE, OR POST THIS DOCUMENT WITHOUT XCI JV, LLC’S EXPRESS WRITTEN AUTHORIZATION.
 
 <sub> Last Update:
-Document Version 0.9.8 - July 22, 2019</sub>
+Document Version 0.9.9 - July 24, 2019</sub>
