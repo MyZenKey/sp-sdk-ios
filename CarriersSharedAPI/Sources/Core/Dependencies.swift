@@ -31,9 +31,9 @@ class Dependencies {
     }
 
     private func buildDependencies() {
-        let host: ProjectVerifyNetworkConfig.Host = (options[.qaHost] as? Bool ?? false) ?
-            .qa :
-            .production
+
+        Log.configureLogger(level: options.logLevel)
+        let host: ProjectVerifyNetworkConfig.Host = options.host
 
         let hostConfig = ProjectVerifyNetworkConfig(host: host)
 
@@ -124,5 +124,16 @@ extension Dependencies {
             fatalError("attemtping to resolve a dependency of type \(T.self) that doesn't exist")
         }
         return resolved
+    }
+}
+
+private extension Dictionary where Key == ProjectVerifyOptionKeys, Value: Any {
+    var host: ProjectVerifyNetworkConfig.Host {
+        let qaFlag = self[.qaHost, or: false]
+        return qaFlag ? .qa : .production
+    }
+
+    var logLevel: Log.Level {
+        return self[.logLevel, or: .off]
     }
 }

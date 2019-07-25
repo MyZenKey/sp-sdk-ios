@@ -172,7 +172,13 @@ private extension AuthorizationServiceIOS {
             performDiscovery(with: nil)
 
         case .concluding(let outcome):
-            Log.log(.info, "\(logStringBase) Conclusion: \(outcome)")
+
+            var logLevel: Log.Level = .info
+            if case .error = outcome {
+                logLevel = .error
+            }
+            Log.log(logLevel, "\(logStringBase) Conclusion: \(outcome)")
+
             request.update(state: .finished)
             state = .idle
         }

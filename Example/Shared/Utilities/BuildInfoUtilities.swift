@@ -30,6 +30,7 @@ struct BuildInfo {
         if isQAHost {
             options[.qaHost] = true
         }
+        options[.logLevel] = Log.Level.info
         return options
     }
 

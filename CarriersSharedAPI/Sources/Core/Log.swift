@@ -8,11 +8,12 @@
 
 import Foundation
 
-struct Log {
+/// A logging structure. Pass a log level to the project verify launch options to enable logging
+/// for use during debuggin.
+public struct Log {
+    static private(set) var logLevel: Level = .off
 
-    static private(set) var logLevel: Level = .verbose//.off
-
-    enum Level: Int {
+    public enum Level: Int {
         case off, error, warn, info, verbose
 
         var name: String {
@@ -29,6 +30,10 @@ struct Log {
                 return "verbose"
             }
         }
+    }
+
+    static func configureLogger(level: Level) {
+        logLevel = level
     }
 
     static func log<T>(_ level: Level, _ object: @autoclosure () -> T, _ file: String = #file) {
