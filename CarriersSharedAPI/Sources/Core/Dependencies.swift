@@ -13,6 +13,7 @@ import CoreTelephony
 
 public enum ProjectVerifyOptionKeys: String {
     case qaHost
+    case logLevel
 }
 
 public typealias ProjectVerifyOptions = [ProjectVerifyOptionKeys: Any]

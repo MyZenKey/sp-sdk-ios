@@ -34,16 +34,17 @@ class NetworkService: NetworkServiceProtocol {
         completion: @escaping (Result<T, NetworkServiceError>) -> Void) {
 
         let decoder = self.jsonDecoder
+        Log.log(.info, "Performing Request: \(request.debugDescription)")
         let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
             DispatchQueue.main.async {
-                completion(
-                    JSONResponseParser.parseDecodable(
-                        with: decoder,
-                        fromData: data,
-                        request: request,
-                        error: error
-                    )
+                let response: Result<T, NetworkServiceError> = JSONResponseParser.parseDecodable(
+                    with: decoder,
+                    fromData: data,
+                    request: request,
+                    error: error
                 )
+                Log.log(.info, "Concluding Request: \(request.debugDescription) with outcome \(response))")
+                completion(response)
             }
         }
         task.resume()

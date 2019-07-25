@@ -150,23 +150,29 @@ private extension AuthorizationServiceIOS {
 
         // if the request is still in progress
         // begin the next appropriate step in the autorization process
+        let logStringBase = "State Change:"
         switch request.state {
         case .undefined, .finished:
             break
 
         case .discovery(let simInfo):
+            Log.log(.verbose, "\(logStringBase) Perform Discovery")
             performDiscovery(with: simInfo)
 
         case .mobileNetworkSelection(let resource):
+            Log.log(.verbose, "\(logStringBase) Discovery UI")
             showDiscoveryUI(usingResource: resource)
 
         case .authorization(let discoveredConfig):
+            Log.log(.verbose, "\(logStringBase) Perform Authorization")
             showAuthorizationUI(usingConfig: discoveredConfig)
 
         case .missingUserRecovery:
+            Log.log(.verbose, "\(logStringBase) Attempt Missing User Recovery")
             performDiscovery(with: nil)
 
-        case .concluding:
+        case .concluding(let outcome):
+            Log.log(.verbose, "\(logStringBase) Conclusion: \(outcome)")
             request.update(state: .finished)
             state = .idle
         }
