@@ -74,7 +74,9 @@ class ApproveViewController: BankAppViewController {
             mcc: mcc,
             mnc: mnc,
             completionHandler: { _ in
-                self.showAlert(title: "Success", message: "Your transfer has succeeded")
+                self.showAlert(title: "Success", message: "Your transfer has succeeded") { [weak self] in
+                    self?.navigationController?.popViewController(animated: true)
+                }
         })
     }
 
