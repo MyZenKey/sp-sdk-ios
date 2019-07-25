@@ -158,7 +158,7 @@ extension OpenIdService: OpenIdServiceProtocol {
                     error == nil,
                     let authState = authState,
                     let authCode = authState.lastAuthorizationResponse.authorizationCode else {
-                        Log.log(.info, "Concluding request with error: \(String(describing: error))")
+                        Log.log(.error, "Concluding request with error: \(String(describing: error))")
                         // error value is present here, or we didn't recieve a symmetrical response
                         // from the api's result
                         self?.concludeAuthorizationFlow(result: .error(.urlResolverError(error)))
@@ -229,7 +229,7 @@ extension OpenIdService: OpenIdServiceProtocol {
                 )
             )
         case .error(let error):
-            Log.log(.info, "Resolving URL: \(url) with error: \(error)")
+            Log.log(.error, "Resolving URL: \(url) with error: \(error)")
             concludeAuthorizationFlow(result: .error(error))
         }
     }

@@ -166,7 +166,7 @@ private extension MobileNetworkSelectionService {
             ))
 
         case .error(let error):
-            Log.log(.info, "Resolving URL: \(url) with error: \(error)")
+            Log.log(.error, "Resolving URL: \(url) with error: \(error)")
             dismissUIAndConclude(result: .error(error))
         }
     }
