@@ -31,10 +31,6 @@ struct Log {
         }
     }
 
-    //        network requests
-    //        network responses
-    //        redirect responses
-    //        request state changes
     static func log<T>(_ level: Level, _ object: @autoclosure () -> T, _ file: String = #file) {
         guard level.rawValue <= logLevel.rawValue, level != .off else { return }
         let type = file.components(separatedBy: "/").last ?? "Unknown Type"

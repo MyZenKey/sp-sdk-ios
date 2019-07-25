@@ -129,6 +129,7 @@ extension OpenIdService: OpenIdServiceProtocol {
 
         // issuing a second authorization flow causes the first to be cancelled:
         if case .inProgress = state {
+            Log.log(.warn, "Implicitly cancelling previous request")
             cancelCurrentAuthorizationSession()
         }
 
@@ -146,6 +147,8 @@ extension OpenIdService: OpenIdServiceProtocol {
         let sessionStorage = PendingSessionStorage()
 
         let simInfo = carrierConfig.simInfo
+
+        Log.log(.info, "Performing auth request \(authorizationRequest)")
         urlResolver.resolve(
             request: authorizationRequest,
             usingStorage: sessionStorage,
@@ -155,6 +158,7 @@ extension OpenIdService: OpenIdServiceProtocol {
                     error == nil,
                     let authState = authState,
                     let authCode = authState.lastAuthorizationResponse.authorizationCode else {
+                        Log.log(.info, "Concluding request with error: \(String(describing: error))")
                         // error value is present here, or we didn't recieve a symmetrical response
                         // from the api's result
                         self?.concludeAuthorizationFlow(result: .error(.urlResolverError(error)))
@@ -167,6 +171,7 @@ extension OpenIdService: OpenIdServiceProtocol {
                     mnc: simInfo.mnc
                 )
 
+                Log.log(.info, "Concluding request with sucessful code response.")
                 self?.concludeAuthorizationFlow(result: .code(authorizedResponse))
         }
 
@@ -190,6 +195,7 @@ extension OpenIdService: OpenIdServiceProtocol {
         // ensure valid state:
         guard case .inProgress(let request, let simInfo, _, _) = state else {
             // there is no request, return
+            Log.log(.warn, "Attempting to resolve url \(url) with no request in progress")
             return false
         }
 
@@ -217,11 +223,13 @@ extension OpenIdService: OpenIdServiceProtocol {
 
         switch validatedCode {
         case .value(let code):
+            Log.log(.info, "Resolving URL with successful code.")
             concludeAuthorizationFlow(result: .code(
                     AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
                 )
             )
         case .error(let error):
+            Log.log(.info, "Resolving URL: \(url) with error: \(error)")
             concludeAuthorizationFlow(result: .error(error))
         }
     }
