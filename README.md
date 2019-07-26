@@ -347,8 +347,10 @@ On your secure server, perform discovery and use the discovered token endpoint t
 The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the Project Verify User Info Endpoint, which should pass information through your server's authenticated endpoints in a way that makes sense for your application.
 
 ## Support
-
 For technical questions, contact [support](mailto:techsupport@mobileauthtaskforce.com).
+
+### Debugging
+It is possible to enable logging by passing a value for the `.logLevel` key via the to the `projectVerifyOptions` parameter in the `ProjectVerifyAppDelegate`. For more information on the options, see the `Log.LogLevel` type.
 
 ## Proprietary and Confidential
 

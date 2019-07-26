@@ -30,6 +30,20 @@ public enum AuthorizationResult {
     case cancelled
 }
 
+extension AuthorizationResult: CustomStringConvertible {
+    public var description: String {
+        let base = "AuthorizationResult:"
+        switch self {
+        case .code:
+            return "\(base) auth code"
+        case .error(let error):
+            return "\(base) error: \(error.errorType)"
+        case .cancelled:
+            return "\(base) cancelled"
+        }
+    }
+}
+
 public typealias AuthorizationCompletion = (AuthorizationResult) -> Void
 
 /// The AuthorizationService interface.

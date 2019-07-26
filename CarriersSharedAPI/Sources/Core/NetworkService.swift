@@ -34,16 +34,17 @@ class NetworkService: NetworkServiceProtocol {
         completion: @escaping (Result<T, NetworkServiceError>) -> Void) {
 
         let decoder = self.jsonDecoder
+        Log.log(.info, "Per forming Request: \(request.debugDescription)")
         let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
             DispatchQueue.main.async {
-                completion(
-                    JSONResponseParser.parseDecodable(
-                        with: decoder,
-                        fromData: data,
-                        request: request,
-                        error: error
-                    )
+                Log.log(.info, "Concluding Request: \(request.debugDescription)")
+                let response: Result<T, NetworkServiceError> = JSONResponseParser.parseDecodable(
+                    with: decoder,
+                    fromData: data,
+                    request: request,
+                    error: error
                 )
+                completion(response)
             }
         }
         task.resume()
@@ -59,10 +60,12 @@ extension NetworkService {
             error: Error?) -> Result<T, NetworkServiceError> {
 
             guard error == nil else {
+                Log.log(.error, "Network response is error \(String(describing: error))")
                 return .error(.networkError(error!))
             }
 
             guard let data = data else {
+                Log.log(.error, "Network response missing data")
                 return .error(NetworkServiceError.invalidResponseBody(request: request))
             }
 
@@ -70,8 +73,10 @@ extension NetworkService {
                 let parsed: T = try decoder.decode(T.self, from: data)
                 return .value(parsed)
             } catch let decodingError as DecodingError {
+                Log.log(.error, "Decoding Error \(decodingError)")
                 return .error(.decodingError(decodingError))
             } catch {
+                Log.log(.error, "Unknown Error \(error)")
                 return .error(.unknownError(error))
             }
         }
