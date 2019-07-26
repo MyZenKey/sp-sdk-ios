@@ -9,7 +9,7 @@
 import Foundation
 
 /// A logging structure. Pass a log level to the project verify launch options to enable logging
-/// for use during debuggin.
+/// for use during debugging.
 public struct Log {
     static private(set) var logLevel: Level = .off
 
