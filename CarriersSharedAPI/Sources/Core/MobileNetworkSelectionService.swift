@@ -102,9 +102,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
     }
 
     func cancel() {
-        dismissUI {
-            self.conclude(result: .cancelled)
-        }
+        dismissUIAndConclude(result: .cancelled)
     }
 
     func resolve(url: URL) -> Bool {

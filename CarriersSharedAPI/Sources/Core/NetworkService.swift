@@ -34,7 +34,7 @@ class NetworkService: NetworkServiceProtocol {
         completion: @escaping (Result<T, NetworkServiceError>) -> Void) {
 
         let decoder = self.jsonDecoder
-        Log.log(.info, "Per forming Request: \(request.debugDescription)")
+        Log.log(.info, "Performing Request: \(request.debugDescription)")
         let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
             DispatchQueue.main.async {
                 Log.log(.info, "Concluding Request: \(request.debugDescription)")

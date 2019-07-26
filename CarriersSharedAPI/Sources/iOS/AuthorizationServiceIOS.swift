@@ -76,7 +76,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
 
         precondition(Thread.isMainThread, "You should only call `authorize` from the main thread.")
 
-        let parameters = OpenIdAuthorizationParameters(
+        let parameters = OpenIdAuthorizationRequest.Parameters(
             clientId: sdkConfig.clientId,
             redirectURL: sdkConfig.redirectURL,
             formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,

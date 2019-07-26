@@ -135,6 +135,8 @@ extension DiscoveryServiceError: AuthorizationErrorConvertible {
 extension OpenIdServiceError: AuthorizationErrorConvertible {
     var asAuthorizationError: AuthorizationError {
         switch self {
+        case .viewControllerNotInHeirarchy:
+            return AuthorizationError.ConfigErrors.viewControllerNotInHeirarchy
         case .urlResolverError:
             return AuthorizationError(
                 rawErrorCode: SDKErrorCode.networkError.rawValue,
@@ -153,10 +155,7 @@ extension MobileNetworkSelectionError: AuthorizationErrorConvertible {
     var asAuthorizationError: AuthorizationError {
         switch self {
         case .viewControllerNotInHeirarchy:
-            return AuthorizationError(
-                rawErrorCode: SDKErrorCode.invalidParameter.rawValue,
-                description: "ensure you're presenting on a valid view controller"
-            )
+            return AuthorizationError.ConfigErrors.viewControllerNotInHeirarchy
         case .invalidMCCMNC:
             return AuthorizationError(
                 rawErrorCode: SDKErrorCode.invalidParameter.rawValue,
@@ -186,5 +185,14 @@ extension AuthorizationRequestError: AuthorizationErrorConvertible {
             )
 
         }
+    }
+}
+
+extension AuthorizationError {
+    struct ConfigErrors {
+        static let viewControllerNotInHeirarchy = AuthorizationError(
+            rawErrorCode: SDKErrorCode.invalidParameter.rawValue,
+            description: "ensure you're presenting on a valid view controller"
+        )
     }
 }

@@ -107,9 +107,10 @@
 		8AD167BC224EB8D3005C1CA3 /* OpenIdConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD167BB224EB8D3005C1CA3 /* OpenIdConfig.swift */; };
 		8AD71CEE22E8CA7300632EE6 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD71CED22E8CA7300632EE6 /* Log.swift */; };
 		8AD71CFC22EA2DC100632EE6 /* Dictionary+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD71CFB22EA2DC000632EE6 /* Dictionary+Helpers.swift */; };
+		8AD71D1122EBA79000632EE6 /* OpenIdAuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD71D1022EBA79000632EE6 /* OpenIdAuthorizationRequest.swift */; };
 		8AE6C24922D39F8B0071C5E5 /* String+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE6C24822D39F8B0071C5E5 /* String+Utilities.swift */; };
 		8AEA8B6022AABE1D0099B226 /* AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEA8B5F22AABE1D0099B226 /* AuthorizationRequest.swift */; };
-		8AEFF02C22736011001CF41D /* MobileNetworkSelectionUIIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEFF02B22736011001CF41D /* MobileNetworkSelectionUIIOS.swift */; };
+		8AEFF02C22736011001CF41D /* WebBrowserUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEFF02B22736011001CF41D /* WebBrowserUI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -312,9 +313,10 @@
 		8AD167BB224EB8D3005C1CA3 /* OpenIdConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdConfig.swift; sourceTree = "<group>"; };
 		8AD71CED22E8CA7300632EE6 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		8AD71CFB22EA2DC000632EE6 /* Dictionary+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Helpers.swift"; sourceTree = "<group>"; };
+		8AD71D1022EBA79000632EE6 /* OpenIdAuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdAuthorizationRequest.swift; sourceTree = "<group>"; };
 		8AE6C24822D39F8B0071C5E5 /* String+Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Utilities.swift"; sourceTree = "<group>"; };
 		8AEA8B5F22AABE1D0099B226 /* AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationRequest.swift; sourceTree = "<group>"; };
-		8AEFF02B22736011001CF41D /* MobileNetworkSelectionUIIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionUIIOS.swift; sourceTree = "<group>"; };
+		8AEFF02B22736011001CF41D /* WebBrowserUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebBrowserUI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -483,7 +485,7 @@
 				23F88F4C2224579900A5F5D9 /* CarrierInfoService.swift */,
 				8A6C135F22820CDC00F42E3A /* CurrentSIMBrandingProvider.swift */,
 				23F88F3D221F433900A5F5D9 /* MobileNetworkInfoProvider.swift */,
-				8AEFF02B22736011001CF41D /* MobileNetworkSelectionUIIOS.swift */,
+				8AEFF02B22736011001CF41D /* WebBrowserUI.swift */,
 				23196D9222309173005393AB /* OpenIdURLResolverIOS.swift */,
 			);
 			path = iOS;
@@ -519,6 +521,7 @@
 				8A37A021226659B3001FE65D /* MobileNetworkSelectionService.swift */,
 				8A6C135B228203E700F42E3A /* MobileNetworkSelectionUI.swift */,
 				23F88F532224738A00A5F5D9 /* NetworkService.swift */,
+				8AD71D1022EBA79000632EE6 /* OpenIdAuthorizationRequest.swift */,
 				8AD167BB224EB8D3005C1CA3 /* OpenIdConfig.swift */,
 				236AC637222720E600E7C900 /* OpenIdService.swift */,
 				8A8FAC902282017A003278C6 /* OpenIdURLResolver.swift */,
@@ -826,7 +829,7 @@
 				8A74103322A9B9D800788E7B /* MockResponseQueue.swift in Sources */,
 				23F88F5E2225AD6600A5F5D9 /* Result.swift in Sources */,
 				8A5C3F9A225E93EE0013DEC3 /* ImageUtils.swift in Sources */,
-				8AEFF02C22736011001CF41D /* MobileNetworkSelectionUIIOS.swift in Sources */,
+				8AEFF02C22736011001CF41D /* WebBrowserUI.swift in Sources */,
 				8A378ED6227D0FBC00B63612 /* AuthorizationServiceIOS.swift in Sources */,
 				8A3FAB1C224055DD00767A03 /* ConfigCacheService.swift in Sources */,
 				8AD71CEE22E8CA7300632EE6 /* Log.swift in Sources */,
@@ -859,6 +862,7 @@
 				8ABF7548226A0BD900A81F50 /* URLHandling.swift in Sources */,
 				8A6C135C228203E700F42E3A /* MobileNetworkSelectionUI.swift in Sources */,
 				23F88F602226086600A5F5D9 /* Scope.swift in Sources */,
+				8AD71D1122EBA79000632EE6 /* OpenIdAuthorizationRequest.swift in Sources */,
 				236AC638222720E600E7C900 /* OpenIdService.swift in Sources */,
 				8A6C136022820CDC00F42E3A /* CurrentSIMBrandingProvider.swift in Sources */,
 				8AB8A96122A05D0300E8AEB3 /* ACRValue.swift in Sources */,

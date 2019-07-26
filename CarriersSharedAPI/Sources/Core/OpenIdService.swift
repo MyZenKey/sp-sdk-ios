@@ -13,56 +13,11 @@ enum ResponseType: String {
     case code
 }
 
-struct OpenIdAuthorizationParameters: Equatable {
-    let clientId: String
-    let redirectURL: URL
-    let formattedScopes: String
-    let state: String?
-    let nonce: String?
-
-    let acrValues: [ACRValue]?
-    let prompt: PromptValue?
-    let correlationId: String?
-    let context: String?
-    var loginHintToken: String?
-
-    init(clientId: String,
-         redirectURL: URL,
-         formattedScopes: String,
-         state: String?,
-         nonce: String?,
-         acrValues: [ACRValue]?,
-         prompt: PromptValue?,
-         correlationId: String?,
-         context: String?,
-         loginHintToken: String?) {
-
-        self.clientId = clientId
-        self.redirectURL = redirectURL
-        self.formattedScopes = formattedScopes
-        self.state = state
-        self.nonce = nonce
-        self.acrValues = acrValues
-        self.prompt = prompt
-        self.correlationId = correlationId
-        self.context = context
-        self.loginHintToken = loginHintToken
-    }
-
-    var base64EncodedContext: String? {
-        guard let context = context else {
-                return nil
-        }
-        // utf8 will encode all for all swift strings:
-        return context.data(using: .utf8)!
-            .base64EncodedString()
-    }
-}
-
 enum OpenIdServiceError: Error {
     case urlResponseError(URLResponseError)
     case urlResolverError(Error?)
     case stateError(RequestStateError)
+    case viewControllerNotInHeirarchy
 }
 
 enum OpenIdServiceResult {
@@ -77,7 +32,7 @@ protocol OpenIdServiceProtocol: URLHandling {
     func authorize(
         fromViewController viewController: UIViewController,
         carrierConfig: CarrierConfig,
-        authorizationParameters: OpenIdAuthorizationParameters,
+        authorizationParameters: OpenIdAuthorizationRequest.Parameters,
         completion: @escaping OpenIdServiceCompletion
     )
 
@@ -86,19 +41,10 @@ protocol OpenIdServiceProtocol: URLHandling {
     func cancelCurrentAuthorizationSession()
 }
 
-class PendingSessionStorage: OpenIdExternalSessionStateStorage {
-    var pendingSession: OIDExternalUserAgentSession?
-}
-
 class OpenIdService {
-    enum ResponseKeys: String {
-        case state
-        case code
-    }
-
     enum State {
         case idle
-        case inProgress(OIDAuthorizationRequest, SIMInfo, OpenIdServiceCompletion, PendingSessionStorage)
+        case inProgress(OpenIdAuthorizationRequest, SIMInfo, OpenIdServiceCompletion)
     }
 
     var state: State = .idle
@@ -123,77 +69,51 @@ extension OpenIdService: OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
         carrierConfig: CarrierConfig,
-        authorizationParameters: OpenIdAuthorizationParameters,
+        authorizationParameters: OpenIdAuthorizationRequest.Parameters,
         completion: @escaping OpenIdServiceCompletion
         ) {
 
         // issuing a second authorization flow causes the first to be cancelled:
-        if case .inProgress = state {
-            Log.log(.warn, "Implicitly cancelling previous request")
-            cancelCurrentAuthorizationSession()
+        guard case .idle = state else {
+            Log.log(.warn, "Implictly cancelling existing request.")
+            dismissUI {
+                self.cancelCurrentAuthorizationSession()
+                self.authorize(fromViewController: viewController,
+                               carrierConfig: carrierConfig,
+                               authorizationParameters: authorizationParameters,
+                               completion: completion)
+            }
+            return
         }
 
-        let openIdConfiguration = OIDServiceConfiguration(
-            authorizationEndpoint: carrierConfig.openIdConfig.authorizationEndpoint,
-            tokenEndpoint: carrierConfig.openIdConfig.tokenEndpoint
-        )
+        guard viewController.view?.window != nil else {
+            completion(.error(.viewControllerNotInHeirarchy))
+            return
+        }
 
         //create the authorization request
-        let authorizationRequest: OIDAuthorizationRequest = OpenIdService.createAuthorizationRequest(
-            openIdServiceConfiguration: openIdConfiguration,
-            authorizationParameters: authorizationParameters
+        let authorizationRequest = OpenIdAuthorizationRequest(
+            resource: carrierConfig.openIdConfig.authorizationEndpoint,
+            parameters: authorizationParameters
         )
-
-        let sessionStorage = PendingSessionStorage()
-
-        let simInfo = carrierConfig.simInfo
 
         Log.log(.info, "Performing auth request \(authorizationRequest)")
         urlResolver.resolve(
             request: authorizationRequest,
-            usingStorage: sessionStorage,
-            fromViewController: viewController,
-            authorizationParameters: authorizationParameters) { [weak self] (authState, error) in
-                guard
-                    error == nil,
-                    let authState = authState,
-                    let authCode = authState.lastAuthorizationResponse.authorizationCode else {
-                        Log.log(.error, "Concluding request with error: \(String(describing: error))")
-                        // error value is present here, or we didn't recieve a symmetrical response
-                        // from the api's result
-                        self?.concludeAuthorizationFlow(result: .error(.urlResolverError(error)))
-                        return
-                }
-
-                let authorizedResponse = AuthorizedResponse(
-                    code: authCode,
-                    mcc: simInfo.mcc,
-                    mnc: simInfo.mnc
-                )
-
-                Log.log(.info, "Concluding request with sucessful code response.")
-                self?.concludeAuthorizationFlow(result: .code(authorizedResponse))
+            fromViewController: viewController) { [weak self] in
+                // ui triggered the dismissal and will clean itself up, just call the completion
+                self?.conclude(result: .cancelled)
         }
-
-        state = .inProgress(authorizationRequest, carrierConfig.simInfo, completion, sessionStorage)
+        state = .inProgress(authorizationRequest, carrierConfig.simInfo, completion)
     }
 
     func cancelCurrentAuthorizationSession() {
-        concludeAuthorizationFlow(result: .cancelled)
+        dismissUIAndConclude(result: .cancelled)
     }
 
     func resolve(url: URL) -> Bool {
-        // NOTE: this logic replicates the functionality in OIDAuthorizationService.m
-        // - (BOOL)resumeExternalUserAgentFlowWithURL:(NSURL *)URL
-        // Because AppAuth is designed around the OAuth 2.0 spec for native apps
-        // (https://tools.ietf.org/html/rfc8252)
-        // it is designed for apps implementing a public client authorization+token flow
-        // we would use the above is the method if we wanted to also request a token but it
-        // doen't support only requesting authorization. Here we'll short circut the token flow and
-        // hand that off to the SP:
-
         // ensure valid state:
-        guard case .inProgress(let request, let simInfo, _, _) = state else {
+        guard case .inProgress(let request, let simInfo, _) = state else {
             // there is no request, return
             Log.log(.warn, "Attempting to resolve url \(url) with no request in progress")
             return false
@@ -202,15 +122,21 @@ extension OpenIdService: OpenIdServiceProtocol {
         resolve(request: request, forSIMInfo: simInfo, withURL: url)
         return true
     }
+}
 
-    private func resolve(
-        request: OIDAuthorizationRequest,
+private extension OpenIdService {
+    enum ResponseKeys: String {
+        case code
+    }
+
+    func resolve(
+        request: OpenIdAuthorizationRequest,
         forSIMInfo simInfo: SIMInfo,
         withURL url: URL) {
 
         let response = ResponseURL(url: url)
-        guard let state = request.state else {
-            concludeAuthorizationFlow(result: .error(.stateError(.generationFailed)))
+        guard let state = request.parameters.state else {
+            conclude(result: .error(.stateError(.generationFailed)))
             return
         }
 
@@ -224,71 +150,38 @@ extension OpenIdService: OpenIdServiceProtocol {
         switch validatedCode {
         case .value(let code):
             Log.log(.info, "Resolving URL with successful code.")
-            concludeAuthorizationFlow(result: .code(
+            dismissUIAndConclude(result: .code(
                     AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
                 )
             )
         case .error(let error):
             Log.log(.error, "Resolving URL: \(url) with error: \(error)")
-            concludeAuthorizationFlow(result: .error(error))
+            dismissUIAndConclude(result: .error(error))
         }
     }
 
-    func concludeAuthorizationFlow(result: OpenIdServiceResult) {
+    func conclude(result: OpenIdServiceResult) {
         defer {
             state = .idle
         }
 
-        guard case .inProgress(_, _, let completion, _) = state else {
+        guard case .inProgress(_, _, let completion) = state else {
             return
         }
 
         completion(result)
     }
-}
 
-extension OpenIdService {
-    enum Keys: String {
-        case loginHintToken = "login_hint_token"
-        case acrValues = "acr_values"
-        case correlationId = "correlation_id"
-        case context = "context"
-        case prompt = "prompt"
+    func dismissUI(completion: @escaping () -> Void) {
+        urlResolver.close {
+            completion()
+        }
     }
 
-    static func createAuthorizationRequest(
-        openIdServiceConfiguration: OIDServiceConfiguration,
-        authorizationParameters: OpenIdAuthorizationParameters) -> OIDAuthorizationRequest {
-
-        let additionalParams: [String: String] = [
-            Keys.loginHintToken.rawValue: authorizationParameters.loginHintToken,
-            Keys.acrValues.rawValue: authorizationParameters.acrValues?
-                .map() { $0.rawValue }
-                .joined(separator: " "),
-            Keys.correlationId.rawValue: authorizationParameters.correlationId,
-            Keys.context.rawValue: authorizationParameters.base64EncodedContext,
-            Keys.prompt.rawValue: authorizationParameters.prompt?.rawValue,
-        ].compactMapValues() { return $0 }
-
-        // This uses the AppAuth defaults from the conveneince initializer in
-        // OIDAuthorizationRequest.m
-        // When we support PKCE challenges see the default imp. there as well.
-        let request: OIDAuthorizationRequest = OIDAuthorizationRequest(
-            configuration: openIdServiceConfiguration,
-            clientId: authorizationParameters.clientId,
-            clientSecret: nil, // client secret is never used in a public client.
-            scope: authorizationParameters.formattedScopes,
-            redirectURL: authorizationParameters.redirectURL,
-            responseType: ResponseType.code.rawValue,
-            state: authorizationParameters.state,
-            nonce: authorizationParameters.nonce,
-            codeVerifier: nil,
-            codeChallenge: nil,
-            codeChallengeMethod: nil,
-            additionalParameters: additionalParams
-        )
-
-        return request
+    func dismissUIAndConclude(result: OpenIdServiceResult) {
+        dismissUI {
+            self.conclude(result: result)
+        }
     }
 }
 

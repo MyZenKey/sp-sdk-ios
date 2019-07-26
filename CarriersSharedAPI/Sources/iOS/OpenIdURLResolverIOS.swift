@@ -9,158 +9,42 @@
 import Foundation
 import AppAuth
 
-/// iOS only implementation using safari view controller
-extension OpenIdURLResolverProtocol {
-    func performSafariAuthorization(
-        request: OIDAuthorizationRequest,
-        storage: OpenIdExternalSessionStateStorage,
-        fromViewController viewController: UIViewController,
-        completion: @escaping OpenIdURLResolverCompletion) {
-
-        // store the session as the presented vc can go out of scope
-        let session = OIDAuthState.authState(
-            byPresenting: request,
-            presenting: viewController,
-            callback: { authState, error in
-
-                // This response will be a cancellation or potentially some sort of network error.
-                // we will expect to recieive the redirect url through the handle url flow and
-                // in all likelyhood clean this up manually.
-
-                // TODO: verify errors here on cancel
-                guard
-                    error == nil,
-                    let authState = authState else {
-                        completion(nil, error)
-                        return
-                }
-
-                completion(authState, nil)
-        })
-
-        storage.pendingSession = session
-    }
-}
-
 /// A url resolver which uses universal links
-struct OpenIdURLResolverIOS: OpenIdURLResolverProtocol {
+class OpenIdURLResolverIOS: OpenIdURLResolverProtocol {
+    private var webBrowserUI: WebBrowserUI = WebBrowserUI()
+
     func resolve(
-        request: OIDAuthorizationRequest,
-        usingStorage storage: OpenIdExternalSessionStateStorage,
+        request: OpenIdAuthorizationRequest,
         fromViewController viewController: UIViewController,
-        authorizationParameters: OpenIdAuthorizationParameters,
-        completion: @escaping OpenIdURLResolverCompletion) {
-        // NOTE: we need to use stage, not test, for universal links to work with att
-        // ie:
-        // URL(string: "https://oidc.stage.xlogin.att.com/mga/sps/oauth/oauth20/authorize")!,
+        onCancel: @escaping OpenIdURLResolverDidCancel) {
+
+        let authoriztionRequestURL = request.authoriztionRequestURL
         UIApplication.shared.open(
-            request.configuration.authorizationEndpoint,
+            authoriztionRequestURL,
             options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true]
         ) { success in
-            if success {
-                self.performCCIDAuthorization(
-                    request: request,
-                    storage: storage,
-                    authorizationParameters: authorizationParameters,
-                    completion: completion
-                )
-            } else {
+            guard success else {
+                // if the request can't be performed locally, fall back to safari:
                 self.performSafariAuthorization(
-                    request: request,
-                    storage: storage,
+                    url: authoriztionRequestURL,
                     fromViewController: viewController,
-                    completion: completion
+                    onCancel: onCancel
                 )
+                return
             }
         }
     }
 
-    func performCCIDAuthorization(
-        request: OIDAuthorizationRequest,
-        storage: OpenIdExternalSessionStateStorage,
-        authorizationParameters: OpenIdAuthorizationParameters,
-        completion: @escaping OpenIdURLResolverCompletion) {
-
-        let externalUserAgent = OIDExternalUserAgentIOSCustomBrowser(
-            urlTransformation: { request in return request },
-            canOpenURLScheme: nil,
-            appStore: request.authorizationRequestURL()
-        )!
-
-        let session = OIDAuthState.authState(
-            byPresenting: request,
-            externalUserAgent: externalUserAgent,
-            callback: completion
-        )
-
-        storage.pendingSession = session
+    func close(completion: @escaping () -> Void) {
+        webBrowserUI.close(completion: completion)
     }
-}
 
-#if DEBUG
-
-/// A url resolver which uses a hard coded xci url scheme
-struct XCISchemeOpenIdURLResolverIOS: OpenIdURLResolverProtocol {
-    func resolve(
-        request: OIDAuthorizationRequest,
-        usingStorage storage: OpenIdExternalSessionStateStorage,
+    func performSafariAuthorization(
+        url: URL,
         fromViewController viewController: UIViewController,
-        authorizationParameters: OpenIdAuthorizationParameters,
-        completion: @escaping OpenIdURLResolverCompletion) {
-
-        if UIApplication.shared.canOpenURL(URL(string: "xci://")!) {
-
-            // restructure resquest to user xci:// scheme for auth point
-            // this reach backward pattern is not ideal and is for QA only!
-            let openIdConfiguration = OIDServiceConfiguration(
-                authorizationEndpoint: URL(string: "xci://authorize")!,
-                tokenEndpoint: request.configuration.tokenEndpoint
-            )
-
-            let authorizationRequest: OIDAuthorizationRequest = OpenIdService
-                .createAuthorizationRequest(
-                    openIdServiceConfiguration: openIdConfiguration,
-                    authorizationParameters: authorizationParameters
-            )
-
-            self.performCCIDAuthorization(
-                request: authorizationRequest,
-                storage: storage,
-                authorizationParameters: authorizationParameters,
-                completion: completion
-            )
-        } else {
-            self.performSafariAuthorization(
-                request: request,
-                storage: storage,
-                fromViewController: viewController,
-                completion: completion
-            )
-        }
-    }
-
-    func performCCIDAuthorization(
-        request: OIDAuthorizationRequest,
-        storage: OpenIdExternalSessionStateStorage,
-        authorizationParameters: OpenIdAuthorizationParameters,
-        completion: @escaping OpenIdURLResolverCompletion) {
-
-        let externalUserAgent = OIDExternalUserAgentIOSCustomBrowser(
-            urlTransformation: { request in return request },
-            canOpenURLScheme: "xci",
-            appStore: request.authorizationRequestURL()
-        )!
-
-        // since we don't rejoin via resumeExternalUserAgentFlowWithURL, we don't need to store the
-        // sesssion
-        let session = OIDAuthState.authState(
-            byPresenting: request,
-            externalUserAgent: externalUserAgent,
-            callback: completion
-        )
-
-        storage.pendingSession = session
+        onCancel: @escaping OpenIdURLResolverDidCancel) {
+        webBrowserUI.showBrowserUI(fromController: viewController,
+                                   forWebInterface: url,
+                                   onUIDidCancel: onCancel)
     }
 }
-
-#endif
