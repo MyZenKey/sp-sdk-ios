@@ -17,6 +17,7 @@ class BankAppUITests: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
+        app.launchArguments.append("--logged-out")
     }
 
     func testProjectVerifyButton() {
