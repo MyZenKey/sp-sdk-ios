@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum ResponseType: String {
+    case code
+}
+
 struct OpenIdAuthorizationRequest: Equatable {
     let resource: URL
     let parameters: Parameters
@@ -78,11 +82,15 @@ extension OpenIdAuthorizationRequest {
         case prompt = "prompt"
     }
 
-    var authoriztionRequestURL: URL {
+    var authorizationRequestURL: URL {
         let params: [URLQueryItem] = [
             URLQueryItem(name: Keys.clientId.rawValue, value: parameters.clientId),
+            URLQueryItem(name: Keys.scope.rawValue, value: parameters.formattedScopes),
             URLQueryItem(name: Keys.redirectURI.rawValue, value: parameters.redirectURL.absoluteString),
+            URLQueryItem(name: Keys.responesType.rawValue, value: ResponseType.code.rawValue),
             URLQueryItem(name: Keys.state.rawValue, value: parameters.state),
+            URLQueryItem(name: Keys.nonce.rawValue, value: parameters.nonce),
+
             URLQueryItem(name: Keys.loginHintToken.rawValue, value: parameters.loginHintToken),
             URLQueryItem(name: Keys.acrValues.rawValue, value: parameters.acrValues?
                 .map() { $0.rawValue }

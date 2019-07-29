@@ -6,43 +6,34 @@
 //  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
-import AppAuth
 @testable import CarriersSharedAPI
 
 class MockURLResolver: OpenIdURLResolverProtocol {
-
-    var lastStorage: OpenIdExternalSessionStateStorage?
-    var lastRequest: OIDAuthorizationRequest?
+    var lastRequest: OpenIdAuthorizationRequest?
     var lastViewController: UIViewController?
-    var lastParameters: OpenIdAuthorizationParameters?
-    var lastCompletion: OpenIdURLResolverCompletion?
+    var lastParameters: OpenIdAuthorizationRequest.Parameters?
+    var lastCompletion: OpenIdURLResolverDidCancel?
 
     func clear() {
-        lastStorage = nil
         lastRequest = nil
         lastViewController = nil
-        lastParameters = nil
         lastCompletion = nil
     }
 
+
     func resolve(
-        request: OIDAuthorizationRequest,
-        usingStorage storage: OpenIdExternalSessionStateStorage,
+        request: OpenIdAuthorizationRequest,
         fromViewController viewController: UIViewController,
-        authorizationParameters: OpenIdAuthorizationParameters,
-        completion: @escaping OpenIdURLResolverCompletion) {
-        lastStorage = storage
+        onCancel: @escaping OpenIdURLResolverDidCancel) {
         lastRequest = request
         lastViewController = viewController
-        lastParameters = authorizationParameters
-        lastCompletion = completion
+        lastCompletion = onCancel
+
     }
 
-    func performCCIDAuthorization(
-        request: OIDAuthorizationRequest,
-        storage: OpenIdExternalSessionStateStorage,
-        authorizationParameters: OpenIdAuthorizationParameters,
-        completion: @escaping OpenIdURLResolverCompletion) {
-
+    func close(completion: @escaping () -> Void) {
+        DispatchQueue.main.async {
+            completion()
+        }
     }
 }

@@ -18,7 +18,7 @@ class OpenIdURLResolverIOS: OpenIdURLResolverProtocol {
         fromViewController viewController: UIViewController,
         onCancel: @escaping OpenIdURLResolverDidCancel) {
 
-        let authoriztionRequestURL = request.authoriztionRequestURL
+        let authoriztionRequestURL = request.authorizationRequestURL
         UIApplication.shared.open(
             authoriztionRequestURL,
             options: [UIApplication.OpenExternalURLOptionsKey.universalLinksOnly: true]

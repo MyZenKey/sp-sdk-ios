@@ -142,7 +142,7 @@ extension AuthorizationServiceTests {
         let expectedController = UIViewController()
         let expectation = XCTestExpectation(description: "async authorization")
 
-        let expected = OpenIdAuthorizationParameters(
+        let expected = OpenIdAuthorizationRequest.Parameters(
             clientId: mockSDKConfig.clientId,
             redirectURL: mockSDKConfig.redirectURL,
             formattedScopes: "address email openid",

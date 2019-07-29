@@ -9,10 +9,6 @@
 import Foundation
 import AppAuth
 
-enum ResponseType: String {
-    case code
-}
-
 enum OpenIdServiceError: Error {
     case urlResponseError(URLResponseError)
     case urlResolverError(Error?)
