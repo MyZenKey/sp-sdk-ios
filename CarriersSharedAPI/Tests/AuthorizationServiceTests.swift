@@ -6,7 +6,6 @@
 //
 
 import XCTest
-import AppAuth
 @testable import CarriersSharedAPI
 
 class AuthorizationServiceTests: XCTestCase {
