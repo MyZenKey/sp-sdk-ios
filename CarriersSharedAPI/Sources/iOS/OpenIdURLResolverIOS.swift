@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import AppAuth
 
 /// A url resolver which uses universal links
 class OpenIdURLResolverIOS: OpenIdURLResolverProtocol {

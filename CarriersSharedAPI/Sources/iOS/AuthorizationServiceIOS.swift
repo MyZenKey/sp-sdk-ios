@@ -27,6 +27,7 @@ class AuthorizationServiceIOS {
     let openIdService: OpenIdServiceProtocol
     let carrierInfoService: CarrierInfoServiceProtocol
     let mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol
+    let stateGenerator: () -> String?
 
     public var isAuthorizing: Bool {
         if case .idle = state {
@@ -46,12 +47,14 @@ class AuthorizationServiceIOS {
          discoveryService: DiscoveryServiceProtocol,
          openIdService: OpenIdServiceProtocol,
          carrierInfoService: CarrierInfoServiceProtocol,
-         mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol) {
+         mobileNetworkSelectionService: MobileNetworkSelectionServiceProtocol,
+         stateGenerator: @escaping () -> String? = RandomStringGenerator.generateStateSuitableString) {
         self.sdkConfig = sdkConfig
         self.discoveryService = discoveryService
         self.openIdService = openIdService
         self.carrierInfoService = carrierInfoService
         self.mobileNetworkSelectionService = mobileNetworkSelectionService
+        self.stateGenerator = stateGenerator
     }
 }
 
@@ -80,7 +83,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
             clientId: sdkConfig.clientId,
             redirectURL: sdkConfig.redirectURL,
             formattedScopes: OpenIdScopes(requestedScopes: scopes).networkFormattedString,
-            state: state ?? RandomStringGenerator.generateStateSuitableString(),
+            state: state,
             nonce: nonce,
             acrValues: acrValues,
             prompt: prompt,
@@ -101,8 +104,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
 
         self.state = .requesting(request)
 
-        request.mainQueueUpdate(state: .discovery(carrierInfoService.primarySIM))
-        next(for: request)
+        preflightCheck()
     }
 
     public func cancel() {
@@ -136,6 +138,31 @@ extension AuthorizationServiceIOS: URLHandling {
 }
 
 private extension AuthorizationServiceIOS {
+
+    func preflightCheck() {
+
+        guard case .requesting(let request) = state else {
+            return
+        }
+
+        defer { next(for: request) }
+
+        guard let generatedState = stateGenerator() else {
+            request.mainQueueUpdate(state: .concluding(
+                    .error(
+                        RequestStateError.generationFailed.asAuthorizationError
+                    )
+                )
+            )
+            return
+        }
+
+        request.authorizationParameters.safeSet(state: generatedState)
+
+        // state is still undefined, start by entering discovery:
+        request.mainQueueUpdate(state: .discovery(carrierInfoService.primarySIM))
+    }
+
     /// This function wraps step transitions and ensures that the request should continue before
     /// advancing to the next step.
     func next(for request: AuthorizationRequest) {
@@ -172,7 +199,6 @@ private extension AuthorizationServiceIOS {
             performDiscovery(with: nil)
 
         case .concluding(let outcome):
-
             var logLevel: Log.Level = .info
             if case .error = outcome {
                 logLevel = .error

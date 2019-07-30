@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import AppAuth
 
 typealias OpenIdURLResolverDidCancel = () -> Void
 

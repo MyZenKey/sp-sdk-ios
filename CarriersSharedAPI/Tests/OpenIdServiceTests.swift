@@ -18,7 +18,6 @@ class OpenIdServiceTests: XCTestCase {
     override func setUp() {
         super.setUp()
         mockURLResolver.clear()
-        openIdService.cancelCurrentAuthorizationSession()
     }
 
     func testInitialState() {
@@ -87,40 +86,6 @@ class OpenIdServiceTests: XCTestCase {
                 XCTAssertEqual(response.code, "TESTCODE")
                 XCTAssertEqual(response.mcc, MockSIMs.tmobile.mcc)
                 XCTAssertEqual(response.mnc, MockSIMs.tmobile.mnc)
-        }
-
-        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"
-        let handled = openIdService.resolve(url: URL(string: urlString)!)
-        XCTAssertTrue(handled)
-        wait(for: [expectation], timeout: timeout)
-    }
-
-    func testConcludeWithStateGenerationError() {
-        let params = OpenIdAuthorizationRequest.Parameters(
-            clientId: OpenIdServiceTests.mockParameters.clientId,
-            redirectURL: OpenIdServiceTests.mockParameters.redirectURL,
-            formattedScopes: OpenIdServiceTests.mockParameters.formattedScopes,
-            state: nil,
-            nonce: nil,
-            acrValues: nil,
-            prompt: nil,
-            correlationId: nil,
-            context: nil,
-            loginHintToken: nil)
-
-        let expectation = XCTestExpectation(description: "wait")
-        openIdService.authorize(
-            fromViewController: UIViewController(),
-            carrierConfig: OpenIdServiceTests.mockCarrierConfig,
-            authorizationParameters: params) { result in
-                defer { expectation.fulfill() }
-                guard
-                    case .error(let error) = result,
-                    case .stateError(let stateError) = error,
-                    case .generationFailed = stateError else {
-                    XCTFail("expected state generation error")
-                    return
-                }
         }
 
         let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"

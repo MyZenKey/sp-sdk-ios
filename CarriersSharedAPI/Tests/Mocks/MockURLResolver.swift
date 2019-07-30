@@ -20,7 +20,6 @@ class MockURLResolver: OpenIdURLResolverProtocol {
         lastCompletion = nil
     }
 
-
     func resolve(
         request: OpenIdAuthorizationRequest,
         fromViewController viewController: UIViewController,

@@ -43,7 +43,7 @@ struct ResponseURL {
     /// - Parameter state: the state value to attempt to match.
     /// - Returns: a successful result or an error if the url state doesn't match the value
     /// provided.
-    func hasMatchingState(_ state: String) -> Result<Void, URLResponseError> {
+    func hasMatchingState(_ state: String?) -> Result<Void, URLResponseError> {
         guard
             let inboundState = queryDictionary[Keys.state.rawValue],
             inboundState == state else {

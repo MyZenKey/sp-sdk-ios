@@ -144,9 +144,6 @@ extension OpenIdServiceError: AuthorizationErrorConvertible {
             )
         case .urlResponseError(let urlError):
             return urlError.asAuthorizationError
-
-        case .stateError(let stateError):
-            return stateError.asAuthorizationError
         }
     }
 }

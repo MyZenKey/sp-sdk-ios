@@ -7,12 +7,10 @@
 //
 
 import Foundation
-import AppAuth
 
 enum OpenIdServiceError: Error {
     case urlResponseError(URLResponseError)
     case urlResolverError(Error?)
-    case stateError(RequestStateError)
     case viewControllerNotInHeirarchy
 }
 
@@ -93,6 +91,8 @@ extension OpenIdService: OpenIdServiceProtocol {
             parameters: authorizationParameters
         )
 
+        state = .inProgress(authorizationRequest, carrierConfig.simInfo, completion)
+
         Log.log(.info, "Performing auth request \(authorizationRequest)")
         urlResolver.resolve(
             request: authorizationRequest,
@@ -100,7 +100,6 @@ extension OpenIdService: OpenIdServiceProtocol {
                 // ui triggered the dismissal and will clean itself up, just call the completion
                 self?.conclude(result: .cancelled)
         }
-        state = .inProgress(authorizationRequest, carrierConfig.simInfo, completion)
     }
 
     func cancelCurrentAuthorizationSession() {
@@ -131,10 +130,8 @@ private extension OpenIdService {
         withURL url: URL) {
 
         let response = ResponseURL(url: url)
-        guard let state = request.parameters.state else {
-            conclude(result: .error(.stateError(.generationFailed)))
-            return
-        }
+
+        let state = request.parameters.state
 
         // validate state
         let validatedCode = response.hasMatchingState(state).promoteResult()
@@ -157,10 +154,7 @@ private extension OpenIdService {
     }
 
     func conclude(result: OpenIdServiceResult) {
-        defer {
-            state = .idle
-        }
-
+        defer { state = .idle }
         guard case .inProgress(_, _, let completion) = state else {
             return
         }

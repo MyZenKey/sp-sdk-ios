@@ -22,7 +22,7 @@ extension OpenIdAuthorizationRequest {
         let clientId: String
         let redirectURL: URL
         let formattedScopes: String
-        let state: String?
+        private(set) var state: String?
         let nonce: String?
 
         let acrValues: [ACRValue]?
@@ -61,6 +61,14 @@ extension OpenIdAuthorizationRequest {
             // utf8 will encode all for all swift strings:
             return context.data(using: .utf8)!
                 .base64EncodedString()
+        }
+
+        mutating func safeSet(state: String) {
+            guard self.state == nil else {
+                Log.log(.warn, "Attempting to set login hint token when it was already set.")
+                return
+            }
+            self.state = state
         }
     }
 }
