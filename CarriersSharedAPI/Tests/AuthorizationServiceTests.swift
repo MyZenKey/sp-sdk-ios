@@ -1,8 +1,9 @@
 //
 //  AuthorizationServiceTests.swift
-//  AppAuth
+//  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 2/26/19.
+//  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
 import XCTest
