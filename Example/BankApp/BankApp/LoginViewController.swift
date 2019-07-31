@@ -98,6 +98,7 @@ class LoginViewController: UIViewController {
     }()
 
     let serviceAPI = ServiceAPI()
+    let clientSideServiceAPI = ClientSideServiceAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -210,19 +211,20 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
 
     func authorizeUser(authorizedResponse: AuthorizedResponse) {
         let code = authorizedResponse.code
-        serviceAPI.login(
+//        serviceAPI.login(
+        clientSideServiceAPI.login(
             withAuthCode: code,
             mcc: authorizedResponse.mcc,
             mnc: authorizedResponse.mnc,
-            completionHandler: { json, error in
-                guard
-                    let accountToken = json?["token"],
-                    let tokenString = accountToken.toString else {
-                        print("error no token returned")
-                        return
-                }
-                AccountManager.login(withToken: tokenString)
-                self.launchHomeScreen()
+            completion: { _, _ in
+//                guard
+//                    let accountToken = json?["token"],
+//                    let tokenString = accountToken.toString else {
+//                        print("error no token returned")
+//                        return
+//                }
+//                AccountManager.login(withToken: tokenString)
+//                self.launchHomeScreen()
         })
     }
 }
