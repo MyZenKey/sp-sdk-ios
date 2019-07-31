@@ -34,42 +34,68 @@ class AuthorizationRequest {
         case finished
     }
 
+    /// Convenience accesor indicating whether or not the request is in a finished state.
     var isFinished: Bool {
         return self.state.isFinishedState
     }
 
-    private var canRedirectToDiscoveryUI = true
+    /// Whether the `prompt` flag should be passed to discovery forcing the flow to redirect to
+    /// discovery ui in lieu of returning a open id config.
+    var passPromptDiscovery: Bool {
+        // pass prompt on discovery the first time on a tablet request and again if missing user
+        // recovery
+        return passPromptDiscoveryFlag
+    }
 
-    /// Whether the `prompt` flag should be passed to discovery and discovery-ui
-    var passPrompt: Bool {
+    /// Whether the `prompt` flag should be passed to discovery-ui, ignoring any previously
+    /// established cookies and entering either trusted browser or carrier selection flow.
+    var passPromptDiscoveryUI: Bool {
+        // pass prompt on discovery ui on missing user recovery 1 time.
         return isAttemptingMissingUserRecovery
     }
+
+    var authorizationParameters: OpenIdAuthorizationRequest.Parameters
+
+    let viewController: UIViewController
 
     /// If this flag is set on the request the prompt flag should be sent to all disocvery
     /// endpoints and all cookies should be ignored. If this flag is already set for a request
     /// recovery should not be attempted a second time.
     private(set) var isAttemptingMissingUserRecovery: Bool = false
 
-    private(set) var state: State = .undefined {
-        didSet {
-            if case .missingUserRecovery = state {
-                // set a flat to indicate we're attempting user recovery:
-                isAttemptingMissingUserRecovery = true
-            }
-        }
-    }
+    /// Request state. Use the `update(state:)` function to manipulate this value.
+    private(set) var state: State = .undefined
 
-    var authorizationParameters: OpenIdAuthorizationRequest.Parameters
+    /// This flag inidcates whether or not we should return `true` for pasPromptDiscovery.
+    ///
+    /// Discussion:
+    /// Prompt is passed to discovery under the following circumstances:
+    /// - pass prompt on the first discovery call if using an iPad.
+    /// - pass prompt on the first discovery call if attempting missing user recovery.
+    private var passPromptDiscoveryFlag = false
 
-    let viewController: UIViewController
+    /// This value indicates whether it's possbile to redirect to discovery ui. redirects are
+    /// permitted one time per request unless we attempt a missing user recovery flow in which case
+    /// they are premitted an addtional time.
+    private var canRedirectToDiscoveryUI = true
+
     private let completion: AuthorizationCompletion
 
-    init(viewController: UIViewController,
+    private let deviceInfoProvider: DeviceInfoProtocol
+
+    init(deviceInfoProvider: DeviceInfoProtocol,
+         viewController: UIViewController,
          authorizationParameters: OpenIdAuthorizationRequest.Parameters,
          completion: @escaping AuthorizationCompletion) {
+        self.deviceInfoProvider = deviceInfoProvider
         self.viewController = viewController
         self.authorizationParameters = authorizationParameters
         self.completion = completion
+
+        // on tablets, always prompt discovery on the first call:
+        if deviceInfoProvider.isTablet {
+            passPromptDiscoveryFlag = true
+        }
     }
 
     /// Updates the state to the requested value if possible. If the requested state is invalid
@@ -90,18 +116,30 @@ class AuthorizationRequest {
             fatalError("The only valid transition from concluding state is to a finsihed state.")
         }
 
+        // if we've just completed discovery, we should un set this flag as it is fulfilled by a
+        // single dicovery call:
+        if case .discovery = state {
+            passPromptDiscoveryFlag = false
+        }
+
         switch newState {
         case .undefined, .discovery, .authorization, .concluding:
-            // no special state managment required
+            // no special state management required
             self.state = newState
 
         case .missingUserRecovery:
-            // enusre we haven't redirected through ui before:
+            // enusre we haven't attempted recovery before:
             guard !isAttemptingMissingUserRecovery else {
                 let error = AuthorizationRequestError.tooManyRecoveries.asAuthorizationError
                 self.state = .concluding(.error(error))
                 return
             }
+
+            // set a flag to indicate we're attempting user recovery:
+            isAttemptingMissingUserRecovery = true
+
+            // the next call to discovery should use prompt
+            passPromptDiscoveryFlag = true
 
             // we're attemting to recover – permit redirects to discovery ui
             canRedirectToDiscoveryUI = true

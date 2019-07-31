@@ -93,6 +93,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
         )
 
         let request = AuthorizationRequest(
+            deviceInfoProvider: DeviceInfo(),
             viewController: viewController,
             authorizationParameters: parameters,
             completion: completion
@@ -219,7 +220,7 @@ private extension AuthorizationServiceIOS {
 
         discoveryService.discoverConfig(
             forSIMInfo: simInfo,
-            prompt: request.passPrompt) { [weak self] result in
+            prompt: request.passPromptDiscovery) { [weak self] result in
 
             defer { self?.next(for: request) }
 
@@ -272,7 +273,7 @@ private extension AuthorizationServiceIOS {
         self.mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: resource,
             fromCurrentViewController: request.viewController,
-            prompt: request.passPrompt
+            prompt: request.passPromptDiscoveryUI
         ) { [weak self] result in
 
             defer { self?.next(for: request) }
