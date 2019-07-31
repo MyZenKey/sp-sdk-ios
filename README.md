@@ -338,24 +338,20 @@ Refer to:
 
 ## Error Handling
 
-When the error is thrown is totally dependent on the error. There is, fundamentally, only one path through the SDK via the authorize function on the AuthorizeService. The errors all originate at different points in this path.
+`AuthorizationError` defines a code, description and an `errorType`. All error codes feature a short docstring to help the developer debug the error. The Error Type provides a class of error with a docstring that indicates what the developer should present to the user. The developer can define the cause of the error.
 
-The `AuthorizationError` defines a code, description (which may or may not exist) and an errorType. All error codes feature a short docstring to help the developer debug the error. The Error Type provides a class of error which also has its own docstring which indicates what the developer should present to the user.
-
-The cause of the error is fundamentally up to the developer. For example, if the error type is `invalidRequest`, you should probably double-check the code (the docstring suggests as much). If it is `requestDenied`, show some UI that reminds the user that that request was denied.
-
-The following table summarizes the type of errors associated with an `AuthorizationError code and how to manage them.
+The following table summarizes the type of errors associated with an `AuthorizationError` code and how to manage them.
 
 | Error Type (Case) | Possible Cause | How to Remedy |
 :------------------ | :------------- | :------------ |
-| invalidRequest | The request was denied by the user or carrier. | |
-| requestDenied | The request has timed out. | |
-| requestTimeout | There was an error on the server. | Please try again later. |
-| serverError | There was a problem communicating over the network. | Check your connection and try again. |
-| networkFailure | There is an error configuring the SDK. | Confirm your configuration locally and with the service provider portal. |
-| conifigurationError | There is an inconsistency with the user's state. | Retry discovery. |
-| discoveryStateError | An unknown error has occurred. | If the problem persists, contact support. |
-| unknownError | |
+| invalidRequest | The request made is invalid. | Check the parameters passed to the authorization call. |
+| requestDenied | The request was denied by the user or carrier. | Display an appropriate feedback message to the user. |
+| requestTimeout | The request has timed out. | Display an appropriate feedback message, such as "Unable to reach the server, please try again" or "Poor network connection". |
+| serverError | There was an error on the server. | Please try again later. |
+| networkFailure | There was a problem communicating over the network. | Check your connection and try again. |
+| conifigurationError | There is an error configuring the SDK. | Confirm your configuration locally and with the service provider portal. |
+| discoveryStateError | There is an inconsistency with the user's state. | Retry discovery. |
+| unknownError | An unknown error has occurred. | If the problem persists, contact support. |
 
 ## Next Steps
 
@@ -376,4 +372,4 @@ For technical questions, contact [support](mailto:support@mobileauthtaskforce.co
 NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND CONFIDENTIAL. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.  NO RECIPIENT MAY DISCLOSE, DISTRIBUTE, OR POST THIS DOCUMENT WITHOUT XCI JV, LLC’S EXPRESS WRITTEN AUTHORIZATION.
 
 <sub> Last Update:
-Document Version 0.9.9 - July 24, 2019</sub>
+Document Version 0.9.11 - July 31, 2019</sub>
