@@ -24,7 +24,7 @@ class AuthorizationServiceTests: XCTestCase {
 
     let networkIdentifierCache =  NetworkIdentifierCache.bundledCarrierLookup
 
-    lazy var authorizationService = authorizationServiceFacotry()
+    lazy var authorizationService = authorizationServiceFactory()
 
     let scopes: [Scope] = [.openid, .address, .address, .email]
 
@@ -35,7 +35,7 @@ class AuthorizationServiceTests: XCTestCase {
         mockNetworkSelectionService.clear()
     }
 
-    func authorizationServiceFacotry(
+    func authorizationServiceFactory(
         // swiftlint:disable:next line_length
         stateGenerator: @escaping () -> String? = RandomStringGenerator.generateStateSuitableString) -> AuthorizationServiceIOS {
         return AuthorizationServiceIOS(
@@ -239,7 +239,7 @@ extension AuthorizationServiceTests {
         mockCarrierInfo.primarySIM = MockSIMs.tmobile
         mockOpenIdService.mockResponse = .cancelled
 
-        let failingStateGeneratorAuthService = authorizationServiceFacotry(
+        let failingStateGeneratorAuthService = authorizationServiceFactory(
             stateGenerator: { return nil }
         )
 
