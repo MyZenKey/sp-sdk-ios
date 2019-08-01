@@ -1,5 +1,5 @@
 //
-//  AuthorizationRequest.swift
+//  AuthorizationServiceStateMachine.swift
 //  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 6/7/19.
@@ -16,7 +16,7 @@ enum AuthorizationRequestError {
 /// This class captures the state and information required during the life time of an authorization
 /// request. It defines the state and validates changes to state to ensure those changes maintain
 /// consistencey with the request's current state.
-class AuthorizationRequest {
+class AuthorizationServiceStateMachine {
     enum State {
         /// No defined action. Any state is a valid transition.
         case undefined
@@ -26,17 +26,21 @@ class AuthorizationRequest {
         case mobileNetworkSelection(URL)
         /// The next action is to perorm authorization. Any state is a valid transition.
         case authorization(CarrierConfig)
-        ///  Any state is a valid transition.
-        case missingUserRecovery
         ///  The only valid tranistion is to the finished state.
         case concluding(AuthorizationResult)
-        ///  No other state tranistions are valid.
-        case finished
+    }
+
+    enum Event {
+        case attemptDiscovery(SIMInfo?)
+        case discoveredConfig(CarrierConfig)
+        case redirected(URL)
+        case errored(AuthorizationError)
+        case authorized(AuthorizedResponse)
     }
 
     /// Convenience accesor indicating whether or not the request is in a finished state.
     var isFinished: Bool {
-        return self.state.isFinishedState
+        return self.state.isConcludingState
     }
 
     /// Whether the `prompt` flag should be passed to discovery forcing the flow to redirect to
@@ -98,41 +102,56 @@ class AuthorizationRequest {
         }
     }
 
-    /// Updates the state to the requested value if possible. If the requested state is invalid
-    /// it may update to a concluding state contining an error value in which case the request
-    /// should error out.
-    /// If the request has already entered a finished state, this function has no action.
-    ///
-    /// This method is not thread safe and it is up to the developer to ensure consistency in
-    /// updates.
-    func update(state newState: State) {
-        // No state transition are valid after finshed is reached.
+    func startRequest(simInfo: SIMInfo) {
+        handle(event: .attemptDiscovery(simInfo))
+    }
+
+    func handle(event: Event) {
+        // Don't handle events after finshed state is reached.
         guard !isFinished else {
             return
         }
 
-        // If we've entered the concluding state, the only valid state is `.finished`
-        guard !self.state.isConcludingState || newState.isFinishedState else {
-            fatalError("The only valid transition from concluding state is to a finsihed state.")
-        }
-
-        // if we've just completed discovery, we should un set this flag as it is fulfilled by a
-        // single dicovery call:
-        if case .discovery = state {
+        switch event {
+        case .attemptDiscovery(let simInfo):
+            // if we've just completed discovery, we should unset this flag as it is fulfilled by a
+            // single discovery call:
             passPromptDiscoveryFlag = false
+            state = .discovery(simInfo)
+            break
+
+        case .discoveredConfig(let carrierConfig):
+            state = .authorization(carrierConfig)
+
+        case .redirected(let url):
+            // enusre we haven't redirected through ui before:
+            guard canRedirectToDiscoveryUI else {
+                let error = AuthorizationRequestError.tooManyRedirects.asAuthorizationError
+                state = .concluding(.error(error))
+                return
+            }
+
+            // only permit this re-direction one time:
+            canRedirectToDiscoveryUI = false
+            state = .mobileNetworkSelection(url)
+
+        case .errored(let error):
+            state = nextState(forError: error)
+
+        case .authorized(let authorizedPayload):
+            state = .concluding(.code(authorizedPayload))
         }
+    }
+}
 
-        switch newState {
-        case .undefined, .discovery, .authorization, .concluding:
-            // no special state management required
-            self.state = newState
-
-        case .missingUserRecovery:
+private extension AuthorizationServiceStateMachine {
+    func nextState(forError error: AuthorizationError) -> State {
+        switch error.code {
+        case ProjectVerifyErrorCode.userNotFound.rawValue:
             // enusre we haven't attempted recovery before:
             guard !isAttemptingMissingUserRecovery else {
                 let error = AuthorizationRequestError.tooManyRecoveries.asAuthorizationError
-                self.state = .concluding(.error(error))
-                return
+                return .concluding(.error(error))
             }
 
             // set a flag to indicate we're attempting user recovery:
@@ -143,45 +162,19 @@ class AuthorizationRequest {
 
             // we're attemting to recover – permit redirects to discovery ui
             canRedirectToDiscoveryUI = true
-            self.state = newState
 
-        case .mobileNetworkSelection:
-            // enusre we haven't redirected through ui before:
-            guard canRedirectToDiscoveryUI else {
-                let error = AuthorizationRequestError.tooManyRedirects.asAuthorizationError
-                self.state = .concluding(.error(error))
-                return
-            }
+            // enter discovery w/o a sim, we wil also prompt.
+            return .discovery(nil)
 
-            // only permit this re-direction one time:
-            canRedirectToDiscoveryUI = false
-
-            self.state = newState
-
-        case .finished:
-            // If we are moving to a finished state, establish we have previously entered a
-            // concluding state and extract the outcome.
-            guard case .concluding(let outcome) = self.state else {
-                fatalError("You must transition to a concluding state before a finished state.")
-            }
-            // ensure consistency so update state before calling completion.
-            self.state = newState
-            // send the completion:
-            completion(outcome)
+        default:
+            return .concluding(.error(error))
         }
     }
 }
 
-private extension AuthorizationRequest.State {
+private extension AuthorizationServiceStateMachine.State {
     var isConcludingState: Bool {
         guard case .concluding = self else {
-            return false
-        }
-        return true
-    }
-
-    var isFinishedState: Bool {
-        guard case .finished = self else {
             return false
         }
         return true
