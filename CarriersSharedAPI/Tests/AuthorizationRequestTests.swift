@@ -137,7 +137,7 @@ class AuthorizationStateMachineTests: XCTestCase {
                 XCTFail("expected error state")
             return
         }
-        XCTAssertEqual(error, AuthorizationRequestError.tooManyRedirects.asAuthorizationError)
+        XCTAssertEqual(error, AuthorizationStateMachineError.tooManyRedirects.asAuthorizationError)
     }
 
     func testShowDiscoveryUITwiceIfEnteredMissingUserRecovery() {
@@ -174,7 +174,7 @@ class AuthorizationStateMachineTests: XCTestCase {
                 XCTFail("expected error state")
                 return
         }
-        XCTAssertEqual(error, AuthorizationRequestError.tooManyRecoveries.asAuthorizationError)
+        XCTAssertEqual(error, AuthorizationStateMachineError.tooManyRecoveries.asAuthorizationError)
     }
 
     func testUnrecoverableErrorConcludesWithError() {

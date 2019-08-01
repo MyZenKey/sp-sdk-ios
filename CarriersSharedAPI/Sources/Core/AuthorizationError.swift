@@ -167,7 +167,7 @@ extension MobileNetworkSelectionError: AuthorizationErrorConvertible {
     }
 }
 
-extension AuthorizationRequestError: AuthorizationErrorConvertible {
+extension AuthorizationStateMachineError: AuthorizationErrorConvertible {
     var asAuthorizationError: AuthorizationError {
         switch self {
         case .tooManyRedirects:

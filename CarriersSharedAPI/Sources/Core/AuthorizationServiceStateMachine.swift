@@ -8,8 +8,7 @@
 
 import Foundation
 
-// FIXME: - Rename
-enum AuthorizationRequestError {
+enum AuthorizationStateMachineError {
     case tooManyRedirects
     case tooManyRecoveries
 }
@@ -45,21 +44,6 @@ class AuthorizationServiceStateMachine {
     /// Convenience accesor indicating whether or not the request is in a finished state.
     var isFinished: Bool {
         return self.state.isConcludingState
-    }
-
-    /// Whether the `prompt` flag should be passed to discovery forcing the flow to redirect to
-    /// discovery ui in lieu of returning a open id config.
-    private var passPromptDiscovery: Bool {
-        // pass prompt on discovery the first time on a tablet request and again if missing user
-        // recovery
-        return passPromptDiscoveryFlag
-    }
-
-    /// Whether the `prompt` flag should be passed to discovery-ui, ignoring any previously
-    /// established cookies and entering either trusted browser or carrier selection flow.
-    private var passPromptDiscoveryUI: Bool {
-        // pass prompt on discovery ui on missing user recovery 1 time.
-        return isAttemptingMissingUserRecovery
     }
 
     /// If this flag is set on the request the prompt flag should be sent to all disocvery
@@ -112,7 +96,6 @@ class AuthorizationServiceStateMachine {
             nextState.isErrorConclusion ? .error : .info,
             "State Change : From |\(state)| to |\(nextState)| via Event: |\(event)|"
         )
-
         state = nextState
     }
 }
@@ -121,9 +104,10 @@ private extension AuthorizationServiceStateMachine {
     func state(forEvent event: Event) -> State {
         switch event {
         case .attemptDiscovery(let simInfo):
+            // this flag indicates whether we should prompt to discovert ui:
+            let shouldPrompt = passPromptDiscoveryFlag
             // if we've just completed discovery, we should unset this flag as it is fulfilled by a
             // single discovery call:
-            let shouldPrompt = passPromptDiscoveryFlag
             passPromptDiscoveryFlag = false
             return .discovery(simInfo, shouldPrompt)
 
@@ -133,7 +117,7 @@ private extension AuthorizationServiceStateMachine {
         case .redirected(let url):
             // enusre we haven't redirected through ui before:
             guard canRedirectToDiscoveryUI else {
-                let error = AuthorizationRequestError.tooManyRedirects.asAuthorizationError
+                let error = AuthorizationStateMachineError.tooManyRedirects.asAuthorizationError
                 return .concluding(.error(error))
             }
 
@@ -158,14 +142,15 @@ private extension AuthorizationServiceStateMachine {
         case ProjectVerifyErrorCode.userNotFound.rawValue:
             // enusre we haven't attempted recovery before:
             guard !isAttemptingMissingUserRecovery else {
-                let error = AuthorizationRequestError.tooManyRecoveries.asAuthorizationError
+                let error = AuthorizationStateMachineError.tooManyRecoveries.asAuthorizationError
                 return .concluding(.error(error))
             }
 
-            // set a flag to indicate we're attempting user recovery:
+            // set a flag to indicate we're attempting user recovery, the next call to discovery-ui
+            // should use prompt:
             isAttemptingMissingUserRecovery = true
 
-            // the next call to discovery should use prompt
+            // the next *one* call to discovery should use prompt
             passPromptDiscoveryFlag = true
 
             // we're attemting to recover – permit redirects to discovery ui
@@ -195,32 +180,6 @@ private extension AuthorizationServiceStateMachine.State {
             return false
         }
         return true
-    }
-}
-
-class AuthorizationRequestContext {
-    let viewController: UIViewController
-    let completion: AuthorizationCompletion
-    var parameters: OpenIdAuthorizationRequest.Parameters
-
-    init(
-        viewController: UIViewController,
-        parameters: OpenIdAuthorizationRequest.Parameters,
-        completion: @escaping AuthorizationCompletion) {
-
-        self.viewController = viewController
-        self.completion = completion
-        self.parameters = parameters
-    }
-
-    func addState(_ state: String) {
-        precondition(Thread.isMainThread)
-        parameters.safeSet(state: state)
-    }
-
-    func addLoginHintToken(_ token: String?) {
-        precondition(Thread.isMainThread)
-        parameters.loginHintToken = token
     }
 }
 

@@ -24,6 +24,7 @@
 		23F88F542224738A00A5F5D9 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F532224738A00A5F5D9 /* NetworkService.swift */; };
 		23F88F5E2225AD6600A5F5D9 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5D2225AD6500A5F5D9 /* Result.swift */; };
 		23F88F602226086600A5F5D9 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F88F5F2226086600A5F5D9 /* Scope.swift */; };
+		8A06286B22F38AD6005DB6A8 /* AuthorizationRequestContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A06286A22F38AD6005DB6A8 /* AuthorizationRequestContext.swift */; };
 		8A0992F622F2055B0047D150 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0992F522F2055B0047D150 /* DeviceInfo.swift */; };
 		8A0992F922F234770047D150 /* AuthorizationRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0992F722F2316D0047D150 /* AuthorizationRequestTests.swift */; };
 		8A0992FA22F250790047D150 /* MockResponseQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A74103222A9B9D800788E7B /* MockResponseQueue.swift */; };
@@ -157,6 +158,7 @@
 		23F88F5922247E2E00A5F5D9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		23F88F5D2225AD6500A5F5D9 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		23F88F5F2226086600A5F5D9 /* Scope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
+		8A06286A22F38AD6005DB6A8 /* AuthorizationRequestContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationRequestContext.swift; sourceTree = "<group>"; };
 		8A0992F522F2055B0047D150 /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		8A0992F722F2316D0047D150 /* AuthorizationRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationRequestTests.swift; sourceTree = "<group>"; };
 		8A0C84BE22DE53EC00D3FD20 /* MockURLResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLResolver.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 			children = (
 				8AB8A96022A05D0300E8AEB3 /* ACRValue.swift */,
 				2399F3F82227702A007D3613 /* AuthorizationError.swift */,
+				8A06286A22F38AD6005DB6A8 /* AuthorizationRequestContext.swift */,
 				231FFB99221C6DD800E2B1BA /* AuthorizationService.swift */,
 				8AEA8B5F22AABE1D0099B226 /* AuthorizationServiceStateMachine.swift */,
 				8AC7FF3A22C135940001066E /* AuthorizationServiceCurrentRequestStorage.swift */,
@@ -620,6 +623,7 @@
 				23F88F602226086600A5F5D9 /* Scope.swift in Sources */,
 				8AD71D1122EBA79000632EE6 /* OpenIdAuthorizationRequest.swift in Sources */,
 				236AC638222720E600E7C900 /* OpenIdService.swift in Sources */,
+				8A06286B22F38AD6005DB6A8 /* AuthorizationRequestContext.swift in Sources */,
 				8A6C136022820CDC00F42E3A /* CurrentSIMBrandingProvider.swift in Sources */,
 				8AB8A96122A05D0300E8AEB3 /* ACRValue.swift in Sources */,
 				2399F3F92227702A007D3613 /* AuthorizationError.swift in Sources */,
