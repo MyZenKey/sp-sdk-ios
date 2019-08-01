@@ -268,12 +268,12 @@ class AuthorizationURLBuilderTests: XCTestCase {
 
         let request = OpenIdAuthorizationRequest(resource: URL.mocked, parameters: parameters)
 
-        let expectdURL = URL(
+        let expectedURL = URL(
             // swiftlint:disable:next line_length
             string: "https://rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://rightpoint.com&response_type=code"
         )!
 
-        XCTAssertEqual(request.authorizationRequestURL, expectdURL)
+        XCTAssertEqual(request.authorizationRequestURL, expectedURL)
     }
 
     func testBase64EncodesContextCorrectly() {
@@ -309,10 +309,10 @@ class AuthorizationURLBuilderTests: XCTestCase {
 
         let request = OpenIdAuthorizationRequest(resource: URL.mocked, parameters: parameters)
 
-        let expectdURL = URL(
+        let expectedURL = URL(
             // swiftlint:disable:next line_length
             string: "https://rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://rightpoint.com&response_type=code&state=foo&nonce=bar&login_hint_token=boo&acr_values=aal1&correlation_id=fizz&context=YnV6eg%3D%3D&prompt=consent"
          )!
-        XCTAssertEqual(request.authorizationRequestURL, expectdURL)
+        XCTAssertEqual(request.authorizationRequestURL, expectedURL)
     }
 }

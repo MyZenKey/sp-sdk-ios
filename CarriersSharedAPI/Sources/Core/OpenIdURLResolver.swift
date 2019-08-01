@@ -13,7 +13,7 @@ typealias OpenIdURLResolverDidCancel = () -> Void
 /// An abstraction over OpenId Universal Link vs in app resolution (ie. via a browser or native ui).
 protocol OpenIdURLResolverProtocol {
 
-    /// Show ui for the provied request parameter. The this interface expects that the contract will
+    /// Show ui for the provied request parameter. The interface expects that the contract will
     /// be fulfilled via the request's redirect uri. For this reason, the only terminal event we
     /// expect to be originated from this flow is a user interaction trigged cancel event.
     ///

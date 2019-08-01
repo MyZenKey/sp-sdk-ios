@@ -48,7 +48,7 @@ private extension RandomStringGenerator {
 private extension Data {
     /// base64url encoded string per [rfc 4649 sec. 5](https://www.ietf.org/rfc/rfc4648.txt)
     ///
-    /// omits padding as well as substuiting the 62nd and 63rd character for url safe variants.
+    /// omits padding and substitutes the 62nd and 63rd character for url safe variants.
     func base64URLEncodedString() -> String {
         return self
             .base64EncodedString(options: .lineLength64Characters)
