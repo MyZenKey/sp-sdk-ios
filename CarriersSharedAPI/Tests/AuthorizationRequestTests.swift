@@ -1,5 +1,5 @@
 //
-//  AuthorizationRequestTests.swift
+//  AuthorizationStateMachineTests.swift
 //  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 7/31/19.
@@ -15,122 +15,124 @@ struct MockDeviceInfo: DeviceInfoProtocol {
     static let mockTablet = MockDeviceInfo(isTablet: true)
 }
 
-class AuthorizationRequestTests: XCTestCase {
+class AuthorizationStateMachineTests: XCTestCase {
+    var stateMachine = stateMachineFactory()
 
-    var request = requestFactory()
-
-    static func requestFactory(
+    static func stateMachineFactory(
         deviceInfoProvider: DeviceInfoProtocol = DeviceInfo(),
-        completion: @escaping AuthorizationCompletion = { _ in }) -> AuthorizationServiceStateMachine {
+        onStateChange: @escaping AuthorizationServiceStateMachine.StateChangeHandler = { _ in }
+        ) -> AuthorizationServiceStateMachine {
         return AuthorizationServiceStateMachine(
             deviceInfoProvider: deviceInfoProvider,
-            viewController: UIViewController(),
-            authorizationParameters: OpenIdAuthorizationRequest.Parameters.mocked,
-            completion: completion)
+            onStateChange: onStateChange)
     }
 
-    static func tabletRequestFactory(
-        completion: @escaping AuthorizationCompletion = { _ in }) -> AuthorizationServiceStateMachine {
-        return requestFactory(deviceInfoProvider: MockDeviceInfo.mockTablet, completion: completion)
+    static func tabletStateMachineFactory(
+        onStateChange: @escaping AuthorizationServiceStateMachine.StateChangeHandler = { _ in }
+        ) -> AuthorizationServiceStateMachine {
+        return stateMachineFactory(deviceInfoProvider: MockDeviceInfo.mockTablet, onStateChange: onStateChange)
     }
 
     override func setUp() {
         super.setUp()
-        request = AuthorizationRequestTests.requestFactory()
+        stateMachine = AuthorizationStateMachineTests.stateMachineFactory()
     }
 
     // MARK: - Initial State
 
-    func testNonTabletInitialState() {
-        guard case .undefined = request.state else {
+    func testInitialState() {
+        guard case .idle = stateMachine.state else {
             XCTFail("expected initial state to be undefined")
             return
         }
-        XCTAssertFalse(request.isFinished)
-        XCTAssertFalse(request.passPromptDiscovery)
-        XCTAssertFalse(request.passPromptDiscoveryUI)
-        XCTAssertFalse(request.isAttemptingMissingUserRecovery)
-    }
-
-    func testTabletInitialState() {
-        request = AuthorizationRequestTests.tabletRequestFactory()
-        guard case .undefined = request.state else {
-            XCTFail("expected initial state to be undefined")
-            return
-        }
-        XCTAssertTrue(request.passPromptDiscovery)
-        XCTAssertFalse(request.isFinished)
-        XCTAssertFalse(request.passPromptDiscoveryUI)
-        XCTAssertFalse(request.isAttemptingMissingUserRecovery)
+        XCTAssertFalse(stateMachine.isFinished)
+        XCTAssertFalse(stateMachine.isAttemptingMissingUserRecovery)
     }
 
     // MARK: - Discovery(UI) Prompts
 
-    func testTableDoesntPromptAfterPerformingDiscovery() {
-        request = AuthorizationRequestTests.tabletRequestFactory()
+    func testNonTabletDoesntPassPromptToDiscoveryTheFirstTime() {
+        let mockSIMInfo = MockSIMs.tmobile
+        stateMachine.handle(event: .attemptDiscovery(mockSIMInfo))
+        guard case .discovery(let simInfo, let passPrompt) = stateMachine.state else {
+            XCTFail("expected update to discovery")
+            return
+        }
 
-        passStateChangeThroughDiscovery(request: request)
-
-        XCTAssertFalse(request.passPromptDiscovery)
-        XCTAssertFalse(request.isFinished)
-        XCTAssertFalse(request.passPromptDiscoveryUI)
-        XCTAssertFalse(request.isAttemptingMissingUserRecovery)
+        XCTAssertEqual(simInfo, mockSIMInfo)
+        XCTAssertFalse(passPrompt)
     }
 
-    func testPromptDiscoveryAndDiscoveryUIIfMissingUserRecovery() {
-        passStateChangeThroughDiscovery(request: request)
-        request.update(state: .missingUserRecovery)
+    func testTabletPassesPromptToDiscoveryTheFirstTime() {
+        stateMachine = AuthorizationStateMachineTests.tabletStateMachineFactory()
+        let mockSIMInfo = MockSIMs.tmobile
+        stateMachine.handle(event: .attemptDiscovery(mockSIMInfo))
+        guard case .discovery(let simInfo, let passPrompt) = stateMachine.state else {
+            XCTFail("expected update to discovery")
+            return
+        }
 
-        XCTAssertTrue(request.passPromptDiscovery)
-        XCTAssertTrue(request.passPromptDiscoveryUI)
-        XCTAssertTrue(request.isAttemptingMissingUserRecovery)
-
-        XCTAssertFalse(request.isFinished)
+        XCTAssertEqual(simInfo, mockSIMInfo)
+        XCTAssertTrue(passPrompt)
     }
 
-    func testDontPromptDiscoveryDuringMissingUserRecoveryAfterFirstPrompt() {
-        passStateChangeThroughDiscovery(request: request)
-        request.update(state: .missingUserRecovery)
-        passStateChangeThroughDiscovery(request: request)
+    func testTabletDoesntPromptAfterPerformingDiscovery() {
+        stateMachine = AuthorizationStateMachineTests.tabletStateMachineFactory()
+        let mockSIMInfo = MockSIMs.tmobile
+        stateMachine.handle(event: .attemptDiscovery(mockSIMInfo))
+        stateMachine.handle(event: .attemptDiscovery(mockSIMInfo))
 
-        XCTAssertFalse(request.passPromptDiscovery)
-        XCTAssertTrue(request.passPromptDiscoveryUI)
-        XCTAssertTrue(request.isAttemptingMissingUserRecovery)
+        guard case .discovery(let simInfo, let passPrompt) = stateMachine.state else {
+            XCTFail("expected update to discovery")
+            return
+        }
 
-        XCTAssertFalse(request.isFinished)
+        XCTAssertEqual(simInfo, mockSIMInfo)
+        XCTAssertFalse(passPrompt)
+    }
+
+    func testPromptDiscoveryWithoutSIMInfoOneTimeAfterUserNotFoundError() {
+        stateMachine.handle(event: .errored(AuthorizationStateMachineTests.userNotFoundError))
+        guard case .discovery(let simInfoOne, let passPromptOne) = stateMachine.state else {
+            XCTFail("expected update to discovery")
+            return
+        }
+        XCTAssertNil(simInfoOne)
+        XCTAssertTrue(passPromptOne)
+
+        stateMachine.handle(event: .attemptDiscovery(nil))
+
+        guard case .discovery(_, let passPromptTwo) = stateMachine.state else {
+            XCTFail("expected update to discovery")
+            return
+        }
+        XCTAssertFalse(passPromptTwo)
+    }
+
+    func testDiscoveryUIRecievesPromptValueAfterUserNotFoundError() {
+        stateMachine.handle(event: .errored(AuthorizationStateMachineTests.userNotFoundError))
+        stateMachine.handle(event: .redirected(URL.mocked))
+        guard case .mobileNetworkSelection(_, let passPrompt) = stateMachine.state else {
+            XCTFail("expected update to discovery")
+            return
+        }
+        XCTAssertTrue(passPrompt)
     }
 
     // MARK: - State Transitions
 
-    func testFinishedStateTriggersCompletion() {
-        let expectation = XCTestExpectation(description: "async")
-        request = AuthorizationRequestTests.requestFactory() { result in
-            defer { expectation.fulfill() }
-            guard case .cancelled = result else {
-                XCTFail("expected cancelled")
-                return
-            }
-        }
-        request.update(state: .concluding(.cancelled))
-        request.update(state: .finished)
-        wait(for: [expectation], timeout: timeout)
-    }
-
     func testStateDoesntUpdateAfterFinished() {
-        request.update(state: .concluding(.cancelled))
-        request.update(state: .finished)
-        request.update(state: .discovery(MockSIMs.tmobile))
-        guard case .finished = request.state else {
-            XCTFail("expected finished state")
-            return
-        }
+        stateMachine.handle(event: .cancelled)
+        stateMachine.handle(event: .attemptDiscovery(nil))
+        XCTAssertTrue(stateMachine.isFinished)
     }
 
     func testErrorIfShowDiscoveryUITwice() {
-        request.update(state: .mobileNetworkSelection(URL.mocked))
-        request.update(state: .mobileNetworkSelection(URL.mocked))
+        stateMachine.handle(event: .redirected(URL.mocked))
+        stateMachine.handle(event: .redirected(URL.mocked))
+
         guard
-            case .concluding(let result) = request.state,
+            case .concluding(let result) = stateMachine.state,
             case .error(let error) = result else {
                 XCTFail("expected error state")
             return
@@ -139,45 +141,56 @@ class AuthorizationRequestTests: XCTestCase {
     }
 
     func testShowDiscoveryUITwiceIfEnteredMissingUserRecovery() {
-        request.update(state: .mobileNetworkSelection(URL.mocked))
-        request.update(state: .missingUserRecovery)
-        request.update(state: .mobileNetworkSelection(URL.mocked))
+        stateMachine.handle(event: .redirected(URL.mocked))
+        stateMachine.handle(event: .errored(AuthorizationStateMachineTests.userNotFoundError))
+        stateMachine.handle(event: .redirected(URL.mocked))
 
-        guard case .mobileNetworkSelection = request.state else {
+        guard case .mobileNetworkSelection = stateMachine.state else {
             XCTFail("expected mobileNetworkSelection")
             return
         }
     }
 
-    func testErrorIfEnterMissingUserRecoveryTwice() {
-        request.update(state: .missingUserRecovery)
-        request.update(state: .missingUserRecovery)
+    // MARK: - Error
+
+    func testCanRecoverFromMissingUserError() {
+        stateMachine.handle(event:
+            .errored(AuthorizationStateMachineTests.userNotFoundError)
+        )
+        XCTAssertFalse(stateMachine.isFinished)
+    }
+
+    func testOnlyRecoverFromRecoverableErrorOnce() {
+        stateMachine.handle(event:
+            .errored(AuthorizationStateMachineTests.userNotFoundError)
+        )
+        stateMachine.handle(event:
+            .errored(AuthorizationStateMachineTests.userNotFoundError)
+        )
+
         guard
-            case .concluding(let result) = request.state,
+            case .concluding(let result) = stateMachine.state,
             case .error(let error) = result else {
                 XCTFail("expected error state")
                 return
         }
         XCTAssertEqual(error, AuthorizationRequestError.tooManyRecoveries.asAuthorizationError)
     }
+
+    func testUnrecoverableErrorConcludesWithError() {
+        stateMachine.handle(event:
+            .errored(OpenIdServiceError.viewControllerNotInHeirarchy.asAuthorizationError)
+        )
+        guard
+            case .concluding(let result) = stateMachine.state,
+            case .error = result else {
+                XCTFail("expected error state")
+                return
+        }    }
 }
 
-private extension AuthorizationRequestTests {
-    func passStateChangeThroughDiscovery(request: AuthorizationServiceStateMachine) {
-        request.update(state: .discovery(MockSIMs.tmobile))
-        guard case .discovery = request.state else {
-            XCTFail("expected update to discovery")
-            return
-        }
-        request.update(state: .authorization(
-            CarrierConfig(
-                simInfo: MockSIMs.tmobile,
-                openIdConfig: OpenIdConfig.mocked
-            ))
-        )
-        guard case .authorization = request.state else {
-            XCTFail("expected update to authorization")
-            return
-        }
-    }
+private extension AuthorizationStateMachineTests {
+    private static let userNotFoundError =
+        URLResponseError.errorResponse(ProjectVerifyErrorCode.userNotFound.rawValue, nil)
+            .asAuthorizationError
 }

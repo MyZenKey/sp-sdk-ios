@@ -29,6 +29,8 @@ class MockDiscoveryService: DiscoveryServiceProtocol {
     var lastPromptFlag: Bool?
     var lastCompletion: DiscoveryServiceCompletion?
 
+    var didCallDiscover: (() -> Void)?
+
     /// FIFO responses
     var responseQueue = MockResponseQueue<DiscoveryServiceResult>([
         .knownMobileNetwork(MockDiscoveryService.mockSuccess),
@@ -40,6 +42,7 @@ class MockDiscoveryService: DiscoveryServiceProtocol {
         lastPromptFlag = nil
         responseQueue.clear()
         discoveryCallCount = 0
+        didCallDiscover = nil
     }
 
     func discoverConfig(
@@ -50,6 +53,8 @@ class MockDiscoveryService: DiscoveryServiceProtocol {
         lastSIMInfo = simInfo
         lastCompletion = completion
         lastPromptFlag = prompt
+
+        didCallDiscover?()
 
         DispatchQueue.main.async {
             completion(self.responseQueue.getResponse())

@@ -180,7 +180,6 @@ extension AuthorizationRequestError: AuthorizationErrorConvertible {
                 rawErrorCode: ProjectVerifyErrorCode.userNotFound.rawValue,
                 description: "Discovery was unable to recover from a user not found error. Please retry discovery"
             )
-
         }
     }
 }

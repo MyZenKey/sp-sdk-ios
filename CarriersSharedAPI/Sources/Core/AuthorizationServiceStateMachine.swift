@@ -18,9 +18,11 @@ enum AuthorizationRequestError {
 /// request. It defines the state and validates changes to state to ensure those changes maintain
 /// consistencey with the request's current state.
 class AuthorizationServiceStateMachine {
+    typealias StateChangeHandler = (AuthorizationServiceStateMachine) -> Void
+
     enum State {
         /// No defined action. Any state is a valid transition.
-        case undefined
+        case idle
         /// The next action is to perform discovery. Any state is a valid transition.
         case discovery(SIMInfo?, Bool)
         /// The next action is to perform discovery-ui. Any state is a valid transition.
@@ -37,6 +39,7 @@ class AuthorizationServiceStateMachine {
         case redirected(URL)
         case errored(AuthorizationError)
         case authorized(AuthorizedResponse)
+        case cancelled
     }
 
     /// Convenience accesor indicating whether or not the request is in a finished state.
@@ -46,7 +49,7 @@ class AuthorizationServiceStateMachine {
 
     /// Whether the `prompt` flag should be passed to discovery forcing the flow to redirect to
     /// discovery ui in lieu of returning a open id config.
-    var passPromptDiscovery: Bool {
+    private var passPromptDiscovery: Bool {
         // pass prompt on discovery the first time on a tablet request and again if missing user
         // recovery
         return passPromptDiscoveryFlag
@@ -54,7 +57,7 @@ class AuthorizationServiceStateMachine {
 
     /// Whether the `prompt` flag should be passed to discovery-ui, ignoring any previously
     /// established cookies and entering either trusted browser or carrier selection flow.
-    var passPromptDiscoveryUI: Bool {
+    private var passPromptDiscoveryUI: Bool {
         // pass prompt on discovery ui on missing user recovery 1 time.
         return isAttemptingMissingUserRecovery
     }
@@ -65,7 +68,11 @@ class AuthorizationServiceStateMachine {
     private(set) var isAttemptingMissingUserRecovery: Bool = false
 
     /// Request state. Use the `update(state:)` function to manipulate this value.
-    private(set) var state: State = .undefined
+    private(set) var state: State = .idle {
+        didSet {
+            stateChangeHandler(self)
+        }
+    }
 
     /// This flag inidcates whether or not we should return `true` for pasPromptDiscovery.
     ///
@@ -82,18 +89,16 @@ class AuthorizationServiceStateMachine {
 
     private let deviceInfoProvider: DeviceInfoProtocol
 
-    init(deviceInfoProvider: DeviceInfoProtocol,
-         onStateChange: @escaping (State) -> Void) {
-        self.deviceInfoProvider = deviceInfoProvider
+    private let stateChangeHandler: StateChangeHandler
 
+    init(deviceInfoProvider: DeviceInfoProtocol,
+         onStateChange: @escaping StateChangeHandler) {
+        self.deviceInfoProvider = deviceInfoProvider
+        self.stateChangeHandler = onStateChange
         // on tablets, always prompt discovery on the first call:
         if deviceInfoProvider.isTablet {
             passPromptDiscoveryFlag = true
         }
-    }
-
-    func startRequest(simInfo: SIMInfo) {
-        handle(event: .attemptDiscovery(simInfo))
     }
 
     func handle(event: Event) {
@@ -102,7 +107,13 @@ class AuthorizationServiceStateMachine {
             return
         }
 
-        state = state(forEvent: event)
+        let nextState = state(forEvent: event)
+        Log.log(
+            nextState.isErrorConclusion ? .error : .info,
+            "State Change : From |\(state)| to |\(nextState)| via Event: |\(event)|"
+        )
+
+        state = nextState
     }
 }
 
@@ -136,6 +147,9 @@ private extension AuthorizationServiceStateMachine {
 
         case .authorized(let authorizedPayload):
             return .concluding(.code(authorizedPayload))
+
+        case .cancelled:
+            return .concluding(.cancelled)
         }
     }
 
@@ -145,7 +159,7 @@ private extension AuthorizationServiceStateMachine {
             // enusre we haven't attempted recovery before:
             guard !isAttemptingMissingUserRecovery else {
                 let error = AuthorizationRequestError.tooManyRecoveries.asAuthorizationError
-                return state(forEvent: .errored(error))
+                return .concluding(.error(error))
             }
 
             // set a flag to indicate we're attempting user recovery:
@@ -161,7 +175,7 @@ private extension AuthorizationServiceStateMachine {
             return state(forEvent: .attemptDiscovery(nil))
 
         default:
-            return state(forEvent: .errored(error))
+            return .concluding(.error(error))
         }
     }
 }
@@ -172,5 +186,80 @@ private extension AuthorizationServiceStateMachine.State {
             return false
         }
         return true
+    }
+
+    var isErrorConclusion: Bool {
+        guard
+            case .concluding(let outcome) = self,
+            case .error = outcome else {
+            return false
+        }
+        return true
+    }
+}
+
+class AuthorizationRequestContext {
+    let viewController: UIViewController
+    let completion: AuthorizationCompletion
+    var parameters: OpenIdAuthorizationRequest.Parameters
+
+    init(
+        viewController: UIViewController,
+        parameters: OpenIdAuthorizationRequest.Parameters,
+        completion: @escaping AuthorizationCompletion) {
+
+        self.viewController = viewController
+        self.completion = completion
+        self.parameters = parameters
+    }
+
+    func addState(_ state: String) {
+        precondition(Thread.isMainThread)
+        parameters.safeSet(state: state)
+    }
+
+    func addLoginHintToken(_ token: String?) {
+        precondition(Thread.isMainThread)
+        parameters.loginHintToken = token
+    }
+}
+
+// MARK: - Logging
+
+extension AuthorizationServiceStateMachine.State: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .idle:
+            return "Idle"
+        case .mobileNetworkSelection(_, let prompt):
+            return "Discovery UI (prompt \(prompt))"
+        case .discovery(let simInfo, let prompt):
+            let suffix: String = simInfo == nil ? "no mcc/mnc" :  "for \(simInfo!)"
+            return "Discovery (prompt \(prompt), " + suffix + ")"
+        case .authorization:
+            return "Authorization"
+        case .concluding(let outcome):
+            return "Finished With Outcome: \(outcome)"
+        }
+    }
+}
+
+extension AuthorizationServiceStateMachine.Event: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .attemptDiscovery(let simInfo):
+            let suffix: String = simInfo == nil ? "no mcc/mnc" :  "for \(simInfo!)"
+            return "Attempt Discovery (" + suffix + ")"
+        case .discoveredConfig:
+            return "Discovered Config"
+        case .redirected:
+            return "Recieved Redirect"
+        case .errored(let error):
+            return "Errored: \(error)"
+        case .authorized:
+            return "Authorized"
+        case .cancelled:
+            return "Cancelled"
+        }
     }
 }
