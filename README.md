@@ -338,7 +338,7 @@ Refer to:
 
 ## Error Handling
 
-`AuthorizationError` defines a code, description and an `errorType`. All error codes feature a short docstring to help the developer debug the error. The Error Type provides a class of error with a docstring that indicates what the developer should present to the user. The developer can define the cause of the error.
+`AuthorizationError` defines the `ErrorType`, `code`, `description` and `errorType` to help the developer debug the error, as well present a description to the user. The `Error Type` identifies a class of error during the Authorization flow, such as`invalidRequest` or `requestDenied`. The developer can include further information, with `code` adding context for the origin of the error, `description` a possible explanation, and `errorType` a possible remedy.
 
 The following table summarizes the type of errors associated with an `AuthorizationError` code and how to manage them.
 
@@ -350,7 +350,7 @@ The following table summarizes the type of errors associated with an `Authorizat
 | serverError | There was an error on the server. | Please try again later. |
 | networkFailure | There was a problem communicating over the network. | Check your connection and try again. |
 | conifigurationError | There is an error configuring the SDK. | Confirm your configuration locally and with the service provider portal. |
-| discoveryStateError | There is an inconsistency with the user's state. | Retry discovery. |
+| discoveryStateError | There is an inconsistency with the user's state. | Try to log in again to the application. |
 | unknownError | An unknown error has occurred. | If the problem persists, contact support. |
 
 ## Next Steps
