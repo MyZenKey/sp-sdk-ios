@@ -61,7 +61,7 @@ class AuthorizationServiceIOS {
 extension AuthorizationServiceIOS {
     enum State {
         case idle
-        case requesting(AuthorizationRequest)
+        case requesting(AuthorizationServiceStateMachine)
     }
 }
 
@@ -92,7 +92,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
             loginHintToken: nil
         )
 
-        let request = AuthorizationRequest(
+        let request = AuthorizationServiceStateMachine(
             deviceInfoProvider: DeviceInfo(),
             viewController: viewController,
             authorizationParameters: parameters,
@@ -166,7 +166,7 @@ private extension AuthorizationServiceIOS {
 
     /// This function wraps step transitions and ensures that the request should continue before
     /// advancing to the next step.
-    func next(for request: AuthorizationRequest) {
+    func next(for request: AuthorizationServiceStateMachine) {
 //
 //        precondition(Thread.isMainThread)
 //
@@ -214,7 +214,7 @@ private extension AuthorizationServiceIOS {
 
 private extension AuthorizationServiceIOS {
     func performDiscovery(with simInfo: SIMInfo?) {
-        guard case .requesting(let request) = state else {
+        guard case .requesting(let stateMachine) = state else {
             return
         }
 
@@ -222,11 +222,9 @@ private extension AuthorizationServiceIOS {
             forSIMInfo: simInfo,
             prompt: request.passPromptDiscovery) { [weak self] result in
 
-            defer { self?.next(for: request) }
-
             switch result {
             case .knownMobileNetwork(let config):
-                request.mainQueueUpdate(state: .authorization(config))
+                stateMachine.mainQueueSend(event: .discoveredConfig(config))
 
             case .unknownMobileNetwork(let redirect):
                 request.mainQueueUpdate(state: .mobileNetworkSelection(redirect.redirectURI))
@@ -255,8 +253,6 @@ private extension AuthorizationServiceIOS {
                     request.mainQueueUpdate(state: .concluding(.code(response)))
 
                 case .error(let error):
-                    let authorizationError = error.asAuthorizationError
-                    let nextState = AuthorizationServiceIOS.recoveryState(forError: authorizationError)
                     request.mainQueueUpdate(state: nextState)
 
                 case .cancelled:
@@ -294,10 +290,10 @@ private extension AuthorizationServiceIOS {
     }
 }
 
-private extension AuthorizationRequest {
-    func mainQueueUpdate(state: AuthorizationRequest.State) {
+private extension AuthorizationServiceStateMachine {
+    func mainQueueSend(event: AuthorizationServiceStateMachine.Event) {
         precondition(Thread.isMainThread)
         // TODO:
-//        self.update(state: state)
+        handle(event: event)
     }
 }

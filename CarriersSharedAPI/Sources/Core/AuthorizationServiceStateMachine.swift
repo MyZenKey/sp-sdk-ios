@@ -8,6 +8,7 @@
 
 import Foundation
 
+// FIXME: - Rename
 enum AuthorizationRequestError {
     case tooManyRedirects
     case tooManyRecoveries
@@ -21,9 +22,9 @@ class AuthorizationServiceStateMachine {
         /// No defined action. Any state is a valid transition.
         case undefined
         /// The next action is to perform discovery. Any state is a valid transition.
-        case discovery(SIMInfo?)
+        case discovery(SIMInfo?, Bool)
         /// The next action is to perform discovery-ui. Any state is a valid transition.
-        case mobileNetworkSelection(URL)
+        case mobileNetworkSelection(URL, Bool)
         /// The next action is to perorm authorization. Any state is a valid transition.
         case authorization(CarrierConfig)
         ///  The only valid tranistion is to the finished state.
@@ -58,10 +59,6 @@ class AuthorizationServiceStateMachine {
         return isAttemptingMissingUserRecovery
     }
 
-    var authorizationParameters: OpenIdAuthorizationRequest.Parameters
-
-    let viewController: UIViewController
-
     /// If this flag is set on the request the prompt flag should be sent to all disocvery
     /// endpoints and all cookies should be ignored. If this flag is already set for a request
     /// recovery should not be attempted a second time.
@@ -83,18 +80,11 @@ class AuthorizationServiceStateMachine {
     /// they are premitted an addtional time.
     private var canRedirectToDiscoveryUI = true
 
-    private let completion: AuthorizationCompletion
-
     private let deviceInfoProvider: DeviceInfoProtocol
 
     init(deviceInfoProvider: DeviceInfoProtocol,
-         viewController: UIViewController,
-         authorizationParameters: OpenIdAuthorizationRequest.Parameters,
-         completion: @escaping AuthorizationCompletion) {
+         onStateChange: @escaping (State) -> Void) {
         self.deviceInfoProvider = deviceInfoProvider
-        self.viewController = viewController
-        self.authorizationParameters = authorizationParameters
-        self.completion = completion
 
         // on tablets, always prompt discovery on the first call:
         if deviceInfoProvider.isTablet {
@@ -112,46 +102,50 @@ class AuthorizationServiceStateMachine {
             return
         }
 
+        state = state(forEvent: event)
+    }
+}
+
+private extension AuthorizationServiceStateMachine {
+    func state(forEvent event: Event) -> State {
         switch event {
         case .attemptDiscovery(let simInfo):
             // if we've just completed discovery, we should unset this flag as it is fulfilled by a
             // single discovery call:
+            let shouldPrompt = passPromptDiscoveryFlag
             passPromptDiscoveryFlag = false
-            state = .discovery(simInfo)
-            break
+            return .discovery(simInfo, shouldPrompt)
 
         case .discoveredConfig(let carrierConfig):
-            state = .authorization(carrierConfig)
+            return .authorization(carrierConfig)
 
         case .redirected(let url):
             // enusre we haven't redirected through ui before:
             guard canRedirectToDiscoveryUI else {
                 let error = AuthorizationRequestError.tooManyRedirects.asAuthorizationError
-                state = .concluding(.error(error))
-                return
+                return .concluding(.error(error))
             }
 
             // only permit this re-direction one time:
             canRedirectToDiscoveryUI = false
-            state = .mobileNetworkSelection(url)
+            let shouldPrompt = isAttemptingMissingUserRecovery
+            return .mobileNetworkSelection(url, shouldPrompt)
 
         case .errored(let error):
-            state = nextState(forError: error)
+            return nextState(forError: error)
 
         case .authorized(let authorizedPayload):
-            state = .concluding(.code(authorizedPayload))
+            return .concluding(.code(authorizedPayload))
         }
     }
-}
 
-private extension AuthorizationServiceStateMachine {
     func nextState(forError error: AuthorizationError) -> State {
         switch error.code {
         case ProjectVerifyErrorCode.userNotFound.rawValue:
             // enusre we haven't attempted recovery before:
             guard !isAttemptingMissingUserRecovery else {
                 let error = AuthorizationRequestError.tooManyRecoveries.asAuthorizationError
-                return .concluding(.error(error))
+                return state(forEvent: .errored(error))
             }
 
             // set a flag to indicate we're attempting user recovery:
@@ -164,10 +158,10 @@ private extension AuthorizationServiceStateMachine {
             canRedirectToDiscoveryUI = true
 
             // enter discovery w/o a sim, we wil also prompt.
-            return .discovery(nil)
+            return state(forEvent: .attemptDiscovery(nil))
 
         default:
-            return .concluding(.error(error))
+            return state(forEvent: .errored(error))
         }
     }
 }

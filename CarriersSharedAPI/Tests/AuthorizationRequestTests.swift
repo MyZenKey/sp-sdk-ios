@@ -21,8 +21,8 @@ class AuthorizationRequestTests: XCTestCase {
 
     static func requestFactory(
         deviceInfoProvider: DeviceInfoProtocol = DeviceInfo(),
-        completion: @escaping AuthorizationCompletion = { _ in }) -> AuthorizationRequest {
-        return AuthorizationRequest(
+        completion: @escaping AuthorizationCompletion = { _ in }) -> AuthorizationServiceStateMachine {
+        return AuthorizationServiceStateMachine(
             deviceInfoProvider: deviceInfoProvider,
             viewController: UIViewController(),
             authorizationParameters: OpenIdAuthorizationRequest.Parameters.mocked,
@@ -30,7 +30,7 @@ class AuthorizationRequestTests: XCTestCase {
     }
 
     static func tabletRequestFactory(
-        completion: @escaping AuthorizationCompletion = { _ in }) -> AuthorizationRequest {
+        completion: @escaping AuthorizationCompletion = { _ in }) -> AuthorizationServiceStateMachine {
         return requestFactory(deviceInfoProvider: MockDeviceInfo.mockTablet, completion: completion)
     }
 
@@ -163,7 +163,7 @@ class AuthorizationRequestTests: XCTestCase {
 }
 
 private extension AuthorizationRequestTests {
-    func passStateChangeThroughDiscovery(request: AuthorizationRequest) {
+    func passStateChangeThroughDiscovery(request: AuthorizationServiceStateMachine) {
         request.update(state: .discovery(MockSIMs.tmobile))
         guard case .discovery = request.state else {
             XCTFail("expected update to discovery")
