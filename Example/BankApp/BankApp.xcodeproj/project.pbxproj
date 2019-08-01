@@ -75,7 +75,6 @@
 		7D89C9DD1FFE82F400AE1EF4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D89C9DF1FFE82F400AE1EF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		810CAC5E21FE9686007F8A22 /* CarriersSharedAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CarriersSharedAPI.framework; sourceTree = "<group>"; };
-		81289E4E2199D2A600063A76 /* AppAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppAuth.framework; sourceTree = "<group>"; };
 		89F9A01A772197F60C3FF63C /* Pods-BankApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BankApp/Pods-BankApp.debug.xcconfig"; sourceTree = "<group>"; };
 		8A92ED1422C40C5D00E0B2CA /* UIViewController+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Helpers.swift"; sourceTree = "<group>"; };
 		8AB02C1222D7E0F900B1673C /* BankAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAppViewController.swift; sourceTree = "<group>"; };
@@ -198,7 +197,6 @@
 		8CBB8CCA2107DE940050A495 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				81289E4E2199D2A600063A76 /* AppAuth.framework */,
 				810CAC5E21FE9686007F8A22 /* CarriersSharedAPI.framework */,
 				FE6212B13800D51B30E3D4A9 /* Pods_BankApp.framework */,
 				7B9D0E5FDAD61C6D67BD854E /* Pods_BankAppTests.framework */,
@@ -371,14 +369,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BankApp/Pods-BankApp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/CarriersSharedAPI/CarriersSharedAPI.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CarriersSharedAPI.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

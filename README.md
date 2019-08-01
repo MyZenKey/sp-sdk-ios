@@ -48,10 +48,6 @@ Consumer verification and authorization flows to Carrier auth, the service provi
 
 Before you integrate with Project Verify, register your application and obtain valid `clientId` and `clientSecret` from the portal or by contacting a Customer Operation Specialist. If you choose to use a custom redirect URI, then ensure that you specify a valid URI.  
 
-### Open ID Connect Client
-
-This SDK relies on *AppAuth* as an OIDC client. For more information about AppAuth, see the repository [here](https://github.com/openid/AppAuth-iOS).
-
 ### Pre-Release Git Access
 
 While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
@@ -68,7 +64,7 @@ Since applications must get authorization to access user information, scopes are
 
 ## Add Project Verify SDK
 
-During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify (and its dependency `AppAuth`) in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future.
+During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future.
 
 ### CocoaPods
 
@@ -78,7 +74,7 @@ You can include the ProjectVerifyLogin SDK in your project as a development Coco
   pod 'CarriersSharedAPI', path: '{your-relative-path}/CarriersSharedAPI.podspec'
 ```
 
-Then run `pod install`. This adds the local source as well as `AppAuth` to your application's workspace.
+Then run `pod install`. This adds the local source to your application's workspace.
 
 ### Carthage
 
@@ -88,29 +84,19 @@ More information coming soon - *Carthage* may be supported in the future.
 
 You can add the ProjectVerifyLogin SDK to your project manually:
 
-1. Retrieve the source for `ProjectVerifyLogin`. We recommend adding it as a [submodule](#pre-release-git-access).
-
-2. After you clone the repository, run `git submodule update --init --recursive` to recursively clone `AppAuth`.
-
-3. If you cannot access submodules, then you must separately clone `AppAuth` and set your working copy to the release tag you would like to target. This SDK currently supports version [0.95.0](https://github.com/openid/AppAuth-iOS/releases/tag/0.95.0).
-
-## Configure Project Verify SDK
-
-After you add the source via a submodule or manually, configure the Project Verify SDK as follows:
+1. Retrieve the source code. We recommend adding it as a [submodule](#pre-release-git-access), but you may also copy the source into a directory manually. 
 
 1. Add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
 
-2. After adding the project, confirm that the deployment targets are less than or equal to your deployment target.
+1. After adding the project, confirm that the deployment targets are less than or equal to your deployment target.
 
-3. Ensure that `AppAuth` is linked to `CarriersSharedAPI` and included as a "Target Dependency" in the `CarrierSharedAPI` build phases.
+1. View your project's "Embedded Binaries" under your project's "General" panel. Add the `CarriersSharedAPI` framework. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
 
-4. View your project's "Embedded Binaries" under your project's "General" panel. Add both `AppAuth` and `CarriersSharedAPI` frameworks. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
-
-5. Build and run to ensure that everything is working correctly.
+1. Build and run to ensure that everything is working correctly.
 
 ## Integration
 
-To integrate Project Verify into your iOS application, configure your *Info.plist* with `ClientId` and instantiate Project Verify in your application delegate.  
+To integrate Project Verify into your iOS application, configure your `Info.plist` with `ClientId` and instantiate Project Verify in your application delegate.  
 
 ### Configure Property List
 
@@ -334,7 +320,6 @@ class LoginViewController {
 Refer to:
 * [Submodules](https://git-scm.com/docs/git-submodule)
 * [ProjectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
-* [AppAuth](https://github.com/openid/AppAuth-iOS)
 
 ## Next Steps
 

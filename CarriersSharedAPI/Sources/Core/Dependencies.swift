@@ -55,7 +55,7 @@ class Dependencies {
 
             let mobileNetworkSelectionService = MobileNetworkSelectionService(
                 sdkConfig: self.sdkConfig,
-                mobileNetworkSelectionUI: MobileNetworkSelectionUIIOS()
+                mobileNetworkSelectionUI: WebBrowserUI()
             )
 
             let openIdService = OpenIdService(

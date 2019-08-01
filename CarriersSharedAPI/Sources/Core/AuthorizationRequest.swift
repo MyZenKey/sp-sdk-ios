@@ -59,13 +59,13 @@ class AuthorizationRequest {
         }
     }
 
-    var authorizationParameters: OpenIdAuthorizationParameters
+    var authorizationParameters: OpenIdAuthorizationRequest.Parameters
 
     let viewController: UIViewController
     private let completion: AuthorizationCompletion
 
     init(viewController: UIViewController,
-         authorizationParameters: OpenIdAuthorizationParameters,
+         authorizationParameters: OpenIdAuthorizationRequest.Parameters,
          completion: @escaping AuthorizationCompletion) {
         self.viewController = viewController
         self.authorizationParameters = authorizationParameters

@@ -1,5 +1,5 @@
 //
-//  MobileNetworkSelectionUIIOS.swift
+//  WebBrowserUI.swift
 //  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 4/26/19.
@@ -9,14 +9,14 @@
 import Foundation
 import SafariServices
 
-class MobileNetworkSelectionUIIOS: NSObject, MobileNetworkSelectionUIProtocol, SFSafariViewControllerDelegate {
+class WebBrowserUI: NSObject, SFSafariViewControllerDelegate {
 
     private var safariController: SFSafariViewController?
     private var onUIDidCancel: (() -> Void)?
 
-    func showMobileNetworkSelectionUI(
+    func showBrowserUI(
         fromController viewController: UIViewController,
-        usingURL url: URL,
+        forWebInterface url: URL,
         onUIDidCancel: @escaping () -> Void) {
 
         self.onUIDidCancel = onUIDidCancel
@@ -33,12 +33,10 @@ class MobileNetworkSelectionUIIOS: NSObject, MobileNetworkSelectionUIProtocol, S
         }
 
         self.safariController = safariController
-
         viewController.present(safariController, animated: true, completion: nil)
     }
 
     func close(completion: @escaping () -> Void) {
-
         guard let presentingViewController = safariController?.presentingViewController else {
             completion()
             return
@@ -53,5 +51,18 @@ class MobileNetworkSelectionUIIOS: NSObject, MobileNetworkSelectionUIProtocol, S
 
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         onUIDidCancel?()
+    }
+}
+
+extension WebBrowserUI: MobileNetworkSelectionUIProtocol {
+    func showMobileNetworkSelectionUI(
+        fromController viewController: UIViewController,
+        usingURL url: URL,
+        onUIDidCancel: @escaping () -> Void) {
+        showBrowserUI(
+            fromController: viewController,
+            forWebInterface: url,
+            onUIDidCancel: onUIDidCancel
+        )
     }
 }

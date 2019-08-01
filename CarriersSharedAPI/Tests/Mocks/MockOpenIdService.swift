@@ -12,7 +12,7 @@ import Foundation
 class MockOpenIdService: OpenIdServiceProtocol {
 
     static let mockSuccess = AuthorizedResponse(code: "abc123", mcc: "123", mnc: "456")
-    var lastParameters: OpenIdAuthorizationParameters?
+    var lastParameters: OpenIdAuthorizationRequest.Parameters?
     var lastCompletion: OpenIdServiceCompletion?
     var lastViewController: UIViewController?
 
@@ -47,7 +47,7 @@ class MockOpenIdService: OpenIdServiceProtocol {
     func authorize(
         fromViewController viewController: UIViewController,
         carrierConfig: CarrierConfig,
-        authorizationParameters: OpenIdAuthorizationParameters,
+        authorizationParameters: OpenIdAuthorizationRequest.Parameters,
         completion: @escaping OpenIdServiceCompletion) {
 
         authorizeCallCount += 1
