@@ -61,7 +61,7 @@ class AuthorizationServiceIOS {
 extension AuthorizationServiceIOS {
     enum State {
         case idle
-        case requesting(AuthorizationRequest)
+        case requesting(AuthorizationServiceStateMachine, AuthorizationRequestContext)
     }
 }
 
@@ -92,9 +92,14 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
             loginHintToken: nil
         )
 
-        let request = AuthorizationRequest(
+        let stateMachine = AuthorizationServiceStateMachine(
+            deviceInfoProvider: DeviceInfo(),
+            onStateChange: { [weak self] _ in self?.handleStateChange() }
+        )
+
+        let requestContext = AuthorizationRequestContext(
             viewController: viewController,
-            authorizationParameters: parameters,
+            parameters: parameters,
             completion: completion
         )
 
@@ -102,29 +107,28 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
             cancel() // will always execute synchronously per precondition above.
         }
 
-        self.state = .requesting(request)
+        self.state = .requesting(stateMachine, requestContext)
 
         preflightCheck()
     }
 
     public func cancel() {
         precondition(Thread.isMainThread, "You should only call `cancel` from the main thread.")
-        guard case .requesting(let request) = state else {
+        guard case .requesting(let stateMachine, _) = state else {
             return
         }
 
-        request.mainQueueUpdate(state: .concluding(.cancelled))
-        next(for: request)
+        stateMachine.mainQueueSend(event: .cancelled)
     }
 }
 
 extension AuthorizationServiceIOS: URLHandling {
     func resolve(url: URL) -> Bool {
-        guard case .requesting(let request) = state else {
+        guard case .requesting(let stateMachine, _) = state else {
             return false
         }
 
-        switch request.state {
+        switch stateMachine.state {
         case .authorization:
             return openIdService.resolve(url: url)
 
@@ -140,174 +144,121 @@ extension AuthorizationServiceIOS: URLHandling {
 private extension AuthorizationServiceIOS {
 
     func preflightCheck() {
-
-        guard case .requesting(let request) = state else {
+        guard case .requesting(let stateMachine, let requestContext) = state else {
             return
         }
 
-        defer { next(for: request) }
-
         guard let generatedState = stateGenerator() else {
-            request.mainQueueUpdate(state: .concluding(
-                    .error(
-                        RequestStateError.generationFailed.asAuthorizationError
-                    )
-                )
+            stateMachine.mainQueueSend(
+                event: .errored(RequestStateError.generationFailed.asAuthorizationError)
             )
             return
         }
+        requestContext.addState(generatedState)
 
-        request.authorizationParameters.safeSet(state: generatedState)
-
-        // state is still undefined, start by entering discovery:
-        request.mainQueueUpdate(state: .discovery(carrierInfoService.primarySIM))
+        let simInfo = carrierInfoService.primarySIM
+        stateMachine.mainQueueSend(event: .attemptDiscovery(simInfo))
     }
 
-    /// This function wraps step transitions and ensures that the request should continue before
-    /// advancing to the next step.
-    func next(for request: AuthorizationRequest) {
-
+    func handleStateChange() {
         precondition(Thread.isMainThread)
-
-        guard !request.isFinished else {
-            // if the request has previously been concluded, we can assume that any further commands
-            // should be ignored and we can return
+        guard case .requesting(let stateMachine, let requestContext) = state else {
             return
         }
 
-        // if the request is still in progress
-        // begin the next appropriate step in the autorization process
-        let logStringBase = "State Change:"
-        switch request.state {
-        case .undefined, .finished:
+        switch stateMachine.state {
+        case .idle:
             break
 
-        case .discovery(let simInfo):
-            Log.log(.info, "\(logStringBase) Perform Discovery")
-            performDiscovery(with: simInfo)
+        case .discovery(let simInfo, let passPrompt):
+            performDiscovery(with: simInfo, prompt: passPrompt)
 
-        case .mobileNetworkSelection(let resource):
-            Log.log(.info, "\(logStringBase) Discovery UI")
-            showDiscoveryUI(usingResource: resource)
+        case .mobileNetworkSelection(let resource, let passPrompt):
+            showDiscoveryUI(usingResource: resource, prompt: passPrompt)
 
         case .authorization(let discoveredConfig):
-            Log.log(.info, "\(logStringBase) Perform Authorization")
             showAuthorizationUI(usingConfig: discoveredConfig)
 
-        case .missingUserRecovery:
-            Log.log(.info, "\(logStringBase) Attempt Missing User Recovery")
-            performDiscovery(with: nil)
-
         case .concluding(let outcome):
-            var logLevel: Log.Level = .info
-            if case .error = outcome {
-                logLevel = .error
-            }
-            Log.log(logLevel, "\(logStringBase) Conclusion: \(outcome)")
-
-            request.update(state: .finished)
+            requestContext.completion(outcome)
             state = .idle
         }
     }
 }
 
 private extension AuthorizationServiceIOS {
-    func performDiscovery(with simInfo: SIMInfo?) {
-        guard case .requesting(let request) = state else {
+    func performDiscovery(with simInfo: SIMInfo?, prompt: Bool = false) {
+        guard case .requesting(let stateMachine, _) = state else {
             return
         }
 
         discoveryService.discoverConfig(
             forSIMInfo: simInfo,
-            prompt: request.passPrompt) { [weak self] result in
-
-            defer { self?.next(for: request) }
-
+            prompt: prompt) { result in
             switch result {
             case .knownMobileNetwork(let config):
-                request.mainQueueUpdate(state: .authorization(config))
+                stateMachine.mainQueueSend(event: .discoveredConfig(config))
 
             case .unknownMobileNetwork(let redirect):
-                request.mainQueueUpdate(state: .mobileNetworkSelection(redirect.redirectURI))
+                stateMachine.mainQueueSend(event: .redirected(redirect.redirectURI))
 
             case .error(let error):
-                let authorizationError = error.asAuthorizationError
-                request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
+                stateMachine.mainQueueSend(event: .errored(error.asAuthorizationError))
             }
         }
     }
 
     func showAuthorizationUI(usingConfig config: CarrierConfig) {
-        guard case .requesting(let request) = state else {
+        guard case .requesting(let stateMachine, let requestContext) = state else {
             return
         }
 
         openIdService.authorize(
-            fromViewController: request.viewController,
+            fromViewController: requestContext.viewController,
             carrierConfig: config,
-            authorizationParameters: request.authorizationParameters) { [weak self] result in
-
-                defer { self?.next(for: request) }
+            authorizationParameters: requestContext.parameters) { result in
 
                 switch result {
                 case .code(let response):
-                    request.mainQueueUpdate(state: .concluding(.code(response)))
+                    stateMachine.mainQueueSend(event: .authorized(response))
 
                 case .error(let error):
-                    let authorizationError = error.asAuthorizationError
-                    let nextState = AuthorizationServiceIOS.recoveryState(forError: authorizationError)
-                    request.mainQueueUpdate(state: nextState)
+                    stateMachine.mainQueueSend(event: .errored(error.asAuthorizationError))
 
                 case .cancelled:
-                    request.mainQueueUpdate(state: .concluding(.cancelled))
+                    stateMachine.mainQueueSend(event: .cancelled)
                 }
         }
     }
 
-    func showDiscoveryUI(usingResource resource: URL) {
-        guard case .requesting(let request) = state else {
+    func showDiscoveryUI(usingResource resource: URL, prompt: Bool = false) {
+        guard case .requesting(let stateMachine, let requestContext) = state else {
             return
         }
 
         self.mobileNetworkSelectionService.requestUserNetworkSelection(
             fromResource: resource,
-            fromCurrentViewController: request.viewController,
-            prompt: request.passPrompt
-        ) { [weak self] result in
-
-            defer { self?.next(for: request) }
-
+            fromCurrentViewController: requestContext.viewController,
+            prompt: prompt
+        ) { result in
             switch result {
             case .networkInfo(let response):
-                request.authorizationParameters.loginHintToken = response.loginHintToken
-                request.mainQueueUpdate(state: .discovery(response.simInfo))
+                requestContext.addLoginHintToken(response.loginHintToken)
+                stateMachine.mainQueueSend(event: .attemptDiscovery(response.simInfo))
 
             case .error(let error):
-                let authorizationError = error.asAuthorizationError
-                request.mainQueueUpdate(state: .concluding(.error(authorizationError)))
+                stateMachine.mainQueueSend(event: .errored(error.asAuthorizationError))
 
             case .cancelled:
-                request.mainQueueUpdate(state: .concluding(.cancelled))
+                stateMachine.mainQueueSend(event: .cancelled)
             }
         }
     }
 }
 
-private extension AuthorizationServiceIOS {
-    static func recoveryState(forError error: AuthorizationError) -> AuthorizationRequest.State {
-        switch error.code {
-        case ProjectVerifyErrorCode.userNotFound.rawValue:
-            return .missingUserRecovery
-
-        default:
-            return .concluding(.error(error))
-        }
-    }
-}
-
-private extension AuthorizationRequest {
-    func mainQueueUpdate(state: AuthorizationRequest.State) {
+private extension AuthorizationServiceStateMachine {
+    func mainQueueSend(event: AuthorizationServiceStateMachine.Event) {
         precondition(Thread.isMainThread)
-        self.update(state: state)
+        handle(event: event)
     }
 }

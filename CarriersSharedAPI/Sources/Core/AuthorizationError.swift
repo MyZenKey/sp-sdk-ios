@@ -167,7 +167,7 @@ extension MobileNetworkSelectionError: AuthorizationErrorConvertible {
     }
 }
 
-extension AuthorizationRequestError: AuthorizationErrorConvertible {
+extension AuthorizationStateMachineError: AuthorizationErrorConvertible {
     var asAuthorizationError: AuthorizationError {
         switch self {
         case .tooManyRedirects:
@@ -180,7 +180,6 @@ extension AuthorizationRequestError: AuthorizationErrorConvertible {
                 rawErrorCode: ProjectVerifyErrorCode.userNotFound.rawValue,
                 description: "Discovery was unable to recover from a user not found error. Please retry discovery"
             )
-
         }
     }
 }
