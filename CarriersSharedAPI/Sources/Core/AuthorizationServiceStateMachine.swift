@@ -13,68 +13,79 @@ enum AuthorizationStateMachineError {
     case tooManyRecoveries
 }
 
-/// This class captures the state and information required during the life time of an authorization
-/// request. It defines the state and validates changes to state to ensure those changes maintain
-/// consistencey with the request's current state.
+/// This class captures the state during the lifetime of an authorization request.
+/// It defines the state and validates changes to state to ensure those changes maintain
+/// consistency with the request's current state.
 class AuthorizationServiceStateMachine {
     typealias StateChangeHandler = (AuthorizationServiceStateMachine) -> Void
 
     enum State {
         /// No defined action. Any state is a valid transition.
         case idle
-        /// The next action is to perform discovery. Any state is a valid transition.
+        /// The corresponding action is to perform discovery. Any state is a valid transition.
         case discovery(SIMInfo?, Bool)
-        /// The next action is to perform discovery-ui. Any state is a valid transition.
+        /// The corresponding action is to perform discovery-ui. Any state is a valid transition.
         case mobileNetworkSelection(URL, Bool)
-        /// The next action is to perorm authorization. Any state is a valid transition.
+        /// The corresponding  action is to perform authorization. Any state is a valid transition.
         case authorization(CarrierConfig)
-        ///  The only valid tranistion is to the finished state.
+        ///  The final state – no other transitions are valid.
         case concluding(AuthorizationResult)
     }
 
     enum Event {
+        /// Trigger transition to the discovery state.
         case attemptDiscovery(SIMInfo?)
+        /// Trigger transition to authorization.
         case discoveredConfig(CarrierConfig)
+        /// Trigger transition to mobile network selection.
         case redirected(URL)
+        /// Trigger transition to conclusion with error - or recovery to discovery ui
         case errored(AuthorizationError)
+        /// Trigger transition to conclusion with success.
         case authorized(AuthorizedResponse)
+        /// Trigger transition to conclusion with cancelled.
         case cancelled
     }
 
-    /// Convenience accesor indicating whether or not the request is in a finished state.
+    /// Convenience accessor indicating whether or not the request is in a finished state.
     var isFinished: Bool {
         return self.state.isConcludingState
     }
 
-    /// If this flag is set on the request the prompt flag should be sent to all disocvery
+    /// If this flag is set on the request the prompt flag should be sent to all discovery
     /// endpoints and all cookies should be ignored. If this flag is already set for a request
     /// recovery should not be attempted a second time.
     private(set) var isAttemptingMissingUserRecovery: Bool = false
 
-    /// Request state. Use the `update(state:)` function to manipulate this value.
+    /// Request state. State transitions are triggered by passing an event to the `handle(event:)`
+    /// function.
     private(set) var state: State = .idle {
         didSet {
             stateChangeHandler(self)
         }
     }
 
-    /// This flag inidcates whether or not we should return `true` for pasPromptDiscovery.
+    /// This flag indicates whether or not we should prompt in the discovery state.
     ///
     /// Discussion:
-    /// Prompt is passed to discovery under the following circumstances:
-    /// - pass prompt on the first discovery call if using an iPad.
-    /// - pass prompt on the first discovery call if attempting missing user recovery.
+    /// Prompt is passed on the first discovery call if:
+    /// - the user is using an iPad.
+    /// - it is the first call following following a missing user error.
     private var passPromptDiscoveryFlag = false
 
-    /// This value indicates whether it's possbile to redirect to discovery ui. redirects are
-    /// permitted one time per request unless we attempt a missing user recovery flow in which case
-    /// they are premitted an addtional time.
+    /// This value indicates whether it's possible to redirect to discovery ui. Redirects are
+    /// permitted one time per request unless we attempt a missing user recovery flow, in which case
+    /// they are permitted an addtional time.
     private var canRedirectToDiscoveryUI = true
 
     private let deviceInfoProvider: DeviceInfoProtocol
 
     private let stateChangeHandler: StateChangeHandler
 
+    ///
+    /// - Parameters:
+    ///   - deviceInfoProvider: Provide info on the current device, which impacts the flow.
+    ///   - onStateChange: function invoked in the states `didSet` proprety accessor.
     init(deviceInfoProvider: DeviceInfoProtocol,
          onStateChange: @escaping StateChangeHandler) {
         self.deviceInfoProvider = deviceInfoProvider
@@ -104,7 +115,7 @@ private extension AuthorizationServiceStateMachine {
     func state(forEvent event: Event) -> State {
         switch event {
         case .attemptDiscovery(let simInfo):
-            // this flag indicates whether we should prompt to discovert ui:
+            // this flag indicates whether we should prompt to discovery ui:
             let shouldPrompt = passPromptDiscoveryFlag
             // if we've just completed discovery, we should unset this flag as it is fulfilled by a
             // single discovery call:
@@ -115,7 +126,7 @@ private extension AuthorizationServiceStateMachine {
             return .authorization(carrierConfig)
 
         case .redirected(let url):
-            // enusre we haven't redirected through ui before:
+            // ensure we haven't redirected through ui before:
             guard canRedirectToDiscoveryUI else {
                 let error = AuthorizationStateMachineError.tooManyRedirects.asAuthorizationError
                 return .concluding(.error(error))
@@ -153,10 +164,10 @@ private extension AuthorizationServiceStateMachine {
             // the next *one* call to discovery should use prompt
             passPromptDiscoveryFlag = true
 
-            // we're attemting to recover – permit redirects to discovery ui
+            // we're attempting to recover – permit redirects to discovery ui
             canRedirectToDiscoveryUI = true
 
-            // enter discovery w/o a sim, we wil also prompt.
+            // enter discovery w/o a sim, we will also prompt.
             return state(forEvent: .attemptDiscovery(nil))
 
         default:
