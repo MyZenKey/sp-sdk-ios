@@ -321,6 +321,23 @@ Refer to:
 * [Submodules](https://git-scm.com/docs/git-submodule)
 * [ProjectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
 
+## Error Handling
+
+`AuthorizationError` defines the `ErrorType`, `code`, `description` and `errorType` to help the developer debug the error, as well present a description to the user. The `Error Type` identifies a class of error during the Authorization flow, such as`invalidRequest` or `requestDenied`. The developer can include further information, with `code` adding context for the origin of the error, `description` a possible explanation, and `errorType` a possible remedy.
+
+The following table summarizes the `AuthorizationError` error types and potential recovery suggestions for each.
+
+| Error Type (Case) | Possible Cause | How to Remedy |
+:------------------ | :------------- | :------------ |
+| invalidRequest | The request made is invalid. | Check the parameters passed to the authorization call. |
+| requestDenied | The request was denied by the user or carrier. | Display an appropriate feedback message to the user. |
+| requestTimeout | The request has timed out. | Display an appropriate feedback message, such as "Unable to reach the server, please try again" or "Poor network connection." |
+| serverError | There was an error on the server. | Please try again later. |
+| networkFailure | There was a problem communicating over the network. | Advise the user to check their connection and try again. |
+| configurationError | There is an error configuring the SDK. | Confirm your configuration locally and with the service provider portal. |
+| discoveryStateError | There is an inconsistency with the user's state. | Try to perform the authorization request again. |
+| unknownError | An unknown error has occurred. | If the problem persists, contact support. |
+
 ## Next Steps
 
 On your secure server, perform discovery and use the discovered token endpoint to request an access token from Project Verify with the processes already detailed:
@@ -341,5 +358,5 @@ It is possible to enable logging by passing a value for the `.logLevel` key via 
 
 NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND CONFIDENTIAL. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.  NO RECIPIENT MAY DISCLOSE, DISTRIBUTE, OR POST THIS DOCUMENT WITHOUT XCI JV, LLC’S EXPRESS WRITTEN AUTHORIZATION.
 
-<sub> Last Update:
-Document Version 0.9.9 - July 24, 2019</sub>
+<sub> Last Update: Document Version 0.9.8 - August 3, 2019</sub>
+
