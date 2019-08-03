@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AppAuth
 
 class ViewController: UIViewController {
 
@@ -18,4 +17,3 @@ class ViewController: UIViewController {
 
 
 }
-

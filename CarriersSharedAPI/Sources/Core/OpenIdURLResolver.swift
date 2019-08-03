@@ -7,36 +7,27 @@
 //
 
 import Foundation
-import AppAuth
 
-typealias OpenIdURLResolverCompletion = (OIDAuthState?, Error?) -> Void
+typealias OpenIdURLResolverDidCancel = () -> Void
 
-/// holds a reference to an in progress OIDExternalUserAgentSession in memory
-/// a present session indicates the storage owns an inflights session.
-protocol OpenIdExternalSessionStateStorage: class {
-    var pendingSession: OIDExternalUserAgentSession? { get set }
-}
-
+/// An abstraction over OpenId Universal Link vs in app resolution (ie. via a browser or native ui).
 protocol OpenIdURLResolverProtocol {
+
+    /// Show ui for the provied request parameter. The interface expects that the contract will
+    /// be fulfilled via the request's redirect uri. For this reason, the only terminal event we
+    /// expect to be originated from this flow is a user interaction trigged cancel event.
+    ///
+    /// - Parameters:
+    ///   - request: the Open Id Authorization request.
+    ///   - viewController: the view contorller responsible for presenting this request.
+    ///   - onCancel: the block to invoke in the event of user triggered cancellation.
     func resolve(
-        request: OIDAuthorizationRequest,
-        usingStorage storage: OpenIdExternalSessionStateStorage,
+        request: OpenIdAuthorizationRequest,
         fromViewController viewController: UIViewController,
-        authorizationParameters: OpenIdAuthorizationParameters,
-        completion: @escaping OpenIdURLResolverCompletion
-    )
+        onCancel: @escaping OpenIdURLResolverDidCancel)
 
-    func performCCIDAuthorization(
-        request: OIDAuthorizationRequest,
-        storage: OpenIdExternalSessionStateStorage,
-        authorizationParameters: OpenIdAuthorizationParameters,
-        completion: @escaping OpenIdURLResolverCompletion
-    )
-
-    func performSafariAuthorization(
-        request: OIDAuthorizationRequest,
-        storage: OpenIdExternalSessionStateStorage,
-        fromViewController viewController: UIViewController,
-        completion: @escaping OpenIdURLResolverCompletion
-    )
+    /// Close the ui if currently prsented and can be closed.
+    ///
+    /// - Parameter completion: closure to execute when the ui has been dismissed.
+    func close(completion: @escaping () -> Void)
 }

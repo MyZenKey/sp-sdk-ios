@@ -75,6 +75,7 @@ class LoginViewController: UIViewController {
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.delegate = self
+        button.accessibilityIdentifier = "Project Verify Button"
         return button
     }()
 
@@ -101,11 +102,6 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        idTextField.becomeFirstResponder()
     }
 
     @objc func loginButtonTouched(_ sender: Any) {

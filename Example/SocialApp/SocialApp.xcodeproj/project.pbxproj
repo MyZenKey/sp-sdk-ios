@@ -41,8 +41,6 @@
 		7D89C9DB1FFE82F400AE1EF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DA1FFE82F400AE1EF4 /* Assets.xcassets */; };
 		7D89C9DE1FFE82F400AE1EF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DC1FFE82F400AE1EF4 /* LaunchScreen.storyboard */; };
 		8A1478852253C181001F2DB8 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8126F2A8218C0E8300AFC3CA /* AVKit.framework */; };
-		8A1479042253C523001F2DB8 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1479032253C523001F2DB8 /* AppAuth.framework */; };
-		8A1479052253C523001F2DB8 /* AppAuth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1479032253C523001F2DB8 /* AppAuth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8A1479072253C528001F2DB8 /* CarriersSharedAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1479062253C528001F2DB8 /* CarriersSharedAPI.framework */; };
 		8A1479082253C528001F2DB8 /* CarriersSharedAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1479062253C528001F2DB8 /* CarriersSharedAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8AC2A39222D8F1FE00B72551 /* BuildInfoUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2A39122D8F1FE00B72551 /* BuildInfoUtilities.swift */; };
@@ -59,7 +57,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8A1479052253C523001F2DB8 /* AppAuth.framework in Embed Frameworks */,
 				8A1479082253C528001F2DB8 /* CarriersSharedAPI.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -106,7 +103,6 @@
 		7D89C9DD1FFE82F400AE1EF4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D89C9DF1FFE82F400AE1EF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8126F2A8218C0E8300AFC3CA /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
-		8A1479032253C523001F2DB8 /* AppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A1479062253C528001F2DB8 /* CarriersSharedAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CarriersSharedAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AC2A39122D8F1FE00B72551 /* BuildInfoUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BuildInfoUtilities.swift; path = ../../Shared/Utilities/BuildInfoUtilities.swift; sourceTree = "<group>"; };
 		8AC2A39722D9088400B72551 /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountManager.swift; path = ../../Shared/Utilities/AccountManager.swift; sourceTree = "<group>"; };
@@ -119,7 +115,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A1479072253C528001F2DB8 /* CarriersSharedAPI.framework in Frameworks */,
-				8A1479042253C523001F2DB8 /* AppAuth.framework in Frameworks */,
 				8A1478852253C181001F2DB8 /* AVKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -196,7 +191,6 @@
 			isa = PBXGroup;
 			children = (
 				8A1479062253C528001F2DB8 /* CarriersSharedAPI.framework */,
-				8A1479032253C523001F2DB8 /* AppAuth.framework */,
 				2D100EE9212E0B7C00B02260 /* Fonts */,
 				7D89C9D21FFE82F400AE1EF4 /* SocialApp */,
 				7D89C9D11FFE82F400AE1EF4 /* Products */,
@@ -438,7 +432,6 @@
 		233B6160220B60B8008A0E27 /* Develop */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "$(CODE_SIGN_IDENTITY_DEMO_APPS)";
@@ -581,7 +574,6 @@
 		7D89C9E31FFE82F400AE1EF4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "$(CODE_SIGN_IDENTITY_DEMO_APPS)";
@@ -610,7 +602,6 @@
 		7D89C9E41FFE82F400AE1EF4 /* Sprint */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "$(CODE_SIGN_IDENTITY_DEMO_APPS)";

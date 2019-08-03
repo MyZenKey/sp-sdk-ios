@@ -60,6 +60,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
         completion: @escaping ((MobileNetworkSelectionResult) -> Void)) {
 
         guard case .idle = state else {
+            Log.log(.warn, "Implictly cancelling existing request.")
             dismissUI {
                 self.conclude(result: .cancelled)
                 self.requestUserNetworkSelection(
@@ -90,6 +91,7 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
 
         state = .requesting(request, completion)
 
+        Log.log(.info, "Display ui with request: \(request.url)")
         mobileNetworkSelectionUI.showMobileNetworkSelectionUI(
             fromController: viewController,
             usingURL: request.url,
@@ -100,14 +102,13 @@ class MobileNetworkSelectionService: NSObject, MobileNetworkSelectionServiceProt
     }
 
     func cancel() {
-        dismissUI {
-            self.conclude(result: .cancelled)
-        }
+        dismissUIAndConclude(result: .cancelled)
     }
 
     func resolve(url: URL) -> Bool {
         guard case .requesting(let request, _) = state else {
             // no request in progress
+            Log.log(.warn, "Attempting to resolve url \(url) with no request in progress")
             return false
         }
 
@@ -154,6 +155,7 @@ private extension MobileNetworkSelectionService {
 
         switch validatedSIMInfoResult {
         case .value(let simInfo):
+            Log.log(.info, "Resolving URL: \(url) with sim info: \(simInfo)")
             dismissUIAndConclude(result: .networkInfo(
                 MobileNetworkSelectionResponse(
                     simInfo: simInfo,
@@ -162,6 +164,7 @@ private extension MobileNetworkSelectionService {
             ))
 
         case .error(let error):
+            Log.log(.error, "Resolving URL: \(url) with error: \(error)")
             dismissUIAndConclude(result: .error(error))
         }
     }

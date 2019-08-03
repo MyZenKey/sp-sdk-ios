@@ -35,11 +35,23 @@ extension AuthorizationServiceTests {
                     XCTFail("expected a successful outcome")
                     return
                 }
-
-                XCTAssertEqual(self.mockDiscoveryService.lastPromptFlag, true)
+                XCTAssertEqual(self.mockDiscoveryService.discoveryCallCount, 3)
                 XCTAssertEqual(self.mockNetworkSelectionService.lastPromptFlag, true)
-
         }
+
+        mockDiscoveryService.didCallDiscover = {
+            // initial call and final call should not pass prompt for "true" discovery
+            // second call passes prompt to force discovery ui
+            switch self.mockDiscoveryService.discoveryCallCount {
+            case 1, 3:
+                XCTAssertEqual(self.mockDiscoveryService.lastPromptFlag, false)
+            case 2:
+                XCTAssertEqual(self.mockDiscoveryService.lastPromptFlag, true)
+            default:
+                XCTFail("unexpected number of discovery calls: \(self.mockDiscoveryService.discoveryCallCount)")
+            }
+        }
+
         wait(for: [expectation], timeout: timeout)
     }
 

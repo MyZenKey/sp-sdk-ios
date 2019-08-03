@@ -1,12 +1,12 @@
 //
 //  AuthorizationServiceTests.swift
-//  AppAuth
+//  CarriersSharedAPI
 //
 //  Created by Adam Tierney on 2/26/19.
+//  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
 import XCTest
-import AppAuth
 @testable import CarriersSharedAPI
 
 class AuthorizationServiceTests: XCTestCase {
@@ -24,13 +24,7 @@ class AuthorizationServiceTests: XCTestCase {
 
     let networkIdentifierCache =  NetworkIdentifierCache.bundledCarrierLookup
 
-    lazy var authorizationService = AuthorizationServiceIOS(
-        sdkConfig: mockSDKConfig,
-        discoveryService: mockDiscoveryService,
-        openIdService: mockOpenIdService,
-        carrierInfoService: mockCarrierInfo,
-        mobileNetworkSelectionService: mockNetworkSelectionService
-    )
+    lazy var authorizationService = authorizationServiceFactory()
 
     let scopes: [Scope] = [.openid, .address, .address, .email]
 
@@ -39,6 +33,19 @@ class AuthorizationServiceTests: XCTestCase {
         mockOpenIdService.clear()
         mockDiscoveryService.clear()
         mockNetworkSelectionService.clear()
+    }
+
+    func authorizationServiceFactory(
+        // swiftlint:disable:next line_length
+        stateGenerator: @escaping () -> String? = RandomStringGenerator.generateStateSuitableString) -> AuthorizationServiceIOS {
+        return AuthorizationServiceIOS(
+            sdkConfig: mockSDKConfig,
+            discoveryService: mockDiscoveryService,
+            openIdService: mockOpenIdService,
+            carrierInfoService: mockCarrierInfo,
+            mobileNetworkSelectionService: mockNetworkSelectionService,
+            stateGenerator: stateGenerator
+        )
     }
 }
 
@@ -142,7 +149,7 @@ extension AuthorizationServiceTests {
         let expectedController = UIViewController()
         let expectation = XCTestExpectation(description: "async authorization")
 
-        let expected = OpenIdAuthorizationParameters(
+        let expected = OpenIdAuthorizationRequest.Parameters(
             clientId: mockSDKConfig.clientId,
             redirectURL: mockSDKConfig.redirectURL,
             formattedScopes: "address email openid",
@@ -179,6 +186,7 @@ extension AuthorizationServiceTests {
         authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
+                defer { expectation.fulfill() }
                 guard case .code(let payload) = result else {
                     XCTFail("expected a successful response")
                     return
@@ -187,7 +195,6 @@ extension AuthorizationServiceTests {
                 XCTAssertEqual(payload.code, mockedResponse.code)
                 XCTAssertEqual(payload.mcc, mockedResponse.mcc)
                 XCTAssertEqual(payload.mnc, mockedResponse.mnc)
-                expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
     }
@@ -201,13 +208,13 @@ extension AuthorizationServiceTests {
         authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
+                defer { expectation.fulfill() }
                 guard
                     case .error(let error) = result else {
                     XCTFail("expected an error response")
                     return
                 }
                 XCTAssertEqual(error.code, SDKErrorCode.networkError.rawValue)
-                expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
     }
@@ -219,11 +226,34 @@ extension AuthorizationServiceTests {
         authorizationService.authorize(
             scopes: self.scopes,
             fromViewController: UIViewController()) { result in
+                defer { expectation.fulfill() }
                 guard case .cancelled = result else {
                     XCTFail("expected a cancelled response")
                     return
                 }
-                expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    func testStateGenerationError() {
+        mockCarrierInfo.primarySIM = MockSIMs.tmobile
+        mockOpenIdService.mockResponse = .cancelled
+
+        let failingStateGeneratorAuthService = authorizationServiceFactory(
+            stateGenerator: { return nil }
+        )
+
+        let expectation = XCTestExpectation(description: "async authorization")
+        failingStateGeneratorAuthService.authorize(
+            scopes: self.scopes,
+            fromViewController: UIViewController()) { result in
+                defer { expectation.fulfill() }
+                guard case .error(let error) = result else {
+                    XCTFail("expected a cancelled response")
+                    return
+                }
+
+                XCTAssertEqual(error, RequestStateError.generationFailed.asAuthorizationError)
         }
         wait(for: [expectation], timeout: timeout)
     }

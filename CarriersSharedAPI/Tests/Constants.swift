@@ -73,3 +73,28 @@ extension AuthorizationError {
         return AuthorizationError(rawErrorCode: "mock_error", description: "a mock error")
     }
 }
+
+extension OpenIdConfig {
+    static var mocked: OpenIdConfig {
+        return OpenIdConfig(tokenEndpoint: URL.mocked,
+                            authorizationEndpoint: URL.mocked,
+                            issuer: URL.mocked)
+    }
+}
+
+extension OpenIdAuthorizationRequest.Parameters {
+    static var mocked: OpenIdAuthorizationRequest.Parameters {
+        return OpenIdAuthorizationRequest.Parameters(
+            clientId: "mockClientId",
+            redirectURL: URL.mocked,
+            formattedScopes: "openid authorization",
+            state: "foo",
+            nonce: "bar",
+            acrValues: nil,
+            prompt: nil,
+            correlationId: nil,
+            context: nil,
+            loginHintToken: nil
+        )
+    }
+}

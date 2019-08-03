@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import AppAuth
 @testable import CarriersSharedAPI
 
 // MARK: - DiscoveryService

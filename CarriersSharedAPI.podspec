@@ -39,7 +39,6 @@ TODO: Add long description of the pod here.
 
   s.ios.frameworks = 'UIKit', 'SafariServices'
   s.tvos.frameworks = 'UIKit'
-  s.dependency 'AppAuth', '~> 0.95.0'
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'CarriersSharedAPI/Tests/**/*.swift'

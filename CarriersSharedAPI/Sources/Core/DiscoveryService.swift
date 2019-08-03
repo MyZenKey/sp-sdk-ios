@@ -90,6 +90,7 @@ private extension DiscoveryService {
         if let simInfo = simInfo, !prompt {
             let cachedConfig = recoverFromCache(simInfo: simInfo)
             guard cachedConfig == nil else {
+                Log.log(.info, "Using Cached Config.")
                 completion(.knownMobileNetwork(
                     CarrierConfig(
                         simInfo: simInfo,
