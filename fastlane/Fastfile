@@ -10,6 +10,8 @@ default_platform :ios
 # CIRCLE_API_TOKEN
 # SLACK_URL - set the hook URL in the CircleCI environment
 
+# BANK_APP_SECRET
+
 # defined in config
 # JAZZY_OUTPUT
 # JAZZY_ARTIFACTS
@@ -32,6 +34,16 @@ SPRINT_IDS = {
   SOCIAL_APP => '3c7003a1984f4e448630beac446cfde3',
   PHOTO_APP => '9ef33650e15f4376804a9194b09efc9c',
 }
+
+SECRETS_MAP = {
+  BANK_APP => ENV['BANK_APP_SECRET'],
+}
+
+XCCONFIGS_PATHS = {
+  BANK_APP => '../Example/BankApp/BankApp/Resources/xcconfig',
+}
+
+SECRETS_CONFIG_NAME = 'Secrets.xcconfig'
 
 # env
 
@@ -169,34 +181,48 @@ platform :ios do
     )
   end
 
-  # desc "Posts screenshots to Slack"
-  # lane :slackshots do
-  #   # Getting artifact URLs from CircleCI
+  desc "Write secret configs"
+  lane :write_secrets do
+    [ BANK_APP ].each do |name|
+      xcconfigsDir(name) do
+        # write the include secrets for each file
+        forEachXCConfig do |file|
+          include_secrets = "#include \"./#{SECRETS_CONFIG_NAME}\"\n"
+          file.write(include_secrets) unless File.readlines(file).grep(/#{SECRETS_CONFIG_NAME}/).size > 0
+        end
+        
+        # lastly write out the secrets config
+        File.open(SECRETS_CONFIG_NAME, "w+") do |file|
+          file.write("PV_APP_SECRET = #{SECRETS_MAP[name]}")
+        end
+      end
+    end
+  end
 
-  #   # You must set up the CIRCLE_API_TOKEN manually using these instructions
-  #   # https://github.com/Raizlabs/ios-template/tree/master/PRODUCTNAME#danger
-  #   token = ENV['CIRCLE_API_TOKEN']
-  #   # These are already in the Circle environment
-  #   # https://circleci.com/docs/2.0/env-vars/#build-specific-environment-variables
-  #   username = ENV['CIRCLE_PROJECT_USERNAME']
-  #   reponame = ENV['CIRCLE_PROJECT_REPONAME']
-  #   build = ENV['CIRCLE_BUILD_NUM']
+  desc "Remove secrets from configs"
+  lane :strip_secrets do
+    [ BANK_APP, SOCIAL_APP, PHOTO_APP ].each do |name|
+      xcconfigsDir(name) do
+        # remove the secrets file if present:
+        FileUtils.rm(SECRETS_CONFIG_NAME) if File.exists? SECRETS_CONFIG_NAME
 
-  #   if !(token.nil? or username.nil? or reponame.nil? or build.nil?)
-  #     fetcher = CircleciArtifact::Fetcher.new(token: token, username: username, reponame: reponame, build: build)
-  #     screenshots = CircleciArtifact::Query.new(url_substring: 'screenshots/screenshots.html')
-  #     queries = [screenshots]
-  #     results = fetcher.fetch_queries(queries)
-  #     screenshots_url = results.url_for_query(screenshots)
-  #     if !screenshots_url.nil?
-  #       slack(message: "[Screenshots](#{screenshots_url})", success: true)
-  #     else
-  #       slack(message: "Screenshots are missing!", success: false)
-  #     end
-  #   else
-  #     slack(message: "Missing CircleCI artifacts. Most likely the [CIRCLE_API_TOKEN](https://github.com/Raizlabs/circleci_artifact#getting-started) is not set, or not running on CircleCI.", success: false)
-  #   end
-  # end
+        # delete secrets by copying all but those lines:
+        forEachXCConfig do |file, file_name|
+          temp_file = "#{file_name}.tmp"
+          File.open(temp_file, "w+") do |temp|
+            File.readlines(file).each_with_index do |line|
+              temp.write line unless line =~ /#{SECRETS_CONFIG_NAME}/
+            end
+          end
+          
+          FileUtils.mv(temp_file, file_name)
+        end
+      end
+      
+      # clear temp files:
+      FileUtils.rm Dir.glob('*').select { |path| File.extname(path) =~ /.tmp/ }
+    end
+  end
 
   desc "Builds and submits a Develop release to Hockey"
   lane :develop do
@@ -286,5 +312,31 @@ platform :ios do
 
   def productIPA(productName)
     "#{ENV['RZ_ARTIFACTS']}/#{productName}.ipa"
+  end
+  
+  # performs the given block in the xcconfig dir for the given product name, if it is known
+  def xcconfigsDir product_name, &block
+    configs_dir = XCCONFIGS_PATHS[product_name]
+    if configs_dir
+      Dir.chdir(configs_dir) do
+        block.call()
+      end
+    else
+      puts "no dir for name #{product_name}"
+    end
+  end
+
+  # returns all xcconfig files in the current dir
+  def all_xcconfigs
+    return Dir.glob('*').select { |path| File.extname(path) == ".xcconfig" }
+  end
+
+  # executes the given block for each xcconfig file with the "write only mode"
+  def forEachXCConfig &block
+    all_xcconfigs.each do |path|
+      File.open(path, "a") do |file|
+        block.call(file, path)
+      end
+    end
   end
 end

@@ -36,6 +36,16 @@ Posts Docs to Slack
 fastlane ios coverage
 ```
 Runs Code Coverage
+### ios write_secrets
+```
+fastlane ios write_secrets
+```
+Write secret configs
+### ios strip_secrets
+```
+fastlane ios strip_secrets
+```
+Remove secrets from configs
 ### ios develop
 ```
 fastlane ios develop

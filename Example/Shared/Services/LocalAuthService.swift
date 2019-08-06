@@ -78,9 +78,9 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
         return clientId
     }()
     private static let clientSecret: String = {
-//        guard let clientId = Bundle.main.infoDictionary?["ProjectVerifyClientSecret"] as? String else {
-//            fatalError("missing client secret")
-//        }
+        guard let clientId = Bundle.main.infoDictionary?["ProjectVerifyClientSecret"] as? String else {
+            fatalError("missing client secret")
+        }
         return ""
     }()
     private static let authHeaderValue: String = {
@@ -102,8 +102,12 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
                mnc: String,
                completion: @escaping (AuthPayload?, Error?) -> Void) {
 
-        ifOIDC(forMCC: mcc, andMNC: mnc, then: { [weak self] oidc in
+        getOIDC(forMCC: mcc,
+                andMNC: mnc,
+                handleError: { completion(nil, $0) }) { [weak self] oidc in
+
             guard let sself = self else { return }
+
             var request = URLRequest(url: oidc.tokenEndpoint)
             request.httpMethod = "POST"
             request.addValue(ClientSideServiceAPI.authHeaderValue, forHTTPHeaderField: "Authorization")
@@ -119,8 +123,6 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
             } catch let encodingError {
                 completion(nil, encodingError)
             }
-        }) { error in
-            completion(nil, error)
         }
     }
 
@@ -135,13 +137,13 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
 
     }
 
-    func ifOIDC(forMCC mcc: String,
+    func getOIDC(forMCC mcc: String,
                 andMNC mnc: String,
-                then: @escaping (DiscoveryResponse) -> Void,
-                else: @escaping (Error?) -> Void) {
+                handleError: @escaping (Error?) -> Void,
+                then: @escaping (DiscoveryResponse) -> Void) {
         getOIDC(mcc: mcc, mnc: mnc) { oidc, error in
             guard let oidc = oidc else {
-                `else`(error)
+                handleError(error)
                 return
             }
             then(oidc)
