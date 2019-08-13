@@ -52,7 +52,7 @@ class EnableVerifyViewController: BankAppViewController {
         return button
     }()
 
-    let serviceAPI = ServiceAPI()
+    private let clientSideServiceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,19 +112,20 @@ extension EnableVerifyViewController: ProjectVerifyAuthorizeButtonDelegate {
 
     func authorizeUser(authorizedResponse: AuthorizedResponse) {
         let code = authorizedResponse.code
-        serviceAPI.login(
+        clientSideServiceAPI.login(
             withAuthCode: code,
             mcc: authorizedResponse.mcc,
             mnc: authorizedResponse.mnc,
-            completionHandler: { json, error in
+            completion: { [weak self] authResponse, error in
                 guard
-                    let accountToken = json?["token"],
-                    let tokenString = accountToken.toString else {
+                    let accountToken = authResponse?.token else {
                         print("error no token returned")
+                        self?.showAlert(title: "Error", message: "error logging in \(String(describing: error))")
                         return
                 }
-                AccountManager.login(withToken: tokenString)
-                self.launchHomeScreen()
+
+                AccountManager.login(withToken: accountToken)
+                self?.launchHomeScreen()
         })
     }
 }

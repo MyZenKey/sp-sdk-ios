@@ -97,7 +97,7 @@ class LoginViewController: UIViewController {
         return toolbar
     }()
 
-    let clientSideServiceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
+    private let clientSideServiceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -218,7 +218,7 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
                 guard
                     let accountToken = authResponse?.token else {
                         print("error no token returned")
-                        self?.showAlert(title: "Error", message: "error logging in \(error)")
+                        self?.showAlert(title: "Error", message: "error logging in \(String(describing: error))")
                         return
                 }
 

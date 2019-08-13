@@ -20,7 +20,12 @@ struct UserInfo {
     let postalCode: String?
 }
 
-struct Trasnaction {}
+struct Transaction {}
+
+enum TransactionError: Error {
+    case unableToParseToken
+    case mismatchedTransaction
+}
 
 protocol ServiceAPIProtocol {
     func login(
@@ -31,10 +36,10 @@ protocol ServiceAPIProtocol {
 
     func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void)
 
-    func approve(transferIdentifier: String,
-                 userContext: String,
-                 nonce: String,
-                 completion: (Trasnaction?, Error?) -> Void)
+    func approveTransfer(withAuthCode code: String,
+                         userContext: String,
+                         nonce: String,
+                         completion: @escaping (Transaction?, Error?) -> Void)
 
     func logout(completion: @escaping (Error?) -> Void)
 }
@@ -162,33 +167,15 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
                mnc: String,
                completion: @escaping (AuthPayload?, Error?) -> Void) {
 
-        getOIDC(forMCC: mcc,
-                andMNC: mnc,
-                handleError: { completion(nil, $0) }) { [weak self] oidc in
-
-            guard let sself = self else { return }
-
-            var request = URLRequest(url: oidc.tokenEndpoint)
-            request.httpMethod = "POST"
-            request.addValue(ClientSideServiceAPI.authHeaderValue, forHTTPHeaderField: "Authorization")
-            request.addValue("Accept", forHTTPHeaderField: "application/x-www-form-urlencoded")
-            let tokenRequest = TokenRequest(
-                clientId: ClientSideServiceAPI.clientId,
-                code: code
-            )
-            let encoded = tokenRequest.urlFormEncodedData
-
-            request.httpBody = encoded
-            sself.requestJSON(request: request) { (tokenResponse: TokenResponse?, error: Error?) in
-                guard let tokenResponse = tokenResponse else {
-                    completion(nil, error)
-                    return
-                }
-
-                UserAccountStorage.setUser(withTokenResponse: tokenResponse)
-                UserAccountStorage.setMCCMNC(mcc: mcc, mnc: mnc)
-                completion(AuthPayload(token: "my_pretend_auth_token"), nil)
+        requestToken(forMCC: mcc, andMNC: mnc, authorizationCode: code) { tokenResponse, error in
+            guard let tokenResponse = tokenResponse else {
+                completion(nil, error)
+                return
             }
+
+            UserAccountStorage.setUser(withTokenResponse: tokenResponse)
+            UserAccountStorage.setMCCMNC(mcc: mcc, mnc: mnc)
+            completion(AuthPayload(token: "my_pretend_auth_token"), nil)
         }
     }
 
@@ -214,11 +201,40 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
         }
     }
 
-    func approve(transferIdentifier: String,
-                 userContext: String,
-                 nonce: String,
-                 completion: (Trasnaction?, Error?) -> Void) {
+    func approveTransfer(withAuthCode code: String,
+                         userContext: String,
+                         nonce: String,
+                         completion: @escaping (Transaction?, Error?) -> Void) {
 
+        guard
+            let mccmnc = UserAccountStorage.mccmnc else {
+                completion(nil, ServiceError.invalidToken)
+                return
+        }
+
+        requestToken(forMCC: mccmnc.mcc, andMNC: mccmnc.mnc, authorizationCode: code) { tokenResponse, error in
+            guard let tokenResponse = tokenResponse else {
+                completion(nil, error)
+                return
+            }
+
+            // ensure integrity of request
+            let idToken = tokenResponse.idToken
+            guard let parsed = idToken.simpleDecodeTokenBody() else {
+                completion(nil, TransactionError.unableToParseToken)
+                return
+            }
+
+            let returnedContext = parsed["context"] as? String
+            let returnedNonce = parsed["nonce"] as? String
+
+            guard returnedContext == userContext, returnedNonce == nonce else {
+                completion(nil, TransactionError.mismatchedTransaction)
+                return
+            }
+
+            completion(Transaction(), nil)
+        }
     }
 
     func getOIDC(forMCC mcc: String,
@@ -268,10 +284,37 @@ private extension ClientSideServiceAPI {
         requestJSON(request: endpoint, completion: completion)
     }
 
+    func requestToken(forMCC mcc: String,
+                      andMNC mnc: String,
+                      authorizationCode code: String,
+                      completion: @escaping (TokenResponse?, Error?) -> Void) {
+
+        getOIDC(forMCC: mcc,
+                andMNC: mnc,
+                handleError: { completion(nil, $0) }) { [weak self] oidc in
+
+                    guard let sself = self else { return }
+
+                    var request = URLRequest(url: oidc.tokenEndpoint)
+                    request.httpMethod = "POST"
+                    request.addValue(ClientSideServiceAPI.authHeaderValue, forHTTPHeaderField: "Authorization")
+                    request.addValue("Accept", forHTTPHeaderField: "application/x-www-form-urlencoded")
+                    let tokenRequest = TokenRequest(
+                        clientId: ClientSideServiceAPI.clientId,
+                        code: code
+                    )
+                    let encoded = tokenRequest.urlFormEncodedData
+
+                    request.httpBody = encoded
+                    sself.requestJSON(request: request, completion: completion)
+        }
+    }
+
     func requestJSON<T: Decodable>(
         request: URLRequest,
         completion: @escaping (T?, Error?) -> Void) {
         let task = session.dataTask(with: request) { data, response, error in
+
             DispatchQueue.main.async {
                 var result: T?
                 var errorResult: Error? = error
@@ -310,14 +353,35 @@ private extension ClientSideServiceAPI {
     }
 }
 
-extension HTTPURLResponse {
-    var errorValue: Error? {
-        switch statusCode {
-        case 401:
-            return ServiceError.invalidToken
-        case 402...599:
-            return ServiceError.unknownError
-        default:
+extension String {
+    /// you should use a tool to support token decoding. this just hacks the base64url encoded
+    /// body back to base64, then to json so we don't need to take on dependencies.
+    func simpleDecodeTokenBody() -> [String: Any]? {
+        let bodyBase64URLString = self.split(separator: ".")[1]
+        var bodyBase64String = bodyBase64URLString
+                .replacingOccurrences(of: "-", with: "+")
+                .replacingOccurrences(of: "_", with: "/")
+
+        let length = Double(bodyBase64String.lengthOfBytes(using: .utf8))
+        let requiredLength = 4 * ceil(length / 4.0)
+        let paddingLength = requiredLength - length
+        if paddingLength > 0 {
+            let padding = "".padding(toLength: Int(paddingLength), withPad: "=", startingAt: 0)
+            bodyBase64String = bodyBase64String + padding
+        }
+        guard let data = Data(base64Encoded: bodyBase64String, options: .ignoreUnknownCharacters) else {
+            print("Warning: unable to parse JWT")
+            return nil
+        }
+
+        do {
+            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                return nil
+            }
+
+            return json
+        } catch {
+            print("Warning: unable to parse JWT")
             return nil
         }
     }
@@ -326,7 +390,7 @@ extension HTTPURLResponse {
 extension Data {
     func printJSON() {
         do {
-            let json = try JSONSerialization.jsonObject(with: self, options: [.allowFragments])
+            let json = try JSONSerialization.jsonObject(with: self, options: [])
             print(json)
         } catch {
             print("invalid json")
