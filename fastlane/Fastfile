@@ -66,6 +66,7 @@ platform :ios do
     if ENV['RZ_ARTIFACTS'] && ENV['RZ_ARTIFACTS'].length > 0
       sh 'rm -rf $RZ_ARTIFACTS && mkdir $RZ_ARTIFACTS'
     end
+    write_secrets
   end
 
   desc "Runs tests"
@@ -184,7 +185,7 @@ platform :ios do
   desc "Write secret configs"
   lane :write_secrets do
     [ BANK_APP ].each do |name|
-      xcconfigsDir(name) do
+      xcConfigsDir(name) do
         # write the include secrets for each file
         forEachXCConfig do |file|
           include_secrets = "#include \"./#{SECRETS_CONFIG_NAME}\"\n"
@@ -202,7 +203,7 @@ platform :ios do
   desc "Remove secrets from configs"
   lane :strip_secrets do
     [ BANK_APP, SOCIAL_APP, PHOTO_APP ].each do |name|
-      xcconfigsDir(name) do
+      xcConfigsDir(name) do
         # remove the secrets file if present:
         FileUtils.rm(SECRETS_CONFIG_NAME) if File.exists? SECRETS_CONFIG_NAME
 
@@ -214,7 +215,7 @@ platform :ios do
               temp.write line unless line =~ /#{SECRETS_CONFIG_NAME}/
             end
           end
-          
+
           FileUtils.mv(temp_file, file_name)
         end
       end
@@ -315,7 +316,7 @@ platform :ios do
   end
   
   # performs the given block in the xcconfig dir for the given product name, if it is known
-  def xcconfigsDir product_name, &block
+  def xcConfigsDir product_name, &block
     configs_dir = XCCONFIGS_PATHS[product_name]
     if configs_dir
       Dir.chdir(configs_dir) do

@@ -71,7 +71,7 @@ class LoginViewController: UIViewController {
     lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
         button.style = .light
-        let scopes: [Scope] = [.authenticate, .register, .name, .email]
+        let scopes: [Scope] = [.openid, .authenticate, .register, .name, .email, .birthdate, .postalCode]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.delegate = self
@@ -97,8 +97,7 @@ class LoginViewController: UIViewController {
         return toolbar
     }()
 
-    let serviceAPI = ServiceAPI()
-    let clientSideServiceAPI = ClientSideServiceAPI()
+    let clientSideServiceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -211,20 +210,20 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
 
     func authorizeUser(authorizedResponse: AuthorizedResponse) {
         let code = authorizedResponse.code
-//        serviceAPI.login(
         clientSideServiceAPI.login(
             withAuthCode: code,
             mcc: authorizedResponse.mcc,
             mnc: authorizedResponse.mnc,
-            completion: { _, _ in
-//                guard
-//                    let accountToken = json?["token"],
-//                    let tokenString = accountToken.toString else {
-//                        print("error no token returned")
-//                        return
-//                }
-//                AccountManager.login(withToken: tokenString)
-//                self.launchHomeScreen()
+            completion: { [weak self] authResponse, error in
+                guard
+                    let accountToken = authResponse?.token else {
+                        print("error no token returned")
+                        self?.showAlert(title: "Error", message: "error logging in \(error)")
+                        return
+                }
+
+                AccountManager.login(withToken: accountToken)
+                self?.launchHomeScreen()
         })
     }
 }

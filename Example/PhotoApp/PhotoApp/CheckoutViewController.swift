@@ -73,7 +73,7 @@ class CheckoutViewController: UIViewController {
     
     lazy private(set) var verifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
-        let scopes: [Scope] = [.authorize, .openid, .name, .email, .address, .postalCode]
+        let scopes: [Scope] = [.openid, .authorize, .name, .email, .address, .postalCode]
         button.scopes = scopes
         button.delegate = self
         button.translatesAutoresizingMaskIntoConstraints = false

@@ -45,7 +45,7 @@ class EnableVerifyViewController: BankAppViewController {
     lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
         button.style = .dark
-        let scopes: [Scope] = [.authenticate, .openid, .name, .email, .phone, .postalCode]
+        let scopes: [Scope] = [.openid, .authenticate, .name, .email, .phone, .postalCode]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.delegate = self

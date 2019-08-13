@@ -193,7 +193,7 @@ class LoginViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let scopes: [Scope] = [.profile, .email]
+        let scopes: [Scope] = [.openid, .profile, .email]
         projectVerifyButton.scopes = scopes
         projectVerifyButton.delegate = self
 

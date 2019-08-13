@@ -6,6 +6,11 @@
 
 import UIKit
 
+enum ServiceError: Error {
+    case invalidToken
+    case unknownError
+}
+
 class ServiceAPI: NSObject {
 
     let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: Foundation.OperationQueue.main)

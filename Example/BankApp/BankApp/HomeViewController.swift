@@ -16,6 +16,15 @@ class HomeViewController: BankAppViewController {
         label.textAlignment = .center
         return label
     }()
+
+    let userInfoLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
     
     let sendMoneyButton: BankAppButton = {
         let button = BankAppButton()
@@ -35,9 +44,26 @@ class HomeViewController: BankAppViewController {
         return button
     }()
 
+    private var needsUserInfo: Bool {
+        return true
+    }
+
+    private var userInfo: UserInfo? {
+        didSet {
+            updateUserInfo()
+        }
+    }
+
+    private var serviceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutView()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchUserInfoIfNeeded()
     }
 
     @objc func logoutButtonTouched(_ sender: Any) {
@@ -54,14 +80,19 @@ class HomeViewController: BankAppViewController {
         let safeAreaGuide = getSafeLayoutGuide()
         
         view.addSubview(titleLabel)
+        view.addSubview(userInfoLabel)
         view.addSubview(sendMoneyButton)
         view.addSubview(logoutButton)
         
         constraints.append(titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
         constraints.append(titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(titleLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        
-        constraints.append(sendMoneyButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20))
+
+        constraints.append(userInfoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20))
+        constraints.append(userInfoLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor))
+        constraints.append(userInfoLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor))
+
+        constraints.append(sendMoneyButton.topAnchor.constraint(equalTo: userInfoLabel.bottomAnchor, constant: 20))
         constraints.append(sendMoneyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
         constraints.append(sendMoneyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
         constraints.append(sendMoneyButton.heightAnchor.constraint(equalToConstant: 48))
@@ -72,5 +103,35 @@ class HomeViewController: BankAppViewController {
         constraints.append(logoutButton.heightAnchor.constraint(equalToConstant: 48))
 
         NSLayoutConstraint.activate(constraints)
+    }
+}
+
+// MARK: - User Info
+
+private extension HomeViewController {
+    func fetchUserInfoIfNeeded() {
+        guard needsUserInfo else { return }
+        serviceAPI.getUserInfo() { [weak self] userInfo, error in
+
+            guard error == nil else {
+                self?.handleNetworkError(error: error!)
+                return
+            }
+
+            self?.userInfo = userInfo
+        }
+    }
+    
+    func updateUserInfo() {
+        guard let userInfo = userInfo else {
+            userInfoLabel.text = nil
+            return
+        }
+
+        userInfoLabel.text = """
+        \(userInfo.name ?? "{name}")
+        \(userInfo.birthdate ?? "{birthdate}")
+        \(userInfo.email ?? "{email}") | \(userInfo.postalCode ?? "{postal code}")
+        """
     }
 }

@@ -17,12 +17,14 @@
 		7D89C9D41FFE82F400AE1EF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D89C9D31FFE82F400AE1EF4 /* AppDelegate.swift */; };
 		7D89C9DB1FFE82F400AE1EF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DA1FFE82F400AE1EF4 /* Assets.xcassets */; };
 		7D89C9DE1FFE82F400AE1EF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DC1FFE82F400AE1EF4 /* LaunchScreen.storyboard */; };
+		8A07E17222FB41BA003659F5 /* UserAccountStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07E17122FB41B9003659F5 /* UserAccountStorage.swift */; };
 		8A0992F422F1F9670047D150 /* LocalAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0992F322F1F9670047D150 /* LocalAuthService.swift */; };
+		8A2294E72303153700C90991 /* DemoAppAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2294E62303153700C90991 /* DemoAppAppDelegate.swift */; };
+		8A406B6322FC972D0047D7AB /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A406B6222FC972D0047D7AB /* AccountManager.swift */; };
 		8A92ED1522C40C5D00E0B2CA /* UIViewController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A92ED1422C40C5D00E0B2CA /* UIViewController+Helpers.swift */; };
 		8AB02C1322D7E0FA00B1673C /* BankAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB02C1222D7E0F900B1673C /* BankAppViewController.swift */; };
 		8AC2A38E22D8F17300B72551 /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D43BF8F2024FA6700B9BE41 /* JsonDocument.swift */; };
 		8AC2A39022D8F1DD00B72551 /* BuildInfoUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2A38F22D8F1DD00B72551 /* BuildInfoUtilities.swift */; };
-		8AC2A39622D9086700B72551 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2A39522D9086600B72551 /* AccountManager.swift */; };
 		8AC2A39C22D90C6800B72551 /* UIViewController+ExampleApps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC2A39B22D90C6800B72551 /* UIViewController+ExampleApps.swift */; };
 		8C6E736E212338F4003B15A4 /* DotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6E736D212338F3003B15A4 /* DotView.swift */; };
 		8C87BE0C212666A900B24707 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C87BE0B212666A900B24707 /* LoginViewController.swift */; };
@@ -77,11 +79,13 @@
 		7D89C9DF1FFE82F400AE1EF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		810CAC5E21FE9686007F8A22 /* CarriersSharedAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CarriersSharedAPI.framework; sourceTree = "<group>"; };
 		89F9A01A772197F60C3FF63C /* Pods-BankApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BankApp/Pods-BankApp.debug.xcconfig"; sourceTree = "<group>"; };
+		8A07E17122FB41B9003659F5 /* UserAccountStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserAccountStorage.swift; path = ../../Shared/Utilities/UserAccountStorage.swift; sourceTree = "<group>"; };
 		8A0992F322F1F9670047D150 /* LocalAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LocalAuthService.swift; path = ../../Shared/Services/LocalAuthService.swift; sourceTree = "<group>"; };
+		8A2294E62303153700C90991 /* DemoAppAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DemoAppAppDelegate.swift; path = ../../Shared/Utilities/DemoAppAppDelegate.swift; sourceTree = "<group>"; };
+		8A406B6222FC972D0047D7AB /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountManager.swift; path = ../../Shared/Utilities/AccountManager.swift; sourceTree = "<group>"; };
 		8A92ED1422C40C5D00E0B2CA /* UIViewController+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Helpers.swift"; sourceTree = "<group>"; };
 		8AB02C1222D7E0F900B1673C /* BankAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAppViewController.swift; sourceTree = "<group>"; };
 		8AC2A38F22D8F1DD00B72551 /* BuildInfoUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BuildInfoUtilities.swift; path = ../../../Shared/Utilities/BuildInfoUtilities.swift; sourceTree = "<group>"; };
-		8AC2A39522D9086600B72551 /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountManager.swift; path = ../../Shared/Utilities/AccountManager.swift; sourceTree = "<group>"; };
 		8AC2A39B22D90C6800B72551 /* UIViewController+ExampleApps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIViewController+ExampleApps.swift"; path = "../../Shared/Utilities/UIViewController+ExampleApps.swift"; sourceTree = "<group>"; };
 		8C6E736D212338F3003B15A4 /* DotView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DotView.swift; sourceTree = "<group>"; };
 		8C87BE0B212666A900B24707 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -173,7 +177,8 @@
 		7D89C9D21FFE82F400AE1EF4 /* BankApp */ = {
 			isa = PBXGroup;
 			children = (
-				8AC2A39522D9086600B72551 /* AccountManager.swift */,
+				8A406B6222FC972D0047D7AB /* AccountManager.swift */,
+				8A07E17122FB41B9003659F5 /* UserAccountStorage.swift */,
 				233B616D220C98E8008A0E27 /* Resources */,
 				8CDE44DB212DCC1B00F403A2 /* Views */,
 				7D89C9D31FFE82F400AE1EF4 /* AppDelegate.swift */,
@@ -192,6 +197,7 @@
 				8AB02C1222D7E0F900B1673C /* BankAppViewController.swift */,
 				8AC2A39B22D90C6800B72551 /* UIViewController+ExampleApps.swift */,
 				8A0992F322F1F9670047D150 /* LocalAuthService.swift */,
+				8A2294E62303153700C90991 /* DemoAppAppDelegate.swift */,
 			);
 			path = BankApp;
 			sourceTree = "<group>";
@@ -401,13 +407,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C87BE0C212666A900B24707 /* LoginViewController.swift in Sources */,
+				8A2294E72303153700C90991 /* DemoAppAppDelegate.swift in Sources */,
 				3508E23A211281940036E4A2 /* ServiceAPI.swift in Sources */,
 				E66B5DD622F225D4005C7FD7 /* UITestLaunchArguments.swift in Sources */,
 				8C87BE1221268FD500B24707 /* HomeViewController.swift in Sources */,
 				8A92ED1522C40C5D00E0B2CA /* UIViewController+Helpers.swift in Sources */,
 				8A0992F422F1F9670047D150 /* LocalAuthService.swift in Sources */,
 				8C87BE0E212669DF00B24707 /* BankAppButton.swift in Sources */,
-				8AC2A39622D9086700B72551 /* AccountManager.swift in Sources */,
 				8CFE96FF2121F22900542F46 /* ApproveViewController.swift in Sources */,
 				8CDE44DD212DCC4C00F403A2 /* GradientView.swift in Sources */,
 				8C6E736E212338F4003B15A4 /* DotView.swift in Sources */,
@@ -415,7 +421,9 @@
 				8AC2A39022D8F1DD00B72551 /* BuildInfoUtilities.swift in Sources */,
 				8AB02C1322D7E0FA00B1673C /* BankAppViewController.swift in Sources */,
 				8C87BE1021266A8B00B24707 /* AppTheme.swift in Sources */,
+				8A406B6322FC972D0047D7AB /* AccountManager.swift in Sources */,
 				6682E1AC21228F9400DBE3C5 /* EnableVerifyViewController.swift in Sources */,
+				8A07E17222FB41BA003659F5 /* UserAccountStorage.swift in Sources */,
 				7D89C9D41FFE82F400AE1EF4 /* AppDelegate.swift in Sources */,
 				8AC2A38E22D8F17300B72551 /* JsonDocument.swift in Sources */,
 			);
