@@ -204,7 +204,8 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
             completion(nil, LoginError.invalidCredentials)
             return
         }
-        UserAccountStorage.userName = "jane"
+
+        UserAccountStorage.userName = ClientSideServiceAPI.mockUserName
         DispatchQueue.main.async {
             completion(AuthPayload(token: "my_pretend_auth_token"), nil)
         }
@@ -220,6 +221,12 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
     }
 
     func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void) {
+
+        guard !isMockUser else {
+            completion(ClientSideServiceAPI.mockUserInfo, nil)
+            return
+        }
+
         guard
             let token = UserAccountStorage.accessToken,
             let mccmnc = UserAccountStorage.mccmnc else {
@@ -301,6 +308,22 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
 }
 
 private extension ClientSideServiceAPI {
+
+    static let mockUserName = "jane"
+
+    static let mockUserInfo = UserInfo(
+        username: ClientSideServiceAPI.mockUserName,
+        email: "janedoe@rightpoint.com",
+        name: "Jane",
+        givenName: "Jane",
+        familyName: "Doe",
+        birthdate: "1/1/1000",
+        postalCode: "00000"
+    )
+
+    var isMockUser: Bool {
+        return UserAccountStorage.userName == ClientSideServiceAPI.mockUserName
+    }
 
     func getOIDC(mcc: String,
                  mnc: String,

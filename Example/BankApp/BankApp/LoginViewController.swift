@@ -105,7 +105,6 @@ class LoginViewController: UIViewController {
     }
 
     @objc func signInButtonPressed() {
-
         clientSideServiceAPI.login(
             withUsername: idTextField.text?.lowercased() ?? "",
             password: passwordTextField.text?.lowercased() ?? "") { [weak self] auth, error in
