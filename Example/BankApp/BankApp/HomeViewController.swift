@@ -44,10 +44,6 @@ class HomeViewController: BankAppViewController {
         return button
     }()
 
-    private var needsUserInfo: Bool {
-        return true
-    }
-
     private var userInfo: UserInfo? {
         didSet {
             updateUserInfo()
@@ -110,7 +106,6 @@ class HomeViewController: BankAppViewController {
 
 private extension HomeViewController {
     func fetchUserInfoIfNeeded() {
-        guard needsUserInfo else { return }
         serviceAPI.getUserInfo() { [weak self] userInfo, error in
 
             guard error == nil else {
