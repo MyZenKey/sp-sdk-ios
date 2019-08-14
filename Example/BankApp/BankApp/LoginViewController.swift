@@ -71,7 +71,7 @@ class LoginViewController: UIViewController {
     lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
         button.style = .light
-        let scopes: [Scope] = [.authenticate, .register, .name, .email]
+        let scopes: [Scope] = [.openid, .authenticate, .register, .name, .email, .birthdate, .postalCode]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.delegate = self
@@ -97,7 +97,7 @@ class LoginViewController: UIViewController {
         return toolbar
     }()
 
-    let serviceAPI = ServiceAPI()
+    private let clientSideServiceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -210,19 +210,20 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
 
     func authorizeUser(authorizedResponse: AuthorizedResponse) {
         let code = authorizedResponse.code
-        serviceAPI.login(
+        clientSideServiceAPI.login(
             withAuthCode: code,
             mcc: authorizedResponse.mcc,
             mnc: authorizedResponse.mnc,
-            completionHandler: { json, error in
+            completion: { [weak self] authResponse, error in
                 guard
-                    let accountToken = json?["token"],
-                    let tokenString = accountToken.toString else {
+                    let accountToken = authResponse?.token else {
                         print("error no token returned")
+                        self?.showAlert(title: "Error", message: "error logging in \(String(describing: error))")
                         return
                 }
-                AccountManager.login(withToken: tokenString)
-                self.launchHomeScreen()
+
+                AccountManager.login(withToken: accountToken)
+                self?.launchHomeScreen()
         })
     }
 }

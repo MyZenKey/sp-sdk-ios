@@ -31,7 +31,7 @@ class ApproveViewController: BankAppViewController {
         return button
     }()
 
-    let serviceAPI = ServiceAPI()
+    private var serviceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
 
     let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
@@ -40,20 +40,23 @@ class ApproveViewController: BankAppViewController {
         return indicator
     }()
 
+    let nonce = RandomStringGenerator.generateNonceSuitableString()!
+    let context = "Confirm you would like to transfer \(ApproveViewController.amount) to \(ApproveViewController.userName)."
+
     lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
         button.style = .dark
-        let scopes: [Scope] = [.authorize]
+        let scopes: [Scope] = [.openid, .authorize]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.delegate = self
         button.acrValues = [.aal2]
-        button.context = "Confirm you would like to transfer \(ApproveViewController.amount) to \(ApproveViewController.userName)."
+        // TODO: new nonce per-press when we make this more realistic.
+        button.nonce = nonce
+        button.context = context
         return button
     }()
 
-    private var notification: NSObjectProtocol?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -69,15 +72,22 @@ class ApproveViewController: BankAppViewController {
     }
 
     func completeFlow(withAuthChode code: String, mcc: String, mnc: String) {
-        serviceAPI.completeTransfer(
+        serviceAPI.approveTransfer(
             withAuthCode: code,
-            mcc: mcc,
-            mnc: mnc,
-            completionHandler: { _ in
+            userContext: context,
+            nonce: nonce) { transaction, error in
+
+                guard error == nil else {
+                    self.showAlert(title: "Error", message: "A problem occured with this transaction. \(error!)") { [weak self] in
+                        self?.navigationController?.popViewController(animated: true)
+                    }
+                    return
+                }
+
                 self.showAlert(title: "Success", message: "Your transfer has succeeded") { [weak self] in
                     self?.navigationController?.popViewController(animated: true)
                 }
-        })
+        }
     }
 
     func showActivityIndicator() {

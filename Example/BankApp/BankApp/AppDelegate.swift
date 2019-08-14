@@ -8,10 +8,11 @@ import UIKit
 import CarriersSharedAPI
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, DemoAppAppDelegate {
 
     var window: UIWindow?
     var navigationController: UINavigationController?
+    private var serviceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
@@ -81,8 +82,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func logout() {
-        AccountManager.logout()
-        launchLoginScreen()
+        serviceAPI.logout { [weak self] _ in
+            AccountManager.logout()
+            self?.launchLoginScreen()
+        }
     }
 
     // MARK: Launch root screen flows

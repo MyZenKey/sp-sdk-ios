@@ -53,3 +53,26 @@ extension UIViewController {
         present(controller, animated: true, completion: nil)
     }
 }
+
+extension UIViewController {
+    func handleNetworkError(error: Error) {
+        if let serviceError = error as? ServiceError,
+            case .invalidToken = serviceError {
+            // logout if invlaid token
+            logout()
+        } else {
+            showAlert(
+                title: "Error",
+                message: "An error occured performing the operation. Please try again soon."
+            )
+        }
+    }
+
+    func logout() {
+        if let appDelegate = UIApplication.shared.delegate as? DemoAppAppDelegate {
+            appDelegate.logout()
+        } else {
+            print("Unbable to logout from app delegate!")
+        }
+    }
+}

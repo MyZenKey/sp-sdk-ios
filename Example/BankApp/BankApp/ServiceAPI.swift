@@ -6,6 +6,24 @@
 
 import UIKit
 
+enum ServiceError: Error {
+    case invalidToken
+    case unknownError
+}
+
+extension HTTPURLResponse {
+    var errorValue: Error? {
+        switch statusCode {
+        case 401:
+            return ServiceError.invalidToken
+        case 402...599:
+            return ServiceError.unknownError
+        default:
+            return nil
+        }
+    }
+}
+
 class ServiceAPI: NSObject {
 
     let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: Foundation.OperationQueue.main)
