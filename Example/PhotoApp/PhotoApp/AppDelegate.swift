@@ -8,7 +8,7 @@ import UIKit
 import CarriersSharedAPI
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, DemoAppAppDelegate {
 
     var window: UIWindow?
     var navigationController: UINavigationController?

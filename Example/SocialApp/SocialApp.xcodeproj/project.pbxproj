@@ -31,7 +31,6 @@
 		2D100F12212E0B7C00B02260 /* SFCompactText-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2D100EFD212E0B7C00B02260 /* SFCompactText-HeavyItalic.otf */; };
 		2D100F13212E0B7C00B02260 /* SFCompactText-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2D100EFE212E0B7C00B02260 /* SFCompactText-LightItalic.otf */; };
 		2D100F14212E0B7C00B02260 /* SFCompactDisplay-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2D100EFF212E0B7C00B02260 /* SFCompactDisplay-Thin.otf */; };
-		3508E23A211281940036E4A2 /* ServiceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3508E239211281930036E4A2 /* ServiceAPI.swift */; };
 		3585D5C621121AAF00745B87 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3585D5C521121AAF00745B87 /* SignUpViewController.swift */; };
 		660B0F432130AA890066DEF4 /* SupportVerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660B0F422130AA890066DEF4 /* SupportVerifyViewController.swift */; };
 		7D073C092029F60200E163E4 /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D073C082029F60200E163E4 /* UserInfoViewController.swift */; };
@@ -40,6 +39,8 @@
 		7D89C9D61FFE82F400AE1EF4 /* LandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D89C9D51FFE82F400AE1EF4 /* LandingViewController.swift */; };
 		7D89C9DB1FFE82F400AE1EF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DA1FFE82F400AE1EF4 /* Assets.xcassets */; };
 		7D89C9DE1FFE82F400AE1EF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DC1FFE82F400AE1EF4 /* LaunchScreen.storyboard */; };
+		8A1057492304D0E700B764C2 /* ServiceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1057482304D0E700B764C2 /* ServiceAPI.swift */; };
+		8A10574B2304D10300B764C2 /* DemoAppAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10574A2304D10300B764C2 /* DemoAppAppDelegate.swift */; };
 		8A1478852253C181001F2DB8 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8126F2A8218C0E8300AFC3CA /* AVKit.framework */; };
 		8A1479072253C528001F2DB8 /* CarriersSharedAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1479062253C528001F2DB8 /* CarriersSharedAPI.framework */; };
 		8A1479082253C528001F2DB8 /* CarriersSharedAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1479062253C528001F2DB8 /* CarriersSharedAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -89,7 +90,6 @@
 		2D100EFD212E0B7C00B02260 /* SFCompactText-HeavyItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFCompactText-HeavyItalic.otf"; sourceTree = "<group>"; };
 		2D100EFE212E0B7C00B02260 /* SFCompactText-LightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFCompactText-LightItalic.otf"; sourceTree = "<group>"; };
 		2D100EFF212E0B7C00B02260 /* SFCompactDisplay-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFCompactDisplay-Thin.otf"; sourceTree = "<group>"; };
-		3508E239211281930036E4A2 /* ServiceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAPI.swift; sourceTree = "<group>"; };
 		3585D5C521121AAF00745B87 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		660B0F422130AA890066DEF4 /* SupportVerifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportVerifyViewController.swift; sourceTree = "<group>"; };
 		6662CA3D21308C9C00280332 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -103,6 +103,8 @@
 		7D89C9DD1FFE82F400AE1EF4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D89C9DF1FFE82F400AE1EF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8126F2A8218C0E8300AFC3CA /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		8A1057482304D0E700B764C2 /* ServiceAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServiceAPI.swift; path = ../../Shared/Services/ServiceAPI.swift; sourceTree = "<group>"; };
+		8A10574A2304D10300B764C2 /* DemoAppAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DemoAppAppDelegate.swift; path = ../../Shared/Utilities/DemoAppAppDelegate.swift; sourceTree = "<group>"; };
 		8A1479062253C528001F2DB8 /* CarriersSharedAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CarriersSharedAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AC2A39122D8F1FE00B72551 /* BuildInfoUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BuildInfoUtilities.swift; path = ../../Shared/Utilities/BuildInfoUtilities.swift; sourceTree = "<group>"; };
 		8AC2A39722D9088400B72551 /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountManager.swift; path = ../../Shared/Utilities/AccountManager.swift; sourceTree = "<group>"; };
@@ -209,6 +211,8 @@
 		7D89C9D21FFE82F400AE1EF4 /* SocialApp */ = {
 			isa = PBXGroup;
 			children = (
+				8A10574A2304D10300B764C2 /* DemoAppAppDelegate.swift */,
+				8A1057482304D0E700B764C2 /* ServiceAPI.swift */,
 				8AC2A39D22D90C8F00B72551 /* UIViewController+ExampleApps.swift */,
 				8AC2A39722D9088400B72551 /* AccountManager.swift */,
 				233B6157220B55E9008A0E27 /* Resources */,
@@ -222,7 +226,6 @@
 				7D89C9DC1FFE82F400AE1EF4 /* LaunchScreen.storyboard */,
 				7D89C9DF1FFE82F400AE1EF4 /* Info.plist */,
 				7D43BF8E2024FA5000B9BE41 /* Utilities */,
-				3508E239211281930036E4A2 /* ServiceAPI.swift */,
 			);
 			path = SocialApp;
 			sourceTree = "<group>";
@@ -340,17 +343,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3508E23A211281940036E4A2 /* ServiceAPI.swift in Sources */,
 				8AC2A39E22D90C9000B72551 /* UIViewController+ExampleApps.swift in Sources */,
 				8AC2A39822D9088400B72551 /* AccountManager.swift in Sources */,
 				7D89C9D61FFE82F400AE1EF4 /* LandingViewController.swift in Sources */,
 				7D073C092029F60200E163E4 /* UserInfoViewController.swift in Sources */,
+				8A10574B2304D10300B764C2 /* DemoAppAppDelegate.swift in Sources */,
 				8AC2A39322D8F30900B72551 /* AppTheme.swift in Sources */,
 				7D43BF902024FA6700B9BE41 /* JsonDocument.swift in Sources */,
 				8AC2A39422D8F39D00B72551 /* Extensions.swift in Sources */,
 				3585D5C621121AAF00745B87 /* SignUpViewController.swift in Sources */,
 				8AC2A39222D8F1FE00B72551 /* BuildInfoUtilities.swift in Sources */,
 				7D89C9D41FFE82F400AE1EF4 /* AppDelegate.swift in Sources */,
+				8A1057492304D0E700B764C2 /* ServiceAPI.swift in Sources */,
 				660B0F432130AA890066DEF4 /* SupportVerifyViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

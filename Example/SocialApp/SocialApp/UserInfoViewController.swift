@@ -70,7 +70,7 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = AppTheme.themeColor
         button.setTitle("Log Out", for: .normal)
-        button.addTarget(self, action: #selector(logout), for: .touchUpInside)
+        button.addTarget(self, action: #selector(logoutPressed), for: .touchUpInside)
         return button
     }()
     
@@ -216,10 +216,8 @@ class UserInfoViewController: UIViewController,MKMapViewDelegate {
         selectedPin.openInMaps(launchOptions: launchOptions)
     }
 
-    @IBAction func logout() {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.logout()
-        }
+    @IBAction func logoutPressed() {
+        logout()
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?{
