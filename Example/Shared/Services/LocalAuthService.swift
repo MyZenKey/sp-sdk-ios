@@ -12,6 +12,7 @@ struct AuthPayload {
     let token: String
 }
 struct UserInfo {
+    let username: String
     let email: String?
     let name: String?
     let givenName: String?
@@ -27,8 +28,23 @@ enum TransactionError: Error {
     case mismatchedTransaction
 }
 
+enum LoginError: Error {
+    case invalidCredentials
+}
+
 protocol ServiceAPIProtocol {
     func login(
+        withAuthCode code: String,
+        mcc: String,
+        mnc: String,
+        completion: @escaping (AuthPayload?, Error?) -> Void)
+
+    func login(
+        withUsername username: String,
+        password: String,
+        completion: @escaping (AuthPayload?, Error?) -> Void)
+
+    func addSecondFactor(
         withAuthCode code: String,
         mcc: String,
         mnc: String,
@@ -95,8 +111,9 @@ struct UserInfoResponse: Codable {
         case postalCode = "postal_code"
     }
 
-    fileprivate var toUserInfo: UserInfo {
+    fileprivate func toUserInfo(withUsername username: String) -> UserInfo {
         return UserInfo(
+            username: username,
             email: email,
             name: name,
             givenName: givenName,
@@ -179,7 +196,37 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
         }
     }
 
+    func login(
+        withUsername username: String,
+        password: String,
+        completion: @escaping (AuthPayload?, Error?) -> Void) {
+        guard username == "jane", password == "12345" else {
+            completion(nil, LoginError.invalidCredentials)
+            return
+        }
+
+        UserAccountStorage.userName = ClientSideServiceAPI.mockUserName
+        DispatchQueue.main.async {
+            completion(AuthPayload(token: "my_pretend_auth_token"), nil)
+        }
+    }
+
+    func addSecondFactor(
+        withAuthCode code: String,
+        mcc: String,
+        mnc: String,
+        completion: @escaping (AuthPayload?, Error?) -> Void) {
+
+        login(withAuthCode: code, mcc: mcc, mnc: mnc, completion: completion)
+    }
+
     func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void) {
+
+        guard !isMockUser else {
+            completion(ClientSideServiceAPI.mockUserInfo, nil)
+            return
+        }
+
         guard
             let token = UserAccountStorage.accessToken,
             let mccmnc = UserAccountStorage.mccmnc else {
@@ -196,7 +243,9 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
                     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
                     request.addValue("Accept", forHTTPHeaderField: "application/json")
                     sself.requestJSON(request: request) { (userInfoResponse: UserInfoResponse?, error: Error?) in
-                        completion(userInfoResponse?.toUserInfo, error)
+                        let userInfo = userInfoResponse?
+                            .toUserInfo(withUsername: UserAccountStorage.userName ?? "projectverify_user")
+                        completion(userInfo, error)
                     }
         }
     }
@@ -259,6 +308,22 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
 }
 
 private extension ClientSideServiceAPI {
+
+    static let mockUserName = "jane"
+
+    static let mockUserInfo = UserInfo(
+        username: ClientSideServiceAPI.mockUserName,
+        email: "janedoe@rightpoint.com",
+        name: "Jane",
+        givenName: "Jane",
+        familyName: "Doe",
+        birthdate: "1/1/1000",
+        postalCode: "00000"
+    )
+
+    var isMockUser: Bool {
+        return UserAccountStorage.userName == ClientSideServiceAPI.mockUserName
+    }
 
     func getOIDC(mcc: String,
                  mnc: String,

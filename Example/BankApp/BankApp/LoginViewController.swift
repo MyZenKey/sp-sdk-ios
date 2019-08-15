@@ -47,7 +47,7 @@ class LoginViewController: UIViewController {
         button.borderWidth = 1.0
         button.borderColor = .white
         button.setTitle("SIGN IN", for: .normal)
-        button.addTarget(self, action: #selector(signInWithVerifyTouched(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
         return button
     }()
     
@@ -56,7 +56,7 @@ class LoginViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Register", for: .normal)
         button.contentHorizontalAlignment = .right
-        button.addTarget(self, action: #selector(signInWithVerifyTouched(_:)), for: .touchUpInside)
+        // Button disabled until register flow story
         return button
     }()
     
@@ -104,20 +104,22 @@ class LoginViewController: UIViewController {
         layoutView()
     }
 
-    @objc func loginButtonTouched(_ sender: Any) {
-        // TODO: see UX section 2.3.1 in design doc
-        // Does SP have this ID associated with CCID (Verify)?
-        //   No - show Enable Verify screen, then go to sub-flow 2.0.3 in Verify
-        //   Yes - go directly to sub-flow 2.0.3 in Verify
-        self.navigationController?.pushViewController(EnableVerifyViewController(), animated: true)
-    }
-    
-    @objc func signInWithVerifyTouched(_ sender: Any) {
-        // TODO: see UX section 2.3.1 in design doc
-        // Does SP have this ID associated with CCID (Verify)?
-        //   No - show Enable Verify screen, then go to sub-flow 2.0.3 in Verify
-        //   Yes - go directly to sub-flow 2.0.3 in Verify
-        self.navigationController?.pushViewController(EnableVerifyViewController(), animated: true)
+    @objc func signInButtonPressed() {
+        clientSideServiceAPI.login(
+            withUsername: idTextField.text?.lowercased() ?? "",
+            password: passwordTextField.text?.lowercased() ?? "") { [weak self] auth, error in
+
+                guard let auth = auth, error == nil else {
+                    self?.showAlert(
+                        title: "Enter User Name and password",
+                        message: "You must enter your user name and password to log in.\nHint: try username: jane and password: 12345"
+                    )
+                    return
+                }
+                AccountManager.login(withToken: auth.token)
+                self?.navigationController?
+                    .pushViewController(EnableVerifyViewController(), animated: true)
+        }
     }
 
     @objc func toggleHost(_ sender: Any) {

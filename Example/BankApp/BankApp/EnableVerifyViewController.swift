@@ -45,7 +45,7 @@ class EnableVerifyViewController: BankAppViewController {
     lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
         let button = ProjectVerifyAuthorizeButton()
         button.style = .dark
-        let scopes: [Scope] = [.openid, .authenticate, .name, .email, .phone, .postalCode]
+        let scopes: [Scope] = [.openid, .secondFactor]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.delegate = self
@@ -112,7 +112,7 @@ extension EnableVerifyViewController: ProjectVerifyAuthorizeButtonDelegate {
 
     func authorizeUser(authorizedResponse: AuthorizedResponse) {
         let code = authorizedResponse.code
-        clientSideServiceAPI.login(
+        clientSideServiceAPI.addSecondFactor(
             withAuthCode: code,
             mcc: authorizedResponse.mcc,
             mnc: authorizedResponse.mnc,

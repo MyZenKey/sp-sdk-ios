@@ -10,6 +10,7 @@ import Foundation
 
 // NOTE: Never store sensetive credentials in UserDefaults, always use the keychain.
 struct UserAccountStorage {
+    private static let userNameKey =  "UserAccountStorage.username"
     private static let accountKey =  "UserAccountStorage"
     private static let mccKey =  "UserAccountStorage.mcc"
     private static let mncKey =  "UserAccountStorage.mnc"
@@ -35,6 +36,15 @@ struct UserAccountStorage {
     static func setMCCMNC(mcc: String, mnc: String) {
         UserDefaults.standard.set(mcc, forKey: mccKey)
         UserDefaults.standard.set(mnc, forKey: mncKey)
+    }
+
+    static var userName: String? {
+        get {
+            return UserDefaults.standard.string(forKey: userNameKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: userNameKey)
+        }
     }
 
     static var idToken: String? {
@@ -69,5 +79,6 @@ struct UserAccountStorage {
         UserDefaults.standard.removeObject(forKey: accountKey)
         UserDefaults.standard.removeObject(forKey: mccKey)
         UserDefaults.standard.removeObject(forKey: mncKey)
+        UserDefaults.standard.removeObject(forKey: userNameKey)
     }
 }
