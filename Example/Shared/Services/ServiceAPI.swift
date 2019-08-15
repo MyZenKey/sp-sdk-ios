@@ -46,27 +46,12 @@ class ServiceAPI: NSObject {
         // but instead be used as the basis for accessing or creating a token within
         // the domain of your application.
 
-        var request = URLRequest(url: URL(string: "https://xci-demoapp-node.raizlabs.xyz/api/auth")!)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try! JSONSerialization.data(withJSONObject: [
-            "code": code,
-            "mcc": mcc,
-            "mnc": mnc,
-            ], options: [])
-
-        let dataTask = session.dataTask(with: request) { (data, response, error) in
-            guard error == nil, let data = data else {
-                tokenResponse(nil, error)
-                return
-            }
-
-            let json = JsonDocument(data: data)
+        DispatchQueue.main.async {
+            let json = JsonDocument(object: [
+                "token": "my_pretend_auth_token"
+            ])
             tokenResponse(json, nil)
         }
-
-        self.dataTask = dataTask
-        dataTask.resume()
     }
 
 
