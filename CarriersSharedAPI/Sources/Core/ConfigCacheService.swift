@@ -19,6 +19,36 @@ protocol ConfigCacheServiceProtocol {
     /// Retrieves a record for the provided identifier or nil from the cache. If a record is stale
     /// nil will be returned.
     func config(forSIMInfo simInfo: SIMInfo) -> OpenIdConfig?
+    /// Adds an action to the list of cache observers. The action is triggered every time the cache
+    /// changes.
+    ///
+    /// - Parameter action: the action to perform on each change
+    /// - Returns: the observer value. Hold a strong reference to this value – the chahe will only
+    /// hold a weak reference.
+    func addCacheObserver(_ action: @escaping CacheObserver.Action) -> CacheObserver
+}
+
+class CacheObserver {
+    typealias Action = (SIMInfo) -> Void
+
+    private var isCancelled = false
+
+    private let action: CacheObserver.Action
+
+    init(_ action: @escaping CacheObserver.Action) {
+        self.action = action
+    }
+
+    func onChange(forSIMInfo simInfo: SIMInfo) {
+        guard !isCancelled else {
+            return
+        }
+        action(simInfo)
+    }
+
+    func cancel() {
+        isCancelled = true
+    }
 }
 
 /// Note: this class is not thread safe and assumes single threaded access
@@ -29,6 +59,7 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
     private var cacheTimeStamps: [String: Date] = [:]
 
     private var cache: [String: OpenIdConfig] = [:]
+    private var cacheObservers: NSHashTable = NSHashTable<CacheObserver>(options: .weakMemory)
 
     private let networkIdentifierCache: NetworkIdentifierCache
 
@@ -40,6 +71,8 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
         let identifier = identifer(forSIMInfo: simInfo)
         cacheTimeStamps[identifier] = Date()
         cache[identifier] = config
+        cacheObservers.allObjects
+            .forEach({ $0.onChange(forSIMInfo: simInfo) })
     }
 
     func config(forSIMInfo simInfo: SIMInfo) -> OpenIdConfig? {
@@ -55,6 +88,12 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
         }
 
         return cachedValue
+    }
+
+    func addCacheObserver(_ action: @escaping CacheObserver.Action) -> CacheObserver {
+        let observer = CacheObserver(action)
+        cacheObservers.add(observer)
+        return observer
     }
 
     private func identifer(forSIMInfo simInfo: SIMInfo) -> String {

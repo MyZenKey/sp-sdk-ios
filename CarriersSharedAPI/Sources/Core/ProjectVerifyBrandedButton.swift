@@ -271,7 +271,6 @@ extension ProjectVerifyBrandedButton {
 
 private extension ProjectVerifyBrandedButton {
     func configureButton() {
-
         adjustsImageWhenHighlighted = false
         adjustsImageWhenDisabled = false
 
@@ -279,7 +278,11 @@ private extension ProjectVerifyBrandedButton {
 
         titleLabel?.lineBreakMode = .byTruncatingTail
 
-        branding = brandingProvider.branding
+        brandingProvider.brandingDidChange = { [weak self] branding in
+            self?.branding = branding
+
+        }
+        branding = brandingProvider.buttonBranding
 
         if bounds.isEmpty {
             sizeToFit()
