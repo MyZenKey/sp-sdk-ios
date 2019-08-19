@@ -11,11 +11,11 @@ import CoreTelephony
 
 protocol MobileNetworkInfoProvider: AnyObject {
 
-    typealias NetworkInfoUpdateHanlder = ([SIMInfo]) -> Void
+    typealias NetworkInfoUpdateHandler = ([SIMInfo]) -> Void
 
     var currentSIMs: [SIMInfo] { get }
 
-    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?)
+    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHandler?)
 }
 
 extension CTTelephonyNetworkInfo: MobileNetworkInfoProvider {
@@ -41,7 +41,7 @@ extension CTTelephonyNetworkInfo: MobileNetworkInfoProvider {
         }
     }
 
-    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?) {
+    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHandler?) {
         let notifer: () -> Void = { [weak self] in
             DispatchQueue.main.async {
                 onNetworkInfoDidUpdate?(self?.currentSIMs ?? [])
@@ -59,9 +59,9 @@ extension CTTelephonyNetworkInfo: MobileNetworkInfoProvider {
 #if DEBUG
 
 class MockATTNetworkInfoProvider: MobileNetworkInfoProvider {
-    var onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?
     let currentSIMs: [SIMInfo] = [SIMInfo(mcc: "310", mnc: "007")]
-    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?) { }
+    var onNetworkInfoDidUpdate: NetworkInfoUpdateHandler?
+    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHandler?) { }
 }
 
 #endif

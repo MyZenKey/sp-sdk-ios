@@ -50,7 +50,7 @@ class Dependencies {
 
         #if os(iOS)
             let carrierInfoService = CarrierInfoService(
-                mobileNetworkInfoProvder: CTTelephonyNetworkInfo()
+                mobileNetworkInfoProvider: CTTelephonyNetworkInfo()
             )
 
             let mobileNetworkSelectionService = MobileNetworkSelectionService(

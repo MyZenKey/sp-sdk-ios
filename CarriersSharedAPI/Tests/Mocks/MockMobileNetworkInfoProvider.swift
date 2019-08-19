@@ -11,10 +11,10 @@ import CoreTelephony
 @testable import CarriersSharedAPI
 
 class MockMobileNetworkInfoProvider: MobileNetworkInfoProvider {
-    var onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?
+    var onNetworkInfoDidUpdate: NetworkInfoUpdateHandler?
     var currentSIMs: [SIMInfo] = []
 
-    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHanlder?) {
+    func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHandler?) {
         self.onNetworkInfoDidUpdate = onNetworkInfoDidUpdate
     }
 
