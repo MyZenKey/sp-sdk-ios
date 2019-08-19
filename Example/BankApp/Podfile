@@ -1,8 +1,7 @@
-# Uncomment the next line to define a global platform for your project
- platform :ios, '10.3'
+platform :ios, '10.3'
+install! 'cocoapods', :share_schemes_for_development_pods => true
 
 target 'BankApp' do
   use_frameworks!
-  # Pods for BankApp
-  pod 'CarriersSharedAPI', path: '../../CarriersSharedAPI.podspec'
+  pod 'CarriersSharedAPI', path: '../../CarriersSharedAPI.podspec', testspecs: ['Tests']
 end
