@@ -8,8 +8,8 @@
 
 import Foundation
 
-enum Carrier: Equatable {
-    case att, tmobile, verizon, sprint, unknown
+public enum Carrier: String, Equatable {
+    case att, tmobile, verizon, sprint
 
     var shortName: String {
         switch self {
@@ -17,7 +17,6 @@ enum Carrier: Equatable {
         case .tmobile: return "tmo"
         case .verizon: return "vzn"
         case .sprint: return "spt"
-        case .unknown: return "unknown"
         }
     }
 }
@@ -44,8 +43,8 @@ struct NetworkIdentifierCache {
         self.identifiersByCarrier = identifiersByCarrier
     }
 
-    func carrier(forMcc mcc: String, mnc: String) -> Carrier {
-        var matchedCarrier: Carrier = .unknown
+    func carrier(forMcc mcc: String, mnc: String) -> Carrier? {
+        var matchedCarrier: Carrier? = nil
         // use for loop to exit early:
         // swiftlint:disable:next unused_enumerated
         for (_, element) in identifiersByCarrier.enumerated() {
