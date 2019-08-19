@@ -80,39 +80,8 @@ class Dependencies {
                 authorizationServiceFactoryIOS,
                 brandingProvider,
             ]
-        #elseif os(tvOS)
-
-        // TODO: tvOS Network Selection UI
-//        let mobileNetworkSelectionService = MobileNetworkSelectionService(
-//            sdkConfig: self.sdkConfig,
-//            mobileNetworkSelectionUI: MobileNetworkSelectionUIIOS()
-//        )
-
-        // TOOD: tvOS OpenIDURLResolver
-//        let openIdService = OpenIdService(
-//            urlResolver: OpenIdURLResolverIOS()
-//        )
-
-        // TODO: tvOS Authorization Service Factory
-//        let iosAuthorizationServiceFactory = AuthorizationServiceIOSFactory()
-
-        // TODO: tvOS Branding Provider
-//        let brandingProvider = CurrentSIMBrandingProvider(
-//            configCacheService: configCacheService,
-//            carrierInfoService: carrierInfoService
-//        )
-
-        all = [
-            sdkConfig,
-            hostConfig,
-            configCacheService,
-            discoveryService,
-//            mobileNetworkSelectionService,
-//            openIdService,
-//            iosAuthorizationServiceFactory,
-//            brandingProvider,
-        ]
-
+        #else
+            fatalError("Currently only supports iOS.")
         #endif
     }
 }
