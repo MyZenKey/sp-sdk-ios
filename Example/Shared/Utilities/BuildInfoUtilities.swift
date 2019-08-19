@@ -30,6 +30,10 @@ struct BuildInfo {
         if isQAHost {
             options[.qaHost] = true
         }
+        if let mockCarrier = ProcessInfo.processInfo.environment["ZENKEY_MOCK_CARRIER"],
+            let value = Carrier(rawValue: mockCarrier) {
+            options[.mockedCarrier] = value
+        }
         options[.logLevel] = Log.Level.info
         return options
     }

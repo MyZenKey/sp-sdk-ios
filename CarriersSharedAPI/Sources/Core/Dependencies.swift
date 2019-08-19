@@ -14,6 +14,7 @@ import CoreTelephony
 public enum ProjectVerifyOptionKeys: String {
     case qaHost
     case logLevel
+    case mockedCarrier
 }
 
 public typealias ProjectVerifyOptions = [ProjectVerifyOptionKeys: Any]
@@ -50,7 +51,7 @@ class Dependencies {
 
         #if os(iOS)
             let carrierInfoService = CarrierInfoService(
-                mobileNetworkInfoProvider: CTTelephonyNetworkInfo()
+                mobileNetworkInfoProvider: resolveNetworkInfoProvider()
             )
 
             let mobileNetworkSelectionService = MobileNetworkSelectionService(
@@ -93,6 +94,21 @@ extension Dependencies {
             fatalError("attemtping to resolve a dependency of type \(T.self) that doesn't exist")
         }
         return resolved
+    }
+}
+
+private extension Dependencies {
+    func resolveNetworkInfoProvider() -> MobileNetworkInfoProvider {
+        #if DEBUG
+        if let mockedCarrier = options[.mockedCarrier] as? Carrier {
+            return MockSIMNetworkInfoProvider(carrier: mockedCarrier)
+        }
+        else {
+            return CTTelephonyNetworkInfo()
+        }
+        #else
+        return CTTelephonyNetworkInfo()
+        #endif
     }
 }
 

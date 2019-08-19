@@ -58,9 +58,17 @@ extension CTTelephonyNetworkInfo: MobileNetworkInfoProvider {
 
 #if DEBUG
 
-class MockATTNetworkInfoProvider: MobileNetworkInfoProvider {
-    let currentSIMs: [SIMInfo] = [SIMInfo(mcc: "310", mnc: "007")]
+class MockSIMNetworkInfoProvider: MobileNetworkInfoProvider {
     var onNetworkInfoDidUpdate: NetworkInfoUpdateHandler?
+    let currentSIMs: [SIMInfo]
+    init(carrier: Carrier) {
+        switch carrier {
+        case .att: currentSIMs = [SIMInfo(mcc: "310", mnc: "007")]
+        case .sprint: currentSIMs = [SIMInfo(mcc: "310", mnc: "120")]
+        case .verizon: currentSIMs = [SIMInfo(mcc: "310", mnc: "010")]
+        case .tmobile: currentSIMs = [SIMInfo(mcc: "310", mnc: "160")]
+        }
+    }
     func subscribeToNetworkInfoChanges(onNetworkInfoDidUpdate: NetworkInfoUpdateHandler?) { }
 }
 
