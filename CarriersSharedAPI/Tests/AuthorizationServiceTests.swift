@@ -22,8 +22,6 @@ class AuthorizationServiceTests: XCTestCase {
         redirectScheme: "pvmockCLient://"
     )
 
-    let networkIdentifierCache =  NetworkIdentifierCache.bundledCarrierLookup
-
     lazy var authorizationService = authorizationServiceFactory()
 
     let scopes: [Scope] = [.openid, .address, .address, .email]

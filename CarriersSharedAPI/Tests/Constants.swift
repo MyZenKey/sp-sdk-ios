@@ -76,8 +76,7 @@ extension AuthorizationError {
 
 extension OpenIdConfig {
     static var mocked: OpenIdConfig {
-        return OpenIdConfig(tokenEndpoint: URL.mocked,
-                            authorizationEndpoint: URL.mocked,
+        return OpenIdConfig(authorizationEndpoint: URL.mocked,
                             issuer: URL.mocked)
     }
 }

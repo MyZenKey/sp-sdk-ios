@@ -39,9 +39,12 @@ class MockConfigCacheService: ConfigCacheServiceProtocol {
     }
 
     private static func newImplementation() -> ConfigCacheService {
-        return ConfigCacheService(
-            networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
-        )
+        return ConfigCacheService()
+    }
+
+    func addCacheObserver(_ action: @escaping CacheObserver.Action) -> CacheObserver {
+        // TODO: -
+        return CacheObserver({ _ in })
     }
 }
 
@@ -154,7 +157,6 @@ class DiscoveryServiceTests: XCTestCase {
         let error = NSError(domain: "", code: 1, userInfo: [:])
         mockNetworkService.mockError(.networkError(error))
         let expectedConfig = OpenIdConfig(
-            tokenEndpoint: URL.mocked,
             authorizationEndpoint: URL.mocked,
             issuer: URL.mocked
         )
@@ -201,7 +203,6 @@ class DiscoveryServiceTests: XCTestCase {
             let expectedResult = CarrierConfig(
                 simInfo: MockSIMs.tmobile,
                 openIdConfig: OpenIdConfig(
-                    tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
                     authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
                     issuer: URL(string: "https://brass.account.t-mobile.com")!
                 )
@@ -236,7 +237,6 @@ class DiscoveryServiceTests: XCTestCase {
             let expectedResult = CarrierConfig(
                 simInfo: MockSIMs.tmobile,
                 openIdConfig: OpenIdConfig(
-                    tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
                     authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
                     issuer: URL(string: "https://brass.account.t-mobile.com")!
                 )
@@ -264,7 +264,6 @@ class DiscoveryServiceTests: XCTestCase {
                 let config = try! UnwrapAndAssertNotNil(result.carrierConfig)
 
                 let expectedResult = OpenIdConfig(
-                    tokenEndpoint: URL(string: "https://brass.account.t-mobile.com/tms/v3/usertoken")!,
                     authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
                     issuer: URL(string: "https://brass.account.t-mobile.com")!
                 )

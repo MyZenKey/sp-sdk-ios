@@ -61,12 +61,6 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
     private var cache: [String: OpenIdConfig] = [:]
     private var cacheObservers: NSHashTable = NSHashTable<CacheObserver>(options: .weakMemory)
 
-    private let networkIdentifierCache: NetworkIdentifierCache
-
-    init(networkIdentifierCache: NetworkIdentifierCache) {
-        self.networkIdentifierCache = networkIdentifierCache
-    }
-
     func cacheConfig(_ config: OpenIdConfig, forSIMInfo simInfo: SIMInfo) {
         let identifier = identifer(forSIMInfo: simInfo)
         cacheTimeStamps[identifier] = Date()

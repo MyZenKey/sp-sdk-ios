@@ -19,13 +19,8 @@ struct SIMInfo: Equatable {
 }
 
 extension SIMInfo {
-
     /// a string with the format '{mcc}{mnc}'
     var networkString: String {
         return "\(mcc)\(mnc)"
-    }
-
-    func carrier(usingCarrierLookUp cache: NetworkIdentifierCache) -> Carrier? {
-        return cache.carrier(forMcc: mcc, mnc: mnc)
     }
 }

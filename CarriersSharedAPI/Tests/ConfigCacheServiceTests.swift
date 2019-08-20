@@ -51,15 +51,12 @@ class ConfigCacheServiceTests: XCTestCase {
     }
 
     private static func newConfigCacheService() -> ConfigCacheService {
-        return ConfigCacheService(
-            networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
-        )
+        return ConfigCacheService()
     }
 
     private func randomMockOIDConfig() -> OpenIdConfig {
         let value = Int.random(in: 0..<100)
         return OpenIdConfig(
-            tokenEndpoint: URL(string: "xci://?foo=\(value)")!,
             authorizationEndpoint: URL(string: "xci://?bar=\(value)")!,
             issuer: URL(string: "xci://?bah=\(value)")!
         )

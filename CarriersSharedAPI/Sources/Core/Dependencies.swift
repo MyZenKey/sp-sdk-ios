@@ -48,13 +48,11 @@ class Dependencies {
         }
 
         // config cache service will be a shared resource:
-        register(type: ConfigCacheServiceProtocol.self, scope: .singleton) { container in
-            return ConfigCacheService(
-                networkIdentifierCache: NetworkIdentifierCache.bundledCarrierLookup
-            )
+        register(type: ConfigCacheServiceProtocol.self, scope: .singleton) { _ in
+            return ConfigCacheService()
         }
 
-        register(type: NetworkServiceProtocol.self) { container in
+        register(type: NetworkServiceProtocol.self) { _ in
             return NetworkService()
         }
 
@@ -74,24 +72,24 @@ class Dependencies {
 
             register(type: CarrierInfoServiceProtocol.self) { container in
                 return CarrierInfoService(
-                    mobileNetworkInfoProvder: container.resolve()
+                    mobileNetworkInfoProvider: container.resolve()
                 )
             }
 
-            register(type: MobileNetworkSelectionServiceProtocol.self) { container in
+            register(type: MobileNetworkSelectionServiceProtocol.self) { _ in
                 return MobileNetworkSelectionService(
                     sdkConfig: self.sdkConfig,
                     mobileNetworkSelectionUI: WebBrowserUI()
                 )
             }
 
-            register(type: OpenIdServiceProtocol.self) { container in
+            register(type: OpenIdServiceProtocol.self) { _ in
                 return OpenIdService(
                     urlResolver: OpenIdURLResolverIOS()
                 )
             }
 
-            register(type: AuthorizationServiceFactory.self) { container in
+            register(type: AuthorizationServiceFactory.self) { _ in
                 return AuthorizationServiceIOSFactory()
             }
 
@@ -162,7 +160,10 @@ extension Dependencies {
             fatalError("attemtping to resolve a dependency of type \(T.self) that doesn't exist")
         }
 
-        // FIXME: support optionals
+        // FIXME: support optionals or remove type inferrence api
+        // currently this type infrence doesn't support inferring the wrapped inner out of an
+        // optional type – it will fail with a fatal error. use a non-optional typed var as a work
+        // around in the mean time.
         guard let typedValue = dependency.value as? T else {
             fatalError("attemtping to resolve a dependency of type \(T.self) that doesn't exist")
         }

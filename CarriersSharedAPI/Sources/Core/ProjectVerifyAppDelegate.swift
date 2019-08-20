@@ -29,7 +29,6 @@ public class ProjectVerifyAppDelegate {
 
     private var discoveryService: DiscoveryServiceProtocol!
     
-
     /// The entry point for the ProjectVerifyLogin SDK. You should call this method during your
     /// applicaiton's `application(_:didFinishLaunchingWithOptions:)` method before returning.
     ///
@@ -100,7 +99,7 @@ private extension ProjectVerifyAppDelegate {
             return
         }
 
-        Log.log(.verbose, "Prefetching discovery")
+        Log.log(.verbose, "Pre-fetching discovery")
         discoveryService.discoverConfig(
             forSIMInfo: simInfo,
             prompt: false

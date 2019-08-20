@@ -14,7 +14,6 @@ class MockDiscoveryService: DiscoveryServiceProtocol {
     static let mockSuccess = CarrierConfig(
         simInfo: MockSIMs.tmobile,
         openIdConfig: OpenIdConfig(
-            tokenEndpoint: URL.mocked,
             authorizationEndpoint: URL.mocked,
             issuer: URL.mocked
         )

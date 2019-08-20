@@ -21,9 +21,6 @@ extension CarrierInfoServiceProtocol {
 
 class CarrierInfoService: CarrierInfoServiceProtocol {
     var primarySIM: SIMInfo? {
-
-        return SIMInfo(mcc: "310", mnc: "380")
-
         guard sims.count > 0 else {
             return nil
         }
