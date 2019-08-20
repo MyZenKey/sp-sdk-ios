@@ -26,7 +26,7 @@ struct MockCodes {
 
 class SIMInfoTests: XCTestCase {
 
-    func carrierUsingBundledLookup(_ simInfo: SIMInfo) -> Carrier {
+    func carrierUsingBundledLookup(_ simInfo: SIMInfo) -> Carrier? {
         return simInfo.carrier(usingCarrierLookUp: NetworkIdentifierCache.bundledCarrierLookup)
     }
 
@@ -52,12 +52,12 @@ class SIMInfoTests: XCTestCase {
 
     func testCreatesUnknownCode() {
         let info = SIMInfo(mcc: "999", mnc: "333")
-        XCTAssertEqual(carrierUsingBundledLookup(info), .unknown)
+        XCTAssertNil(carrierUsingBundledLookup(info))
     }
 
     func testDoesntRecognizeInvalidComboInfo() {
         let incorrectInfo = SIMInfo(mcc: MockCodes.MCC.secondaryUS, mnc: MockCodes.MNC.verizon)
-        XCTAssertEqual(carrierUsingBundledLookup(incorrectInfo), .unknown)
+        XCTAssertNil(carrierUsingBundledLookup(incorrectInfo))
 
         let correctInfo = SIMInfo(mcc: MockCodes.MCC.secondaryUS, mnc: MockCodes.MNC.secondaryVerizon)
         XCTAssertEqual(carrierUsingBundledLookup(correctInfo), .verizon)

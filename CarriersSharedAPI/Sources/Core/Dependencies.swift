@@ -14,6 +14,7 @@ import CoreTelephony
 public enum ProjectVerifyOptionKeys: String {
     case qaHost
     case logLevel
+    case mockedCarrier
 }
 
 public typealias ProjectVerifyOptions = [ProjectVerifyOptionKeys: Any]
@@ -50,7 +51,7 @@ class Dependencies {
 
         #if os(iOS)
             let carrierInfoService = CarrierInfoService(
-                mobileNetworkInfoProvder: CTTelephonyNetworkInfo()
+                mobileNetworkInfoProvider: resolveNetworkInfoProvider()
             )
 
             let mobileNetworkSelectionService = MobileNetworkSelectionService(
@@ -80,39 +81,8 @@ class Dependencies {
                 authorizationServiceFactoryIOS,
                 brandingProvider,
             ]
-        #elseif os(tvOS)
-
-        // TODO: tvOS Network Selection UI
-//        let mobileNetworkSelectionService = MobileNetworkSelectionService(
-//            sdkConfig: self.sdkConfig,
-//            mobileNetworkSelectionUI: MobileNetworkSelectionUIIOS()
-//        )
-
-        // TOOD: tvOS OpenIDURLResolver
-//        let openIdService = OpenIdService(
-//            urlResolver: OpenIdURLResolverIOS()
-//        )
-
-        // TODO: tvOS Authorization Service Factory
-//        let iosAuthorizationServiceFactory = AuthorizationServiceIOSFactory()
-
-        // TODO: tvOS Branding Provider
-//        let brandingProvider = CurrentSIMBrandingProvider(
-//            configCacheService: configCacheService,
-//            carrierInfoService: carrierInfoService
-//        )
-
-        all = [
-            sdkConfig,
-            hostConfig,
-            configCacheService,
-            discoveryService,
-//            mobileNetworkSelectionService,
-//            openIdService,
-//            iosAuthorizationServiceFactory,
-//            brandingProvider,
-        ]
-
+        #else
+            fatalError("Currently only supports iOS.")
         #endif
     }
 }
@@ -124,6 +94,21 @@ extension Dependencies {
             fatalError("attemtping to resolve a dependency of type \(T.self) that doesn't exist")
         }
         return resolved
+    }
+}
+
+private extension Dependencies {
+    func resolveNetworkInfoProvider() -> MobileNetworkInfoProvider {
+        #if DEBUG
+        if let mockedCarrier = options[.mockedCarrier] as? Carrier {
+            return MockSIMNetworkInfoProvider(carrier: mockedCarrier)
+        }
+        else {
+            return CTTelephonyNetworkInfo()
+        }
+        #else
+        return CTTelephonyNetworkInfo()
+        #endif
     }
 }
 

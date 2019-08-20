@@ -25,7 +25,7 @@ extension SIMInfo {
         return "\(mcc)\(mnc)"
     }
 
-    func carrier(usingCarrierLookUp cache: NetworkIdentifierCache) -> Carrier {
+    func carrier(usingCarrierLookUp cache: NetworkIdentifierCache) -> Carrier? {
         return cache.carrier(forMcc: mcc, mnc: mnc)
     }
 }

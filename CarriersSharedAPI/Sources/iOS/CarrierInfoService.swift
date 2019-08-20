@@ -27,18 +27,18 @@ class CarrierInfoService: CarrierInfoServiceProtocol {
         return sims[0]
     }
 
-    private let mobileNetworkInfoProvder: MobileNetworkInfoProvider
+    private let mobileNetworkInfoProvider: MobileNetworkInfoProvider
     private var sims: [SIMInfo]
 
-    init(mobileNetworkInfoProvder: MobileNetworkInfoProvider) {
-        self.mobileNetworkInfoProvder = mobileNetworkInfoProvder
-        self.sims = mobileNetworkInfoProvder.currentSIMs
-        mobileNetworkInfoProvder.subscribeToNetworkInfoChanges() { [weak self] newSIMs in
+    init(mobileNetworkInfoProvider: MobileNetworkInfoProvider) {
+        self.mobileNetworkInfoProvider = mobileNetworkInfoProvider
+        self.sims = mobileNetworkInfoProvider.currentSIMs
+        mobileNetworkInfoProvider.subscribeToNetworkInfoChanges() { [weak self] newSIMs in
             self?.sims = newSIMs
         }
     }
 
     func refreshSIMs() {
-        self.sims = mobileNetworkInfoProvder.currentSIMs
+        self.sims = mobileNetworkInfoProvider.currentSIMs
     }
 }

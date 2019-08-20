@@ -16,7 +16,7 @@ class CarriersInfoServiceTests: XCTestCase {
 
     let mockNetworkProvider = MockMobileNetworkInfoProvider()
     lazy var carrerInfoService: CarrierInfoService =  CarrierInfoService(
-        mobileNetworkInfoProvder: self.mockNetworkProvider
+        mobileNetworkInfoProvider: self.mockNetworkProvider
     )
 
     override func setUp() {
