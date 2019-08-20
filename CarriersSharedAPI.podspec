@@ -30,15 +30,12 @@ TODO: Add long description of the pod here.
 
   # s.module_name = 'CarriersSharedAPI'
   s.ios.deployment_target = '10.0'
-  s.tvos.deployment_target = '10.0'
 
   s.ios.source_files = ['CarriersSharedAPI/Sources/Core/**/*', 'CarriersSharedAPI/Sources/iOS/**/*']
-  s.tvos.source_files = ['CarriersSharedAPI/Sources/Core/**/*', 'CarriersSharedAPI/Sources/tvOS/**/*']
   s.public_header_files = 'CarriersSharedAPI/**/*.h'
   s.resources = ['CarriersSharedAPI/Resources/*.xcassets', 'CarriersSharedAPI/Resources/*.lproj/*.strings']
 
   s.ios.frameworks = 'UIKit', 'SafariServices'
-  s.tvos.frameworks = 'UIKit'
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'CarriersSharedAPI/Tests/**/*.swift'
