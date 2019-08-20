@@ -4,21 +4,21 @@
 
 This guide is for developers integrating Project Verify with their iOS applications.
 
-## Background
+## 1.0 Background
 
 Project Verify is a joint undertaking of the Mobile Authentication Taskforce. The taskforce provides customers with the ability to use their mobile phone number to sign into apps. Project Verify is built on top of OpenID Connect (OIDC).
 
-### OpenID Connect
+### 1.1 OpenID Connect
 
 OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0 specification. It uses JSON Web Tokens (JWTs) that are obtained using OAuth 2.0 flows. You can read more about OIDC [here](https://openid.net/specs/openid-connect-core-1_0.html).
 
-### Authorization Code Flow and Carrier Discovery
+### 1.2 Authorization Code Flow and Carrier Discovery
 
 Project Verify SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to the carrier for authorization. Upon successful authorization, the user is redirected to your backend with an authorization code, which your backend exchanges for an ID token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
 
 Because each carrier operates its own authorization servers, we determine the user's carrier prior to authentication. This process is called Carrier Discovery (this is an OIDC Discovery with extra parameters). This ensures that the discovery document from Project Verify is for the correct carrier.
 
-### High Level Architecture
+### 1.3 High Level Architecture
 
 Project Verify brings the four main US phone carriers together with a common user authentication experience backed by carrier device authentication. The solution enables two main flows at initial launch (app and web). The app flow is for  service provider (SP) native apps or a SP-browser based websites that are on the same device as Project Verify. The web flow shows secondary device support when the SP website is accessed from a device other than a user’s primary phone.
 
@@ -37,18 +37,18 @@ The user receives a visual or numeric code with which to confirm their identity 
 Consumer verification and authorization flows to Carrier auth, the service provider backend, Project Verify platform and mobile carrier as follows:
 
 * Discovery
-* Auth code request, universal link captured
-* Sim and user authentication, explicit user consent (via the primary device)
-* Auth code returned, deep or universal link
+* Authorization code request, universal link captured
+* SIM and user authentication, explicit user consent (via the primary device)
+* Authorization code returned, deep or universal link
 * Service provider integrated clients
 * Token request
 * Userinfo mobile carrier resource
 
-## Getting Started
+## 2.0 Getting Started
 
 Before you integrate with Project Verify, register your application and obtain valid `clientId` and `clientSecret` from the portal or by contacting a Customer Operation Specialist. If you choose to use a custom redirect URI, then ensure that you specify a valid URI.  
 
-### Pre-Release Git Access
+### 2.1 Pre-Release Git Access
 
 While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
 
@@ -56,17 +56,17 @@ While the SDK is under development, we recommend maintaining the Provider SDK so
 git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 ```
 
-### Client Information and Scopes
+### 2.2 Client Information and Scopes
 
 Service providers decide how much client information they obtain from the user. In your setup, you can choose to have an experience with or without requiring a PIN or a biometric.
 
 Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented via OIDC and can be set to request profile information (such as email address, name, phone) to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
 
-## Add Project Verify SDK
+## 3.0 Add Project Verify SDK
 
 During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future.
 
-### CocoaPods
+### 3.1 CocoaPods
 
 You can include the ProjectVerifyLogin SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following to your Podfile.
 
@@ -76,15 +76,15 @@ You can include the ProjectVerifyLogin SDK in your project as a development Coco
 
 Then run `pod install`. This adds the local source to your application's workspace.
 
-### Carthage
+### 3.2 Carthage
 
 More information coming soon - *Carthage* may be supported in the future.
 
-### Adding Project Verify SDK Manually
+### 3.3 Adding Project Verify SDK Manually
 
 You can add the ProjectVerifyLogin SDK to your project manually:
 
-1. Retrieve the source code. We recommend adding it as a [submodule](#pre-release-git-access), but you may also copy the source into a directory manually. 
+1. Retrieve the source code. We recommend adding it as a [submodule](#pre-release-git-access), but you may also copy the source into a directory manually.
 
 1. Add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
 
@@ -94,11 +94,11 @@ You can add the ProjectVerifyLogin SDK to your project manually:
 
 1. Build and run to ensure that everything is working correctly.
 
-## Integration
+## 4.0 Integration
 
 To integrate Project Verify into your iOS application, configure your `Info.plist` with `ClientId` and instantiate Project Verify in your application delegate.  
 
-### Configure Property List
+### 4.1 Configure Property List
 
 Retrieve your application's `clientId` from the Project Verify dashboard. Add the following keys to *Info.plist* in your application:
 
@@ -120,7 +120,7 @@ Retrieve your application's `clientId` from the Project Verify dashboard. Add th
 	</array>
 ```
 
-### Using a Custom Redirect URI
+### 4.2 Using a Custom Redirect URI
 
 If you would like to use universal links for your redirect scheme, it is possible to configure a custom URL scheme and a custom URL host.
 
@@ -138,11 +138,11 @@ The following keys are made available for you to customize the structure of the 
 Redirect URLs will require the universal links to route the following paths to the application: `/authorize` and `/discoveryui`.
 For more information about universal links, read Apple's [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links).
 
-#### Project Verify Redirects
+#### 4.2.1 Project Verify Redirects
 
 We recommend that you use either the default URL scheme (your Project Verify client ID) or a universal linking scheme to support Project Verify redirects. Other URL schemes may be owned by other applications and can introduce unexpected behavior. For more information, view [Apple's documentation](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) on defining a custom URL scheme.
 
-## Instantiate Project Verify
+## 5.0 Instantiate Project Verify
 
 To support Project Verify, you must instantiate Project Verify in your application delegate:
 
@@ -176,11 +176,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 ```
 
-## Request Authorization Code
+## 6.0 Request Authorization Code
 
 The SDK provides a branded button called `ProjectVerifyAuthorizationButton` that automatically handles Project Verify authorization.
 
-### Add Verify Button
+### 6.1 Add Verify Button
 
 Add the Project Verify  `ProjectVerifyAuthorizationButton` to your UIView.
 
@@ -202,7 +202,7 @@ class LoginViewController {
 }
 ```
 
-#### Dark Button
+#### 6.1.1 Dark Button
 
 You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the Project Verify button uses the dark style specified as follows:
 
@@ -213,7 +213,7 @@ The dark button style looks like this:
 
  <img src="image/verify_button_dark.png" alt="Verify Button Dark" width="360">
 
-#### Light Button
+#### 6.1.2 Light Button
 
 A light button style is appropriate to use with dark backgrounds. For the light style, add the light parameter specified as follows:
 
@@ -224,7 +224,7 @@ The light button style looks like this:
 
 <img src="image/verify_button_light.png" alt="Verify Button Light" width="360">
 
-### Receive Callbacks
+### 6.2 Receive Callbacks
 
 In order to receive the outcome of your Project Verify request, implement the `ProjectVerifyAuthorizeButtonDelegate` and handle the events.
 
@@ -255,11 +255,11 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
 }
 ```
 
-### Request Parameters
+### 6.3 Request Parameters
 
 There are several parameters that you may wish to configure for your authorization request, as noted in this section.
 
-#### Scopes
+#### 6.3.1 Scopes
 
 By default, authorization requests made with the Project Verify SDK include the `OpenId` scope. To use additional scopes, set them on the button and they will be added to the request.
 
@@ -269,7 +269,7 @@ By default, authorization requests made with the Project Verify SDK include the 
 
 For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/blob/develop/CarriersSharedAPI/Sources/Core/Scope.swift).
 
-#### Additional Parameters
+#### 6.3.2 Additional Parameters
 
 Additionally, it is possible to configure the following parameters:
 
@@ -282,7 +282,7 @@ Additionally, it is possible to configure the following parameters:
 
 For more information about each of these parameters and instructions on how to use them, view the documentation for the `ProjectVerifyAuthorizeButton`.
 
-## Request Authorization Code Manually
+## 7.0 Request Authorization Code Manually
 
 For a more hands-on approach, you can perform a manual authorization request with `AuthorizationService`.
 Pass the code and associated identifiers to your secure server to complete the token request flow.
@@ -321,7 +321,7 @@ Refer to:
 * [Submodules](https://git-scm.com/docs/git-submodule)
 * [ProjectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
 
-## Error Handling
+## 8.0 Error Handling
 
 `AuthorizationError` defines the `ErrorType`, `code`, `description` and `errorType` to help the developer debug the error, as well present a description to the user. The `Error Type` identifies a class of error during the Authorization flow, such as`invalidRequest` or `requestDenied`. The developer can include further information, with `code` adding context for the origin of the error, `description` a possible explanation, and `errorType` a possible remedy.
 
@@ -338,7 +338,10 @@ The following table summarizes the `AuthorizationError` error types and potentia
 | discoveryStateError | There is an inconsistency with the user's state. | Try to perform the authorization request again. |
 | unknownError | An unknown error has occurred. | If the problem persists, contact support. |
 
-## Next Steps
+### 8.1 Debugging
+It is possible to enable logging by passing a value for the `.logLevel` key via the to the `projectVerifyOptions` parameter in the `ProjectVerifyAppDelegate`. For more information on the options, see the `Log.LogLevel` type.
+
+## 9.0 Next Steps
 
 On your secure server, perform discovery and use the discovered token endpoint to request an access token from Project Verify with the processes already detailed:
 
@@ -351,12 +354,14 @@ The token should be used as the basis for accessing or creating a token within t
 ## Support
 For technical questions, contact [support](mailto:techsupport@mobileauthtaskforce.com).
 
-### Debugging
-It is possible to enable logging by passing a value for the `.logLevel` key via the to the `projectVerifyOptions` parameter in the `ProjectVerifyAppDelegate`. For more information on the options, see the `Log.LogLevel` type.
-
 ## Proprietary and Confidential
 
 NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND CONFIDENTIAL. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT.  NO RECIPIENT MAY DISCLOSE, DISTRIBUTE, OR POST THIS DOCUMENT WITHOUT XCI JV, LLC’S EXPRESS WRITTEN AUTHORIZATION.
 
-<sub> Last Update: Document Version 0.9.8 - August 3, 2019</sub>
+## Revision History
 
+| Date   | Version      | Description |
+| -------- | --------- | ------------------------------------------------------ |
+8.20.2019 | 0.9.9     | Added section numbers; Added revision history |
+
+<sub> Last Update: Document Version 0.9.9 - August 20, 2019</sub>
