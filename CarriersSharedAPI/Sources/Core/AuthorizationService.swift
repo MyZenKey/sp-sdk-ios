@@ -139,20 +139,16 @@ public extension AuthorizationServiceProtocol {
     }
 }
 
-/// An appropriate factory is registerd per-platform to vend the correct authorization service
-/// when creating new instances.
-protocol AuthorizationServiceFactory {
-    func createAuthorizationService() -> AuthorizationServiceProtocol & URLHandling
-}
+// Combines these two protocols into one type
+protocol AuthorizationServiceProtocolInternal: AuthorizationServiceProtocol, URLHandling { }
 
 /// This service provides an interface for authorizing an application with Project Verify.
 public class AuthorizationService {
-    let backingService: AuthorizationServiceProtocol & URLHandling
+    let backingService: AuthorizationServiceProtocolInternal
 
     public init() {
         let container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies
-        let factory: AuthorizationServiceFactory = container.resolve()
-        self.backingService = factory.createAuthorizationService()
+        self.backingService = container.resolve()
     }
 }
 

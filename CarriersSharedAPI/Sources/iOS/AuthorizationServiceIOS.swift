@@ -8,19 +8,6 @@
 
 import Foundation
 
-class AuthorizationServiceIOSFactory: AuthorizationServiceFactory {
-    func createAuthorizationService() -> AuthorizationServiceProtocol & URLHandling {
-        let container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies
-        return AuthorizationServiceIOS(
-            sdkConfig: container.resolve(),
-            discoveryService: container.resolve(),
-            openIdService: container.resolve(),
-            carrierInfoService: container.resolve(),
-            mobileNetworkSelectionService: container.resolve()
-        )
-    }
-}
-
 class AuthorizationServiceIOS {
     let sdkConfig: SDKConfig
     let discoveryService: DiscoveryServiceProtocol
@@ -65,7 +52,7 @@ extension AuthorizationServiceIOS {
     }
 }
 
-extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
+extension AuthorizationServiceIOS: AuthorizationServiceProtocolInternal {
     public func authorize(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
@@ -122,7 +109,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocol {
     }
 }
 
-extension AuthorizationServiceIOS: URLHandling {
+extension AuthorizationServiceIOS {
     func resolve(url: URL) -> Bool {
         guard case .requesting(let stateMachine, _) = state else {
             return false

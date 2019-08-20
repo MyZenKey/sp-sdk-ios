@@ -89,8 +89,14 @@ class Dependencies {
                 )
             }
 
-            register(type: AuthorizationServiceFactory.self) { _ in
-                return AuthorizationServiceIOSFactory()
+            register(type: AuthorizationServiceProtocolInternal.self) { container in
+                return AuthorizationServiceIOS(
+                    sdkConfig: container.resolve(),
+                    discoveryService: container.resolve(),
+                    openIdService: container.resolve(),
+                    carrierInfoService: container.resolve(),
+                    mobileNetworkSelectionService: container.resolve()
+                )
             }
 
             register(type: BrandingProvider.self) { container in
@@ -103,7 +109,7 @@ class Dependencies {
             fatalError("currently only supports iOS")
         #endif
 
-        Log.log(.verbose, "Configured Dependency Grapy: \(dependencies)")
+        Log.log(.info, "Configured Dependency Graph: \(dependencies)")
     }
 }
 
@@ -194,5 +200,17 @@ private extension Dictionary where Key == ProjectVerifyOptionKeys, Value: Any {
 
     var logLevel: Log.Level {
         return self[.logLevel, or: .off]
+    }
+}
+
+extension Dependencies.Singleton: CustomStringConvertible {
+    var description: String {
+        return "Singleton<\(T.self)>"
+    }
+}
+
+extension Dependencies.Factory: CustomStringConvertible {
+    var description: String {
+        return "Factory<\(T.self)>"
     }
 }
