@@ -8,10 +8,15 @@
 
 import Foundation
 
-struct Branding {
-    let icon: UIImage?
-    let carrierText: String?
-    let carrierIcon: String?
+public struct Branding {
+    /// The branded icon
+    public let icon: UIImage?
+
+    /// The branded carrier text
+    public let carrierText: String?
+
+    /// The branded carrier icon
+    public let carrierIcon: String?
 
     static let `default` = Branding(
         icon: ImageUtils.image(named: "pv-icon-connect"),
