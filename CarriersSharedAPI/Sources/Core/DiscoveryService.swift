@@ -121,6 +121,7 @@ private extension DiscoveryService {
             request: request
         ) { [weak self] (result: Result<IssuerResponse, NetworkServiceError>) in
 
+            Log.log(.info, "Discovery outcome: \(result)")
             switch result {
             case .value(let configResult):
                 // Because the endpoint can return either a config _or_ an error, we need to parse the
@@ -128,9 +129,11 @@ private extension DiscoveryService {
                 switch configResult {
                 case .config(let carrierConfig):
 
+                    // NTH: "pseudo sim" support, where we propagate returned simInfo to provide
+                    // hints locally.
                     self?.configCacheService.cacheConfig(
                         carrierConfig.openIdConfig,
-                        forSIMInfo: carrierConfig.simInfo
+                        forSIMInfo: simInfo ?? carrierConfig.simInfo
                     )
 
                     completion(.knownMobileNetwork(carrierConfig))
