@@ -17,6 +17,9 @@ public struct AuthorizedResponse: Equatable {
     public let mcc: String
     /// The Mobile Network Code used to identify the correct issuer.
     public let mnc: String
+    /// The redirect URI used to deliver the result to the SDK. This must be provided to the
+    /// Token Endpoint alongside the autorization code in order to issue the token.
+    public let redirectURI: URL
 }
 
 /// The outcome of an Authorization Operation.
