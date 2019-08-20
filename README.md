@@ -135,6 +135,19 @@ The following keys are made available for you to customize the structure of the 
 
 **Note:** For schemes other than `https`, you must add the scheme to your application's `CFBundleURLTypes` list.
 
+#### 4.2.1 Redirect URIs
+
+Service providers must configure one or more valid Redirect URIs.
+
+Project Verify supports the following Redirect URIs:
+
+| URI | Description |
+| ----- | ------------ |
+|	`https://URL/URI` | Redirects. Must be a secure URL. |
+| `<clientid>://` | Deeplink default URL’s used by the Project Verify SDK. |
+|	`<custom>://` | Custom Deep link URL’s. |
+| `Com.sp.app://` | App links to application names. |
+
 Redirect URLs will require the universal links to route the following paths to the application: `/authorize` and `/discoveryui`.
 For more information about universal links, read Apple's [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links).
 
@@ -351,6 +364,8 @@ On your secure server, perform discovery and use the discovered token endpoint t
 
 The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the Project Verify User Info Endpoint, which should pass information through your server's authenticated endpoints in a way that makes sense for your application.
 
+Information on setting up your secure server can be found in the Project Verify Server and Web Integration Guide.
+
 ## Support
 For technical questions, contact [support](mailto:techsupport@mobileauthtaskforce.com).
 
@@ -362,6 +377,6 @@ NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND C
 
 | Date   | Version      | Description |
 | -------- | --------- | ------------------------------------------------------ |
-8.20.2019 | 0.9.9     | Added section numbers; Added revision history |
+8.20.2019 | 0.9.9     | Added section numbers; Added revision history; Added additional info about Redirect URIs to section 4.2.1. |
 
 <sub> Last Update: Document Version 0.9.9 - August 20, 2019</sub>
