@@ -96,51 +96,45 @@ You can add the ProjectVerifyLogin SDK to your project manually:
 
 ## 4.0 Integration
 
-To integrate Project Verify into your iOS application, configure your `Info.plist` with `ClientId` and instantiate Project Verify in your application delegate.  
+To integrate Project Verify into your iOS application you must first configure your `Info.plist` with your project verify client Id as well as your chosen redirect URI.
 
-### 4.1 Configure Property List
-
-Retrieve your application's `clientId` from the Project Verify dashboard. Add the following keys to *Info.plist* in your application:
-
-```xml
-	<key>ProjectVerifyClientId</key>
-	<string>{your application's client id}</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>{your bundle id}</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>{your application's client id}</string>
-			</array>
-		</dict>
-	</array>
-```
-
-### 4.2 Using a Custom Redirect URI
-
-If you would like to use universal links for your redirect scheme, it is possible to configure a custom URL scheme and a custom URL host.
-
-The following keys are made available for you to customize the structure of the redirect URL:
+### 4.1 Client ID
+All Service providers must add their application’s client Id to their `Info.plist`. Retrieve your client Id from the Project Verify dashboard and add the following key to your application’s `Info.plist`:
 
 ```xml
-    <key>ProjectVerifyCustomScheme</key>
-    <string>{your application's custom scheme}</string>
+    <key>ProjectVerifyClientId</key>
+    <string>{your application's client id}</string>```
+
+### 4.2 Choosing a Redirect URI
+In addition to configuring a your client Id, Service providers must also specify one or more valid redirect URIs. The redirect URI will be passed as a vehicle for callbacks to the SDK to several Project Verify services. To make it easy to get up and running with Project Verify, all Service Providers are pre-configured with the redirect URI: `{your client Id}://com.xci.provider.sdk`.
+
+In order to get up and running with this default configuration, all you need to do is to add your client Id as a custom scheme to your Info.plist:
+
+```xml
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLName</key>
+            <string>{your bundle id}</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>{your application's client id}</string>
+            </array>
+        </dict>
+    </array>```
+
+#### 4.2.1 Specifying a custom URI
+If you would like to add an extra layer of security to your integration, we recommend specifying your redirect URI as a **universal link**. This requires that you have the appropriately configured app association and entitlements. For more information on universal links, see Apple’s [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links). To use a custom url as your redirect URI, specify your custom scheme, host, and path in your `Info.plist`.
+
+```xml
     <key>ProjectVerifyCustomHost</key>
-    <string>{your application's custom host}</string>
-```
-
-**Note:** For schemes other than `https`, you must add the scheme to your application's `CFBundleURLTypes` list.
-
-Redirect URLs will require the universal links to route the following paths to the application: `/authorize` and `/discoveryui`.
-For more information about universal links, read Apple's [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links).
-
-#### 4.2.1 Project Verify Redirects
-
-We recommend that you use either the default URL scheme (your Project Verify client ID) or a universal linking scheme to support Project Verify redirects. Other URL schemes may be owned by other applications and can introduce unexpected behavior. For more information, view [Apple's documentation](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) on defining a custom URL scheme.
+    <string>{your universal link's host}</string>
+    <key>ProjectVerifyCustomPath</key>
+    <string>{your universal link's full path}</string>
+    <key>ProjectVerifyCustomScheme</key>
+    <string>https</string>```
 
 ## 5.0 Instantiate Project Verify
 
@@ -351,6 +345,8 @@ On your secure server, perform discovery and use the discovered token endpoint t
 
 The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the Project Verify User Info Endpoint, which should pass information through your server's authenticated endpoints in a way that makes sense for your application.
 
+Information on setting up your secure server can be found in the Project Verify Server and Web Integration Guide.
+
 ## Support
 For technical questions, contact [support](mailto:techsupport@mobileauthtaskforce.com).
 
@@ -362,6 +358,6 @@ NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND C
 
 | Date   | Version      | Description |
 | -------- | --------- | ------------------------------------------------------ |
-8.20.2019 | 0.9.9     | Added section numbers; Added revision history |
+8.20.2019 | 0.9.9     | Added section numbers; Added revision history; Added additional info about Redirect URIs to section 4.0 |
 
 <sub> Last Update: Document Version 0.9.9 - August 20, 2019</sub>
