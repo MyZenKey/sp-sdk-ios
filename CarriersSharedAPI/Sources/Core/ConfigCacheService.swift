@@ -28,10 +28,10 @@ protocol ConfigCacheServiceProtocol {
     func addCacheObserver(_ action: @escaping CacheObserver.Action) -> CacheObserver
 }
 
-class CacheObserver {
+final class CacheObserver {
     typealias Action = (SIMInfo) -> Void
 
-    private var isCancelled = false
+    private(set) var isCancelled = false
 
     private let action: CacheObserver.Action
 

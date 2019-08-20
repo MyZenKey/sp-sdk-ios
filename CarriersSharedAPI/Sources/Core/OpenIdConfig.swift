@@ -16,18 +16,21 @@ struct OpenIdConfig: Equatable {
     /// A string the carrier can provide to enable per carrier branding of the Login with CCID
     /// button. Examples might be "Powered by AT&T" etc.
     let linkBranding: String?
-    ///
+    /// TBD: how this is used
     let linkImage: URL?
-    ///
+    /// TBD: how this is used
     let branding: URL?
 
     init(authorizationEndpoint: URL,
-         issuer: URL) {
+         issuer: URL,
+         linkBranding: String? = nil,
+         linkImage: URL? = nil,
+         branding: URL? = nil) {
         self.authorizationEndpoint = authorizationEndpoint
         self.issuer = issuer
-        self.linkBranding = nil
-        self.linkImage = nil
-        self.branding = nil
+        self.linkBranding = linkBranding
+        self.linkImage = linkImage
+        self.branding = branding
     }
 }
 

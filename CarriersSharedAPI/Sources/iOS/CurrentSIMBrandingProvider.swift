@@ -33,7 +33,6 @@ class CurrentSIMBrandingProvider: BrandingProvider {
 
         // add an observer, on cache changes
         observerToken = configCacheService.addCacheObserver() { [weak self] simInfo in
-
             guard
                 let sself = self,
                 sself.carrierInfoService.primarySIM == simInfo else {

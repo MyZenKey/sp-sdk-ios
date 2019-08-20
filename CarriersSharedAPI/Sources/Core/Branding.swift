@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Branding {
+public struct Branding: Equatable {
     /// The branded icon
     public let icon: UIImage?
 
