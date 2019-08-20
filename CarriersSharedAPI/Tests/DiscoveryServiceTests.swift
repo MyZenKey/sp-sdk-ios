@@ -43,7 +43,6 @@ class MockConfigCacheService: ConfigCacheServiceProtocol {
     }
 
     func addCacheObserver(_ action: @escaping CacheObserver.Action) -> CacheObserver {
-        // TODO: -
         return CacheObserver({ _ in })
     }
 }

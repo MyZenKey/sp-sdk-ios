@@ -177,8 +177,7 @@ private extension Dependencies {
         #if DEBUG
         if let mockedCarrier = options[.mockedCarrier] as? Carrier {
             return MockSIMNetworkInfoProvider(carrier: mockedCarrier)
-        }
-        else {
+        } else {
             return CTTelephonyNetworkInfo()
         }
         #else

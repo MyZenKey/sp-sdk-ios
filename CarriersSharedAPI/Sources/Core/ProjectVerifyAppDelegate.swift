@@ -28,7 +28,7 @@ public class ProjectVerifyAppDelegate {
     private(set) var dependencies: Dependencies!
 
     private var discoveryService: DiscoveryServiceProtocol!
-    
+
     /// The entry point for the ProjectVerifyLogin SDK. You should call this method during your
     /// applicaiton's `application(_:didFinishLaunchingWithOptions:)` method before returning.
     ///
