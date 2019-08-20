@@ -37,6 +37,7 @@ class Dependencies {
     private func buildDependencies() {
 
         Log.configureLogger(level: options.logLevel)
+
         let host: ProjectVerifyNetworkConfig.Host = options.host
 
         let hostConfig = ProjectVerifyNetworkConfig(host: host)

@@ -37,9 +37,11 @@ public struct Log {
     }
 
     static func log<T>(_ level: Level, _ object: @autoclosure () -> T, _ file: String = #file) {
+        #if DEBUG
         guard level.rawValue <= logLevel.rawValue, level != .off else { return }
         let type = file.components(separatedBy: "/").last ?? "Unknown Type"
         print("|\(level.name.uppercased())| \(dateformatter.string(from: Date())) : \(type) :: \(object())")
+        #endif
     }
 }
 

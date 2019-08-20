@@ -28,9 +28,14 @@ struct ProjectVerifyNetworkConfig {
     func resource(forPath path: String, queryItems: [String: String] = [:]) -> URL {
         var components = URLComponents()
         components.scheme = scheme
-        components.host = host.rawValue
-        components.path = path
 
+        #if DEBUG
+        components.host = host.rawValue
+        #else
+        components.host = Host.production.rawValue
+        #endif
+
+        components.path = path
         components.queryItems = queryItems.map { return URLQueryItem(name: $0.key, value: $0.value) }
 
         guard let resource = components.url else {
