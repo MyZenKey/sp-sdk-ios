@@ -24,8 +24,6 @@ class Dependencies {
     let sdkConfig: SDKConfig
     let options: ProjectVerifyOptions
 
-    private(set) var all: [Any] = []
-
     private var dependencies: [String: Dependency] = [:]
 
     init(sdkConfig: SDKConfig, options: ProjectVerifyOptions = [:]) {
@@ -77,9 +75,9 @@ class Dependencies {
                 )
             }
 
-            register(type: MobileNetworkSelectionServiceProtocol.self) { _ in
+            register(type: MobileNetworkSelectionServiceProtocol.self) { container in
                 return MobileNetworkSelectionService(
-                    sdkConfig: self.sdkConfig,
+                    sdkConfig: container.resolve(),
                     mobileNetworkSelectionUI: WebBrowserUI()
                 )
             }
@@ -120,16 +118,11 @@ protocol Dependency {
 
 private extension Dependencies {
     class Singleton<T>: Dependency {
-        var value: Any {
-            guard let value = _value else {
-                let value = factory()
-                _value = value
-                return value
-            }
-            return value
-        }
-        private var _value: T?
         private let factory: () -> T
+        lazy private(set) var value: Any = {
+            return self.factory()
+        }()
+
         init(_ factory: @autoclosure @escaping () -> T) {
             self.factory = factory
         }
@@ -162,6 +155,11 @@ private extension Dependencies {
 }
 
 extension Dependencies {
+    /// Pulls the registered instance of the inferred type out of the dependency container.
+    ///
+    /// - Warning: If the inferred type is Optional<T> this function will not work. Always use a
+    ///     non-optional variable to drive the inference and assign to the optional variable as
+    ///     necessary.
     func resolve<T>() -> T {
         guard let dependency = dependencies["\(T.self)"] else {
             fatalError("attemtping to resolve a dependency of type \(T.self) that doesn't exist")

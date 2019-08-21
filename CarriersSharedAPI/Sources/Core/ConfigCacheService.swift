@@ -33,9 +33,9 @@ final class CacheObserver {
 
     private(set) var isCancelled = false
 
-    private let action: CacheObserver.Action
+    private let action: Action
 
-    init(_ action: @escaping CacheObserver.Action) {
+    init(_ action: @escaping Action) {
         self.action = action
     }
 

@@ -8,6 +8,12 @@
 
 import Foundation
 
+protocol BrandingProvider: AnyObject {
+    var buttonBranding: Branding { get }
+
+    var brandingDidChange: ((Branding) -> Void)? { get set }
+}
+
 /// A branding provider that uses the carrier info service to inform branding decisions.
 class CurrentSIMBrandingProvider: BrandingProvider {
     private let configCacheService: ConfigCacheServiceProtocol

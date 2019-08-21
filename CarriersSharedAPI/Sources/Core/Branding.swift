@@ -25,12 +25,6 @@ public struct Branding: Equatable {
     )
 }
 
-protocol BrandingProvider: AnyObject {
-    var buttonBranding: Branding { get }
-
-    var brandingDidChange: ((Branding) -> Void)? { get set }
-}
-
 // NOTE: since config retrieval will need to also support asyc cases for there to be a reasonable
 // chance of recievieng an up to date config for a button that will most likly appear on one of the
 // initial views of the application.

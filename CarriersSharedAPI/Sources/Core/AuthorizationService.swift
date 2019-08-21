@@ -140,7 +140,7 @@ public extension AuthorizationServiceProtocol {
 }
 
 // Combines these two protocols into one type
-protocol AuthorizationServiceProtocolInternal: AuthorizationServiceProtocol, URLHandling { }
+typealias AuthorizationServiceProtocolInternal = AuthorizationServiceProtocol & URLHandling
 
 /// This service provides an interface for authorizing an application with Project Verify.
 public class AuthorizationService {
