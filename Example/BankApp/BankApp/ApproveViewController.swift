@@ -71,9 +71,10 @@ class ApproveViewController: BankAppViewController {
         }
     }
 
-    func completeFlow(withAuthChode code: String, mcc: String, mnc: String) {
+    func completeFlow(withAuthChode code: String, redirectURI: URL, mcc: String, mnc: String) {
         serviceAPI.approveTransfer(
             withAuthCode: code,
+            redirectURI: redirectURI,
             userContext: context,
             nonce: nonce) { transaction, error in
 
@@ -144,6 +145,7 @@ extension ApproveViewController: ProjectVerifyAuthorizeButtonDelegate {
         switch result {
         case .code(let response):
             completeFlow(withAuthChode: response.code,
+                         redirectURI: response.redirectURI,
                          mcc: response.mcc,
                          mnc: response.mnc)
 
