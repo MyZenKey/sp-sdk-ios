@@ -14,7 +14,7 @@ OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0 speci
 
 ### 1.2 Authorization Code Flow and Carrier Discovery
 
-Project Verify SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to the carrier for authorization. Upon successful authorization, the user is redirected to your backend with an authorization code, which your backend exchanges for an ID token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
+Project Verify SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to the carrier for authorization. Upon successful authorization, the user is redirected to your application with an authorization code, which you should exchange from your secure backend exchanges for an ID token and access token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
 
 Because each carrier operates its own authorization servers, we determine the user's carrier prior to authentication. This process is called Carrier Discovery (this is an OIDC Discovery with extra parameters). This ensures that the discovery document from Project Verify is for the correct carrier.
 
@@ -46,21 +46,21 @@ Consumer verification and authorization flows to Carrier auth, the service provi
 
 ## 2.0 Getting Started
 
-Before you integrate with Project Verify, register your application and obtain valid `clientId` and `clientSecret` from the portal or by contacting a Customer Operation Specialist. If you choose to use a custom redirect URI, then ensure that you specify a valid URI.  
+Before you integrate with Project Verify, register your application and obtain valid `clientId` and `clientSecret` from the portal or by contacting a Customer Operation Specialist.
 
-### 2.1 Pre-Release Git Access
+### 2.1 Client Information and Scopes
+
+Service providers decide how much client information they obtain from the user. In your setup, you can choose to have an experience with or without requiring a PIN or a biometric.
+
+Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented via OIDC and can be set to request profile information (such as email address, name, phone) to verify users. OpenID is the only required scope. All others are optional depending on the needs of your application.
+
+### 2.2 Pre-Release Git Access
 
 While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
 
 ```bash
 git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 ```
-
-### 2.2 Client Information and Scopes
-
-Service providers decide how much client information they obtain from the user. In your setup, you can choose to have an experience with or without requiring a PIN or a biometric.
-
-Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented via OIDC and can be set to request profile information (such as email address, name, phone) to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
 
 ## 3.0 Add Project Verify SDK
 
@@ -103,10 +103,11 @@ All Service providers must add their application’s client Id to their `Info.pl
 
 ```xml
     <key>ProjectVerifyClientId</key>
-    <string>{your application's client id}</string>```
+    <string>{your application's client id}</string>
+```
 
 ### 4.2 Choosing a Redirect URI
-In addition to configuring a your client Id, Service providers must also specify one or more valid redirect URIs. The redirect URI will be passed as a vehicle for callbacks to the SDK to several Project Verify services. To make it easy to get up and running with Project Verify, all Service Providers are pre-configured with the redirect URI: `{your client Id}://com.xci.provider.sdk`.
+In addition to configuring a your client Id, Service providers must also specify one or more valid redirect URIs. The redirect URI will be passed as a vehicle for callbacks to the SDK to several Project Verify services. To make it easy to get up and running with Project Verify, all Service Providers are pre-configured with the redirect URI: `{your client Id}://com.xci.provider.sdk`. If you would like to use a different redirect URI you must configure it in the Service Provider Portal. See section 4.2.1 for more information.
 
 In order to get up and running with this default configuration, all you need to do is to add your client Id as a custom scheme to your Info.plist:
 
@@ -123,7 +124,8 @@ In order to get up and running with this default configuration, all you need to 
                 <string>{your application's client id}</string>
             </array>
         </dict>
-    </array>```
+    </array>
+```
 
 #### 4.2.1 Specifying a custom URI
 If you would like to add an extra layer of security to your integration, we recommend specifying your redirect URI as a **universal link**. This requires that you have the appropriately configured app association and entitlements. For more information on universal links, see Apple’s [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links). To use a custom url as your redirect URI, specify your custom scheme, host, and path in your `Info.plist`.
@@ -134,7 +136,8 @@ If you would like to add an extra layer of security to your integration, we reco
     <key>ProjectVerifyCustomPath</key>
     <string>{your universal link's full path}</string>
     <key>ProjectVerifyCustomScheme</key>
-    <string>https</string>```
+    <string>https</string>
+```
 
 ## 5.0 Instantiate Project Verify
 
@@ -187,7 +190,7 @@ class LoginViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let scopes: [Scope] = [.openid, .profile, .email]
+        let scopes: [Scope] = [.openid, .email, .name]
         projectVerifyButton.scopes = scopes
         projectVerifyButton.delegate = self
 
@@ -255,10 +258,10 @@ There are several parameters that you may wish to configure for your authorizati
 
 #### 6.3.1 Scopes
 
-By default, authorization requests made with the Project Verify SDK include the `OpenId` scope. To use additional scopes, set them on the button and they will be added to the request.
+By you should always include the `.openid` scope. To use additional scopes, set them on the button and they will be added to the request.
 
 ```swift
-    let scopes: [Scope] = [.profile, .email]
+    let scopes: [Scope] = [.openid, .email, .name]
 ```
 
 For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/blob/develop/CarriersSharedAPI/Sources/Core/Scope.swift).
@@ -290,7 +293,7 @@ class LoginViewController {
 
     func loginWithProjectVerify() {
         // in response to some UI, perform an authorization using the AuthorizationService
-        let scopes: [Scope] = [.profile, .email]
+        let scopes: [Scope] = [.openid, .email, .name]
         authService.authorize(
             scopes: scopes,
             fromViewController: self) { result in
@@ -342,6 +345,7 @@ On your secure server, perform discovery and use the discovered token endpoint t
 * Auth Code
 * MCC (Mobile Country Code)
 * MNC (Mobile Network Code)
+* Redirect URI
 
 The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the Project Verify User Info Endpoint, which should pass information through your server's authenticated endpoints in a way that makes sense for your application.
 
