@@ -18,7 +18,7 @@ import Foundation
 class AuthorizationServiceCurrentRequestStorage {
     static let shared = AuthorizationServiceCurrentRequestStorage()
 
-    weak var currentRequestingService: (AuthorizationServiceProtocol & URLHandling)?
+    weak var currentRequestingService: AuthorizationServiceProtocolInternal?
 }
 
 // swiftlint:enable type_name

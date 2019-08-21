@@ -27,6 +27,8 @@ public class ProjectVerifyAppDelegate {
 
     private(set) var dependencies: Dependencies!
 
+    private var discoveryService: DiscoveryServiceProtocol!
+
     /// The entry point for the ProjectVerifyLogin SDK. You should call this method during your
     /// applicaiton's `application(_:didFinishLaunchingWithOptions:)` method before returning.
     ///
@@ -48,6 +50,9 @@ public class ProjectVerifyAppDelegate {
         do {
             let sdkConfig = try SDKConfig.load(fromBundle: Bundle.main)
             self.dependencies = Dependencies(sdkConfig: sdkConfig, options: projectVerifyOptions)
+            let discoveryService: DiscoveryServiceProtocol = self.dependencies.resolve()
+            self.discoveryService = discoveryService
+            prefetchOIDC()
         } catch {
             fatalError("Bundle configuration error: \(error)")
         }
@@ -83,5 +88,21 @@ public class ProjectVerifyAppDelegate {
         }
 
         return currentAuthorizationService.resolve(url: url)
+    }
+}
+
+private extension ProjectVerifyAppDelegate {
+    func prefetchOIDC() {
+        let currentDeviceInfo: CarrierInfoServiceProtocol = dependencies.resolve()
+        guard let simInfo = currentDeviceInfo.primarySIM else {
+            Log.log(.verbose, "Skipping prefetch of discovery: No SIM info")
+            return
+        }
+
+        Log.log(.verbose, "Pre-fetching discovery")
+        discoveryService.discoverConfig(
+            forSIMInfo: simInfo,
+            prompt: false
+        ) { _ in  /* fail silently, prefetch is best effort only */ }
     }
 }

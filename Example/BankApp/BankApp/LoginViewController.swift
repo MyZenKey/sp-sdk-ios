@@ -74,9 +74,19 @@ class LoginViewController: UIViewController {
         let scopes: [Scope] = [.openid, .authenticate, .register, .name, .email, .birthdate, .postalCode]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.brandingDelegate = self
         button.delegate = self
         button.accessibilityIdentifier = "Project Verify Button"
         return button
+    }()
+
+    let poweredByLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 12)
+        return label
     }()
 
     lazy var toggleEnv: UIButton = {
@@ -149,6 +159,7 @@ class LoginViewController: UIViewController {
         view.addSubview(forgotButton)
         view.addSubview(registerButton)
         view.addSubview(projectVerifyButton)
+        view.addSubview(poweredByLabel)
         view.addSubview(toggleEnv)
 
         gradientBackground.frame = view.frame
@@ -188,8 +199,12 @@ class LoginViewController: UIViewController {
         constraints.append(projectVerifyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(projectVerifyButton.widthAnchor.constraint(equalTo: signInButton.widthAnchor))
 
+        constraints.append(poweredByLabel.topAnchor.constraint(equalTo: projectVerifyButton.bottomAnchor, constant: 10.0))
+        constraints.append(poweredByLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(poweredByLabel.widthAnchor.constraint(equalTo: projectVerifyButton.widthAnchor))
+
         constraints.append(toggleEnv.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(toggleEnv.topAnchor.constraint(equalTo: projectVerifyButton.bottomAnchor, constant: 20.0))
+        constraints.append(toggleEnv.topAnchor.constraint(equalTo: poweredByLabel.bottomAnchor, constant: 20.0))
 
         NSLayoutConstraint.activate(constraints)
     }
@@ -227,5 +242,16 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
                 AccountManager.login(withToken: accountToken)
                 self?.launchHomeScreen()
         })
+    }
+}
+
+extension LoginViewController: ProjectVerifyBrandedButtonDelegate {
+    func brandingWillUpdate(_ oldBranding: Branding,
+                            forButton button: ProjectVerifyBrandedButton) {
+    }
+
+    func brandingDidUpdate(_ newBranding: Branding,
+                           forButton button: ProjectVerifyBrandedButton) {
+        poweredByLabel.text = newBranding.carrierText
     }
 }

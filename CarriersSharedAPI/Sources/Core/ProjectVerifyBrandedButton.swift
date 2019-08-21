@@ -8,8 +8,33 @@
 
 import UIKit
 
+/// A protocol which represents the interface for handling changes to branding information.
+///
+/// Implement this protocol and specify the `brandingDelegate` on a ProjectVerifyBrandedButton to
+/// recieve changes to the button's branding information.
+public protocol ProjectVerifyBrandedButtonDelegate: AnyObject {
+    /// Called before the button updates its branding with the previous branding value
+    ///
+    /// - Parameters:
+    ///   - oldBranding: the old branding of the button
+    ///   - button: the button instance
+    func brandingWillUpdate(_ oldBranding: Branding, forButton button: ProjectVerifyBrandedButton)
+
+    /// Called after the button updates its branding with the new branding value
+    ///
+    /// - Parameters:
+    ///   - newBranding: the new branding of the button
+    ///   - button: the button instance
+    func brandingDidUpdate(_ newBranding: Branding, forButton button: ProjectVerifyBrandedButton)
+}
+
 /// A branded ProjectVerifyButton
 public class ProjectVerifyBrandedButton: UIButton {
+
+    /// the button's brandding delegate
+    /// - SeeAlso: ProjectVerifyBrandedButtonDelegate
+    public weak var brandingDelegate: ProjectVerifyBrandedButtonDelegate?
+
     public override var isHighlighted: Bool {
         didSet {
             updateTinting()
@@ -28,14 +53,16 @@ public class ProjectVerifyBrandedButton: UIButton {
     /// - SeeAlso: `ProjectVerifyBrandedButton.Style`
     public var style: Style = .dark {
         didSet {
-            updateBranding()
+            updateBrandingPresentation()
         }
     }
 
     var branding: Branding = .default {
         didSet {
-            updateBranding()
+            brandingDelegate?.brandingWillUpdate(oldValue, forButton: self)
+            updateBrandingPresentation()
             invalidateIntrinsicContentSize()
+            brandingDelegate?.brandingDidUpdate(branding, forButton: self)
         }
     }
 
@@ -271,7 +298,6 @@ extension ProjectVerifyBrandedButton {
 
 private extension ProjectVerifyBrandedButton {
     func configureButton() {
-
         adjustsImageWhenHighlighted = false
         adjustsImageWhenDisabled = false
 
@@ -279,14 +305,18 @@ private extension ProjectVerifyBrandedButton {
 
         titleLabel?.lineBreakMode = .byTruncatingTail
 
-        branding = brandingProvider.branding
+        brandingProvider.brandingDidChange = { [weak self] branding in
+            self?.branding = branding
+        }
+
+        branding = brandingProvider.buttonBranding
 
         if bounds.isEmpty {
             sizeToFit()
         }
     }
 
-    func updateBranding() {
+    func updateBrandingPresentation() {
         setImage(branding.icon, for: .normal)
         updateTinting()
         if let title = attributedTitle(for: .normal)?.string {

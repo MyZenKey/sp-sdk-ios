@@ -96,9 +96,11 @@ class MockAuthorizationButtonDelegate: ProjectVerifyAuthorizeButtonDelegate {
 }
 
 class MockBrandingProvider: BrandingProvider {
-    var branding: Branding {
+    var buttonBranding: Branding {
         return .default
     }
+
+    var brandingDidChange: ((Branding) -> Void)?
 }
 
 class ProjectVerifyAuthorizeButtonTests: XCTestCase {

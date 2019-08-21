@@ -8,26 +8,44 @@
 
 import Foundation
 
+protocol BrandingProvider: AnyObject {
+    var buttonBranding: Branding { get }
+
+    var brandingDidChange: ((Branding) -> Void)? { get set }
+}
+
 /// A branding provider that uses the carrier info service to inform branding decisions.
 class CurrentSIMBrandingProvider: BrandingProvider {
-    let configCacheService: ConfigCacheServiceProtocol
-    let carrierInfoService: CarrierInfoServiceProtocol
+    private let configCacheService: ConfigCacheServiceProtocol
+    private let carrierInfoService: CarrierInfoServiceProtocol
+    private(set) var observerToken: CacheObserver?
 
-    var branding: Branding {
+    var brandingDidChange: ((Branding) -> Void)?
+
+    var buttonBranding: Branding {
         guard
             let primarySIM = carrierInfoService.primarySIM,
-            let config = configCacheService.config(
-                forSIMInfo: primarySIM)
-            else {
+            let config = configCacheService.config(forSIMInfo: primarySIM) else {
                 return .default
         }
 
-        return config.branding
+        return config.buttonBranding
     }
 
     init(configCacheService: ConfigCacheServiceProtocol,
          carrierInfoService: CarrierInfoServiceProtocol) {
         self.configCacheService = configCacheService
         self.carrierInfoService = carrierInfoService
+
+        // add an observer, on cache changes
+        observerToken = configCacheService.addCacheObserver() { [weak self] simInfo in
+            guard
+                let sself = self,
+                sself.carrierInfoService.primarySIM == simInfo else {
+                    return
+            }
+
+            sself.brandingDidChange?(sself.buttonBranding)
+        }
     }
 }

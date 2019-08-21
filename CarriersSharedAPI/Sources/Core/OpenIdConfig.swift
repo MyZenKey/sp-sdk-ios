@@ -9,24 +9,38 @@
 import Foundation
 
 struct OpenIdConfig: Equatable {
-    let tokenEndpoint: URL
+    /// The authorization enpdoint to issue authroization requests to.
     let authorizationEndpoint: URL
+    /// The open id issuer.
     let issuer: URL
+    /// A string the carrier can provide to enable per carrier branding of the Login with CCID
+    /// button. Examples might be "Powered by AT&T" etc.
+    let linkBranding: String?
+    /// TBD: how this is used
+    let linkImage: URL?
+    /// TBD: how this is used
+    let branding: URL?
 
-    init(tokenEndpoint: URL,
-         authorizationEndpoint: URL,
-         issuer: URL) {
-        self.tokenEndpoint = tokenEndpoint
+    init(authorizationEndpoint: URL,
+         issuer: URL,
+         linkBranding: String? = nil,
+         linkImage: URL? = nil,
+         branding: URL? = nil) {
         self.authorizationEndpoint = authorizationEndpoint
         self.issuer = issuer
+        self.linkBranding = linkBranding
+        self.linkImage = linkImage
+        self.branding = branding
     }
 }
 
 extension OpenIdConfig: Decodable {
     enum CodingKeys: String, CodingKey {
-        case tokenEndpoint = "token_endpoint"
         case authorizationEndpoint = "authorization_endpoint"
         case issuer
+        case linkBranding = "link_branding"
+        case linkImage = "link_image"
+        case branding
     }
 }
 
