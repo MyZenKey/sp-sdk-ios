@@ -143,8 +143,14 @@ private extension OpenIdService {
         switch validatedCode {
         case .value(let code):
             Log.log(.info, "Resolving URL with successful code.")
-            dismissUIAndConclude(result: .code(
-                    AuthorizedResponse(code: code, mcc: simInfo.mcc, mnc: simInfo.mnc)
+            dismissUIAndConclude(
+                result: .code(
+                    AuthorizedResponse(
+                        code: code,
+                        mcc: simInfo.mcc,
+                        mnc: simInfo.mnc,
+                        redirectURI: request.parameters.redirectURL
+                    )
                 )
             )
         case .error(let error):

@@ -228,7 +228,7 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
     }
 
     func testButtonUpdatesReportsResult() {
-        let mockResponse = AuthorizedResponse(code: "foo", mcc: "bar", mnc: "bah")
+        let mockResponse = AuthorizedResponse(code: "foo", mcc: "bar", mnc: "bah", redirectURI: URL.mocked)
         mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate

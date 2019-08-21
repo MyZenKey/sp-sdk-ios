@@ -114,6 +114,7 @@ extension EnableVerifyViewController: ProjectVerifyAuthorizeButtonDelegate {
         let code = authorizedResponse.code
         clientSideServiceAPI.addSecondFactor(
             withAuthCode: code,
+            redirectURI: authorizedResponse.redirectURI,
             mcc: authorizedResponse.mcc,
             mnc: authorizedResponse.mnc,
             completion: { [weak self] authResponse, error in

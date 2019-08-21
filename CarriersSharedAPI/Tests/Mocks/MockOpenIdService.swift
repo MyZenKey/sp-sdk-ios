@@ -11,7 +11,7 @@ import Foundation
 
 class MockOpenIdService: OpenIdServiceProtocol {
 
-    static let mockSuccess = AuthorizedResponse(code: "abc123", mcc: "123", mnc: "456")
+    static let mockSuccess = AuthorizedResponse(code: "abc123", mcc: "123", mnc: "456", redirectURI: URL.mocked)
     var lastParameters: OpenIdAuthorizationRequest.Parameters?
     var lastCompletion: OpenIdServiceCompletion?
     var lastViewController: UIViewController?

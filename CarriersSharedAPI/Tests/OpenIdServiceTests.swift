@@ -86,6 +86,7 @@ class OpenIdServiceTests: XCTestCase {
                 XCTAssertEqual(response.code, "TESTCODE")
                 XCTAssertEqual(response.mcc, MockSIMs.tmobile.mcc)
                 XCTAssertEqual(response.mnc, MockSIMs.tmobile.mnc)
+                XCTAssertEqual(response.redirectURI, OpenIdServiceTests.mockParameters.redirectURL)
         }
 
         let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"

@@ -229,6 +229,7 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
         let code = authorizedResponse.code
         clientSideServiceAPI.login(
             withAuthCode: code,
+            redirectURI: authorizedResponse.redirectURI,
             mcc: authorizedResponse.mcc,
             mnc: authorizedResponse.mnc,
             completion: { [weak self] authResponse, error in

@@ -35,6 +35,7 @@ enum LoginError: Error {
 protocol ServiceAPIProtocol {
     func login(
         withAuthCode code: String,
+        redirectURI: URL,
         mcc: String,
         mnc: String,
         completion: @escaping (AuthPayload?, Error?) -> Void)
@@ -46,6 +47,7 @@ protocol ServiceAPIProtocol {
 
     func addSecondFactor(
         withAuthCode code: String,
+        redirectURI: URL,
         mcc: String,
         mnc: String,
         completion: @escaping (AuthPayload?, Error?) -> Void)
@@ -53,6 +55,7 @@ protocol ServiceAPIProtocol {
     func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void)
 
     func approveTransfer(withAuthCode code: String,
+                         redirectURI: URL,
                          userContext: String,
                          nonce: String,
                          completion: @escaping (Transaction?, Error?) -> Void)
@@ -65,9 +68,9 @@ struct TokenRequest: Encodable {
     let code: String
     let redirectURI: String
 
-    init(clientId: String, code: String) {
+    init(clientId: String, code: String, redirectURI: URL) {
         self.code = code
-        self.redirectURI = "\(clientId)://com.xci.provider.sdk"
+        self.redirectURI = redirectURI.absoluteString
     }
 
     enum CodingKeys: String, CodingKey {
@@ -180,11 +183,15 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
     )
 
     func login(withAuthCode code: String,
+               redirectURI: URL,
                mcc: String,
                mnc: String,
                completion: @escaping (AuthPayload?, Error?) -> Void) {
 
-        requestToken(forMCC: mcc, andMNC: mnc, authorizationCode: code) { tokenResponse, error in
+        requestToken(forMCC: mcc,
+                     andMNC: mnc,
+                     redirectURI: redirectURI,
+                     authorizationCode: code) { tokenResponse, error in
             guard let tokenResponse = tokenResponse else {
                 completion(nil, error)
                 return
@@ -213,11 +220,12 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
 
     func addSecondFactor(
         withAuthCode code: String,
+        redirectURI: URL,
         mcc: String,
         mnc: String,
         completion: @escaping (AuthPayload?, Error?) -> Void) {
 
-        login(withAuthCode: code, mcc: mcc, mnc: mnc, completion: completion)
+        login(withAuthCode: code, redirectURI: redirectURI, mcc: mcc, mnc: mnc, completion: completion)
     }
 
     func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void) {
@@ -251,6 +259,7 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
     }
 
     func approveTransfer(withAuthCode code: String,
+                         redirectURI: URL,
                          userContext: String,
                          nonce: String,
                          completion: @escaping (Transaction?, Error?) -> Void) {
@@ -261,7 +270,7 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
                 return
         }
 
-        requestToken(forMCC: mccmnc.mcc, andMNC: mccmnc.mnc, authorizationCode: code) { tokenResponse, error in
+        requestToken(forMCC: mccmnc.mcc, andMNC: mccmnc.mnc, redirectURI: redirectURI, authorizationCode: code) { tokenResponse, error in
             guard let tokenResponse = tokenResponse else {
                 completion(nil, error)
                 return
@@ -351,6 +360,7 @@ private extension ClientSideServiceAPI {
 
     func requestToken(forMCC mcc: String,
                       andMNC mnc: String,
+                      redirectURI: URL,
                       authorizationCode code: String,
                       completion: @escaping (TokenResponse?, Error?) -> Void) {
 
@@ -366,7 +376,8 @@ private extension ClientSideServiceAPI {
                     request.addValue("Accept", forHTTPHeaderField: "application/x-www-form-urlencoded")
                     let tokenRequest = TokenRequest(
                         clientId: ClientSideServiceAPI.clientId,
-                        code: code
+                        code: code,
+                        redirectURI: redirectURI
                     )
                     let encoded = tokenRequest.urlFormEncodedData
 

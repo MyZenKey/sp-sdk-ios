@@ -32,12 +32,10 @@ class Dependencies {
         self.buildDependencies()
     }
 
+    // swiftlint:disable:next function_body_length
     private func buildDependencies() {
-
         Log.configureLogger(level: options.logLevel)
-
         let host: ProjectVerifyNetworkConfig.Host = options.host
-
         let hostConfig = ProjectVerifyNetworkConfig(host: host)
 
         // this is a little silly, just to make sdkconfig available to be resolved...
