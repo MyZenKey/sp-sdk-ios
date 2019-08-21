@@ -31,7 +31,3 @@ An e-commerce app might leverage Project Verify to retrieve user information fro
 ## Branding Guidelines (iOS)
 
 This app has some simple UI to showcase Project Verify branding guidelines. It demonstrates how to layout the branded buttons using different UI paradigms.
-
-## TV App (tvOS)
-
-TODO: -
