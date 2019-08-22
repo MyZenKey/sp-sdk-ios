@@ -126,13 +126,16 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     }
 
     @objc func handlePress(sender: Any) {
+        
+        if authorizationService.isAuthorizing {
+            cancel()
+        }
 
         guard let currentViewController = controllerContextProvider.currentController else {
             fatalError("attempting to authorize before the key window has a root view controller")
         }
 
         delegate?.buttonWillBeginAuthorizing(self)
-
         authorizationService.authorize(
             scopes: scopes,
             fromViewController: currentViewController,
@@ -149,6 +152,14 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 
 private extension ProjectVerifyAuthorizeButton {
     func configureButton() {
+
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                self?.handleDidBecomeActive()
+        }
+
         configureSelectors()
         updateButtonText()
     }
@@ -173,5 +184,15 @@ private extension ProjectVerifyAuthorizeButton {
             // use generic 'continue' message by default.
             updateBrandedText(Localization.Buttons.continueWithProjectVerify)
         }
+    }
+
+    func handleDidBecomeActive() {
+        // This notificaiton will be recieved _after_ the redirect url is handled via. the main
+        // queue. If the authorization service is still running, let's implicitly cancel the request
+        // in favor of having the user retry the action.
+        guard authorizationService.isAuthorizing else {
+            return
+        }
+        authorizationService.cancel()
     }
 }

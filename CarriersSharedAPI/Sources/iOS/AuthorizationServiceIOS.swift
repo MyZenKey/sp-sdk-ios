@@ -83,7 +83,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocolInternal {
             deviceInfoProvider: DeviceInfo(),
             onStateChange: { [weak self] _ in self?.handleStateChange() }
         )
-
+        
         let requestContext = AuthorizationRequestContext(
             viewController: viewController,
             parameters: parameters,
