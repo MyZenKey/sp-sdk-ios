@@ -127,15 +127,16 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
 
     @objc func handlePress(sender: Any) {
 
-        if authorizationService.isAuthorizing {
-            cancel()
-        }
+        guard isEnabled else { return }
+
+        isEnabled = false
 
         guard let currentViewController = controllerContextProvider.currentController else {
             fatalError("attempting to authorize before the key window has a root view controller")
         }
 
         delegate?.buttonWillBeginAuthorizing(self)
+
         authorizationService.authorize(
             scopes: scopes,
             fromViewController: currentViewController,
@@ -179,6 +180,7 @@ private extension ProjectVerifyAuthorizeButton {
     }
 
     func handle(result: AuthorizationResult) {
+        isEnabled = true
         delegate?.buttonDidFinish(self, withResult: result)
     }
 

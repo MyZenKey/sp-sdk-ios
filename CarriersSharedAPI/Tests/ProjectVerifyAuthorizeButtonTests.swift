@@ -180,25 +180,33 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         wait(for: [expectation], timeout: timeout)
     }
 
-    func testButtonImplictlyCancelsPreviousRequest() {
+    func testButtonIgnoresDuplicateRequests() {
+        let firstCallContext = "foo"
+        let secondCallContext = "bar"
+        button.context = firstCallContext
+        button.handlePress(sender: button)
+        button.context = secondCallContext
+        button.handlePress(sender: button)
+        XCTAssertEqual(mockAuthorizationService.lastContext, firstCallContext)
+    }
 
+    func testButtonDisabledUponRequest() {
+        button.handlePress(sender: button)
+        XCTAssertFalse(button.isEnabled)
+    }
+
+    func testButtonEnabledUponCompletion() {
+        let mockResponse = AuthorizedResponse(code: "foo", mcc: "bar", mnc: "bah", redirectURI: URL.mocked)
+        mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate
-
         let expectation = XCTestExpectation(description: "wait")
         mockDelegate.onDidFinish = { _ in
-            // no action
-        }
-
-        // press 2x to implictly cancel
-        button.handlePress(sender: button)
-        button.handlePress(sender: button)
-
-        mockDelegate.onDidFinish = { _ in
-            XCTAssertEqual(self.mockAuthorizationService.cancelCallCount, 1)
+            XCTAssertTrue(self.button.isEnabled)
             expectation.fulfill()
         }
 
+        button.handlePress(sender: button)
         wait(for: [expectation], timeout: timeout)
     }
 
