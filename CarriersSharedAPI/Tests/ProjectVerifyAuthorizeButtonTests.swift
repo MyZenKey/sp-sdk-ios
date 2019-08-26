@@ -179,6 +179,47 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         button.handlePress(sender: button)
         wait(for: [expectation], timeout: timeout)
     }
+
+    func testButtonImplictlyCancelsPreviousRequest() {
+
+        let mockDelegate = MockAuthorizationButtonDelegate()
+        button.delegate = mockDelegate
+
+        let expectation = XCTestExpectation(description: "wait")
+        mockDelegate.onDidFinish = { _ in
+            // no action
+        }
+
+        // press 2x to implictly cancel
+        button.handlePress(sender: button)
+        button.handlePress(sender: button)
+
+        mockDelegate.onDidFinish = { _ in
+            XCTAssertEqual(self.mockAuthorizationService.cancelCallCount, 1)
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    func testButtonCancelsOnAppDidBecomeActiveIfNoURL() {
+        let mockDelegate = MockAuthorizationButtonDelegate()
+        button.delegate = mockDelegate
+
+        let expectation = XCTestExpectation(description: "wait")
+        mockDelegate.onDidFinish = { _ in
+            expectation.fulfill()
+        }
+
+        button.handlePress(sender: button)
+
+        NotificationCenter.default.post(
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            userInfo: [:])
+
+        wait(for: [expectation], timeout: timeout)
+    }
 }
 
 private extension ProjectVerifyBrandedButton {

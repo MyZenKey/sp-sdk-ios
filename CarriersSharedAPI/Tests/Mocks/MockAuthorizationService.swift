@@ -24,6 +24,8 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
     var lastViewController: UIViewController?
     var lastCompletion: AuthorizationCompletion?
 
+    private(set) var cancelCallCount: Int = 0
+
     func clear() {
         mockResult = .cancelled
 
@@ -37,6 +39,8 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
 
         lastViewController = nil
         lastCompletion = nil
+
+        cancelCallCount = 0
 
         isAuthorizing = false
     }
@@ -75,6 +79,8 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
     }
 
     func cancel() {
+        cancelCallCount += 1
         isAuthorizing = false
+        mockResult = .cancelled
     }
 }
