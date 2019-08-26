@@ -22,7 +22,7 @@ class WebBrowserUI: NSObject, SFSafariViewControllerDelegate {
         self.onUIDidCancel = onUIDidCancel
 
         if viewController.transitionCoordinator != nil {
-            // in the case that there is a transition in progress, we need to follow the tranisiton
+            // in the case that there is a transition in progress, we need to follow the transition
             // and create the safari vc in the completion (or it will appear blank).
             viewController.transitionCoordinator?.animate(alongsideTransition: nil) { _ in
                 let safariController = self.newSafariViewController(url: url)

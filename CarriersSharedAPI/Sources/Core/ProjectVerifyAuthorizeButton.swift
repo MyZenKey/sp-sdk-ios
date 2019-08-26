@@ -151,7 +151,7 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     }
 
     @objc func handleDidBecomeActive() {
-        // This notificaiton will be recieved _after_ the redirect url is handled via. the main
+        // This notification will be recieved _after_ the redirect url is handled via the main
         // queue. If the authorization service is still running, let's implicitly cancel the request
         // in favor of having the user retry the action.
         guard authorizationService.isAuthorizing else {
