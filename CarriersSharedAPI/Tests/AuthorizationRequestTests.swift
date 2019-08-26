@@ -12,6 +12,8 @@ import XCTest
 struct MockDeviceInfo: DeviceInfoProtocol {
     var isTablet: Bool
 
+    static let mockNonTablet = MockDeviceInfo(isTablet: false)
+
     static let mockTablet = MockDeviceInfo(isTablet: true)
 }
 
@@ -19,7 +21,7 @@ class AuthorizationStateMachineTests: XCTestCase {
     var stateMachine = stateMachineFactory()
 
     static func stateMachineFactory(
-        deviceInfoProvider: DeviceInfoProtocol = DeviceInfo(),
+        deviceInfoProvider: DeviceInfoProtocol = MockDeviceInfo.mockNonTablet,
         onStateChange: @escaping AuthorizationServiceStateMachine.StateChangeHandler = { _ in }
         ) -> AuthorizationServiceStateMachine {
         return AuthorizationServiceStateMachine(

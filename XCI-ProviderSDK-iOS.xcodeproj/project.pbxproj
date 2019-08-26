@@ -36,6 +36,7 @@
 		8A3FAB1C224055DD00767A03 /* ConfigCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */; };
 		8A42008B230C65E7004AB908 /* CurrentSIMBrandingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A420089230C64FF004AB908 /* CurrentSIMBrandingProviderTests.swift */; };
 		8A420092230DAA01004AB908 /* DependenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A420090230DA9CC004AB908 /* DependenciesTests.swift */; };
+		8A420097230F4099004AB908 /* MockAuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A420095230F405B004AB908 /* MockAuthorizationService.swift */; };
 		8A42700E22B153FE0046C69E /* AuthorizationServiceTests+DiscoveryServiceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A42700022B153D10046C69E /* AuthorizationServiceTests+DiscoveryServiceInterface.swift */; };
 		8A42701122B16E810046C69E /* AuthorizationServiceTests+UserNotFoundError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A42700F22B16E600046C69E /* AuthorizationServiceTests+UserNotFoundError.swift */; };
 		8A48895122555345006337EC /* ProjectVerifyAuthorizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A48895022555345006337EC /* ProjectVerifyAuthorizeButton.swift */; };
@@ -142,6 +143,7 @@
 		8A3FAB1B224055DD00767A03 /* ConfigCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCacheService.swift; sourceTree = "<group>"; };
 		8A420089230C64FF004AB908 /* CurrentSIMBrandingProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSIMBrandingProviderTests.swift; sourceTree = "<group>"; };
 		8A420090230DA9CC004AB908 /* DependenciesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependenciesTests.swift; sourceTree = "<group>"; };
+		8A420095230F405B004AB908 /* MockAuthorizationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockAuthorizationService.swift; sourceTree = "<group>"; };
 		8A42700022B153D10046C69E /* AuthorizationServiceTests+DiscoveryServiceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthorizationServiceTests+DiscoveryServiceInterface.swift"; sourceTree = "<group>"; };
 		8A42700F22B16E600046C69E /* AuthorizationServiceTests+UserNotFoundError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthorizationServiceTests+UserNotFoundError.swift"; sourceTree = "<group>"; };
 		8A48895022555345006337EC /* ProjectVerifyAuthorizeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectVerifyAuthorizeButton.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				23F88F5122246EC100A5F5D9 /* DisocoveryConfigMockPayloads.swift */,
+				8A420095230F405B004AB908 /* MockAuthorizationService.swift */,
 				233A50302228831A0089BA0D /* MockCarrierInfoService.swift */,
 				23F88F5722247A4600A5F5D9 /* MockMobileNetworkInfoProvider.swift */,
 				23F88F5522247A3500A5F5D9 /* MockNetworkService.swift */,
@@ -556,6 +559,7 @@
 				8AB30A01228614DE003E08D8 /* DiscoveryServiceTests.swift in Sources */,
 				8AB30A09228614DE003E08D8 /* AuthorizationErrorParsing.swift in Sources */,
 				8AB30A04228614DE003E08D8 /* OpenIdServiceTests.swift in Sources */,
+				8A420097230F4099004AB908 /* MockAuthorizationService.swift in Sources */,
 				8AB30A06228614DE003E08D8 /* ConfigCacheServiceTests.swift in Sources */,
 				8AB8A97122A06F2B00E8AEB3 /* MockOpenIdService.swift in Sources */,
 				8AB30A00228614DE003E08D8 /* CarrierInfoServiceTests.swift in Sources */,
