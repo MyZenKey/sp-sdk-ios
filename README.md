@@ -359,8 +359,8 @@ The following table summarizes the `AuthorizationError` error types and potentia
 It is possible to enable logging by passing a value for the `.logLevel` key via the to the `projectVerifyOptions` parameter in the `ProjectVerifyAppDelegate`. For more information on the options, see the `Log.LogLevel` type  as shown below (source is *Log.swift*).
 
 ```swift
-/// A logging structure. Pass a log level to the project verify launch options to enable logging
-/// for use during debugging.
+/// Pass a log level to the ZenKey launch options to enable logging for use during debugging.
+
 public struct Log {
     static private(set) var logLevel: Level = .off
 
