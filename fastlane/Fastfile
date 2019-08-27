@@ -50,7 +50,7 @@ ENV['FL_HOCKEY_NOTIFY'] = '0'
 DERIVED_DATA_PATH = "#{ENV['RZ_TEST_REPORTS']}/derived_data"
 TEST_PROJCET = 'XCI-ProviderSDK-iOS.xcodeproj'
 TEST_PROJCET_PATH = "./#{TEST_PROJCET}"
-TEST_SCHEME = "CarriersSharedAPITests"
+TEST_SCHEME = "ZenKeySDKTests"
 
   # LANES ----------------------
 
@@ -190,7 +190,7 @@ platform :ios do
     slather_proj = TEST_PROJCET
     slather_scheme = TEST_SCHEME
     # Add binaries here as you create internal frameworks
-    slather_binaries = ['CarriersSharedAPI']
+    slather_binaries = ['ZenKeySDK']
     slather_output_directory = "#{ENV['RZ_TEST_REPORTS']}/slather"
 
     # html and cobertura_xml output must be run separately

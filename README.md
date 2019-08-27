@@ -144,7 +144,7 @@ If you would like to add an extra layer of security to your integration, we reco
 To support ZenKey, you must instantiate ZenKey in your application delegate:
 
 ```swift
-import CarriersSharedAPI
+import ZenKeySDK
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
@@ -183,7 +183,7 @@ The SDK provides a branded button called `ProjectVerifyAuthorizationButton` that
 Add the ZenKey  `ProjectVerifyAuthorizationButton` to your UIView.
 
 ```swift
-import CarriersSharedAPI
+import ZenKeySDK
 
 class LoginViewController {
     let projectVerifyButton = ProjectVerifyAuthorizationButton()
@@ -269,7 +269,7 @@ By you should always include the `.openid` scope. To use additional scopes, set 
     let scopes: [Scope] = [.openid, .email, .name]
 ```
 
-For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/blob/develop/CarriersSharedAPI/Sources/Core/Scope.swift).
+For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/blob/develop/ZenKeySDK/Sources/Core/Scope.swift).
 
 #### 6.3.2 Additional Parameters
 
@@ -305,7 +305,7 @@ For a more hands-on approach, you can perform a manual authorization request wit
 Pass the code and associated identifiers to your secure server to complete the token request flow.
 
 ```swift
-import CarriersSharedAPI
+import ZenKeySDK
 
 class LoginViewController {
 
