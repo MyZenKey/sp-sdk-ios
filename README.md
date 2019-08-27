@@ -224,7 +224,7 @@ The light button style looks like this:
 
 #### 6.1.3 Custom Button or View
 
-If you want you can add a custom button/view instead of using the default `ProjectVerifyAuthorizationButton`. Add the implementation details as noted in section 7.0, "Request Authorization Code Manually". 
+Instead of the default `ProjectVerifyAuthorizationButton`, you can invoke ZenKey with your own custom button or view. See the implementation details in section 7.0, "Request Authorization Code Manually".
 
 ### 6.2 Receive Callbacks
 
@@ -249,9 +249,9 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
             let mnc = authorizedResponse.mnc
             // pass these identifiers to your secure server to perform a token request
         case .error(let authorizationError):
-            // Error is returned identity provider
+            // There was an error with the authorization request
         case .cancelled:
-            //The user cancelled request in ZenKey application 
+            // The user cancelled their request in the ZenKey application 
         }
     }
 }
@@ -278,7 +278,8 @@ Additionally, it is possible to configure the following parameters:
 * ACR Values - Authenticator Assurance Levels (AAL) which identify The strength of an authentication transaction. Stronger authentication (a higher AAL) requires malicious actors to have better capabilities and expend greater resources in order to successfully subvert the authentication process. Values returned in id_token will contain `aalx`. 
 
   * SPs should ask for aal1 when they need a low level of authentication, users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require second factor (pin | bio).
-  * SPs should ask for aal2 or aal3 anytime they want to ensure the user has provided their (pin | bio). 
+  
+* SPs should ask for aal2 or aal3 anytime they want to ensure the user has provided their (pin | bio). 
 
 * Request State - Any SP-provided value to be returned with the auth_code
 
@@ -287,18 +288,16 @@ Additionally, it is possible to configure the following parameters:
 
 * Correlation Id - SPs may pass a correlation id to be added to Carrier logs. SPs must work with the ZenKey SP Portal to request any log entries.  
 
-  **Note:** An SP should use the same correlation_id for code, token, and userinfo requests. But MNO’s may not enforce this. 
+  **Note:** An SP should use the same correlation_id for code, token, and userinfo requests. But carrier’s may not enforce this. 
 
-* Context - SPs will be able to submit “text string” for authorization by the user. For example, a bank transfer may say, "Do you want to authorize a $200 transfer to your checking account?".  The best practice is that a server-initiated request should contain a context parameter, so that a user understands the reason for the interaction.  Maximum size will be <280> characters. Any request with a context that is too large will result in an OIDC error. (invalid request).  
+* Context - SPs will be able to submit “text string” to accompany the authorization request in the ZenKey application. For example, a bank transfer may prompt the user with: "Do you want to authorize a $200 transfer to your checking account?".  The best practice is that a server-initiated request should contain a context parameter, so that a user understands the reason for the interaction.  Maximum size will be <280> characters. Any request with a context that is too large will result in an OIDC error. (invalid request).  
   
-* Prompt - The user needs to approve a transaction with each request. 
+* Prompt - The user needs to approve a transaction with each request.  
 
-  * prompt=None - should always return “user interaction required” which is a standard
-    oauth2 response to this request.
-  * prompt=login - SP asks user to authenticate again
-  * prompt=consent - SP asks user to explicitly re-confirm user agrees to exposure of their data. (Carrier recaptures user consent for listed scopes) 
+  * prompt=login - SP asks user to authenticate again.
+  * prompt=consent - SP asks user to explicitly re-confirm user agrees to exposure of their data. (Carrier recaptures user consent for listed scopes).
 
-For more information about each of these parameters and instructions on how to use them, view the documentation for the `ProjectVerifyAuthorizeButton`.
+For more information about each of these parameters and instructions on how to use them, view the documentation for the `ProjectVerifyAuthorizeButton`. There is also more information on the enumerated values in `PromptValue.swift`.
 
 ## 7.0 Request Authorization Code Manually
 
@@ -414,6 +413,7 @@ NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND C
 
 | Date   | Version      | Description |
 | -------- | --------- | ------------------------------------------------------ |
-|8.27.2019 | 0.9.10     | Added section numbers; Added revision history; Added additional info about Redirect URIs to section 4.0 |
+|8.27.2019 | 0.9.10     | Updated high-level flows; Updated sample code.  |
+|8.20.2019 | 0.9.9     | Added section numbers; Added revision history; Added additional info about Redirect URIs to section 4.0 |
 
 <sub> Last Update: Document Version 0.9.10 - August 27, 2019</sub>
