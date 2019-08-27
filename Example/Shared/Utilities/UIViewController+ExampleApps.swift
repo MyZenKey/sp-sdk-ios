@@ -33,7 +33,7 @@ extension UIViewController {
                 message: "Comeback later if you change your mind."
             )
         default:
-            showAlert(title: "Error", message: "An error occured")
+            showAlert(title: "Error", message: "An error occured of type: \(error.errorType)\n with code: \(error.code)")
         }
     }
 
