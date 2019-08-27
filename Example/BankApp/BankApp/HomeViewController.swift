@@ -50,7 +50,7 @@ class HomeViewController: BankAppViewController {
         }
     }
 
-    private var serviceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
+    private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()

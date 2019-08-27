@@ -12,7 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, DemoAppAppDelegate {
 
     var window: UIWindow?
     var navigationController: UINavigationController?
-    private var serviceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
+    private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 

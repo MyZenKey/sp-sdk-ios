@@ -107,7 +107,7 @@ class LoginViewController: UIViewController {
         return toolbar
     }()
 
-    private let clientSideServiceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
+    private let clientSideServiceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()

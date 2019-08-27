@@ -51,4 +51,8 @@ struct BuildInfo {
         label.numberOfLines = 0
         return label
     }
+
+    static func serviceProviderAPI() -> ServiceProviderAPIProtocol {
+        return ClientSideServiceAPI()
+    }
 }
