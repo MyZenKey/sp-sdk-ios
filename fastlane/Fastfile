@@ -17,22 +17,16 @@ default_platform :ios
 # JAZZY_ARTIFACTS
 
 BANK_APP = 'BankApp'
-SOCIAL_APP = 'SocialApp'
-PHOTO_APP = 'PhotoApp'
 
-PRODUCT_NAMES = [SOCIAL_APP, BANK_APP, PHOTO_APP]
+PRODUCT_NAMES = [BANK_APP]
 
 # hockey app id hashes
 DEVELOP_IDS = {
   BANK_APP => '0aa24abecfcb48d7ab03ea1cf26074cb',
-  SOCIAL_APP => '8ced2056b5884381ac30218cdeab765c',
-  PHOTO_APP => '295b01ec09064334b893280047da21ae',
 }
 
 SPRINT_IDS = {
   BANK_APP => 'e771ef86bdcd40f698cb7610682ea589',
-  SOCIAL_APP => '3c7003a1984f4e448630beac446cfde3',
-  PHOTO_APP => '9ef33650e15f4376804a9194b09efc9c',
 }
 
 SECRETS_MAP = {
@@ -45,7 +39,7 @@ XCCONFIGS_PATHS = {
 
 SECRETS_CONFIG_NAME = 'Secrets.xcconfig'
 
-# env
+  # ENV ----------------------
 
 ENV['RZ_ARTIFACTS'] = './build'
 ENV['RZ_TEST_REPORTS'] ||= ENV['CIRCLE_TEST_REPORTS'] || './build'
@@ -58,19 +52,21 @@ TEST_PROJCET = 'XCI-ProviderSDK-iOS.xcodeproj'
 TEST_PROJCET_PATH = "./#{TEST_PROJCET}"
 TEST_SCHEME = "CarriersSharedAPITests"
 
-# lanes
+  # LANES ----------------------
 
 platform :ios do
   before_all do
     setup_circle_ci
+    match(type: "enterprise", readonly: true)
     if ENV['RZ_ARTIFACTS'] && ENV['RZ_ARTIFACTS'].length > 0
       sh 'rm -rf $RZ_ARTIFACTS && mkdir $RZ_ARTIFACTS'
     end
   end
 
+  # BUILDS ----------------------
+
   desc "Runs tests"
   lane :test do
-    match(type: "enterprise", readonly: true)
     scan(
       project: TEST_PROJCET_PATH,
       output_types: 'junit,html',
@@ -91,9 +87,50 @@ platform :ios do
     end
   end
 
+  desc "Builds and submits a Develop release to Hockey"
+  lane :develop do
+    write_secrets
+
+    PRODUCT_NAMES.each do |productName|
+      buildName = "develop-#{productName}"
+      buildDemoApp(productName, buildName, 'enterprise', {
+        teamID: "XRTVVR644Y",
+        signingCertificate: "iPhone Distribution",
+      })
+      hockey(
+        ipa: productIPA(productName),
+        public_identifier: DEVELOP_IDS[productName],
+        bypass_cdn: true
+      )
+      # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_DEVELOPZZ')
+      slack(message: "Successfully uploaded #{buildName} build number #{build_number} to develop", success: true)  
+    end
+  end
+
+  desc "Builds and submits a Sprint release to Hockey"
+  lane :sprint do
+    write_secrets
+
+    PRODUCT_NAMES.each do |productName|
+      buildName = "sprint-#{productName}"
+      buildDemoApp(productName, buildName, 'enterprise', {
+        teamID: "XRTVVR644Y",
+        signingCertificate: "iPhone Distribution",
+      })
+      hockey(
+        ipa: productIPA(productName),
+        public_identifier: SPRINT_IDS[productName],
+        bypass_cdn: true
+      )
+      # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_SPRINTZZ')
+      slack(message: "Successfully uploaded #{buildName} build number #{build_number} to sprint", success: true)
+    end
+  end
+
+  # ADMIN ----------------------
+
   desc "Generates Docs"
   lane :generate_docs do
-
     jazzy_output = ENV['JAZZY_OUTPUT']
     jazzy_artifacts = ENV['JAZZY_ARTIFACTS']
 
@@ -181,9 +218,24 @@ platform :ios do
     )
   end
 
+  desc "Updates the pods for all Example repos"
+  lane :update_pods do
+    Dir.chdir('../Example') do
+      directories = Dir.glob('*').select { |file| File.directory? file }
+      directories.each do |entry|
+        Dir.chdir("./#{entry}") do
+          puts "in #{Dir.pwd}"
+          sh "bundle exec pod install" unless !File.exists? "Podfile" 
+        end
+      end
+    end  
+  end
+
+  # SECRETS ----------------------
+
   desc "Write secret configs"
   lane :write_secrets do
-    [ BANK_APP ].each do |name|
+    PRODUCT_NAMES.each do |name|
       xcConfigsDir(name) do
         # write the include secrets for each file
         forEachXCConfig do |file|
@@ -201,7 +253,7 @@ platform :ios do
 
   desc "Remove secrets from configs"
   lane :strip_secrets do
-    [ BANK_APP, SOCIAL_APP, PHOTO_APP ].each do |name|
+    PRODUCT_NAMES.each do |name|
       xcConfigsDir(name) do
         # remove the secrets file if present:
         FileUtils.rm(SECRETS_CONFIG_NAME) if File.exists? SECRETS_CONFIG_NAME
@@ -224,79 +276,10 @@ platform :ios do
     end
   end
 
-  desc "Builds and submits a Develop release to Hockey"
-  lane :develop do
-    write_secrets
-
-    PRODUCT_NAMES.each do |productName|
-      buildName = "develop-#{productName}"
-      buildDemoApp(productName, buildName, 'enterprise', {
-        teamID: "XRTVVR644Y",
-        signingCertificate: "iPhone Distribution",
-      })
-      hockey(
-        ipa: productIPA(productName),
-        public_identifier: DEVELOP_IDS[productName],
-        bypass_cdn: true
-      )
-      # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_DEVELOPZZ')
-      slack(message: "Successfully uploaded #{buildName} build number #{build_number} to develop", success: true)  
-    end
-  end
-
-  desc "Builds and submits a Sprint release to Hockey"
-  lane :sprint do
-    write_secrets
-
-    PRODUCT_NAMES.each do |productName|
-      buildName = "sprint-#{productName}"
-      buildDemoApp(productName, buildName, 'enterprise', {
-        teamID: "XRTVVR644Y",
-        signingCertificate: "iPhone Distribution",
-      })
-      hockey(
-        ipa: productIPA(productName),
-        public_identifier: SPRINT_IDS[productName],
-        bypass_cdn: true
-      )
-      # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_SPRINTZZ')
-      slack(message: "Successfully uploaded #{buildName} build number #{build_number} to sprint", success: true)
-    end
-  end
-
-  desc "Updates the pods for all Example repos"
-  lane :update_pods do
-    Dir.chdir('../Example') do
-      directories = Dir.glob('*').select { |file| File.directory? file }
-      directories.each do |entry|
-        Dir.chdir("./#{entry}") do
-          puts "in #{Dir.pwd}"
-          sh "bundle exec pod install" unless !File.exists? "Podfile" 
-        end
-      end
-    end  
-  end
-
-  # desc "Builds and submits an App Store release to TestFlight"
-  lane :beta do
-  #  build("appStore-PRODUCTNAME", 'app-store', {
-  #    teamID: "",
-  #    signingCertificate: "iPhone Distribution",
-  #    provisioningProfiles: { "" => "" }
-  #  })    
-  #  pilot(
-  #   distribute_external: false,
-  #     skip_waiting_for_build_processing: true,
-  #  )
-  #  upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_APPSTOREZZ')
-  #  slack(message: "Successfully uploaded build #{build_number} to test flight", success: true)
-  end
-
   # Helpers ----------------------
 
   def buildDemoApp(name, scheme, export_method, export_options)
     workspacePath = File.expand_path("../Example/#{name}/#{name}.xcworkspace")
-    match(type: "enterprise", readonly: true)
     gym(
       workspace: workspacePath,
       output_directory: "#{ENV['RZ_ARTIFACTS']}",
