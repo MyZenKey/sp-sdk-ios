@@ -1,12 +1,12 @@
-![Project Verify](image/project_verify.png "Project Verify")
+![Zenkey](image/ZenKey_rgb.png "ZenKey")
 
 # iOS Integration Guide
 
-This guide is for developers integrating Project Verify with their iOS applications.
+This guide is for developers integrating Zenkey with their iOS applications.
 
 ## 1.0 Background
 
-Project Verify is a joint undertaking of the Mobile Authentication Taskforce. The taskforce provides customers with the ability to use their mobile phone number to sign into apps. Project Verify is built on top of OpenID Connect (OIDC).
+Zenkey is a joint undertaking of the Mobile Authentication Taskforce. The taskforce provides customers with the ability to use their mobile phone number to sign into apps. Zenkey is built on top of OpenID Connect (OIDC).
 
 ### 1.1 OpenID Connect
 
@@ -14,27 +14,27 @@ OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0 speci
 
 ### 1.2 Authorization Code Flow and Carrier Discovery
 
-Project Verify SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to the carrier for authorization. Upon successful authorization, the user is redirected to your application with an authorization code, which you should exchange from your secure backend exchanges for an ID token and access token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
+Zenkey SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to the carrier for authorization. Upon successful authorization, the user is redirected to your application with an authorization code, which you should exchange from your secure backend exchanges for an ID token and access token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
 
-Because each carrier operates its own authorization servers, we determine the user's carrier prior to authentication. This process is called Carrier Discovery (this is an OIDC Discovery with extra parameters). This ensures that the discovery document from Project Verify is for the correct carrier.
+Because each carrier operates its own authorization servers, we determine the user's carrier prior to authentication. This process is called Carrier Discovery (this is an OIDC Discovery with extra parameters). This ensures that the discovery document from Zenkey is for the correct carrier.
 
 ### 1.3 High Level Architecture
 
-Project Verify brings the four main US phone carriers together with a common user authentication experience backed by carrier device authentication. The solution enables two main flows at initial launch (app and web). The app flow is for  service provider (SP) native apps or a SP-browser based websites that are on the same device as Project Verify. The web flow shows secondary device support when the SP website is accessed from a device other than a user’s primary phone.
+Zenkey brings the four main US phone carriers together with a common user authentication experience backed by carrier device authentication. The solution enables two main flows at initial launch (app and web). The app flow is for  service provider (SP) native apps or a SP-browser based websites that are on the same device as Zenkey. The web flow shows secondary device support when the SP website is accessed from a device other than a user’s primary phone.
 
-As the first image shows, consumers from their primary phone access Project Verify either from the SP app or SP website. As a service provider developer, you sign up and log in through the Project Verify portal, then write code in your backend. The architecture looks like this:
+As the first image shows, consumers from their primary phone access Zenkey either from the SP app or SP website. As a service provider developer, you sign up and log in through the Zenkey portal, then write code in your backend. The architecture looks like this:
 
  <img src="image/high_level_flow_app_pri.png" alt="High Level Flow - App" width="550">
 
-The flow goes from consumer through service provider website, to service provider backend, to mobile carrier, to Project Verify and back again.
+The flow goes from consumer through service provider website, to service provider backend, to mobile carrier, to Zenkey and back again.
 
-As the second image shows, consumers from their secondary device (such as a laptop) can access Project Verify from the SP website. The architecture looks like this:
+As the second image shows, consumers from their secondary device (such as a laptop) can access Zenkey from the SP website. The architecture looks like this:
 
  <img src="image/high_level_flow_web_sec.png" alt="High Level Flow - Web" width="550">
 
 The user receives a visual or numeric code with which to confirm their identity with their primary phone. Once they have done this  they can log in with their secondary device.
 
-Consumer verification and authorization flows to Carrier auth, the service provider backend, Project Verify platform and mobile carrier as follows:
+Consumer verification and authorization flows to Carrier auth, the service provider backend, Zenkey platform and mobile carrier as follows:
 
 * Discovery
 * Authorization code request, universal link captured
@@ -46,7 +46,7 @@ Consumer verification and authorization flows to Carrier auth, the service provi
 
 ## 2.0 Getting Started
 
-Before you integrate with Project Verify, register your application and obtain valid `clientId` and `clientSecret` from the portal or by contacting a Customer Operation Specialist.
+Before you integrate with Zenkey, register your application and obtain valid `clientId` and `clientSecret` from the portal or by contacting a Customer Operation Specialist.
 
 ### 2.1 Client Information and Scopes
 
@@ -62,9 +62,9 @@ While the SDK is under development, we recommend maintaining the Provider SDK so
 git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 ```
 
-## 3.0 Add Project Verify SDK
+## 3.0 Add Zenkey SDK
 
-During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Project Verify in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future.
+During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate Zenkey in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future.
 
 ### 3.1 CocoaPods
 
@@ -80,7 +80,7 @@ Then run `pod install`. This adds the local source to your application's workspa
 
 More information coming soon - *Carthage* may be supported in the future.
 
-### 3.3 Adding Project Verify SDK Manually
+### 3.3 Adding Zenkey SDK Manually
 
 You can add the ProjectVerifyLogin SDK to your project manually:
 
@@ -96,10 +96,10 @@ You can add the ProjectVerifyLogin SDK to your project manually:
 
 ## 4.0 Integration
 
-To integrate Project Verify into your iOS application you must first configure your `Info.plist` with your project verify client Id as well as your chosen redirect URI.
+To integrate Zenkey into your iOS application you must first configure your `Info.plist` with your Zenkey client Id as well as your chosen redirect URI.
 
 ### 4.1 Client ID
-All Service providers must add their application’s client Id to their `Info.plist`. Retrieve your client Id from the Project Verify dashboard and add the following key to your application’s `Info.plist`:
+All Service providers must add their application’s client Id to their `Info.plist`. Retrieve your client Id from the Zenkey dashboard and add the following key to your application’s `Info.plist`:
 
 ```xml
     <key>ProjectVerifyClientId</key>
@@ -107,7 +107,7 @@ All Service providers must add their application’s client Id to their `Info.pl
 ```
 
 ### 4.2 Choosing a Redirect URI
-In addition to configuring a your client Id, Service providers must also specify one or more valid redirect URIs. The redirect URI will be passed as a vehicle for callbacks to the SDK to several Project Verify services. To make it easy to get up and running with Project Verify, all Service Providers are pre-configured with the redirect URI: `{your client Id}://com.xci.provider.sdk`. If you would like to use a different redirect URI you must configure it in the Service Provider Portal. See section 4.2.1 for more information.
+In addition to configuring a your client Id, Service providers must also specify one or more valid redirect URIs. The redirect URI will be passed as a vehicle for callbacks to the SDK to several Zenkey services. To make it easy to get up and running with Zenkey, all Service Providers are pre-configured with the redirect URI: `{your client Id}://com.xci.provider.sdk`. If you would like to use a different redirect URI you must configure it in the Service Provider Portal. See section 4.2.1 for more information.
 
 In order to get up and running with this default configuration, all you need to do is to add your client Id as a custom scheme to your Info.plist:
 
@@ -139,9 +139,9 @@ If you would like to add an extra layer of security to your integration, we reco
     <string>https</string>
 ```
 
-## 5.0 Instantiate Project Verify
+## 5.0 Instantiate Zenkey
 
-To support Project Verify, you must instantiate Project Verify in your application delegate:
+To support Zenkey, you must instantiate Zenkey in your application delegate:
 
 ```swift
 import CarriersSharedAPI
@@ -172,14 +172,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 ```
+**NOTE:** To pass a log level to the launch options to enable logging, include the `projectVerifyOptions` parameter. Refer to section 8.1 of this document for the loglevel options..
 
 ## 6.0 Request Authorization Code
 
-The SDK provides a branded button called `ProjectVerifyAuthorizationButton` that automatically handles Project Verify authorization.
+The SDK provides a branded button called `ProjectVerifyAuthorizationButton` that automatically handles Zenkey authorization.
 
 ### 6.1 Add Verify Button
 
-Add the Project Verify  `ProjectVerifyAuthorizationButton` to your UIView.
+Add the Zenkey  `ProjectVerifyAuthorizationButton` to your UIView.
 
 ```swift
 import CarriersSharedAPI
@@ -201,7 +202,7 @@ class LoginViewController {
 
 #### 6.1.1 Dark Button
 
-You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the Project Verify button uses the dark style specified as follows:
+You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the Zenkey button uses the dark style specified as follows:
 
 ```swift
     projectVerifyButton
@@ -221,9 +222,13 @@ The light button style looks like this:
 
 <img src="image/verify_button_light.png" alt="Verify Button Light" width="360">
 
+#### 6.1.3 Custom Button or View
+
+Add a custom button or view instead of the default **ProjectVerifyAuthorizationButton** to match the theme of your app or flow. Add the implementation details as noted in section 7.0, " Request Authorization Code Manually". 
+
 ### 6.2 Receive Callbacks
 
-In order to receive the outcome of your Project Verify request, implement the `ProjectVerifyAuthorizeButtonDelegate` and handle the events.
+In order to receive the outcome of your Zenkey request, implement the `ProjectVerifyAuthorizeButtonDelegate` and handle the events.
 
 ```swift
 extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
@@ -243,10 +248,10 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
             let mcc = authorizedResponse.mcc
             let mnc = authorizedResponse.mnc
             // pass these identifiers to your secure server to perform a token request
-        case .error:
-            // handle the error case appropriately
+        case .error(let authorizationError):
+            // error is returned identity provider
         case .cancelled:
-            // perform any work required when the user cancels
+            //cancelled is users action in application 
         }
     }
 }
@@ -270,12 +275,29 @@ For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/
 
 Additionally, it is possible to configure the following parameters:
 
-* ACR Values
-* Request State
-* Nonce
-* Correlation Id
-* Context
-* Prompt
+* ACR Values - Authenticator Assurance Levels (AAL) which identify The strength of an authentication transaction. Stronger authentication (a higher AAL) requires malicious actors to have better capabilities and expend greater resources in order to successfully subvert the authentication process. Values returned in id_token will contain `aalx`. 
+
+  * SP’s should ask for aal1 when they need a low level of authentication, users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require 2nd factor (pin | bio).
+  * SP’s should ask for aal2 or aal3 anytime they want to ensure the user has provided their (pin | bio). 
+
+* Request State - 
+
+* Nonce - A number used once. This is any Service Provider supplied value included in the ID_Token if SP
+  asked for the openid scope. 
+
+* Correlation Id - SPs may pass a correlation id to be added to MNO logs. SPs must work with the CCID onboarding portal to request any log entries.  
+
+  **Note:** an SP should use the same correlation_id for code, token, and userinfo requests. But MNO’s may not enforce this. 
+
+* Context - SPs will be able to submit “text string” for authorization by the user.  Best practice is a server-initiated request should contain a context parameter, so that a user understands the reason for
+  the interaction.  Maximum size will be <280> characters. Any request with a context that is too large will result in an OIDC error. (invalid request).  
+
+* Prompt - The user needs to approve a transaction with each request. 
+
+  * prompt=None - should always return “user interaction required” which is a standard
+    oauth2 response to this request.
+  * prompt=login - SP asks user to authenticate again
+  * prompt=consent - SP asks user to explicitly re-confirm user agrees to exposure of their data. (Carrier recaptures user consent for listed scopes) 
 
 For more information about each of these parameters and instructions on how to use them, view the documentation for the `ProjectVerifyAuthorizeButton`.
 
@@ -320,7 +342,7 @@ Refer to:
 
 ## 8.0 Error Handling
 
-`AuthorizationError` defines the `ErrorType`, `code`, `description` and `errorType` to help the developer debug the error, as well present a description to the user. The `Error Type` identifies a class of error during the Authorization flow, such as`invalidRequest` or `requestDenied`. The developer can include further information, with `code` adding context for the origin of the error, `description` a possible explanation, and `errorType` a possible remedy.
+`AuthorizationError` defines the `code`, `description` and `errorType` to help the developer debug the error or present a description to the user. The `errorType` is of type `ErrorType` which identifies a class of error during the Authorization flow, such as`invalidRequest` or `requestDenied`. The developer can include further information, with `code` adding context for the origin of the error, `description` a possible explanation and possible remedy.
 
 The following table summarizes the `AuthorizationError` error types and potential recovery suggestions for each.
 
@@ -336,20 +358,51 @@ The following table summarizes the `AuthorizationError` error types and potentia
 | unknownError | An unknown error has occurred. | If the problem persists, contact support. |
 
 ### 8.1 Debugging
-It is possible to enable logging by passing a value for the `.logLevel` key via the to the `projectVerifyOptions` parameter in the `ProjectVerifyAppDelegate`. For more information on the options, see the `Log.LogLevel` type.
+It is possible to enable logging by passing a value for the `.logLevel` key via the to the `projectVerifyOptions` parameter in the `ProjectVerifyAppDelegate`. For more information on the options, see the `Log.LogLevel` type  as shown below (source is *Log.swift*).
+
+```swift
+/// A logging structure. Pass a log level to the project verify launch options to enable logging
+/// for use during debugging.
+public struct Log {
+    static private(set) var logLevel: Level = .off
+
+    public enum Level: Int {
+        case off, error, warn, info, verbose
+
+        var name: String {
+            switch self {
+            case .off:
+                return ""
+            case .warn:
+                return "warn"
+            case .error:
+                return "error"
+            case .info:
+                return "info"
+            case .verbose:
+                return "verbose"
+            }
+        }
+    }
+
+    static func configureLogger(level: Level) {
+        logLevel = level
+    }
+
+```
 
 ## 9.0 Next Steps
 
-On your secure server, perform discovery and use the discovered token endpoint to request an access token from Project Verify with the processes already detailed:
+On your secure server, perform discovery and use the discovered token endpoint to request an access token from Zenkey with the processes already detailed:
 
 * Auth Code
 * MCC (Mobile Country Code)
 * MNC (Mobile Network Code)
 * Redirect URI
 
-The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the Project Verify User Info Endpoint, which should pass information through your server's authenticated endpoints in a way that makes sense for your application.
+The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the Zenkey User Info Endpoint, which should pass information through your server's authenticated endpoints in a way that makes sense for your application.
 
-Information on setting up your secure server can be found in the Project Verify Server and Web Integration Guide.
+Information on setting up your secure server can be found in the Zenkey Server and Web Integration Guide.
 
 ## Support
 For technical questions, contact [support](mailto:techsupport@mobileauthtaskforce.com).
