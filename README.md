@@ -64,11 +64,11 @@ git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 
 ## 3.0 Add ZenKey SDK
 
-During development, include the ProjectVerifyLogin SDK in your project. There are currently two ways to integrate ZenKey in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future.
+During development, include the ZenKey SDK in your project. There are currently two ways to integrate ZenKey in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future.
 
 ### 3.1 CocoaPods
 
-You can include the ProjectVerifyLogin SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following to your Podfile.
+You can include the ZenKey SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following to your Podfile.
 
 ```ruby
   pod 'CarriersSharedAPI', path: '{your-relative-path}/CarriersSharedAPI.podspec'
@@ -82,7 +82,7 @@ More information coming soon - *Carthage* may be supported in the future.
 
 ### 3.3 Adding ZenKey SDK Manually
 
-You can add the ProjectVerifyLogin SDK to your project manually:
+You can add the ZenKey SDK to your project manually:
 
 1. Retrieve the source code. We recommend adding it as a [submodule](#pre-release-git-access), but you may also copy the source into a directory manually.
 
@@ -172,7 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 ```
-**NOTE:** To pass a log level to the launch options to enable logging, include the `projectVerifyOptions` parameter. Refer to section 8.1 of this document for the loglevel options..
+**NOTE:** To enable logging for debugging purposes, include the `projectVerifyOptions` parameter and specify a log level (refer to section 8.1).
 
 ## 6.0 Request Authorization Code
 
@@ -224,7 +224,7 @@ The light button style looks like this:
 
 #### 6.1.3 Custom Button or View
 
-Add a custom button or view instead of the default **ProjectVerifyAuthorizationButton** to match the theme of your app or flow. Add the implementation details as noted in section 7.0, " Request Authorization Code Manually". 
+If you want you can add a custom button/view instead of using the default `ProjectVerifyAuthorizationButton`. Add the implementation details as noted in section 7.0, "Request Authorization Code Manually". 
 
 ### 6.2 Receive Callbacks
 
@@ -249,9 +249,9 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
             let mnc = authorizedResponse.mnc
             // pass these identifiers to your secure server to perform a token request
         case .error(let authorizationError):
-            // error is returned identity provider
+            // Error is returned identity provider
         case .cancelled:
-            //cancelled is users action in application 
+            //The user cancelled request in ZenKey application 
         }
     }
 }
@@ -277,21 +277,20 @@ Additionally, it is possible to configure the following parameters:
 
 * ACR Values - Authenticator Assurance Levels (AAL) which identify The strength of an authentication transaction. Stronger authentication (a higher AAL) requires malicious actors to have better capabilities and expend greater resources in order to successfully subvert the authentication process. Values returned in id_token will contain `aalx`. 
 
-  * SP’s should ask for aal1 when they need a low level of authentication, users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require 2nd factor (pin | bio).
-  * SP’s should ask for aal2 or aal3 anytime they want to ensure the user has provided their (pin | bio). 
+  * SPs should ask for aal1 when they need a low level of authentication, users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require second factor (pin | bio).
+  * SPs should ask for aal2 or aal3 anytime they want to ensure the user has provided their (pin | bio). 
 
-* Request State - 
+* Request State - Any SP-provided value to be returned with the auth_code
 
-* Nonce - A number used once. This is any Service Provider supplied value included in the ID_Token if SP
+* Nonce - A number used once. This is any SP-supplied value included in the ID_Token if SP
   asked for the openid scope. 
 
-* Correlation Id - SPs may pass a correlation id to be added to MNO logs. SPs must work with the CCID onboarding portal to request any log entries.  
+* Correlation Id - SPs may pass a correlation id to be added to Carrier logs. SPs must work with the ZenKey SP Portal to request any log entries.  
 
-  **Note:** an SP should use the same correlation_id for code, token, and userinfo requests. But MNO’s may not enforce this. 
+  **Note:** An SP should use the same correlation_id for code, token, and userinfo requests. But MNO’s may not enforce this. 
 
-* Context - SPs will be able to submit “text string” for authorization by the user.  Best practice is a server-initiated request should contain a context parameter, so that a user understands the reason for
-  the interaction.  Maximum size will be <280> characters. Any request with a context that is too large will result in an OIDC error. (invalid request).  
-
+* Context - SPs will be able to submit “text string” for authorization by the user. For example, a bank transfer may say, "Do you want to authorize a $200 transfer to your checking account?".  The best practice is that a server-initiated request should contain a context parameter, so that a user understands the reason for the interaction.  Maximum size will be <280> characters. Any request with a context that is too large will result in an OIDC error. (invalid request).  
+  
 * Prompt - The user needs to approve a transaction with each request. 
 
   * prompt=None - should always return “user interaction required” which is a standard
@@ -327,9 +326,9 @@ class LoginViewController {
                 let mnc = authorizedResponse.mnc
                 // pass these identifiers to your secure server to perform a token request
             case .error:
-                // handle the error case appropriately
+                // Error is returned identity provider
             case .cancelled:
-                // perform any work required when the user cancels
+                // The user cancelled request in ZenKey application.
             }
         }
     }
@@ -338,7 +337,7 @@ class LoginViewController {
 
 Refer to:
 * [Submodules](https://git-scm.com/docs/git-submodule)
-* [ProjectVerifyLogin](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
+* [ZenKey](https://git.xcijv.net/sp-sdk/sp-sdk-ios)
 
 ## 8.0 Error Handling
 
