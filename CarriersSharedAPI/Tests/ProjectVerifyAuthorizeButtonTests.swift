@@ -13,72 +13,6 @@ class MockCurrentControllerContextProvider: CurrentControllerContextProvider {
     var currentController: UIViewController?
 }
 
-class MockAuthorizationService: AuthorizationServiceProtocol {
-
-    var mockResult: AuthorizationResult = .cancelled
-
-    var lastScopes: [ScopeProtocol]?
-    var lastACRValues: [ACRValue]?
-    var lastState: String?
-    var lastCorrelationId: String?
-    var lastContext: String?
-    var lastPrompt: PromptValue?
-    var lastNonce: String?
-
-    var lastViewController: UIViewController?
-    var lastCompletion: AuthorizationCompletion?
-
-    func clear() {
-        mockResult = .cancelled
-
-        lastScopes = nil
-        lastACRValues = nil
-        lastState = nil
-        lastCorrelationId = nil
-        lastContext = nil
-        lastPrompt = nil
-        lastNonce = nil
-
-        lastViewController = nil
-        lastCompletion = nil
-    }
-
-    var isAuthorizing: Bool = false
-
-    // swiftlint:disable:next function_parameter_count
-    func authorize(
-        scopes: [ScopeProtocol],
-        fromViewController viewController: UIViewController,
-        acrValues: [ACRValue]?,
-        state: String?,
-        correlationId: String?,
-        context: String?,
-        prompt: PromptValue?,
-        nonce: String?,
-        completion: @escaping AuthorizationCompletion) {
-
-        lastScopes = scopes
-        lastACRValues = acrValues
-        lastState = state
-        lastCorrelationId = correlationId
-        lastContext = context
-        lastPrompt = prompt
-        lastNonce = nonce
-
-        lastViewController = viewController
-        lastCompletion = completion
-
-        isAuthorizing = true
-
-        DispatchQueue.main.async {
-            self.isAuthorizing = false
-            completion(self.mockResult)
-        }
-    }
-
-    func cancel() { }
-}
-
 class MockAuthorizationButtonDelegate: ProjectVerifyAuthorizeButtonDelegate {
 
     var onWillBegin: (() -> Void)?
@@ -243,6 +177,55 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
             expectation.fulfill()
         }
         button.handlePress(sender: button)
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    func testButtonIgnoresDuplicateRequests() {
+        let firstCallContext = "foo"
+        let secondCallContext = "bar"
+        button.context = firstCallContext
+        button.handlePress(sender: button)
+        button.context = secondCallContext
+        button.handlePress(sender: button)
+        XCTAssertEqual(mockAuthorizationService.lastContext, firstCallContext)
+    }
+
+    func testButtonDisabledUponRequest() {
+        button.handlePress(sender: button)
+        XCTAssertFalse(button.isEnabled)
+    }
+
+    func testButtonEnabledUponCompletion() {
+        let mockResponse = AuthorizedResponse(code: "foo", mcc: "bar", mnc: "bah", redirectURI: URL.mocked)
+        mockAuthorizationService.mockResult = .code(mockResponse)
+        let mockDelegate = MockAuthorizationButtonDelegate()
+        button.delegate = mockDelegate
+        let expectation = XCTestExpectation(description: "wait")
+        mockDelegate.onDidFinish = { _ in
+            XCTAssertTrue(self.button.isEnabled)
+            expectation.fulfill()
+        }
+
+        button.handlePress(sender: button)
+        wait(for: [expectation], timeout: timeout)
+    }
+
+    func testButtonCancelsOnAppDidBecomeActiveIfNoURL() {
+        let mockDelegate = MockAuthorizationButtonDelegate()
+        button.delegate = mockDelegate
+
+        let expectation = XCTestExpectation(description: "wait")
+        mockDelegate.onDidFinish = { _ in
+            expectation.fulfill()
+        }
+
+        button.handlePress(sender: button)
+
+        NotificationCenter.default.post(
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            userInfo: [:])
+
         wait(for: [expectation], timeout: timeout)
     }
 }
