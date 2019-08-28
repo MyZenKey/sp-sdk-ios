@@ -1,6 +1,6 @@
 //
 //  AuthorizationErrorParsing.swift
-//  XCI-ProviderSDK-iOS
+//  ZenKeySDK
 //
 //  Created by Adam Tierney on 5/9/19.
 //  Copyright © 2019 XCI JV, LLC. All rights reserved.
