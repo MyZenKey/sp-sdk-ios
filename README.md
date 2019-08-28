@@ -102,7 +102,7 @@ To integrate ZenKey into your iOS application you must first configure your `Inf
 All Service providers must add their application’s client Id to their `Info.plist`. Retrieve your client Id from the ZenKey dashboard and add the following key to your application’s `Info.plist`:
 
 ```xml
-    <key>ProjectVerifyClientId</key>
+    <key>ZenKeyClientId</key>
     <string>{your application's client id}</string>
 ```
 
@@ -131,11 +131,11 @@ In order to get up and running with this default configuration, all you need to 
 If you would like to add an extra layer of security to your integration, we recommend specifying your redirect URI as a **universal link**. This requires that you have the appropriately configured app association and entitlements. For more information on universal links, see Apple’s [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links). To use a custom url as your redirect URI, specify your custom scheme, host, and path in your `Info.plist`.
 
 ```xml
-    <key>ProjectVerifyCustomHost</key>
+    <key>ZenKeyCustomHost</key>
     <string>{your universal link's host}</string>
-    <key>ProjectVerifyCustomPath</key>
+    <key>ZenKeyCustomPath</key>
     <string>{your universal link's full path}</string>
-    <key>ProjectVerifyCustomScheme</key>
+    <key>ZenKeyCustomScheme</key>
     <string>https</string>
 ```
 
@@ -150,7 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        ProjectVerifyAppDelegate.shared.application(
+        ZenKeyAppDelegate.shared.application(
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
@@ -164,7 +164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      open url: URL,
                      options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 
-        guard !ProjectVerifyAppDelegate.shared.application(app, open: url, options: options) else {
+        guard !ZenKeyAppDelegate.shared.application(app, open: url, options: options) else {
             return true
         }
         // Perform any other URL processing your app may need to perform.
@@ -172,30 +172,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 ```
-**NOTE:** To enable logging for debugging purposes, include the `projectVerifyOptions` parameter and specify a log level (refer to section 8.1).
+**NOTE:** To enable logging for debugging purposes, include the `zenKeyOptions` parameter and specify a log level (refer to section 8.1).
 
 ## 6.0 Request Authorization Code
 
-The SDK provides a branded button called `ProjectVerifyAuthorizationButton` that automatically handles ZenKey authorization.
+The SDK provides a branded button called `ZenKeyAuthorizationButton` that automatically handles ZenKey authorization.
 
 ### 6.1 Add Verify Button
 
-Add the ZenKey  `ProjectVerifyAuthorizationButton` to your UIView.
+Add the ZenKey  `ZenKeyAuthorizationButton` to your UIView.
 
 ```swift
 import ZenKeySDK
 
 class LoginViewController {
-    let projectVerifyButton = ProjectVerifyAuthorizationButton()
+    let zenKeyButton = ZenKeyAuthorizationButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let scopes: [Scope] = [.openid, .email, .name]
-        projectVerifyButton.scopes = scopes
-        projectVerifyButton.delegate = self
+        zenKeyButton.scopes = scopes
+        zenKeyButton.delegate = self
 
-        view.addSubview(projectVerifyButton)
+        view.addSubview(zenKeyButton)
     }
 }
 ```
@@ -205,7 +205,7 @@ class LoginViewController {
 You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the ZenKey button uses the dark style specified as follows:
 
 ```swift
-    projectVerifyButton
+    zenKeyButton
 ```
 The dark button style looks like this:
 
@@ -216,7 +216,7 @@ The dark button style looks like this:
 A light button style is appropriate to use with dark backgrounds. For the light style, add the light parameter specified as follows:
 
 ```swift
-    projectVerifyButton.style = .light
+    zenKeyButton.style = .light
 ```
 The light button style looks like this:
 
@@ -224,21 +224,21 @@ The light button style looks like this:
 
 #### 6.1.3 Custom Button or View
 
-Instead of the default `ProjectVerifyAuthorizationButton`, you can invoke ZenKey with your own custom button or view. See the implementation details in section 7.0, "Request Authorization Code Manually".
+Instead of the default `ZenKeyAuthorizationButton`, you can invoke ZenKey with your own custom button or view. See the implementation details in section 7.0, "Request Authorization Code Manually".
 
 ### 6.2 Receive Callbacks
 
-In order to receive the outcome of your ZenKey request, implement the `ProjectVerifyAuthorizeButtonDelegate` and handle the events.
+In order to receive the outcome of your ZenKey request, implement the `ZenKeyAuthorizeButtonDelegate` and handle the events.
 
 ```swift
-extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
+extension LoginViewController: ZenKeyAuthorizeButtonDelegate {
 
-    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) {
+    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) {
         // perform any ui updates like showing an activity indicator.
     }
 
     func buttonDidFinish(
-        _ button: ProjectVerifyAuthorizeButton,
+        _ button: ZenKeyAuthorizeButton,
         withResult result: AuthorizationResult) {
 
         // handle the outcome of the request:
@@ -297,7 +297,7 @@ Additionally, it is possible to configure the following parameters:
   * prompt=login - SP asks user to authenticate again.
   * prompt=consent - SP asks user to explicitly re-confirm user agrees to exposure of their data. (Carrier recaptures user consent for listed scopes).
 
-For more information about each of these parameters and instructions on how to use them, view the documentation for the `ProjectVerifyAuthorizeButton`. There is also more information on the enumerated values in `PromptValue.swift`.
+For more information about each of these parameters and instructions on how to use them, view the documentation for the `ZenKeyAuthorizeButton`. There is also more information on the enumerated values in `PromptValue.swift`.
 
 ## 7.0 Request Authorization Code Manually
 
@@ -311,7 +311,7 @@ class LoginViewController {
 
     let authService = AuthorizationService()
 
-    func loginWithProjectVerify() {
+    func loginWithZenKey() {
         // in response to some UI, perform an authorization using the AuthorizationService
         let scopes: [Scope] = [.openid, .email, .name]
         authService.authorize(
@@ -356,7 +356,7 @@ The following table summarizes the `AuthorizationError` error types and potentia
 | unknownError | An unknown error has occurred. | If the problem persists, contact support. |
 
 ### 8.1 Debugging
-It is possible to enable logging by passing a value for the `.logLevel` key via the to the `projectVerifyOptions` parameter in the `ProjectVerifyAppDelegate`. For more information on the options, see the `Log.LogLevel` type  as shown below (source is *Log.swift*).
+It is possible to enable logging by passing a value for the `.logLevel` key via the to the `zenKeyOptions` parameter in the `ZenKeyAppDelegate`. For more information on the options, see the `Log.LogLevel` type  as shown below (source is *Log.swift*).
 
 ```swift
 /// Pass a log level to the ZenKey launch options to enable logging for use during debugging.
