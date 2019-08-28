@@ -120,16 +120,9 @@ public class ZenKeyBrandedButton: UIButton {
     }
 
     private func trueContentSize() -> CGSize {
-        let greatestSize = CGSize(width: CGFloat.greatestFiniteMagnitude,
-                                  height: CGFloat.greatestFiniteMagnitude)
-        let titleSize: CGSize = attributedTitle(for: state)?
-            .boundingRect(
-                with: greatestSize,
-                options: [.usesFontLeading, .usesLineFragmentOrigin],
-                context: nil
-            ).size ?? .zero
+        let titleSize: CGSize = measuredTitleSize
 
-        let iconSize = branding.icon?.size ?? .zero
+        let iconSize = measuredImageSize
 
         let contentWidth =
             iconSize.width +
@@ -159,13 +152,12 @@ public class ZenKeyBrandedButton: UIButton {
                 return .zero
         }
 
-        let size = bounds.size
-
-        let contentSize = trueContentSize()
         let fitMargins = CGSize(
-            width: max( size.width - contentSize.width, Insets.Minimum.horizontal * 2 ),
-            height: max( size.height - contentSize.height, Insets.Minimum.vertical * 2 )
+            width: max( Insets.horizontal * 2, Insets.Minimum.horizontal * 2 ),
+            height: max( Insets.vertical * 2, Insets.Minimum.vertical * 2 )
         )
+
+        print("bounds: \(bounds)")
 
         return CGRect(x: fitMargins.width / 2,
                       y: fitMargins.height / 2,
@@ -181,17 +173,37 @@ public class ZenKeyBrandedButton: UIButton {
 
         // #NTH: - potentially add title scaling behavior to support smaller buttons:
         let imageRect = self.imageRect(forContentRect: contentRect)
-        let offset: CGFloat = spaceTitleAndImageRects ? 8 : 0
-        let xOrign = imageRect.maxX + offset
+        let offset: CGFloat = spaceTitleAndImageRects ? Constants.interitemSpacing : 0
+
+        // x axis: attempt to center the label in the space provided, min x must be >= interitem
+        // spacing, max x must be <= right margin
+        // y axis: use content rect
+        let titleSize = measuredTitleSize
+        let rectCenteredInButton = CGRect(
+            x: max((contentRect.width - titleSize.width), 1) / 2,
+            y: max((contentRect.height - titleSize.height), 1) / 2,
+            width: min(titleSize.width, contentRect.width),
+            height: min(titleSize.height, contentRect.width)
+        )
+
+        let imageRectPlusInteritem = imageRect.maxX + offset
+        print("content:")
+        print(contentRect)
+        print("centered:")
+        print(rectCenteredInButton)
+        let xOrigin =
+            contentRect.origin.x +
+            max( imageRectPlusInteritem, rectCenteredInButton.origin.x )
+        print("xorigin: \(xOrigin)")
         return CGRect(
-            x: xOrign,
+            x: xOrigin,
             y: contentRect.minY,
-            width: contentRect.size.width - xOrign + contentRect.origin.x,
+            width: min( rectCenteredInButton.size.width, contentRect.width - xOrigin ),
             height: contentRect.height)
     }
 
     public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
-        let imageSize = branding.icon?.size ?? .zero
+        let imageSize = measuredImageSize
 
         guard imageSize.width != 0, imageSize.height != 0 else {
             return .zero
@@ -297,6 +309,24 @@ extension ZenKeyBrandedButton {
 // MARK: - private config
 
 private extension ZenKeyBrandedButton {
+
+    var measuredImageSize: CGSize {
+        return branding.icon?.size ?? .zero
+    }
+
+    var measuredTitleSize: CGSize {
+        let greatestSize = CGSize(
+            width: CGFloat.greatestFiniteMagnitude,
+            height: CGFloat.greatestFiniteMagnitude
+        )
+        return attributedTitle(for: state)?
+            .boundingRect(
+                with: greatestSize,
+                options: [.usesFontLeading, .usesLineFragmentOrigin],
+                context: nil
+            ).size ?? .zero
+    }
+
     func configureButton() {
         adjustsImageWhenHighlighted = false
         adjustsImageWhenDisabled = false
@@ -341,7 +371,7 @@ private extension ZenKeyBrandedButton {
                          withColor color: UIColor) -> NSAttributedString {
         let attributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: color,
-            .font: UIFont.boldSystemFont(ofSize: 17.0),
+            .font: UIFont.boldSystemFont(ofSize: 14.0),
         ]
         let attributedString = NSAttributedString(string: title, attributes: attributes)
         return attributedString
@@ -352,13 +382,13 @@ private extension ZenKeyBrandedButton {
 
 private extension ZenKeyBrandedButton {
     enum Constants {
-        static let cornerRadius: CGFloat = 8
-        static let interitemSpacing: CGFloat = 8
+        static let cornerRadius: CGFloat = 2
+        static let interitemSpacing: CGFloat = 25
     }
 
     enum Insets {
-        static let vertical: CGFloat = 16
-        static let horizontal: CGFloat = 42
+        static let vertical: CGFloat = 12
+        static let horizontal: CGFloat = 24
         // swiftlint:disable:next nesting
         enum Minimum {
             static let vertical: CGFloat = 5
