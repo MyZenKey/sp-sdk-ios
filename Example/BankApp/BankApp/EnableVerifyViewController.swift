@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import CarriersSharedAPI
+import ZenKeySDK
 
 class EnableVerifyViewController: BankAppViewController {
     let cancelButton: UIButton = {
@@ -21,9 +21,9 @@ class EnableVerifyViewController: BankAppViewController {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        let text = "We now support\nProject Verify"
+        let text = "We now support\nZenKey"
         let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttributes([NSAttributedStringKey.font :  UIFont.italicSystemFont(ofSize: 38), NSAttributedStringKey.foregroundColor:UIColor.black], range: (text as NSString).range(of: "Project Verify"))
+        attributedString.addAttributes([NSAttributedStringKey.font :  UIFont.italicSystemFont(ofSize: 38), NSAttributedStringKey.foregroundColor:UIColor.black], range: (text as NSString).range(of: "ZenKey"))
         label.attributedText = attributedString
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -33,17 +33,17 @@ class EnableVerifyViewController: BankAppViewController {
     let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        let text = "Would you like to use Project Verify to approve future Bank App logins?"
+        let text = "Would you like to use ZenKey to approve future Bank App logins?"
         let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttributes([NSAttributedStringKey.font :  UIFont.italicSystemFont(ofSize: 18), NSAttributedStringKey.foregroundColor:UIColor.black], range: (text as NSString).range(of: "Project Verify"))
+        attributedString.addAttributes([NSAttributedStringKey.font :  UIFont.italicSystemFont(ofSize: 18), NSAttributedStringKey.foregroundColor:UIColor.black], range: (text as NSString).range(of: "ZenKey"))
         label.attributedText = attributedString
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()
 
-    lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
-        let button = ProjectVerifyAuthorizeButton()
+    lazy var zenKeyButton: ZenKeyAuthorizeButton = {
+        let button = ZenKeyAuthorizeButton()
         button.style = .dark
         let scopes: [Scope] = [.openid, .secondFactor]
         button.scopes = scopes
@@ -71,7 +71,7 @@ class EnableVerifyViewController: BankAppViewController {
         view.addSubview(titleLabel)
         view.addSubview(descriptionLabel)
         view.addSubview(cancelButton)
-        view.addSubview(projectVerifyButton)
+        view.addSubview(zenKeyButton)
         
         constraints.append(titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
         constraints.append(titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
@@ -81,9 +81,9 @@ class EnableVerifyViewController: BankAppViewController {
         constraints.append(descriptionLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(descriptionLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
 
-        constraints.append(projectVerifyButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -25))
-        constraints.append(projectVerifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(projectVerifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+        constraints.append(zenKeyButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -25))
+        constraints.append(zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
 
         constraints.append(cancelButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -25))
         constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
@@ -95,11 +95,11 @@ class EnableVerifyViewController: BankAppViewController {
     }
 }
 
-extension EnableVerifyViewController: ProjectVerifyAuthorizeButtonDelegate {
+extension EnableVerifyViewController: ZenKeyAuthorizeButtonDelegate {
 
-    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) { }
+    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) { }
 
-    func buttonDidFinish(_ button: ProjectVerifyAuthorizeButton, withResult result: AuthorizationResult) {
+    func buttonDidFinish(_ button: ZenKeyAuthorizeButton, withResult result: AuthorizationResult) {
         switch result {
         case .code(let authorizedResponse):
             authorizeUser(authorizedResponse: authorizedResponse)

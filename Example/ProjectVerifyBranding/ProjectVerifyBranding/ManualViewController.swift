@@ -7,11 +7,11 @@
 //
 
 import UIKit
-import CarriersSharedAPI
+import ZenKeySDK
 
 class ManualViewController: UIViewController {
-    let buttonOne: ProjectVerifyBrandedButton = {
-        let button = ProjectVerifyBrandedButton()
+    let buttonOne: ZenKeyBrandedButton = {
+        let button = ZenKeyBrandedButton()
         button.updateBrandedText("Sample Text")
         button.sizeToFit()
         return button
@@ -19,8 +19,8 @@ class ManualViewController: UIViewController {
 
     // view landscape to see resizing behavior for buttons 2 + 3:
     
-    lazy var buttonTwo: ProjectVerifyBrandedButton = {
-        let button = ProjectVerifyBrandedButton()
+    lazy var buttonTwo: ZenKeyBrandedButton = {
+        let button = ZenKeyBrandedButton()
         button.style = .light
         button.autoresizingMask = [.flexibleWidth]
         button.updateBrandedText("Some Longer Sample Text")
@@ -28,8 +28,8 @@ class ManualViewController: UIViewController {
         return button
     }()
     
-    let buttonThree: ProjectVerifyBrandedButton = {
-        let button = ProjectVerifyBrandedButton()
+    let buttonThree: ZenKeyBrandedButton = {
+        let button = ZenKeyBrandedButton()
         button.autoresizingMask = [.flexibleRightMargin]
         return button
     }()

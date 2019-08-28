@@ -1,7 +1,7 @@
 {
-  "name": "CarriersSharedAPI",
-  "version": "0.1.0",
-  "summary": "CarriersSharedAPI",
+  "name": "ZenKeySDK",
+  "version": "0.0.1",
+  "summary": "ZenKeySDK",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/Raizlabs/XCI-ProviderSDK-iOS",
   "license": {
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/Raizlabs/XCI-ProviderSDK-iOS.git",
-    "tag": "0.1.0"
+    "tag": "0.0.1"
   },
   "swift_version": "4.2",
   "platforms": {
@@ -21,24 +21,24 @@
   },
   "ios": {
     "source_files": [
-      "CarriersSharedAPI/Sources/Core/**/*",
-      "CarriersSharedAPI/Sources/iOS/**/*"
+      "ZenKeySDK/Sources/Core/**/*",
+      "ZenKeySDK/Sources/iOS/**/*"
     ],
     "frameworks": [
       "UIKit",
       "SafariServices"
     ]
   },
-  "public_header_files": "CarriersSharedAPI/**/*.h",
+  "public_header_files": "ZenKeySDK/**/*.h",
   "resources": [
-    "CarriersSharedAPI/Resources/*.xcassets",
-    "CarriersSharedAPI/Resources/*.lproj/*.strings"
+    "ZenKeySDK/Resources/*.xcassets",
+    "ZenKeySDK/Resources/*.lproj/*.strings"
   ],
   "testspecs": [
     {
       "name": "Tests",
       "test_type": "unit",
-      "source_files": "CarriersSharedAPI/Tests/**/*.swift",
+      "source_files": "ZenKeySDK/Tests/**/*.swift",
       "frameworks": "XCTest"
     }
   ]

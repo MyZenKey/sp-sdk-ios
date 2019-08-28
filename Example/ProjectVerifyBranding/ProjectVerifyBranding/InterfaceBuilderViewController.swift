@@ -7,12 +7,12 @@
 //
 
 import UIKit
-import CarriersSharedAPI
+import ZenKeySDK
 
 class InterfaceBuilderViewController: UIViewController {
     
-    @IBOutlet var buttonOne: ProjectVerifyBrandedButton!
-    @IBOutlet var buttonTwo: ProjectVerifyBrandedButton!
+    @IBOutlet var buttonOne: ZenKeyBrandedButton!
+    @IBOutlet var buttonTwo: ZenKeyBrandedButton!
 
     init() {
         super.init(nibName: "InterfaceBuilderViewController", bundle: nil)

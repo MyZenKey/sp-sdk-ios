@@ -1,7 +1,7 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
-## CarriersSharedAPI
+## ZenKeySDK
 
 © 2018 XCI JV, LLC. All Rights Reserved.
 

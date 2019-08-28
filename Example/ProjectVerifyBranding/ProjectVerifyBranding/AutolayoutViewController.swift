@@ -7,27 +7,27 @@
 //
 
 import UIKit
-import CarriersSharedAPI
+import ZenKeySDK
 
 class AutolayoutViewController: UIViewController {
     
-    let buttonOne: ProjectVerifyBrandedButton = {
-        let button = ProjectVerifyBrandedButton()
+    let buttonOne: ZenKeyBrandedButton = {
+        let button = ZenKeyBrandedButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.updateBrandedText("Some Longer Sample Text")
         return button
     }()
     
-    let buttonTwo: ProjectVerifyBrandedButton = {
-        let button = ProjectVerifyBrandedButton()
+    let buttonTwo: ZenKeyBrandedButton = {
+        let button = ZenKeyBrandedButton()
         button.style = .light
         button.translatesAutoresizingMaskIntoConstraints = false
         button.updateBrandedText("Sample Text")
         return button
     }()
     
-    let buttonThree: ProjectVerifyBrandedButton = {
-        let button = ProjectVerifyBrandedButton()
+    let buttonThree: ZenKeyBrandedButton = {
+        let button = ZenKeyBrandedButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

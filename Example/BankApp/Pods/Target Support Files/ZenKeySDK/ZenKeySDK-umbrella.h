@@ -10,8 +10,8 @@
 #endif
 #endif
 
-#import "CarriersSharedAPI.h"
+#import "ZenKeySDK.h"
 
-FOUNDATION_EXPORT double CarriersSharedAPIVersionNumber;
-FOUNDATION_EXPORT const unsigned char CarriersSharedAPIVersionString[];
+FOUNDATION_EXPORT double ZenKeySDKVersionNumber;
+FOUNDATION_EXPORT const unsigned char ZenKeySDKVersionString[];
 

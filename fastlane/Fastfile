@@ -245,7 +245,7 @@ platform :ios do
         
         # lastly write out the secrets config
         File.open(SECRETS_CONFIG_NAME, "w+") do |file|
-          file.write("PV_APP_SECRET = #{SECRETS_MAP[name]}")
+          file.write("ZK_APP_SECRET = #{SECRETS_MAP[name]}")
         end
       end
     end

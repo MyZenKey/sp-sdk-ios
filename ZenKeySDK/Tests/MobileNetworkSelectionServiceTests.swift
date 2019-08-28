@@ -241,13 +241,13 @@ class MobileNetworkSelectionServiceRequestTests: XCTestCase {
         let request = MobileNetworkSelectionService.Request(
             resource: URL(string: "https://rightpoint")!,
             clientId: "foobar",
-            redirectURI: "foo://pv",
+            redirectURI: "foo://zk",
             state: "?@=$somechars",
             prompt: false
         )
 
         let expectedURL = URL(
-            string: "https://rightpoint?client_id=foobar&redirect_uri=foo://pv&state=?@%3D$somechars"
+            string: "https://rightpoint?client_id=foobar&redirect_uri=foo://zk&state=?@%3D$somechars"
             )!
         XCTAssertEqual(request.url, expectedURL)
     }
@@ -256,13 +256,13 @@ class MobileNetworkSelectionServiceRequestTests: XCTestCase {
         let request = MobileNetworkSelectionService.Request(
             resource: URL(string: "https://rightpoint")!,
             clientId: "foobar",
-            redirectURI: "foo://pv",
+            redirectURI: "foo://zk",
             state: "?@=$somechars",
             prompt: true
         )
 
         let expectedURL = URL(
-            string: "https://rightpoint?client_id=foobar&redirect_uri=foo://pv&state=?@%3D$somechars&prompt=true"
+            string: "https://rightpoint?client_id=foobar&redirect_uri=foo://zk&state=?@%3D$somechars&prompt=true"
             )!
         XCTAssertEqual(request.url, expectedURL)
     }

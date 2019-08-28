@@ -19,7 +19,7 @@ class AuthorizationServiceTests: XCTestCase {
 
     let mockSDKConfig = SDKConfig(
         clientId: "mockClient",
-        redirectScheme: "pvmockCLient://"
+        redirectScheme: "zkmockCLient://"
     )
 
     lazy var authorizationService = authorizationServiceFactory()

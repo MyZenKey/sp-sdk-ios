@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import CarriersSharedAPI
+import ZenKeySDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window.makeKeyAndVisible()
         }
 
-        ProjectVerifyAppDelegate.shared
+        ZenKeyAppDelegate.shared
             .application(application, didFinishLaunchingWithOptions: launchOptions)
         
         return true
