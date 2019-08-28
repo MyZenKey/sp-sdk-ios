@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_ProjectVerifyBrandingVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_ProjectVerifyBrandingVersionString[];
+FOUNDATION_EXPORT double Pods_ZenKeyBrandingVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_ZenKeyBrandingVersionString[];
 
