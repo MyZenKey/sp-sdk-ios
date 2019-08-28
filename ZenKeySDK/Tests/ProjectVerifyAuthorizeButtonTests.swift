@@ -1,5 +1,5 @@
 //
-//  ProjectVerifyAuthorizeButtonTests.swift
+//  ZenKeyAuthorizeButtonTests.swift
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 4/12/19.
@@ -13,17 +13,17 @@ class MockCurrentControllerContextProvider: CurrentControllerContextProvider {
     var currentController: UIViewController?
 }
 
-class MockAuthorizationButtonDelegate: ProjectVerifyAuthorizeButtonDelegate {
+class MockAuthorizationButtonDelegate: ZenKeyAuthorizeButtonDelegate {
 
     var onWillBegin: (() -> Void)?
     var onDidFinish: ((AuthorizationResult) -> Void)?
 
-    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) {
+    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) {
         onWillBegin?()
     }
 
     func buttonDidFinish(
-        _ button: ProjectVerifyAuthorizeButton,
+        _ button: ZenKeyAuthorizeButton,
         withResult result: AuthorizationResult) {
         onDidFinish?(result)
     }
@@ -37,13 +37,13 @@ class MockBrandingProvider: BrandingProvider {
     var brandingDidChange: ((Branding) -> Void)?
 }
 
-class ProjectVerifyAuthorizeButtonTests: XCTestCase {
+class ZenKeyAuthorizeButtonTests: XCTestCase {
 
     let mockControllerProvider = MockCurrentControllerContextProvider()
     let mockAuthorizationService = MockAuthorizationService()
     let mockBrandingProvider = MockBrandingProvider()
 
-    lazy var button = ProjectVerifyAuthorizeButton(
+    lazy var button = ZenKeyAuthorizeButton(
         authorizationService: mockAuthorizationService,
         controllerContextProvider: mockControllerProvider,
         brandingProvider: mockBrandingProvider
@@ -54,7 +54,7 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
         mockControllerProvider.currentController = UIViewController()
         mockAuthorizationService.clear()
 
-        button = ProjectVerifyAuthorizeButton(
+        button = ZenKeyAuthorizeButton(
             authorizationService: mockAuthorizationService,
             controllerContextProvider: mockControllerProvider,
             brandingProvider: mockBrandingProvider
@@ -62,25 +62,25 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
     }
 
     func testDefaultAppearance() {
-        let appearance = ProjectVerifyBrandedButton.Appearance.dark
+        let appearance = ZenKeyBrandedButton.Appearance.dark
         XCTAssertTrue(button.isCurrentColorScheme(appearance.normal))
     }
 
     func testUpdateStyle() {
         button.style = .light
-        let appearance = ProjectVerifyBrandedButton.Appearance.light
+        let appearance = ZenKeyBrandedButton.Appearance.light
         XCTAssertTrue(button.isCurrentColorScheme(appearance.normal))
     }
 
     func testHighlightApperance() {
         button.isHighlighted = true
-        let appearance = ProjectVerifyBrandedButton.Appearance.dark
+        let appearance = ZenKeyBrandedButton.Appearance.dark
         XCTAssertTrue(button.isCurrentColorScheme(appearance.highlighted))
     }
 
     func testHighlightDisabledAppearance() {
         button.isEnabled = false
-        let appearance = ProjectVerifyBrandedButton.Appearance.dark
+        let appearance = ZenKeyBrandedButton.Appearance.dark
         XCTAssertTrue(button.isCurrentColorScheme(appearance.highlighted))
     }
 
@@ -230,7 +230,7 @@ class ProjectVerifyAuthorizeButtonTests: XCTestCase {
     }
 }
 
-private extension ProjectVerifyBrandedButton {
+private extension ZenKeyBrandedButton {
     func isCurrentColorScheme(_ colorScheme: Appearance.ColorScheme) -> Bool {
         guard
             let title = attributedTitle(for: state),

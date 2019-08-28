@@ -177,7 +177,7 @@ extension AuthorizationStateMachineError: AuthorizationErrorConvertible {
             )
         case .tooManyRecoveries:
             return AuthorizationError(
-                rawErrorCode: ProjectVerifyErrorCode.userNotFound.rawValue,
+                rawErrorCode: ZenKeyErrorCode.userNotFound.rawValue,
                 description: "Discovery was unable to recover from a user not found error. Please retry discovery"
             )
         }

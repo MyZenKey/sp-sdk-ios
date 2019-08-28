@@ -47,7 +47,7 @@ protocol DiscoveryServiceProtocol {
 
 class DiscoveryService: DiscoveryServiceProtocol {
     private let sdkConfig: SDKConfig
-    private let hostConfig: ProjectVerifyNetworkConfig
+    private let hostConfig: ZenKeyNetworkConfig
     private let networkService: NetworkServiceProtocol
     private let configCacheService: ConfigCacheServiceProtocol
 
@@ -55,7 +55,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
     private let discoveryEndpointFormat = "%@?&mccmnc=%@%@"
 
     init(sdkConfig: SDKConfig,
-         hostConfig: ProjectVerifyNetworkConfig,
+         hostConfig: ZenKeyNetworkConfig,
          networkService: NetworkServiceProtocol,
          configCacheService: ConfigCacheServiceProtocol) {
         self.sdkConfig = sdkConfig

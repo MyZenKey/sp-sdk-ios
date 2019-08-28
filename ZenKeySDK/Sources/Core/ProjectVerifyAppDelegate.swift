@@ -1,5 +1,5 @@
 //
-//  ProjectVerify.swift
+//  ZenKey.swift
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 2/13/19.
@@ -17,39 +17,39 @@ import UIKit
 /// `application(_:open:options)`
 ///
 /// - SeeAlso: UIApplicationDelegate
-public class ProjectVerifyAppDelegate {
+public class ZenKeyAppDelegate {
 
-    /// The shared `ProjectVerifyAppDelegate` instance.
+    /// The shared `ZenKeyAppDelegate` instance.
     ///
-    /// This should be the only instance of the `ProjectVerifyAppDelegate` used. Creation of other
+    /// This should be the only instance of the `ZenKeyAppDelegate` used. Creation of other
     /// instances is unsupported.
-    public static let shared = ProjectVerifyAppDelegate()
+    public static let shared = ZenKeyAppDelegate()
 
     private(set) var dependencies: Dependencies!
 
     private var discoveryService: DiscoveryServiceProtocol!
 
-    /// The entry point for the ProjectVerifyLogin SDK. You should call this method during your
+    /// The entry point for the ZenKeyLogin SDK. You should call this method during your
     /// applicaiton's `application(_:didFinishLaunchingWithOptions:)` method before returning.
     ///
     /// - Parameters:
     ///   - application: The UIApplication instance received by your application's app
     ///     delegate
     ///   - launchOptions: The launchOptions received by your applicaiton's app delegate
-    ///   - projectVerifyOptions: ZenKey specific options.
+    ///   - zenKeyOptions: ZenKey specific options.
     ///
-    /// This method is responsible for configuring the ProjectVerifyLogin SDK and should be called
+    /// This method is responsible for configuring the ZenKeyLogin SDK and should be called
     /// before performing any other actions with the SDK.
     ///
     /// - SeeAlso: UIApplicationDelegate.application(_:didFinishLaunchingWithOptions:)
     public func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?,
-        projectVerifyOptions: ProjectVerifyOptions = [:]) {
+        zenKeyOptions: ZenKeyOptions = [:]) {
         // initialize sdk config
         do {
             let sdkConfig = try SDKConfig.load(fromBundle: Bundle.main)
-            self.dependencies = Dependencies(sdkConfig: sdkConfig, options: projectVerifyOptions)
+            self.dependencies = Dependencies(sdkConfig: sdkConfig, options: zenKeyOptions)
             let discoveryService: DiscoveryServiceProtocol = self.dependencies.resolve()
             self.discoveryService = discoveryService
             prefetchOIDC()
@@ -59,7 +59,7 @@ public class ProjectVerifyAppDelegate {
     }
 
     /// Call this method in your application delegates's `application(_:open:options)` method.
-    /// This provides `ProjectVerifyLogin` the opportunity to handle the inbound URL.
+    /// This provides `ZenKeyLogin` the opportunity to handle the inbound URL.
     ///
     /// - Parameters:
     ///   - application: The UIApplication instance received by your application's app
@@ -67,7 +67,7 @@ public class ProjectVerifyAppDelegate {
     ///   - url: The URL parameter received by your applications app delegate
     ///   - options: The options received by your applicaiton's app delegate
     ///
-    /// - Returns: a boolean indicating true if `ProjectVerifyLogin` successfully handled the url
+    /// - Returns: a boolean indicating true if `ZenKeyLogin` successfully handled the url
     /// passed into it, or `false`, if the URL remains un-handled.
     ///
     /// - SeeAlso: UIApplicationDelegate.application(_:open:options)`
@@ -91,7 +91,7 @@ public class ProjectVerifyAppDelegate {
     }
 }
 
-private extension ProjectVerifyAppDelegate {
+private extension ZenKeyAppDelegate {
     func prefetchOIDC() {
         let currentDeviceInfo: CarrierInfoServiceProtocol = dependencies.resolve()
         guard let simInfo = currentDeviceInfo.primarySIM else {

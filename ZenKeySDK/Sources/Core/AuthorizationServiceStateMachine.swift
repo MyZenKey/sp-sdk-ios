@@ -150,7 +150,7 @@ private extension AuthorizationServiceStateMachine {
 
     func nextState(forError error: AuthorizationError) -> State {
         switch error.code {
-        case ProjectVerifyErrorCode.userNotFound.rawValue:
+        case ZenKeyErrorCode.userNotFound.rawValue:
             // enusre we haven't attempted recovery before:
             guard !isAttemptingMissingUserRecovery else {
                 let error = AuthorizationStateMachineError.tooManyRecoveries.asAuthorizationError

@@ -1,5 +1,5 @@
 //
-//  ProjectVerifyBrandedButton.swift
+//  ZenKeyBrandedButton.swift
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 4/10/19.
@@ -10,30 +10,30 @@ import UIKit
 
 /// A protocol which represents the interface for handling changes to branding information.
 ///
-/// Implement this protocol and specify the `brandingDelegate` on a ProjectVerifyBrandedButton to
+/// Implement this protocol and specify the `brandingDelegate` on a ZenKeyBrandedButton to
 /// recieve changes to the button's branding information.
-public protocol ProjectVerifyBrandedButtonDelegate: AnyObject {
+public protocol ZenKeyBrandedButtonDelegate: AnyObject {
     /// Called before the button updates its branding with the previous branding value
     ///
     /// - Parameters:
     ///   - oldBranding: the old branding of the button
     ///   - button: the button instance
-    func brandingWillUpdate(_ oldBranding: Branding, forButton button: ProjectVerifyBrandedButton)
+    func brandingWillUpdate(_ oldBranding: Branding, forButton button: ZenKeyBrandedButton)
 
     /// Called after the button updates its branding with the new branding value
     ///
     /// - Parameters:
     ///   - newBranding: the new branding of the button
     ///   - button: the button instance
-    func brandingDidUpdate(_ newBranding: Branding, forButton button: ProjectVerifyBrandedButton)
+    func brandingDidUpdate(_ newBranding: Branding, forButton button: ZenKeyBrandedButton)
 }
 
-/// A branded ProjectVerifyButton
-public class ProjectVerifyBrandedButton: UIButton {
+/// A branded ZenKeyButton
+public class ZenKeyBrandedButton: UIButton {
 
     /// the button's brandding delegate
-    /// - SeeAlso: ProjectVerifyBrandedButtonDelegate
-    public weak var brandingDelegate: ProjectVerifyBrandedButtonDelegate?
+    /// - SeeAlso: ZenKeyBrandedButtonDelegate
+    public weak var brandingDelegate: ZenKeyBrandedButtonDelegate?
 
     public override var isHighlighted: Bool {
         didSet {
@@ -50,7 +50,7 @@ public class ProjectVerifyBrandedButton: UIButton {
     /// A style for the button to adopt. Light backgrounds should prefer a dark style, while
     /// dark backgrounds may find a light style provides greater contrast.
     ///
-    /// - SeeAlso: `ProjectVerifyBrandedButton.Style`
+    /// - SeeAlso: `ZenKeyBrandedButton.Style`
     public var style: Style = .dark {
         didSet {
             updateBrandingPresentation()
@@ -77,12 +77,12 @@ public class ProjectVerifyBrandedButton: UIButton {
     let brandingProvider: BrandingProvider
 
     public init() {
-        brandingProvider = ProjectVerifyAppDelegate.shared.dependencies.resolve()
+        brandingProvider = ZenKeyAppDelegate.shared.dependencies.resolve()
         super.init(frame: .zero)
         configureButton()
     }
 
-    init(dependencyContainer container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies) {
+    init(dependencyContainer container: Dependencies = ZenKeyAppDelegate.shared.dependencies) {
         brandingProvider = container.resolve()
         super.init(frame: .zero)
         configureButton()
@@ -95,13 +95,13 @@ public class ProjectVerifyBrandedButton: UIButton {
     }
 
     public override init(frame: CGRect) {
-        brandingProvider = ProjectVerifyAppDelegate.shared.dependencies.resolve()
+        brandingProvider = ZenKeyAppDelegate.shared.dependencies.resolve()
         super.init(frame: frame)
         configureButton()
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        brandingProvider = ProjectVerifyAppDelegate.shared.dependencies.resolve()
+        brandingProvider = ZenKeyAppDelegate.shared.dependencies.resolve()
         super.init(coder: aDecoder)
         configureButton()
     }
@@ -234,7 +234,7 @@ public class ProjectVerifyBrandedButton: UIButton {
     }
 }
 
-public extension ProjectVerifyBrandedButton {
+public extension ZenKeyBrandedButton {
     /// Prefer this method for updating the text of the BrandedButton. This method implemnts an
     /// expected, branded behavior for multiple control states by applying the branded attributes
     /// to the provided string.
@@ -271,7 +271,7 @@ public extension ProjectVerifyBrandedButton {
 
 // MARK: - sub-types
 
-extension ProjectVerifyBrandedButton {
+extension ZenKeyBrandedButton {
     /// Provide guidance for the button to use a light background button or a dark background button.
     public enum Style {
         /// Suggests the button should prefer using a light background
@@ -296,7 +296,7 @@ extension ProjectVerifyBrandedButton {
 
 // MARK: - private config
 
-private extension ProjectVerifyBrandedButton {
+private extension ZenKeyBrandedButton {
     func configureButton() {
         adjustsImageWhenHighlighted = false
         adjustsImageWhenDisabled = false
@@ -350,7 +350,7 @@ private extension ProjectVerifyBrandedButton {
 
 // MARK: - Geometery exetensions
 
-private extension ProjectVerifyBrandedButton {
+private extension ZenKeyBrandedButton {
     enum Constants {
         static let cornerRadius: CGFloat = 8
         static let interitemSpacing: CGFloat = 8

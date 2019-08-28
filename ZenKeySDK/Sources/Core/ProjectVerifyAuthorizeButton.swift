@@ -1,5 +1,5 @@
 //
-//  ProjectVerifyAuthorizeButton.swift
+//  ZenKeyAuthorizeButton.swift
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 4/3/19.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-/// Notifications for the ProjectVerifyAuthorizationButton authorization lifecycle
-public protocol ProjectVerifyAuthorizeButtonDelegate: AnyObject {
+/// Notifications for the ZenKeyAuthorizationButton authorization lifecycle
+public protocol ZenKeyAuthorizeButtonDelegate: AnyObject {
     /// Called before the button starts the authorization request
     ///
     /// - Parameter button: the button implementing the request
-    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton)
+    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton)
 
     /// Called upon request completion
     ///
@@ -22,13 +22,13 @@ public protocol ProjectVerifyAuthorizeButtonDelegate: AnyObject {
     ///   - result: the result of the request
     /// - SeeAlso: `AuthorizationResult`
     func buttonDidFinish(
-        _ button: ProjectVerifyAuthorizeButton,
+        _ button: ZenKeyAuthorizeButton,
         withResult result: AuthorizationResult)
 }
 
 /// A button which encapsulates the ZenKey authorization logic and exposes the outcomes
 /// via a delegeate.
-public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
+public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
 
     /// A boolean indicating whether the backing autorization service is currently making a request
     ///
@@ -84,8 +84,8 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     public var nonce: String?
 
     /// the button's delegate
-    /// - SeeAlso: ProjectVerifyAuthorizeButtonDelegate
-    public weak var delegate: ProjectVerifyAuthorizeButtonDelegate?
+    /// - SeeAlso: ZenKeyAuthorizeButtonDelegate
+    public weak var delegate: ZenKeyAuthorizeButtonDelegate?
 
     private var authorizationService: AuthorizationServiceProtocol
     private var controllerContextProvider: CurrentControllerContextProvider
@@ -161,7 +161,7 @@ public final class ProjectVerifyAuthorizeButton: ProjectVerifyBrandedButton {
     }
 }
 
-private extension ProjectVerifyAuthorizeButton {
+private extension ZenKeyAuthorizeButton {
     func configureButton() {
 
         NotificationCenter.default.addObserver(
@@ -188,13 +188,13 @@ private extension ProjectVerifyAuthorizeButton {
         let scopesSet = Set<String>(scopes.map { $0.scopeString })
         if  scopesSet.contains(Scope.authenticate.rawValue) ||
             scopesSet.contains(Scope.register.rawValue) {
-            updateBrandedText(Localization.Buttons.signInWithProjectVerify)
+            updateBrandedText(Localization.Buttons.signInWithZenKey)
         } else if scopesSet.contains(Scope.authorize.rawValue) ||
                   scopesSet.contains(Scope.secondFactor.rawValue) {
-            updateBrandedText(Localization.Buttons.continueWithProjectVerify)
+            updateBrandedText(Localization.Buttons.continueWithZenKey)
         } else {
             // use generic 'continue' message by default.
-            updateBrandedText(Localization.Buttons.continueWithProjectVerify)
+            updateBrandedText(Localization.Buttons.continueWithZenKey)
         }
     }
 }

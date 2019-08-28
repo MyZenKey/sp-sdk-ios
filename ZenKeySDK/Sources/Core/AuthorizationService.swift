@@ -150,7 +150,7 @@ public class AuthorizationService {
     let backingService: AuthorizationServiceProtocolInternal
 
     public init() {
-        let container: Dependencies = ProjectVerifyAppDelegate.shared.dependencies
+        let container: Dependencies = ZenKeyAppDelegate.shared.dependencies
         self.backingService = container.resolve()
     }
 }

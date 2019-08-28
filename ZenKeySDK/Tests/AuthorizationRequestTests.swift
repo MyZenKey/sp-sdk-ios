@@ -193,6 +193,6 @@ class AuthorizationStateMachineTests: XCTestCase {
 
 private extension AuthorizationStateMachineTests {
     private static let userNotFoundError =
-        URLResponseError.errorResponse(ProjectVerifyErrorCode.userNotFound.rawValue, nil)
+        URLResponseError.errorResponse(ZenKeyErrorCode.userNotFound.rawValue, nil)
             .asAuthorizationError
 }

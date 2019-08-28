@@ -31,7 +31,7 @@ public enum OAuthErrorCode: String {
     case temporarilyUnavailable = "temporarily_unavailable"
     /// The resource owner or authorization server denied the request.
     ///
-    /// - SeeAlso: `ProjectVerifyErrorCode.requestDenied`
+    /// - SeeAlso: `ZenKeyErrorCode.requestDenied`
     case accessDenied = "access_denied"
 }
 
@@ -90,7 +90,7 @@ extension OpenIdErrorCode: AuthorizationErrorTypeMappable {
 }
 
 /// ZenKey Error Codes
-public enum ProjectVerifyErrorCode: String {
+public enum ZenKeyErrorCode: String {
     /// This may be returned if the carrier does not support the user identity. (This may be that
     /// the phone number is not currently on this carrier, or that the subscriber ID is for a user
     /// that has ported out).
@@ -120,7 +120,7 @@ public enum ProjectVerifyErrorCode: String {
     case invalidLoginHint = "invalid_login_hint"
 }
 
-extension ProjectVerifyErrorCode: AuthorizationErrorTypeMappable {
+extension ZenKeyErrorCode: AuthorizationErrorTypeMappable {
     var errorType: AuthorizationError.ErrorType {
         switch self {
         case .requestDenied, .deviceUnavailable, .deviceAuthenticationFailure:
@@ -168,7 +168,7 @@ extension String {
         let errorCodes: [(String) -> AuthorizationErrorTypeMappable?] = [
             OAuthErrorCode.init,
             OpenIdErrorCode.init,
-            ProjectVerifyErrorCode.init,
+            ZenKeyErrorCode.init,
             SDKErrorCode.init,
         ]
         return errorCodes.compactMap({ $0(self) }).first

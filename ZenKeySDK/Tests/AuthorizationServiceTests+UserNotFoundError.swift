@@ -21,7 +21,7 @@ extension AuthorizationServiceTests {
 
         mockOpenIdService.responseQueue.mockResponses = [
             .error(
-                .urlResponseError(.errorResponse(ProjectVerifyErrorCode.userNotFound.rawValue, nil))
+                .urlResponseError(.errorResponse(ZenKeyErrorCode.userNotFound.rawValue, nil))
             ),
             .code(MockOpenIdService.mockSuccess),
         ]
@@ -66,7 +66,7 @@ extension AuthorizationServiceTests {
 
         mockOpenIdService.responseQueue.mockResponses = [
             .error(
-                .urlResponseError(.errorResponse(ProjectVerifyErrorCode.userNotFound.rawValue, nil))
+                .urlResponseError(.errorResponse(ZenKeyErrorCode.userNotFound.rawValue, nil))
             ),
             .code(MockOpenIdService.mockSuccess),
         ]
@@ -91,10 +91,10 @@ extension AuthorizationServiceTests {
         mockCarrierInfo.primarySIM = nil
         mockOpenIdService.responseQueue.mockResponses = [
             .error(
-                .urlResponseError(.errorResponse(ProjectVerifyErrorCode.userNotFound.rawValue, nil))
+                .urlResponseError(.errorResponse(ZenKeyErrorCode.userNotFound.rawValue, nil))
             ),
             .error(
-                .urlResponseError(.errorResponse(ProjectVerifyErrorCode.userNotFound.rawValue, nil))
+                .urlResponseError(.errorResponse(ZenKeyErrorCode.userNotFound.rawValue, nil))
             ),
         ]
 
@@ -108,7 +108,7 @@ extension AuthorizationServiceTests {
                     return
                 }
 
-                XCTAssertEqual(error.code, ProjectVerifyErrorCode.userNotFound.rawValue)
+                XCTAssertEqual(error.code, ZenKeyErrorCode.userNotFound.rawValue)
         }
         wait(for: [expectation], timeout: timeout)
     }

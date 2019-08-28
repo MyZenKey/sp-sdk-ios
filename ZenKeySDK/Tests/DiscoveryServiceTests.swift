@@ -58,7 +58,7 @@ class DiscoveryServiceTests: XCTestCase {
 
     lazy var discoveryService = DiscoveryService(
         sdkConfig: SDKConfig(clientId: mockClientId, redirectScheme: mockRedirectScheme),
-        hostConfig: ProjectVerifyNetworkConfig(host: .production),
+        hostConfig: ZenKeyNetworkConfig(host: .production),
         networkService: mockNetworkService,
         configCacheService: mockConfigCacheService
     )
@@ -77,7 +77,7 @@ class DiscoveryServiceTests: XCTestCase {
 
             XCTAssertEqual(request?.httpMethod, "GET")
             XCTAssertEqual(request?.url?.scheme, "https")
-            XCTAssertEqual(request?.url?.host, ProjectVerifyNetworkConfig.Host.production.rawValue)
+            XCTAssertEqual(request?.url?.host, ZenKeyNetworkConfig.Host.production.rawValue)
             XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
             AssertHasQueryItemPair(url: request?.url, key: "mccmnc", value: "123456")
             AssertHasQueryItemPair(url: request?.url, key: "client_id", value: self.mockClientId)
@@ -94,7 +94,7 @@ class DiscoveryServiceTests: XCTestCase {
 
             XCTAssertEqual(request?.httpMethod, "GET")
             XCTAssertEqual(request?.url?.scheme, "https")
-            XCTAssertEqual(request?.url?.host, ProjectVerifyNetworkConfig.Host.production.rawValue)
+            XCTAssertEqual(request?.url?.host, ZenKeyNetworkConfig.Host.production.rawValue)
             XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
             AssertHasQueryItemPair(url: request?.url, key: "client_id", value: self.mockClientId)
             AssertDoesntContainQueryItem(url: request?.url, key: "mccmnc")
@@ -111,7 +111,7 @@ class DiscoveryServiceTests: XCTestCase {
 
             XCTAssertEqual(request?.httpMethod, "GET")
             XCTAssertEqual(request?.url?.scheme, "https")
-            XCTAssertEqual(request?.url?.host, ProjectVerifyNetworkConfig.Host.production.rawValue)
+            XCTAssertEqual(request?.url?.host, ZenKeyNetworkConfig.Host.production.rawValue)
             XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
             AssertHasQueryItemPair(url: request?.url, key: "client_id", value: self.mockClientId)
             AssertHasQueryItemPair(url: request?.url, key: "prompt", value: "true")

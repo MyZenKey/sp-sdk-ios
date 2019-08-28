@@ -1,5 +1,5 @@
 //
-//  ProjectVerifyNetworkConfig.swift
+//  ZenKeyNetworkConfig.swift
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 4/16/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ProjectVerifyNetworkConfig {
+struct ZenKeyNetworkConfig {
 
     let scheme = "https"
 

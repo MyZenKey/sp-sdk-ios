@@ -89,14 +89,14 @@ class OpenIdServiceTests: XCTestCase {
                 XCTAssertEqual(response.redirectURI, OpenIdServiceTests.mockParameters.redirectURL)
         }
 
-        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"
+        let urlString = "testapp://zenkey/authorize?code=TESTCODE&state=bar"
         let handled = openIdService.resolve(url: URL(string: urlString)!)
         XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
     }
 
     func testConcludeWithURLNoRequestInProgressError() {
-        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=bar"
+        let urlString = "testapp://zenkey/authorize?code=TESTCODE&state=bar"
         let handled = openIdService.resolve(url: URL(string: urlString)!)
         XCTAssertFalse(handled)
     }
@@ -117,7 +117,7 @@ class OpenIdServiceTests: XCTestCase {
                 }
         }
 
-        let urlString = "testapp://projectverify/authorize?code=TESTCODE&state=BIZ"
+        let urlString = "testapp://zenkey/authorize?code=TESTCODE&state=BIZ"
         let handled = openIdService.resolve(url: URL(string: urlString)!)
         XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
@@ -141,7 +141,7 @@ class OpenIdServiceTests: XCTestCase {
                 XCTAssertEqual(param, "code")
         }
 
-        let urlString = "testapp://projectverify/authorize?state=bar"
+        let urlString = "testapp://zenkey/authorize?state=bar"
         let handled = openIdService.resolve(url: URL(string: urlString)!)
         XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
@@ -168,7 +168,7 @@ class OpenIdServiceTests: XCTestCase {
                 XCTAssertNil(desc)
         }
 
-        let urlString = "testapp://projectverify/authorize?state=bar&error=\(OAuthErrorCode.invalidRequest.rawValue)"
+        let urlString = "testapp://zenkey/authorize?state=bar&error=\(OAuthErrorCode.invalidRequest.rawValue)"
         let handled = openIdService.resolve(url: URL(string: urlString)!)
         XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
@@ -194,7 +194,7 @@ class OpenIdServiceTests: XCTestCase {
         }
 
         // swiftlint:disable:next line_length
-        let urlString = "testapp://projectverify/authorize?state=bar&error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"
+        let urlString = "testapp://zenkey/authorize?state=bar&error=\(OAuthErrorCode.invalidRequest.rawValue)&error_description=foo"
         let handled = openIdService.resolve(url: URL(string: urlString)!)
         XCTAssertTrue(handled)
         wait(for: [expectation], timeout: timeout)
@@ -226,7 +226,7 @@ class OpenIdServiceTests: XCTestCase {
 extension OpenIdServiceTests {
     static let mockParameters = OpenIdAuthorizationRequest.Parameters(
         clientId: "foo",
-        redirectURL: URL(string: "testapp://projectverify/authorize")!,
+        redirectURL: URL(string: "testapp://zenkey/authorize")!,
         formattedScopes: "openid",
         state: "bar",
         nonce: nil,

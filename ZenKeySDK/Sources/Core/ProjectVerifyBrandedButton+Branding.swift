@@ -1,5 +1,5 @@
 //
-//  ProjectVerifyBrandedButton+Branding.swift
+//  ZenKeyBrandedButton+Branding.swift
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 4/10/19.
@@ -8,8 +8,8 @@
 
 import UIKit
 
-extension ProjectVerifyBrandedButton.Appearance {
-    static let dark = ProjectVerifyBrandedButton.Appearance(
+extension ZenKeyBrandedButton.Appearance {
+    static let dark = ZenKeyBrandedButton.Appearance(
         normal: ColorScheme(
             title: .buttonWhite,
             image: .buttonWhite,
@@ -22,7 +22,7 @@ extension ProjectVerifyBrandedButton.Appearance {
         )
     )
 
-    static let light = ProjectVerifyBrandedButton.Appearance(
+    static let light = ZenKeyBrandedButton.Appearance(
         normal: ColorScheme(
             title: .buttonGray,
             image: .buttonGreen,
@@ -36,7 +36,7 @@ extension ProjectVerifyBrandedButton.Appearance {
     )
 }
 
-extension ProjectVerifyBrandedButton {
+extension ZenKeyBrandedButton {
     var appearance: Appearance {
         switch style {
         case .dark:

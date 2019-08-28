@@ -9,7 +9,7 @@
 import XCTest
 @testable import ZenKeySDK
 
-class MockBundle: ProjectVerifyBundleProtocol {
+class MockBundle: ZenKeyBundleProtocol {
     var clientId: String?
     var urlSchemes: [String] = []
     var customURLScheme: String?

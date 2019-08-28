@@ -11,22 +11,22 @@ import Foundation
 import CoreTelephony
 #endif
 
-public enum ProjectVerifyOptionKeys: String {
+public enum ZenKeyOptionKeys: String {
     case qaHost
     case logLevel
     case mockedCarrier
 }
 
-public typealias ProjectVerifyOptions = [ProjectVerifyOptionKeys: Any]
+public typealias ZenKeyOptions = [ZenKeyOptionKeys: Any]
 
 class Dependencies {
 
     let sdkConfig: SDKConfig
-    let options: ProjectVerifyOptions
+    let options: ZenKeyOptions
 
     private var dependencies: [String: Dependency] = [:]
 
-    init(sdkConfig: SDKConfig, options: ProjectVerifyOptions = [:]) {
+    init(sdkConfig: SDKConfig, options: ZenKeyOptions = [:]) {
         self.sdkConfig = sdkConfig
         self.options = options
         self.buildDependencies()
@@ -35,8 +35,8 @@ class Dependencies {
     // swiftlint:disable:next function_body_length
     private func buildDependencies() {
         Log.configureLogger(level: options.logLevel)
-        let host: ProjectVerifyNetworkConfig.Host = options.host
-        let hostConfig = ProjectVerifyNetworkConfig(host: host)
+        let host: ZenKeyNetworkConfig.Host = options.host
+        let hostConfig = ZenKeyNetworkConfig(host: host)
 
         // this is a little silly, just to make sdkconfig available to be resolved...
         // maybe rehthink this
@@ -189,8 +189,8 @@ private extension Dependencies {
     }
 }
 
-private extension Dictionary where Key == ProjectVerifyOptionKeys, Value: Any {
-    var host: ProjectVerifyNetworkConfig.Host {
+private extension Dictionary where Key == ZenKeyOptionKeys, Value: Any {
+    var host: ZenKeyNetworkConfig.Host {
         let qaFlag = self[.qaHost, or: false]
         return qaFlag ? .qa : .production
     }

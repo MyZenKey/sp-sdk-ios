@@ -10,8 +10,8 @@ import Foundation
 
 enum Localization {
     enum Buttons {
-        static let signInWithProjectVerify = LocalizationUtils.localizedString("Sign in with ZenKey")
-        static let continueWithProjectVerify = LocalizationUtils.localizedString("Continue with ZenKey")
+        static let signInWithZenKey = LocalizationUtils.localizedString("Sign in with ZenKey")
+        static let continueWithZenKey = LocalizationUtils.localizedString("Continue with ZenKey")
     }
 }
 

@@ -38,7 +38,7 @@ struct SDKConfig: Equatable {
         self.redirectPath = redirectPath
     }
 
-    static func load(fromBundle bundle: ProjectVerifyBundleProtocol) throws -> SDKConfig {
+    static func load(fromBundle bundle: ZenKeyBundleProtocol) throws -> SDKConfig {
         guard let clientId = bundle.clientId else {
             throw BundleLoadingErrors.specifyClientId
         }
@@ -85,7 +85,7 @@ extension SDKConfig {
     }
 }
 
-protocol ProjectVerifyBundleProtocol {
+protocol ZenKeyBundleProtocol {
     var clientId: String? { get }
     var urlSchemes: [String] { get }
     var customURLScheme: String? { get }
@@ -94,14 +94,14 @@ protocol ProjectVerifyBundleProtocol {
 }
 
 private enum PlistKeys: String {
-    case clientId = "ProjectVerifyClientId"
-    case customScheme = "ProjectVerifyCustomScheme"
-    case customHost = "ProjectVerifyCustomHost"
-    case customPath = "ProjectVerifyCustomPath"
+    case clientId = "ZenKeyClientId"
+    case customScheme = "ZenKeyCustomScheme"
+    case customHost = "ZenKeyCustomHost"
+    case customPath = "ZenKeyCustomPath"
     case bundleURLTypes = "CFBundleURLTypes"
 }
 
-extension Bundle: ProjectVerifyBundleProtocol {
+extension Bundle: ZenKeyBundleProtocol {
     var clientId: String? {
         return object(forInfoDictionaryKey: PlistKeys.clientId.rawValue) as? String
     }
