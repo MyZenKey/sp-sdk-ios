@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import CarriersSharedAPI
+import ZenKeySDK
 
 struct BuildInfo {
 
@@ -25,8 +25,8 @@ struct BuildInfo {
         UserDefaults.standard.set(true, forKey: hostToggleKey)
     }
 
-    static var projectVerifyOptions: ProjectVerifyOptions {
-        var options: ProjectVerifyOptions = [:]
+    static var zenKeyOptions: ZenKeyOptions {
+        var options: ZenKeyOptions = [:]
         if isQAHost {
             options[.qaHost] = true
         }

@@ -5,7 +5,7 @@
 //
 
 import UIKit
-import CarriersSharedAPI
+import ZenKeySDK
 
 class LoginViewController: UIViewController {
     
@@ -68,15 +68,15 @@ class LoginViewController: UIViewController {
         return button
     }()
 
-    lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
-        let button = ProjectVerifyAuthorizeButton()
+    lazy var zenKeyButton: ZenKeyAuthorizeButton = {
+        let button = ZenKeyAuthorizeButton()
         button.style = .light
         let scopes: [Scope] = [.openid, .authenticate, .register, .name, .email, .birthdate, .postalCode]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.brandingDelegate = self
         button.delegate = self
-        button.accessibilityIdentifier = "Project Verify Button"
+        button.accessibilityIdentifier = "ZenKey Button"
         return button
     }()
 
@@ -158,7 +158,7 @@ class LoginViewController: UIViewController {
         view.addSubview(signInButton)
         view.addSubview(forgotButton)
         view.addSubview(registerButton)
-        view.addSubview(projectVerifyButton)
+        view.addSubview(zenKeyButton)
         view.addSubview(poweredByLabel)
         view.addSubview(toggleEnv)
 
@@ -195,13 +195,13 @@ class LoginViewController: UIViewController {
         constraints.append(registerButton.trailingAnchor.constraint(equalTo: signInButton.trailingAnchor, constant: 0))
         constraints.append(registerButton.heightAnchor.constraint(equalToConstant: 39))
 
-        constraints.append(projectVerifyButton.topAnchor.constraint(equalTo: forgotButton.bottomAnchor, constant: 20.0))
-        constraints.append(projectVerifyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(projectVerifyButton.widthAnchor.constraint(equalTo: signInButton.widthAnchor))
+        constraints.append(zenKeyButton.topAnchor.constraint(equalTo: forgotButton.bottomAnchor, constant: 20.0))
+        constraints.append(zenKeyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(zenKeyButton.widthAnchor.constraint(equalTo: signInButton.widthAnchor))
 
-        constraints.append(poweredByLabel.topAnchor.constraint(equalTo: projectVerifyButton.bottomAnchor, constant: 10.0))
+        constraints.append(poweredByLabel.topAnchor.constraint(equalTo: zenKeyButton.bottomAnchor, constant: 10.0))
         constraints.append(poweredByLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(poweredByLabel.widthAnchor.constraint(equalTo: projectVerifyButton.widthAnchor))
+        constraints.append(poweredByLabel.widthAnchor.constraint(equalTo: zenKeyButton.widthAnchor))
 
         constraints.append(toggleEnv.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(toggleEnv.topAnchor.constraint(equalTo: poweredByLabel.bottomAnchor, constant: 20.0))
@@ -210,11 +210,11 @@ class LoginViewController: UIViewController {
     }
 }
 
-extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
+extension LoginViewController: ZenKeyAuthorizeButtonDelegate {
 
-    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) { }
+    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) { }
 
-    func buttonDidFinish(_ button: ProjectVerifyAuthorizeButton, withResult result: AuthorizationResult) {
+    func buttonDidFinish(_ button: ZenKeyAuthorizeButton, withResult result: AuthorizationResult) {
         switch result {
         case .code(let authorizedResponse):
             authorizeUser(authorizedResponse: authorizedResponse)
@@ -246,13 +246,13 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
     }
 }
 
-extension LoginViewController: ProjectVerifyBrandedButtonDelegate {
+extension LoginViewController: ZenKeyBrandedButtonDelegate {
     func brandingWillUpdate(_ oldBranding: Branding,
-                            forButton button: ProjectVerifyBrandedButton) {
+                            forButton button: ZenKeyBrandedButton) {
     }
 
     func brandingDidUpdate(_ newBranding: Branding,
-                           forButton button: ProjectVerifyBrandedButton) {
+                           forButton button: ZenKeyBrandedButton) {
         poweredByLabel.text = newBranding.carrierText
     }
 }

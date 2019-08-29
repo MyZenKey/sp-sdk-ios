@@ -3,5 +3,5 @@ install! 'cocoapods', :share_schemes_for_development_pods => true
 
 target 'BankApp' do
   use_frameworks!
-  pod 'CarriersSharedAPI', path: '../../CarriersSharedAPI.podspec', testspecs: ['Tests']
+  pod 'ZenKeySDK', path: '../../ZenKeySDK.podspec'
 end
