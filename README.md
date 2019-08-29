@@ -71,7 +71,7 @@ During development, include the ZenKey SDK in your project. There are currently 
 You can include the ZenKey SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following to your Podfile.
 
 ```ruby
-  pod 'CarriersSharedAPI', path: '{your-relative-path}/CarriersSharedAPI.podspec'
+  pod 'ZenKeySDK', path: '{your-relative-path}/ZenKeySDK.podspec'
 ```
 
 Then run `pod install`. This adds the local source to your application's workspace.
@@ -86,11 +86,11 @@ You can add the ZenKey SDK to your project manually:
 
 1. Retrieve the source code. We recommend adding it as a [submodule](#pre-release-git-access), but you may also copy the source into a directory manually.
 
-1. Add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
+1. Add `ZenKeySDK.xcodeproj` to your application's Xcode project.
 
 1. After adding the project, confirm that the deployment targets are less than or equal to your deployment target.
 
-1. View your project's "Embedded Binaries" under your project's "General" panel. Add the `CarriersSharedAPI` framework. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
+1. View your project's "Embedded Binaries" under your project's "General" panel. Add the `ZenKeySDK` framework. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
 
 1. Build and run to ensure that everything is working correctly.
 
