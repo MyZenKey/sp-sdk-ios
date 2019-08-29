@@ -350,6 +350,11 @@ private extension ZenKeyBrandedButton {
 
         layer.cornerRadius = Constants.cornerRadius
 
+        layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1).cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowRadius = 2
+        layer.shadowOpacity = 0.24
+
         titleLabel?.lineBreakMode = .byTruncatingTail
 
         brandingProvider.brandingDidChange = { [weak self] branding in
