@@ -120,16 +120,9 @@ public class ZenKeyBrandedButton: UIButton {
     }
 
     private func trueContentSize() -> CGSize {
-        let greatestSize = CGSize(width: CGFloat.greatestFiniteMagnitude,
-                                  height: CGFloat.greatestFiniteMagnitude)
-        let titleSize: CGSize = attributedTitle(for: state)?
-            .boundingRect(
-                with: greatestSize,
-                options: [.usesFontLeading, .usesLineFragmentOrigin],
-                context: nil
-            ).size ?? .zero
+        let titleSize: CGSize = measuredTitleSize
 
-        let iconSize = branding.icon?.size ?? .zero
+        let iconSize = measuredImageSize
 
         let contentWidth =
             iconSize.width +
@@ -159,12 +152,20 @@ public class ZenKeyBrandedButton: UIButton {
                 return .zero
         }
 
-        let size = bounds.size
-
+        // try to fit the content rect into the button size – if it doesn't fit shrink down to
+        // minimum margins at most.
+        let boundsSize = bounds.size
         let contentSize = trueContentSize()
+
+        let widthDelta = boundsSize.width - contentSize.width
+        let heightDelta = boundsSize.height - contentSize.height
+
+        // if negative, apply bounded to minimum insets, else use the marigns:
+        let widthModifier = widthDelta >= 0 ? 0 : widthDelta
+        let heightModifier = heightDelta >= 0 ? 0 : heightDelta
         let fitMargins = CGSize(
-            width: max( size.width - contentSize.width, Insets.Minimum.horizontal * 2 ),
-            height: max( size.height - contentSize.height, Insets.Minimum.vertical * 2 )
+            width: max( (Insets.horizontal * 2) + widthModifier, Insets.Minimum.horizontal * 2 ),
+            height: max( (Insets.vertical * 2) + heightModifier, Insets.Minimum.vertical * 2 )
         )
 
         return CGRect(x: fitMargins.width / 2,
@@ -181,17 +182,45 @@ public class ZenKeyBrandedButton: UIButton {
 
         // #NTH: - potentially add title scaling behavior to support smaller buttons:
         let imageRect = self.imageRect(forContentRect: contentRect)
-        let offset: CGFloat = spaceTitleAndImageRects ? 8 : 0
-        let xOrign = imageRect.maxX + offset
+        let offset: CGFloat = spaceTitleAndImageRects ? Constants.interitemSpacing : 0
+
+        // x axis: attempt to center the label in the content rect provided,
+        // min x must be >= image + interitem spacing, max x must be <= right margin
+        // y axis: use content rect
+        let titleSize = measuredTitleSize
+        let boundedTextRectCenteredInButton = CGRect(
+            x: contentRect.minX + max((contentRect.width - titleSize.width), 1) / 2,
+            y: contentRect.minY + max((contentRect.height - titleSize.height), 1) / 2,
+            width: min(titleSize.width, contentRect.width),
+            height: min(titleSize.height, contentRect.width)
+        )
+
+        let imageRectPlusInteritem = imageRect.maxX + offset
+
+        // 1) if the centered text fits in space between far right margin & image + spacer,
+        //    then use the centered frame.
+        // 2) if text won't fit in that space, left justify and grow from there.
+        let xOrigin: CGFloat
+        if boundedTextRectCenteredInButton.width >= titleSize.width &&
+            boundedTextRectCenteredInButton.minX >= imageRectPlusInteritem {
+            xOrigin = boundedTextRectCenteredInButton.origin.x
+        } else {
+            // NOTE: we could also grow from the right:
+            // ie: contentRect.maxX - boundedTextRectCenteredInButton.size.width
+            // or attempt to center this rect bewteen the imageRectPlusInteritem & right margin
+            xOrigin = imageRectPlusInteritem
+        }
+
         return CGRect(
-            x: xOrign,
+            x: xOrigin,
             y: contentRect.minY,
-            width: contentRect.size.width - xOrign + contentRect.origin.x,
-            height: contentRect.height)
+            width: min( boundedTextRectCenteredInButton.size.width, contentRect.maxX - xOrigin ),
+            height: contentRect.height
+        )
     }
 
     public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
-        let imageSize = branding.icon?.size ?? .zero
+        let imageSize = measuredImageSize
 
         guard imageSize.width != 0, imageSize.height != 0 else {
             return .zero
@@ -297,11 +326,34 @@ extension ZenKeyBrandedButton {
 // MARK: - private config
 
 private extension ZenKeyBrandedButton {
+
+    var measuredImageSize: CGSize {
+        return branding.icon?.size ?? .zero
+    }
+
+    var measuredTitleSize: CGSize {
+        let greatestSize = CGSize(
+            width: CGFloat.greatestFiniteMagnitude,
+            height: CGFloat.greatestFiniteMagnitude
+        )
+        return attributedTitle(for: state)?
+            .boundingRect(
+                with: greatestSize,
+                options: [.usesFontLeading, .usesLineFragmentOrigin],
+                context: nil
+            ).size ?? .zero
+    }
+
     func configureButton() {
         adjustsImageWhenHighlighted = false
         adjustsImageWhenDisabled = false
 
         layer.cornerRadius = Constants.cornerRadius
+
+        layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1).cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowRadius = 2
+        layer.shadowOpacity = 0.24
 
         titleLabel?.lineBreakMode = .byTruncatingTail
 
@@ -341,7 +393,8 @@ private extension ZenKeyBrandedButton {
                          withColor color: UIColor) -> NSAttributedString {
         let attributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: color,
-            .font: UIFont.boldSystemFont(ofSize: 17.0),
+            .kern: 0.22,
+            .font: UIFont.boldSystemFont(ofSize: 14.0),
         ]
         let attributedString = NSAttributedString(string: title, attributes: attributes)
         return attributedString
@@ -352,13 +405,13 @@ private extension ZenKeyBrandedButton {
 
 private extension ZenKeyBrandedButton {
     enum Constants {
-        static let cornerRadius: CGFloat = 8
-        static let interitemSpacing: CGFloat = 8
+        static let cornerRadius: CGFloat = 2
+        static let interitemSpacing: CGFloat = 25
     }
 
     enum Insets {
-        static let vertical: CGFloat = 16
-        static let horizontal: CGFloat = 42
+        static let vertical: CGFloat = 12
+        static let horizontal: CGFloat = 24
         // swiftlint:disable:next nesting
         enum Minimum {
             static let vertical: CGFloat = 5

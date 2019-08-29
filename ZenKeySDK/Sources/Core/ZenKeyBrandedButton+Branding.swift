@@ -11,27 +11,27 @@ import UIKit
 extension ZenKeyBrandedButton.Appearance {
     static let dark = ZenKeyBrandedButton.Appearance(
         normal: ColorScheme(
-            title: .buttonWhite,
-            image: .buttonWhite,
-            background: .buttonGreen
+            title: UIColor.Button.white,
+            image: UIColor.Button.white,
+            background: UIColor.Button.green
         ),
         highlighted: ColorScheme(
-            title: .buttonDimGray,
-            image: .buttonDimGray,
-            background: .buttonDimGreen
+            title: UIColor.Button.darkGray,
+            image: UIColor.Button.darkGray,
+            background: UIColor.Button.lightGray
         )
     )
 
     static let light = ZenKeyBrandedButton.Appearance(
         normal: ColorScheme(
-            title: .buttonGray,
-            image: .buttonGreen,
-            background: .buttonWhite
+            title: UIColor.Button.black,
+            image: UIColor.Button.green,
+            background: UIColor.Button.white
         ),
         highlighted: ColorScheme(
-            title: .buttonDimGray,
-            image: .buttonDimGray,
-            background: .buttonDimLightGray
+            title: UIColor.Button.darkGray,
+            image: UIColor.Button.darkGray,
+            background: UIColor.Button.lightGray
         )
     )
 }
@@ -48,10 +48,11 @@ extension ZenKeyBrandedButton {
 }
 
 private extension UIColor {
-    static let buttonWhite = UIColor.white
-    static let buttonGreen = UIColor(red: 46/255, green: 173/255, blue: 69/255, alpha: 1)
-    static let buttonDimGreen = UIColor(red: 46/255, green: 173/255, blue: 69/255, alpha: 0.5)
-    static let buttonGray = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 1)
-    static let buttonDimGray = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 0.5)
-    static let buttonDimLightGray = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 0.2)
+    struct Button {
+        static let black: UIColor = .black
+        static let white: UIColor = .white
+        static let green: UIColor = UIColor(red: 0, green: 133/255, blue: 34/255, alpha: 1)
+        static let darkGray: UIColor = UIColor(red: 141/255, green: 141/255, blue: 141/255, alpha: 1)
+        static let lightGray: UIColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
+    }
 }

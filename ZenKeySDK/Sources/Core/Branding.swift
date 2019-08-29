@@ -19,7 +19,7 @@ public struct Branding: Equatable {
     public let carrierIcon: String?
 
     static let `default` = Branding(
-        icon: ImageUtils.image(named: "pv-icon-connect"),
+        icon: ImageUtils.image(named: "zk-icon-connect"),
         carrierText: nil,
         carrierIcon: nil
     )
@@ -38,7 +38,7 @@ extension OpenIdConfig {
         }
 
         return Branding(
-            icon: ImageUtils.image(named: "pv-icon-connect"),
+            icon: ImageUtils.image(named: "zk-icon-connect"),
             carrierText: carrierText,
             carrierIcon: nil
         )
