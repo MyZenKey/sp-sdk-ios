@@ -53,10 +53,10 @@ extension HTTPURLResponse {
 
 /// This interface describes what an abstraction of the layer between your client and your server
 /// might look like. Each of these functions describe how that conversation might be supported
-/// by project verify.
+/// by ZenKey.
 protocol ServiceProviderAPIProtocol {
 
-    /// Authenticate a user without project verify, this represents what your sign in flow might look
+    /// Authenticate a user without ZenKey, this represents what your sign in flow might look
     /// currently.
     ///
     /// - Parameters:
@@ -68,13 +68,13 @@ protocol ServiceProviderAPIProtocol {
         password: String,
         completion: @escaping (AuthPayload?, Error?) -> Void)
 
-    /// Authenticate a user with a Project Verify using the authorization code from a successful
-    /// authorization by a Project Verify user. Each of these fields (with the exception of
+    /// Authenticate a user with a ZenKey using the authorization code from a successful
+    /// authorization by a ZenKey user. Each of these fields (with the exception of
     /// completion are returned from the `authrorize(...)` request the SDK performs.
     ///
     /// With the auth code, mcc, and mnc, you have everything you need to re-perform discovery
     /// on your secure server and use the discovered token endpoint to request an access token
-    /// from Project Verify. This access token shouldn't reach the client transparently,
+    /// from ZenKey. This access token shouldn't reach the client transparently,
     /// but instead be used as the basis for accessing or creating a token within
     /// the domain of your application.
     ///
@@ -91,12 +91,12 @@ protocol ServiceProviderAPIProtocol {
         mnc: String,
         completion: @escaping (AuthPayload?, Error?) -> Void)
 
-    /// Attach a completed Project Verify authorization flow to an existing user. This represents
-    /// the second factor use case where Project Verify provides the user with a second form of
+    /// Attach a completed ZenKey authorization flow to an existing user. This represents
+    /// the second factor use case where ZenKey provides the user with a second form of
     /// consent to ensure they originate the login action.
     ///
-    /// Your server is responsible performing the token request as you would when using Project
-    /// Verify as the primary means of authentication. The successfully returned token request
+    /// Your server is responsible performing the token request as you would when using ZenKey
+    /// as the primary means of authentication. The successfully returned token request
     /// validates that the user has approved the second factor request. You can store the user's sub
     /// value and compare it against future requests to ensure the correct user is approving the
     /// action.
@@ -117,8 +117,8 @@ protocol ServiceProviderAPIProtocol {
     /// Request the user's info from your server.
     ///
     /// Once you've successfully exchanged the authorization code for an authorization token
-    /// on your secure server, you'll be able to access the Project Verify User Info Endpoint.
-    /// The Project Verify User Info Endpoint shouldn't be accessed from a client but instead
+    /// on your secure server, you'll be able to access the ZenKey User Info Endpoint.
+    /// The ZenKey User Info Endpoint shouldn't be accessed from a client but instead
     /// should pass information through your server's authenticated endpoints in a way that
     /// makes sense for your application. The user info endpoint will reflect the information your
     /// user has approved scopes for.
@@ -126,13 +126,13 @@ protocol ServiceProviderAPIProtocol {
     /// - Parameter completion: An async callback with the result of the request.
     func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void)
 
-    /// Approve some action with project verify for which you've requested the `authorize` scope and
+    /// Approve some action with ZenKey for which you've requested the `authorize` scope and
     /// an appropriate context string.
     ///
-    /// Your server is responsible performing the token request as you would when using Project
-    /// Verify to authenticate. The successful token request will return a value containing a JWT
+    /// Your server is responsible performing the token request as you would when using ZenKey
+    /// to authenticate. The successful token request will return a value containing a JWT
     /// for the field id_token. You should introspect this token to verify that the nonce value and
-    /// context string are the same as those requested from the user via Project Verify. This
+    /// context string are the same as those requested from the user via ZenKey. This
     /// ensures the integrity of the request and consent from the user.
     ///
     /// - Parameters:
