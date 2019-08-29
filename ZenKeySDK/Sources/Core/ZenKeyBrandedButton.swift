@@ -152,12 +152,21 @@ public class ZenKeyBrandedButton: UIButton {
                 return .zero
         }
 
-        let fitMargins = CGSize(
-            width: max( Insets.horizontal * 2, Insets.Minimum.horizontal * 2 ),
-            height: max( Insets.vertical * 2, Insets.Minimum.vertical * 2 )
-        )
+        // try to fit the content rect into the button size – if it doesn't fit shrink down to
+        // minimum margins at most.
+        let boundsSize = bounds.size
+        let contentSize = trueContentSize()
 
-        print("bounds: \(bounds)")
+        let widthDelta = boundsSize.width - contentSize.width
+        let heightDelta = boundsSize.height - contentSize.height
+
+        // if negative, apply bounded to minimum insets, else use the marigns:
+        let widthModifier = widthDelta >= 0 ? 0 : widthDelta
+        let heightModifier = heightDelta >= 0 ? 0 : heightDelta
+        let fitMargins = CGSize(
+            width: max( (Insets.horizontal * 2) + widthModifier, Insets.Minimum.horizontal * 2 ),
+            height: max( (Insets.vertical * 2) + heightModifier, Insets.Minimum.vertical * 2 )
+        )
 
         return CGRect(x: fitMargins.width / 2,
                       y: fitMargins.height / 2,
@@ -175,31 +184,39 @@ public class ZenKeyBrandedButton: UIButton {
         let imageRect = self.imageRect(forContentRect: contentRect)
         let offset: CGFloat = spaceTitleAndImageRects ? Constants.interitemSpacing : 0
 
-        // x axis: attempt to center the label in the space provided, min x must be >= interitem
-        // spacing, max x must be <= right margin
+        // x axis: attempt to center the label in the content rect provided,
+        // min x must be >= image + interitem spacing, max x must be <= right margin
         // y axis: use content rect
         let titleSize = measuredTitleSize
-        let rectCenteredInButton = CGRect(
-            x: max((contentRect.width - titleSize.width), 1) / 2,
-            y: max((contentRect.height - titleSize.height), 1) / 2,
+        let boundedTextRectCenteredInButton = CGRect(
+            x: contentRect.minX + max((contentRect.width - titleSize.width), 1) / 2,
+            y: contentRect.minY + max((contentRect.height - titleSize.height), 1) / 2,
             width: min(titleSize.width, contentRect.width),
             height: min(titleSize.height, contentRect.width)
         )
 
         let imageRectPlusInteritem = imageRect.maxX + offset
-        print("content:")
-        print(contentRect)
-        print("centered:")
-        print(rectCenteredInButton)
-        let xOrigin =
-            contentRect.origin.x +
-            max( imageRectPlusInteritem, rectCenteredInButton.origin.x )
-        print("xorigin: \(xOrigin)")
+
+        // 1) if the centered text fits in space between far right margin & image + spacer,
+        //    then use the centered frame.
+        // 2) if text won't fit in that space, left justify and grow from there.
+        let xOrigin: CGFloat
+        if boundedTextRectCenteredInButton.width >= titleSize.width &&
+            boundedTextRectCenteredInButton.minX >= imageRectPlusInteritem {
+            xOrigin = boundedTextRectCenteredInButton.origin.x
+        } else {
+            // NOTE: we could also grow from the right:
+            // ie: contentRect.maxX - boundedTextRectCenteredInButton.size.width
+            // or attempt to center this rect bewteen the imageRectPlusInteritem & right margin
+            xOrigin = imageRectPlusInteritem
+        }
+
         return CGRect(
             x: xOrigin,
             y: contentRect.minY,
-            width: min( rectCenteredInButton.size.width, contentRect.width - xOrigin ),
-            height: contentRect.height)
+            width: min( boundedTextRectCenteredInButton.size.width, contentRect.maxX - xOrigin ),
+            height: contentRect.height
+        )
     }
 
     public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
@@ -371,6 +388,7 @@ private extension ZenKeyBrandedButton {
                          withColor color: UIColor) -> NSAttributedString {
         let attributes: [NSAttributedString.Key: Any] = [
             .foregroundColor: color,
+            .kern: 0.22,
             .font: UIFont.boldSystemFont(ofSize: 14.0),
         ]
         let attributedString = NSAttributedString(string: title, attributes: attributes)
