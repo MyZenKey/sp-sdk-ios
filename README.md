@@ -46,70 +46,60 @@ Consumer verification and authorization flows to Carrier auth, the service provi
 
 ## 2.0 Getting Started
 
-Before you integrate with ZenKey, register your application and obtain valid `clientId` and `clientSecret` from the portal or by contacting a Customer Operation Specialist.
+To get started integrating the ZenKey API with your applications, there are a few things you should do:
 
-### 2.1 Client Information and Scopes
-
-Service providers decide how much client information they obtain from the user. In your setup, you can choose to have an experience with or without requiring a PIN or a biometric.
-
-Since applications must get authorization to access user information, scopes are used to define allowed actions. Scopes are implemented via OIDC and can be set to request profile information (such as email address, name, phone) to verify users. OpenID is the only required scope. All others are optional depending on the needs of your application.
-
-### 2.2 Pre-Release Git Access
-
-While the SDK is under development, we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
+* Register your application - Access the Service Provider portal to register your application and obtain a valid `clientId` and `clientSecret`.
+* Identify user information data your want to capture - The ZenKey enrollment process includes asking for personal user data. Of course, the user determines whether or not to submit this data to you.  There are various user data  "scopes" already defined in the ZenKey API which you can select to be captured during the enrollment process, such as email address, name, phone number.
+* Identify if you need custom redirect URIs - Redirect URIs will be used for callbacks to several ZenKey services
+* Set up Git Access - While the SDK is under development (Pre-Release), we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
 
 ```bash
 git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 ```
 
-## 3.0 Add ZenKey SDK
+## 3.0 Download the ZenKey SDK
 
-During development, include the ZenKey SDK in your project. There are currently two ways to integrate ZenKey in your project: via CocoaPods or as a git submodule. Carthage may be supported in the future.
+From the Service Provider Portal, download the ZenKey SDK. Review the various components as noted in this README. 
 
-### 3.1 CocoaPods
+To integrate ZenKey with your application project by: 
 
-You can include the ZenKey SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following to your Podfile.
+* Using CocoaPods, or 
+* Adding the SDK source manually 
+
+**NOTE:** Use of Carthage for development is not currently supported.
+
+### 3.1 Using CocoaPods
+
+You can include the ZenKey SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following code to your Podfile.
 
 ```ruby
   pod 'CarriersSharedAPI', path: '{your-relative-path}/CarriersSharedAPI.podspec'
 ```
 
-Then run `pod install`. This adds the local source to your application's workspace.
+Then, run`pod install`. This command adds the local source code to your application's workspace.
 
-### 3.2 Carthage
+### 3.2 Adding the SDK Source Manually
 
-More information coming soon - *Carthage* may be supported in the future.
+Another option for integrating the SDK is to add the source manually to your application process:
 
-### 3.3 Adding ZenKey SDK Manually
-
-You can add the ZenKey SDK to your project manually:
-
-1. Retrieve the source code. We recommend adding it as a [submodule](#pre-release-git-access), but you may also copy the source into a directory manually.
-
+1. Add the ZenKey source manually either as a git submodule or by copying the source directly to the project directory.
 1. Add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
-
 1. After adding the project, confirm that the deployment targets are less than or equal to your deployment target.
-
 1. View your project's "Embedded Binaries" under your project's "General" panel. Add the `CarriersSharedAPI` framework. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
+1. Build and run the project to ensure that everything is working correctly.
 
-1. Build and run to ensure that everything is working correctly.
+## 4.0 Configure Client ID and Redirect URI
 
-## 4.0 Integration
-
-To integrate ZenKey into your iOS application you must first configure your `Info.plist` with your ZenKey client Id as well as your chosen redirect URI.
-
-### 4.1 Client ID
-All Service providers must add their application’s client Id to their `Info.plist`. Retrieve your client Id from the ZenKey dashboard and add the following key to your application’s `Info.plist`:
+Retrieve your client Id from the ZenKey dashboard and add the following key to your application’s `Info.plist`:
 
 ```xml
     <key>ProjectVerifyClientId</key>
     <string>{your application's client id}</string>
 ```
 
-### 4.2 Choosing a Redirect URI
-In addition to configuring a your client Id, Service providers must also specify one or more valid redirect URIs. The redirect URI will be passed as a vehicle for callbacks to the SDK to several ZenKey services. To make it easy to get up and running with ZenKey, all Service Providers are pre-configured with the redirect URI: `{your client Id}://com.xci.provider.sdk`. If you would like to use a different redirect URI you must configure it in the Service Provider Portal. See section 4.2.1 for more information.
+You also need to configure the redirect URI to be used. The redirect URI is used for callbacks to the SDK and several ZenKey services. You can use the default, pre-configured URI or create a custom redirect URI.
 
-In order to get up and running with this default configuration, all you need to do is to add your client Id as a custom scheme to your Info.plist:
+The default URI is  `{your client Id}://com.xci.provider.sdk`.  Use this URI by adding your client Id to your `Info.plist` as a custom scheme:
 
 ```xml
     <key>CFBundleURLTypes</key>
@@ -127,8 +117,13 @@ In order to get up and running with this default configuration, all you need to 
     </array>
 ```
 
-#### 4.2.1 Specifying a custom URI
-If you would like to add an extra layer of security to your integration, we recommend specifying your redirect URI as a **universal link**. This requires that you have the appropriately configured app association and entitlements. For more information on universal links, see Apple’s [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links). To use a custom url as your redirect URI, specify your custom scheme, host, and path in your `Info.plist`.
+
+
+To create a custom redirect URI, access the Service Provider Portal and follow the instructions. 
+
+**NOTE: **To add an extra layer of security to your integration, we recommend specifying your redirect URI as a universal link. This requires having the appropriately configured app association and entitlements. Refer to e Apple’s [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links). 
+
+To apply your custom redirect URI, specify the custom scheme, host, and path in the `Info.plist` file.
 
 ```xml
     <key>ProjectVerifyCustomHost</key>
@@ -141,7 +136,7 @@ If you would like to add an extra layer of security to your integration, we reco
 
 ## 5.0 Instantiate ZenKey
 
-To support ZenKey, you must instantiate ZenKey in your application delegate:
+To support ZenKey, you must instantiate ZenKey in the application delegate as follows:
 
 ```swift
 import CarriersSharedAPI
@@ -176,9 +171,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 ## 6.0 Request Authorization Code
 
-The SDK provides a branded button called `ProjectVerifyAuthorizationButton` that automatically handles ZenKey authorization.
+The SDK provides the branded button `ProjectVerifyAuthorizationButton` to automatically submit a request for ZenKey authorization.
 
-### 6.1 Add Verify Button
+### 6.1 Add Authorization Button
 
 Add the ZenKey  `ProjectVerifyAuthorizationButton` to your UIView.
 
@@ -213,7 +208,7 @@ The dark button style looks like this:
 
 #### 6.1.2 Light Button
 
-A light button style is appropriate to use with dark backgrounds. For the light style, add the light parameter specified as follows:
+A light button style is appropriate to use with dark backgrounds. For the light style, specify the light parameter as follows:
 
 ```swift
     projectVerifyButton.style = .light
@@ -228,7 +223,7 @@ Instead of the default `ProjectVerifyAuthorizationButton`, you can invoke ZenKey
 
 ### 6.2 Receive Callbacks
 
-In order to receive the outcome of your ZenKey request, implement the `ProjectVerifyAuthorizeButtonDelegate` and handle the events.
+In order to receive the response from the ZenKey request, implement the `ProjectVerifyAuthorizeButtonDelegate` to handle the events.
 
 ```swift
 extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
@@ -259,11 +254,13 @@ extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
 
 ### 6.3 Request Parameters
 
-There are several parameters that you may wish to configure for your authorization request, as noted in this section.
+There are several parameters that you can configure with your authorization request, as noted in this section.
 
 #### 6.3.1 Scopes
 
-By you should always include the `.openid` scope. To use additional scopes, set them on the button and they will be added to the request.
+Select each of the userinfo `scopes` to be added to the authorization request. 
+
+**NOTE: ** The `.openid` scope is required. 
 
 ```swift
     let scopes: [Scope] = [.openid, .email, .name]
@@ -273,35 +270,34 @@ For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/
 
 #### 6.3.2 Additional Parameters
 
-Additionally, it is possible to configure the following parameters:
+Additional parameters that you can configure include:
 
-* ACR Values - Authenticator Assurance Levels (AAL) which identify The strength of an authentication transaction. Stronger authentication (a higher AAL) requires malicious actors to have better capabilities and expend greater resources in order to successfully subvert the authentication process. Values returned in id_token will contain `aalx`. 
+* ACR Values - Authenticator Assurance Levels (AAL) identify the strength of an authentication transaction. Stronger authentication (i.e., a higher AALx value) requires malicious actors to have better capabilities and expend greater resources to successfully subvert the authentication process. The values returned in the `id_token` will contain `aalx`. 
 
-  * SPs should ask for aal1 when they need a low level of authentication, users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require second factor (pin | bio).
+  * Ask for `aal1` when you need a low level of authentication. Users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require second factor authentication (pin | bio).
   
-* SPs should ask for aal2 or aal3 anytime they want to ensure the user has provided their (pin | bio). 
+* Ask for `aal2` or `aal3` when you want to ensure the user has provided their (pin | bio). 
 
-* Request State - Any SP-provided value to be returned with the auth_code
+* Request State - A value provided by you to be returned with the auth_code
 
-* Nonce - A number used once. This is any SP-supplied value included in the ID_Token if SP
-  asked for the openid scope. 
+* Nonce - A number used once. This is any value provided by you and included in the ID_Token if you requested the openid scope. 
+  
+* Correlation Id - You can pass a `correlation_id` to be added to the carrier logs. You must access the ZenKey SP Portal to request any log entries.  
 
-* Correlation Id - SPs may pass a correlation id to be added to Carrier logs. SPs must work with the ZenKey SP Portal to request any log entries.  
+  **Note:** Use the same `correlation_id`for code, token, and userinfo requests. But the carrier may not enforce this. 
 
-  **Note:** An SP should use the same correlation_id for code, token, and userinfo requests. But carrier’s may not enforce this. 
-
-* Context - SPs will be able to submit “text string” to accompany the authorization request in the ZenKey application. For example, a bank transfer may prompt the user with: "Do you want to authorize a $200 transfer to your checking account?".  The best practice is that a server-initiated request should contain a context parameter, so that a user understands the reason for the interaction.  Maximum size will be <280> characters. Any request with a context that is too large will result in an OIDC error. (invalid request).  
+* Context - You can submit “text string” to accompany the authorization request in the ZenKey application. For example, a bank transfer may prompt the user: "Do you want to authorize a $200 transfer to your checking account?".  The best practice is that a server-initiated request should contain a context parameter for a user to understand the reason for the interaction. The maximum size is <280> characters. Any request with a context that is too large will result in an OIDC error (i.e., an invalid request).  
   
 * Prompt - The user needs to approve a transaction with each request.  
 
-  * prompt=login - SP asks user to authenticate again.
-  * prompt=consent - SP asks user to explicitly re-confirm user agrees to exposure of their data. (Carrier recaptures user consent for listed scopes).
+  * `prompt=login` - At login, prompt the user to authenticate again.
+  * `prompt=consent` - Prompt the user to explicitly re-confirm agreeement with exposing personal data. (The carrier recaptures user consent for listed scopes).
 
-For more information about each of these parameters and instructions on how to use them, view the documentation for the `ProjectVerifyAuthorizeButton`. There is also more information on the enumerated values in `PromptValue.swift`.
+For more information about each of these parameters and instructions on how to use them, view the documentation for `ProjectVerifyAuthorizeButton`. There is also more information on the enumerated values in `PromptValue.swift`.
 
 ## 7.0 Request Authorization Code Manually
 
-For a more hands-on approach, you can perform a manual authorization request with `AuthorizationService`.
+You can perform a manual authorization request by configuring`AuthorizationService`.
 Pass the code and associated identifiers to your secure server to complete the token request flow.
 
 ```swift
@@ -351,12 +347,12 @@ The following table summarizes the `AuthorizationError` error types and potentia
 | requestTimeout | The request has timed out. | Display an appropriate feedback message, such as "Unable to reach the server, please try again" or "Poor network connection." |
 | serverError | There was an error on the server. | Please try again later. |
 | networkFailure | There was a problem communicating over the network. | Advise the user to check their connection and try again. |
-| configurationError | There is an error configuring the SDK. | Confirm your configuration locally and with the service provider portal. |
+| configurationError | There is an error configuring the SDK. | Check your local code configuration with the configuration on the Service Provider Portal. |
 | discoveryStateError | There is an inconsistency with the user's state. | Try to perform the authorization request again. |
 | unknownError | An unknown error has occurred. | If the problem persists, contact support. |
 
 ### 8.1 Debugging
-It is possible to enable logging by passing a value for the `.logLevel` key via the to the `projectVerifyOptions` parameter in the `ProjectVerifyAppDelegate`. For more information on the options, see the `Log.LogLevel` type  as shown below (source is *Log.swift*).
+It is possible to enable logging by passing a value for the `.logLevel` key to the `projectVerifyOptions` parameter in the `ProjectVerifyAppDelegate`. For more information on the options, see the `Log.LogLevel` type  as shown below.
 
 ```swift
 /// Pass a log level to the ZenKey launch options to enable logging for use during debugging.
@@ -398,9 +394,9 @@ On your secure server, perform discovery and use the discovered token endpoint t
 * MNC (Mobile Network Code)
 * Redirect URI
 
-The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the ZenKey User Info Endpoint, which should pass information through your server's authenticated endpoints in a way that makes sense for your application.
+The token should be used as the basis for accessing or creating a token within the domain of your application. After you exchange the authorization code for an authorization token on your secure server, you will be able to access the ZenKey `userinfo` endpoint, which will pass information through your server's authenticated endpoints as defined by your application.
 
-Information on setting up your secure server can be found in the ZenKey Server and Web Integration Guide.
+Information on setting up your secure server can be found in the "ZenKey Server and Web Integration Guide".
 
 ## Support
 For technical questions, contact [support](mailto:techsupport@mobileauthtaskforce.com).
@@ -413,7 +409,8 @@ NOTICE: © 2019 XCI JV, LLC.  ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND C
 
 | Date   | Version      | Description |
 | -------- | --------- | ------------------------------------------------------ |
+| 8.29.2019 | 0.9.11 | Updating verbiage and instructions |
 |8.27.2019 | 0.9.10     | Updated high-level flows; Updated sample code.  |
 |8.20.2019 | 0.9.9     | Added section numbers; Added revision history; Added additional info about Redirect URIs to section 4.0 |
 
-<sub> Last Update: Document Version 0.9.10 - August 27, 2019</sub>
+<sub> Last Update: Document Version 0.9.11 - August 279, 2019</sub>
