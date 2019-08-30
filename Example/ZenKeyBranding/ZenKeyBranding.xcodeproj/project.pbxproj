@@ -1,0 +1,420 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		13F55D12C7FB89F79348FD5D /* Pods_ZenKeyBranding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFB5E1A5DFF2B18FC024FC28 /* Pods_ZenKeyBranding.framework */; };
+		8A5C3FAB225FE6550013DEC3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5C3FAA225FE6550013DEC3 /* AppDelegate.swift */; };
+		8A5C3FAD225FE6550013DEC3 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5C3FAC225FE6550013DEC3 /* MenuViewController.swift */; };
+		8A5C3FB2225FE6560013DEC3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A5C3FB1225FE6560013DEC3 /* Assets.xcassets */; };
+		8A5C3FB5225FE6560013DEC3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A5C3FB3225FE6560013DEC3 /* LaunchScreen.storyboard */; };
+		8A5C3FBD225FF1DF0013DEC3 /* ManualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5C3FBC225FF1DF0013DEC3 /* ManualViewController.swift */; };
+		8A5C3FBF225FF1EB0013DEC3 /* AutolayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5C3FBE225FF1EB0013DEC3 /* AutolayoutViewController.swift */; };
+		8A5C3FC1225FF1F80013DEC3 /* InterfaceBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5C3FC0225FF1F80013DEC3 /* InterfaceBuilderViewController.swift */; };
+		8AB2413E2260FF95007E57B3 /* InterfaceBuilderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AB2413D2260FF95007E57B3 /* InterfaceBuilderViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3D88E1A909A3382EA8E31480 /* Pods-ZenKeyBranding.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZenKeyBranding.debug.xcconfig"; path = "Target Support Files/Pods-ZenKeyBranding/Pods-ZenKeyBranding.debug.xcconfig"; sourceTree = "<group>"; };
+		8A5C3FA7225FE6550013DEC3 /* ZenKeyBranding.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZenKeyBranding.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A5C3FAA225FE6550013DEC3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8A5C3FAC225FE6550013DEC3 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		8A5C3FB1225FE6560013DEC3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8A5C3FB4225FE6560013DEC3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8A5C3FB6225FE6560013DEC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A5C3FBC225FF1DF0013DEC3 /* ManualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualViewController.swift; sourceTree = "<group>"; };
+		8A5C3FBE225FF1EB0013DEC3 /* AutolayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutolayoutViewController.swift; sourceTree = "<group>"; };
+		8A5C3FC0225FF1F80013DEC3 /* InterfaceBuilderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceBuilderViewController.swift; sourceTree = "<group>"; };
+		8AB2413D2260FF95007E57B3 /* InterfaceBuilderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InterfaceBuilderViewController.xib; sourceTree = "<group>"; };
+		DC757DB0FE3D061215C02EEE /* Pods-ZenKeyBranding.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZenKeyBranding.release.xcconfig"; path = "Target Support Files/Pods-ZenKeyBranding/Pods-ZenKeyBranding.release.xcconfig"; sourceTree = "<group>"; };
+		DFB5E1A5DFF2B18FC024FC28 /* Pods_ZenKeyBranding.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZenKeyBranding.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8A5C3FA4225FE6550013DEC3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				13F55D12C7FB89F79348FD5D /* Pods_ZenKeyBranding.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2B4C5B9D62E3DC9A38FF6D43 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3D88E1A909A3382EA8E31480 /* Pods-ZenKeyBranding.debug.xcconfig */,
+				DC757DB0FE3D061215C02EEE /* Pods-ZenKeyBranding.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		8A5C3F9E225FE6550013DEC3 = {
+			isa = PBXGroup;
+			children = (
+				8A5C3FA9225FE6550013DEC3 /* ZenKeyBranding */,
+				8A5C3FA8225FE6550013DEC3 /* Products */,
+				2B4C5B9D62E3DC9A38FF6D43 /* Pods */,
+				AF4D9B8FB6EFAF72A8AFE972 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		8A5C3FA8225FE6550013DEC3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A5C3FA7225FE6550013DEC3 /* ZenKeyBranding.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A5C3FA9225FE6550013DEC3 /* ZenKeyBranding */ = {
+			isa = PBXGroup;
+			children = (
+				8A5C3FAA225FE6550013DEC3 /* AppDelegate.swift */,
+				8A5C3FBE225FF1EB0013DEC3 /* AutolayoutViewController.swift */,
+				8A5C3FC0225FF1F80013DEC3 /* InterfaceBuilderViewController.swift */,
+				8A5C3FBC225FF1DF0013DEC3 /* ManualViewController.swift */,
+				8A5C3FAC225FE6550013DEC3 /* MenuViewController.swift */,
+				8A5C3FB1225FE6560013DEC3 /* Assets.xcassets */,
+				8A5C3FB3225FE6560013DEC3 /* LaunchScreen.storyboard */,
+				8AB2413D2260FF95007E57B3 /* InterfaceBuilderViewController.xib */,
+				8A5C3FB6225FE6560013DEC3 /* Info.plist */,
+			);
+			path = ZenKeyBranding;
+			sourceTree = "<group>";
+		};
+		AF4D9B8FB6EFAF72A8AFE972 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DFB5E1A5DFF2B18FC024FC28 /* Pods_ZenKeyBranding.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8A5C3FA6225FE6550013DEC3 /* ZenKeyBranding */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A5C3FB9225FE6560013DEC3 /* Build configuration list for PBXNativeTarget "ZenKeyBranding" */;
+			buildPhases = (
+				B412DD59FBF6BF0F4EC312BB /* [CP] Check Pods Manifest.lock */,
+				8A5C3FA3225FE6550013DEC3 /* Sources */,
+				8A5C3FA4225FE6550013DEC3 /* Frameworks */,
+				8A5C3FA5225FE6550013DEC3 /* Resources */,
+				14FD3632AA2CA5B5CF9775A2 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZenKeyBranding;
+			productName = ZenKeyBranding;
+			productReference = 8A5C3FA7225FE6550013DEC3 /* ZenKeyBranding.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8A5C3F9F225FE6550013DEC3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1020;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = "XCI JV, LLC.";
+				TargetAttributes = {
+					8A5C3FA6225FE6550013DEC3 = {
+						CreatedOnToolsVersion = 10.2;
+					};
+				};
+			};
+			buildConfigurationList = 8A5C3FA2225FE6550013DEC3 /* Build configuration list for PBXProject "ZenKeyBranding" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8A5C3F9E225FE6550013DEC3;
+			productRefGroup = 8A5C3FA8225FE6550013DEC3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8A5C3FA6225FE6550013DEC3 /* ZenKeyBranding */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8A5C3FA5225FE6550013DEC3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AB2413E2260FF95007E57B3 /* InterfaceBuilderViewController.xib in Resources */,
+				8A5C3FB5225FE6560013DEC3 /* LaunchScreen.storyboard in Resources */,
+				8A5C3FB2225FE6560013DEC3 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		14FD3632AA2CA5B5CF9775A2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ZenKeyBranding/Pods-ZenKeyBranding-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ZenKeySDK/ZenKeySDK.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZenKeySDK.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ZenKeyBranding/Pods-ZenKeyBranding-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B412DD59FBF6BF0F4EC312BB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ZenKeyBranding-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8A5C3FA3225FE6550013DEC3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A5C3FAD225FE6550013DEC3 /* MenuViewController.swift in Sources */,
+				8A5C3FBD225FF1DF0013DEC3 /* ManualViewController.swift in Sources */,
+				8A5C3FAB225FE6550013DEC3 /* AppDelegate.swift in Sources */,
+				8A5C3FBF225FF1EB0013DEC3 /* AutolayoutViewController.swift in Sources */,
+				8A5C3FC1225FF1F80013DEC3 /* InterfaceBuilderViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		8A5C3FB3225FE6560013DEC3 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8A5C3FB4225FE6560013DEC3 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8A5C3FB7225FE6560013DEC3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		8A5C3FB8225FE6560013DEC3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8A5C3FBA225FE6560013DEC3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D88E1A909A3382EA8E31480 /* Pods-ZenKeyBranding.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XRTVVR644Y;
+				INFOPLIST_FILE = ZenKeyBranding/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rightpoint.ZenKeyBranding;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8A5C3FBB225FE6560013DEC3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC757DB0FE3D061215C02EEE /* Pods-ZenKeyBranding.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XRTVVR644Y;
+				INFOPLIST_FILE = ZenKeyBranding/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rightpoint.ZenKeyBranding;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8A5C3FA2225FE6550013DEC3 /* Build configuration list for PBXProject "ZenKeyBranding" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A5C3FB7225FE6560013DEC3 /* Debug */,
+				8A5C3FB8225FE6560013DEC3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A5C3FB9225FE6560013DEC3 /* Build configuration list for PBXNativeTarget "ZenKeyBranding" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A5C3FBA225FE6560013DEC3 /* Debug */,
+				8A5C3FBB225FE6560013DEC3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8A5C3F9F225FE6550013DEC3 /* Project object */;
+}

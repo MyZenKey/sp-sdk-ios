@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import CarriersSharedAPI
+import ZenKeySDK
 
 class ApproveViewController: BankAppViewController {
 
@@ -43,8 +43,8 @@ class ApproveViewController: BankAppViewController {
     let nonce = RandomStringGenerator.generateNonceSuitableString()!
     let context = "Confirm you would like to transfer \(ApproveViewController.amount) to \(ApproveViewController.userName)."
 
-    lazy var projectVerifyButton: ProjectVerifyAuthorizeButton = {
-        let button = ProjectVerifyAuthorizeButton()
+    lazy var zenKeyButton: ZenKeyAuthorizeButton = {
+        let button = ZenKeyAuthorizeButton()
         button.style = .dark
         let scopes: [Scope] = [.openid, .authorize]
         button.scopes = scopes
@@ -64,8 +64,8 @@ class ApproveViewController: BankAppViewController {
     }
 
     @objc func cancelTransaction(_ sender: Any) {
-        if projectVerifyButton.isAuthorizing {
-            projectVerifyButton.cancel()
+        if zenKeyButton.isAuthorizing {
+            zenKeyButton.cancel()
         } else {
             navigationController?.popViewController(animated: true)
         }
@@ -105,7 +105,7 @@ class ApproveViewController: BankAppViewController {
         let safeAreaGuide = getSafeLayoutGuide()
         
         view.addSubview(promptLabel)
-        view.addSubview(projectVerifyButton)
+        view.addSubview(zenKeyButton)
         view.addSubview(cancelButton)
         view.addSubview(activityIndicator)
 
@@ -113,14 +113,14 @@ class ApproveViewController: BankAppViewController {
         constraints.append(promptLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(promptLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
 
-        constraints.append(projectVerifyButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -10))
-        constraints.append(projectVerifyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(projectVerifyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+        constraints.append(zenKeyButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -10))
+        constraints.append(zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
+        constraints.append(zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
 
         constraints.append(cancelButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -30))
         constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
         constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(cancelButton.heightAnchor.constraint(equalTo: projectVerifyButton.heightAnchor))
+        constraints.append(cancelButton.heightAnchor.constraint(equalTo: zenKeyButton.heightAnchor))
 
         constraints.append(activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
@@ -129,17 +129,17 @@ class ApproveViewController: BankAppViewController {
     }
 }
 
-extension ApproveViewController: ProjectVerifyAuthorizeButtonDelegate {
+extension ApproveViewController: ZenKeyAuthorizeButtonDelegate {
 
-    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) {
+    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) {
         showActivityIndicator()
-        projectVerifyButton.isEnabled = false
+        zenKeyButton.isEnabled = false
     }
 
-    func buttonDidFinish(_ button: ProjectVerifyAuthorizeButton, withResult result: AuthorizationResult) {
+    func buttonDidFinish(_ button: ZenKeyAuthorizeButton, withResult result: AuthorizationResult) {
         defer {
             hideActivityIndicator()
-            projectVerifyButton.isEnabled = true
+            zenKeyButton.isEnabled = true
         }
 
         switch result {

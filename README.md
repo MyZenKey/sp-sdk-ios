@@ -6,43 +6,57 @@ This guide is for developers integrating ZenKey with their iOS applications.
 
 ## 1.0 Background
 
-ZenKey is a joint undertaking of the Mobile Authentication Taskforce. The taskforce provides customers with the ability to use their mobile phone number to sign into apps. ZenKey is built on top of OpenID Connect (OIDC).
+ZenKey is a secure bridge between your users and the apps and services you provide. The platform is a joint undertaking of the Mobile Authentication Taskforce, a joint venture of the four major US wireless carriers. 
+
+ZenKey leverages encryption technologies in a user's mobile phone and mobile network. The platform packages multiple factors of authentication into a streamlined experience for app and website providers, taking advantage of the unique capabilities and insights of the wireless carriers. It then applies those capabilities to provide an easy and secure way to register, login, and perform other types of authorizations within apps and services. The result for Service Providers is a better user experience and a more secure link to your users.
+
+ZenKey makes integration easy by following the OpenID Connect (OIDC) authentication protocol.
 
 ### 1.1 OpenID Connect
 
-OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0 specification. It uses JSON Web Tokens (JWTs) that are obtained using OAuth 2.0 flows. You can read more about OIDC [here](https://openid.net/specs/openid-connect-core-1_0.html).
+OpenID Connect (OIDC) is an authentication protocol based on the OAuth 2.0 specification. It uses JSON Web Tokens (JWTs) obtained using OAuth 2.0 flows. The ZenKey SDK uses OIDC to support developers creating experiences in web and native applications. You can read more about OIDC [here](https://openid.net/specs/openid-connect-core-1_0.html).
 
-### 1.2 Authorization Code Flow and Carrier Discovery
+### 1.2 Authorization Flow
 
-ZenKey SDK supports the authorization code flow for web and native applications. In the flow, the user is redirected to the carrier for authorization. Upon successful authorization, the user is redirected to your application with an authorization code, which you should exchange from your secure backend exchanges for an ID token and access token. This flow enhances security, as `clientId`, `clientSecret` and user ID token are not revealed to your client.
+ZenKey is simple to use – one method to authenticate into all of your apps and websites (when those third parties have enabled ZenKey). These user flows can take place on the user's primary device, which has the ZenKey app installed, or on a secondary device, such as desktops and tablets.
 
-Because each carrier operates its own authorization servers, we determine the user's carrier prior to authentication. This process is called Carrier Discovery (this is an OIDC Discovery with extra parameters). This ensures that the discovery document from ZenKey is for the correct carrier.
+#### 1.2.1 Authorization on a Primary Device
 
-### 1.3 High Level Architecture
+Users establish their mobile device as their primary device by installing the carrier specific ZenKey app on that device. After completing a simple initial setup, users are ready to use ZenKey with third-party applications. Pressing the ZenKey button in a third party app or website from their primary device starts the authentication process.
 
-ZenKey brings the four main US phone carriers together with a common user authentication experience backed by carrier device authentication. The solution enables two main flows at initial launch (app and web). The app flow is for  service provider (SP) native apps or a SP-browser based websites that are on the same device as ZenKey. The web flow shows secondary device support when the SP website is accessed from a device other than a user’s primary phone.
-
-As the first image shows, consumers from their primary phone access ZenKey either from the SP app or SP website. As a service provider developer, you sign up and log in through the ZenKey portal, then write code in your backend. The architecture looks like this:
+*Note:* This primary device is also the device users can use to authenticate requests from other devices, such as desktops and tablets. See Section 1.2.2 Authorization on Secondary Devices.
 
  <img src="image/high_level_flow_app_pri.png" alt="High Level Flow - App" width="550">
 
-The flow goes from consumer through service provider website, to service provider backend, to mobile carrier, to ZenKey and back again.
+**Step 1:** The Service Provider's mobile app or website makes an authorization code request to the local ZenKey app.
 
-As the second image shows, consumers from their secondary device (such as a laptop) can access ZenKey from the SP website. The architecture looks like this:
+**Step 2:** The ZenKey app determines the appropriate wireless carrier to perform SIM and user authentication with and returns an authorization code to your Redirect URI (see section on Redirect URI).
+
+**Step 3:** Your backend server may make a token request for user info or other resources which the user consented to share with you.
+
+#### 1.2.2 Authorization on Secondary Devices
+
+Users can also use ZenKey to authenticate on devices other than their primary device, such as a tablet or desktop. These secondary devices rely on the user's primary device to complete the authentication process.
+
+User's pressing the ZenKey button on a secondary device will see a visual and numeric code as a part of the secondary device authorization process. This code allows the user to associate that secondary device with their primary device. From there, they are then instructed to open the ZenKey application on their primary device, where they will be able to complete the authentication request.
 
  <img src="image/high_level_flow_web_sec.png" alt="High Level Flow - Web" width="550">
 
-The user receives a visual or numeric code with which to confirm their identity with their primary phone. Once they have done this  they can log in with their secondary device.
+**Step 1:** The user is taken to the Carrier Discovery UI website, where they choose the carrier associated with their primary device. If the user is authorizing a secondary device from an app on a tablet, the SDK will use a webview for this step.
 
-Consumer verification and authorization flows to Carrier auth, the service provider backend, ZenKey platform and mobile carrier as follows:
+**Step 2:** The user then scans the visual code or enters the numeric code into the ZenKey app on their primary device.
 
-* Discovery
-* Authorization code request, universal link captured
-* SIM and user authentication, explicit user consent (via the primary device)
-* Authorization code returned, deep or universal link
-* Service provider integrated clients
-* Token request
-* Userinfo mobile carrier resource
+**Step 3:** Once the user approves the request in the ZenKey app on their primary device, the Carrier Discovery UI website gets redirected to perform authorization with a `login_hint_token`.
+
+**Step 4:** Your backend server makes an authorization code request to the appropriate carrier, to perform SIM and user authentication, receives the auth code back at your Redirect URI.
+
+**Step 5:** Your backend server may make a token request for user info or other resources which the user consented to share with you.
+
+### 1.3 User Data
+
+To create a secure experience, user info is only shared via a web request from your secure backend to the user's carrier backend. By using a backend server to make calls to the user's carrier, and not the client application, the `clientId`, `clientSecret` and user ID token are not revealed to your client.
+
+The ZenKey services itself does not accumulate the personal data used for authentication. That data remains secured by the user's  wireless carrier. Encrypted user information is only shared with Service Providers upon subscriber consent. Users are able to choose whether to share their data and specifically what data will be shared with each participating Service Provider.
 
 ## 2.0 Getting Started
 
@@ -74,7 +88,7 @@ To integrate ZenKey with your application project by:
 You can include the ZenKey SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following code to your Podfile.
 
 ```ruby
-  pod 'CarriersSharedAPI', path: '{your-relative-path}/CarriersSharedAPI.podspec'
+  pod 'ZenKeySDK', path: '{your-relative-path}/ZenKeySDK.podspec'
 ```
 ### 3.2 Adding the SDK as a Submodule
 
@@ -91,9 +105,9 @@ git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 To add the SDK source manually to your Xcode project:
 
 1. Copy and paste the ZenKey SDK source directly to the project directory.
-1. Add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
+1. Add `ZenKeySDK.xcodeproj` to your application's Xcode project.
 1. After adding the project, confirm that the deployment targets are less than or equal to your deployment target.
-1. View your project's "Embedded Binaries" under your project's "General" panel. Add the `CarriersSharedAPI` framework. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
+1. View your project's "Embedded Binaries" under your project's "General" panel. Add the `ZenKeySDK` framework. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
 1. Build and run the project to ensure that everything is working correctly.
 
 ## 4.0 Configure Client ID and Redirect URI
@@ -101,7 +115,7 @@ To add the SDK source manually to your Xcode project:
 All Service Providers must add their application's client Id to their `Info.plist`.  Retrieve your client Id from the ZenKey dashboard and add the following key to your application’s `Info.plist`:
 
 ```xml
-    <key>ProjectVerifyClientId</key>
+    <key>ZenKeyClientId</key>
     <string>{your application's client id}</string>
 ```
 
@@ -134,11 +148,11 @@ To create a custom redirect URI, access the Service Provider Portal and follow t
 To apply your custom redirect URI, specify the custom scheme, host, and path in the `Info.plist` file.
 
 ```xml
-    <key>ProjectVerifyCustomHost</key>
+    <key>ZenKeyCustomHost</key>
     <string>{your universal link's host}</string>
-    <key>ProjectVerifyCustomPath</key>
+    <key>ZenKeyCustomPath</key>
     <string>{your universal link's full path}</string>
-    <key>ProjectVerifyCustomScheme</key>
+    <key>ZenKeyCustomScheme</key>
     <string>https</string>
 ```
 
@@ -147,13 +161,13 @@ To apply your custom redirect URI, specify the custom scheme, host, and path in 
 To support ZenKey SDK within your application, you must instantiate ZenKey in the application delegate as follows:
 
 ```swift
-import CarriersSharedAPI
+import ZenKeySDK
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        ProjectVerifyAppDelegate.shared.application(
+        ZenKeyAppDelegate.shared.application(
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
@@ -167,7 +181,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      open url: URL,
                      options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 
-        guard !ProjectVerifyAppDelegate.shared.application(app, open: url, options: options) else {
+        guard !ZenKeyAppDelegate.shared.application(app, open: url, options: options) else {
             return true
         }
         // Perform any other URL processing your app may need to perform.
@@ -175,30 +189,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 ```
-**NOTE:** To enable logging for debugging purposes, include the `projectVerifyOptions` parameter and specify a log level (refer to section 8.1).
+**NOTE:** To enable logging for debugging purposes, include the `zenKeyOptions` parameter and specify a log level (refer to section 8.1).
 
 ## 6.0 Request Authorization Code
 
-A ZenKey authorization can provide your application with the means to secure a user's registration, login, or authorization to processing an important transaction. The SDK provides the branded button `ProjectVerifyAuthorizationButton` to automatically submit a request for ZenKey authorization.
+A ZenKey authorization can provide your application with the means to secure a user's registration, login, or authorization to processing an important transaction. The SDK provides the branded button `ZenKeyAuthorizationButton` to automatically submit a request for ZenKey authorization.
 
 ### 6.1 Add ZenKey Button 
 
-Add the ZenKey  `ProjectVerifyAuthorizationButton` to your UIView.
+Add the ZenKey  `ZenKeyAuthorizationButton` to your UIView.
 
 ```swift
-import CarriersSharedAPI
+import ZenKeySDK
 
 class LoginViewController {
-    let projectVerifyButton = ProjectVerifyAuthorizationButton()
+    let zenKeyButton = ZenKeyAuthorizationButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let scopes: [Scope] = [.openid, .email, .name]
-        projectVerifyButton.scopes = scopes
-        projectVerifyButton.delegate = self
+        zenKeyButton.scopes = scopes
+        zenKeyButton.delegate = self
 
-        view.addSubview(projectVerifyButton)
+        view.addSubview(zenKeyButton)
     }
 }
 ```
@@ -208,7 +222,7 @@ class LoginViewController {
 You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the ZenKey button uses the dark style specified as follows:
 
 ```swift
-    projectVerifyButton
+    zenKeyButton
 ```
 The dark button style looks like this:
 
@@ -219,7 +233,7 @@ The dark button style looks like this:
 A light button style is appropriate to use with dark backgrounds. For the light style, specify the light parameter as follows:
 
 ```swift
-    projectVerifyButton.style = .light
+    zenKeyButton.style = .light
 ```
 The light button style looks like this:
 
@@ -227,21 +241,21 @@ The light button style looks like this:
 
 #### 6.1.3 Custom Button or View
 
-Instead of the default `ProjectVerifyAuthorizationButton`, you can invoke ZenKey with your own custom button or view. See the implementation details in section 7.0, "Request Authorization Code Manually".
+Instead of the default `ZenKeyAuthorizationButton`, you can invoke ZenKey with your own custom button or view. See the implementation details in section 7.0, "Request Authorization Code Manually".
 
 ### 6.2 Receive Callbacks
 
-In order to receive the responses from a ZenKey request, implement  `ProjectVerifyAuthorizeButtonDelegate`.
+In order to receive the responses from a ZenKey request, implement  `ZenKeyAuthorizeButtonDelegate`.
 
 ```swift
-extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
+extension LoginViewController: ZenKeyAuthorizeButtonDelegate {
 
-    func buttonWillBeginAuthorizing(_ button: ProjectVerifyAuthorizeButton) {
+    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) {
         // perform any ui updates like showing an activity indicator.
     }
 
     func buttonDidFinish(
-        _ button: ProjectVerifyAuthorizeButton,
+        _ button: ZenKeyAuthorizeButton,
         withResult result: AuthorizationResult) {
 
         // handle the outcome of the request:
@@ -274,7 +288,7 @@ Select each of the userinfo `scopes` to be added to the authorization request.
     let scopes: [Scope] = [.openid, .email, .name]
 ```
 
-For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/blob/develop/CarriersSharedAPI/Sources/Core/Scope.swift).
+For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/blob/develop/ZenKeySDK/Sources/Core/Scope.swift).
 
 #### 6.3.2 Additional Parameters
 
@@ -301,7 +315,7 @@ Additional parameters that you can configure include:
   * `prompt=login` At login, prompt the user to authenticate again.
   * `prompt=consent` Prompt the user to explicitly re-confirm agreeement with exposing personal data. (The carrier recaptures user consent for listed scopes).
 
-For more information about each of these parameters and instructions on how to use them, view the documentation for `ProjectVerifyAuthorizeButton`. There is also more information on the enumerated values in `PromptValue.swift`.
+For more information about each of these parameters and instructions on how to use them, view the documentation for `ZenKeyAuthorizeButton`. There is also more information on the enumerated values in `PromptValue.swift`.
 
 ## 7.0 Request Authorization Code Manually
 
@@ -309,13 +323,13 @@ You can perform a manual authorization request by configuring`AuthorizationServi
 Pass the code and associated identifiers to your secure server to complete the token request flow.
 
 ```swift
-import CarriersSharedAPI
+import ZenKeySDK
 
 class LoginViewController {
 
     let authService = AuthorizationService()
 
-    func loginWithProjectVerify() {
+    func loginWithZenKey() {
         // in response to some UI, perform an authorization using the AuthorizationService
         let scopes: [Scope] = [.openid, .email, .name]
         authService.authorize(
@@ -360,7 +374,8 @@ The following table summarizes the `AuthorizationError` error types and potentia
 | unknownError | An unknown error has occurred. | If the problem persists, contact support. |
 
 ### 8.1 Debugging
-It is possible to enable logging by passing a value for the `.logLevel` key to the `projectVerifyOptions` parameter in the `ProjectVerifyAppDelegate`. For more information on the options, see the `Log.LogLevel` type  as shown below.
+
+It is possible to enable logging by passing a value for the `.logLevel` key to the `zenKeyOptions` parameter in the `ZenKeyAppDelegate`. For more information on the options, see the `Log.LogLevel` type  as shown below.
 
 ```swift
 /// Pass a log level to the ZenKey launch options to enable logging for use during debugging.

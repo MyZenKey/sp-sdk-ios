@@ -21,6 +21,16 @@ or alternatively using `brew cask install fastlane`
 fastlane ios test
 ```
 Runs tests
+### ios develop
+```
+fastlane ios develop
+```
+Builds and submits a Develop release to Hockey
+### ios sprint
+```
+fastlane ios sprint
+```
+Builds and submits a Sprint release to Hockey
 ### ios generate_docs
 ```
 fastlane ios generate_docs
@@ -36,6 +46,11 @@ Posts Docs to Slack
 fastlane ios coverage
 ```
 Runs Code Coverage
+### ios update_pods
+```
+fastlane ios update_pods
+```
+Updates the pods for all Example repos
 ### ios write_secrets
 ```
 fastlane ios write_secrets
@@ -46,26 +61,6 @@ Write secret configs
 fastlane ios strip_secrets
 ```
 Remove secrets from configs
-### ios develop
-```
-fastlane ios develop
-```
-Builds and submits a Develop release to Hockey
-### ios sprint
-```
-fastlane ios sprint
-```
-Builds and submits a Sprint release to Hockey
-### ios update_pods
-```
-fastlane ios update_pods
-```
-Updates the pods for all Example repos
-### ios beta
-```
-fastlane ios beta
-```
-
 
 ----
 

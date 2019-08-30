@@ -156,13 +156,13 @@ struct DiscoveryResponse: Decodable {
 class ClientSideServiceAPI: ServiceAPIProtocol {
 
     private static let clientId: String = {
-        guard let clientId = Bundle.main.infoDictionary?["ProjectVerifyClientId"] as? String else {
+        guard let clientId = Bundle.main.infoDictionary?["ZenKeyClientId"] as? String else {
             fatalError("missing client id")
         }
         return clientId
     }()
     private static let appSecret: String = {
-        guard let appSecret = Bundle.main.infoDictionary?["ProjectVerifyAppSecret"] as? String else {
+        guard let appSecret = Bundle.main.infoDictionary?["ZenKeyAppSecret"] as? String else {
             return ""
         }
         return appSecret
@@ -252,7 +252,7 @@ class ClientSideServiceAPI: ServiceAPIProtocol {
                     request.addValue("Accept", forHTTPHeaderField: "application/json")
                     sself.requestJSON(request: request) { (userInfoResponse: UserInfoResponse?, error: Error?) in
                         let userInfo = userInfoResponse?
-                            .toUserInfo(withUsername: UserAccountStorage.userName ?? "projectverify_user")
+                            .toUserInfo(withUsername: UserAccountStorage.userName ?? "zenkey_user")
                         completion(userInfo, error)
                     }
         }

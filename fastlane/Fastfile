@@ -48,9 +48,9 @@ ENV['CI_BUILD'] = 'yes'
 ENV['FL_HOCKEY_NOTIFY'] = '0'
 
 DERIVED_DATA_PATH = "#{ENV['RZ_TEST_REPORTS']}/derived_data"
-TEST_PROJCET = 'XCI-ProviderSDK-iOS.xcodeproj'
+TEST_PROJCET = 'ZenKeySDK.xcodeproj'
 TEST_PROJCET_PATH = "./#{TEST_PROJCET}"
-TEST_SCHEME = "CarriersSharedAPITests"
+TEST_SCHEME = "ZenKeySDKTests"
 
   # LANES ----------------------
 
@@ -176,7 +176,7 @@ platform :ios do
     end
 
     # Add targets here as you create internal frameworks
-    xcov_targets = "CarriersSharedAPI.framework"
+    xcov_targets = "ZenKeySDK.framework"
     xcov_scheme = TEST_SCHEME
 
     xcov(
@@ -190,7 +190,7 @@ platform :ios do
     slather_proj = TEST_PROJCET
     slather_scheme = TEST_SCHEME
     # Add binaries here as you create internal frameworks
-    slather_binaries = ['CarriersSharedAPI']
+    slather_binaries = ['ZenKeySDK']
     slather_output_directory = "#{ENV['RZ_TEST_REPORTS']}/slather"
 
     # html and cobertura_xml output must be run separately
@@ -245,7 +245,7 @@ platform :ios do
         
         # lastly write out the secrets config
         File.open(SECRETS_CONFIG_NAME, "w+") do |file|
-          file.write("PV_APP_SECRET = #{SECRETS_MAP[name]}")
+          file.write("ZK_APP_SECRET = #{SECRETS_MAP[name]}")
         end
       end
     end

@@ -5,7 +5,7 @@
 //
 
 import UIKit
-import CarriersSharedAPI
+import ZenKeySDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, DemoAppAppDelegate {
@@ -18,10 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, DemoAppAppDelegate {
 
         UITestLaunchArgument.handle()
 
-        ProjectVerifyAppDelegate.shared.application(
+        ZenKeyAppDelegate.shared.application(
             application,
             didFinishLaunchingWithOptions: launchOptions,
-            projectVerifyOptions: BuildInfo.projectVerifyOptions
+            zenKeyOptions: BuildInfo.zenKeyOptions
         )
 
         // Override point for customization after application launch.
@@ -74,7 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, DemoAppAppDelegate {
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
 
-        guard !ProjectVerifyAppDelegate.shared.application(app, open: url, options: options) else {
+        guard !ZenKeyAppDelegate.shared.application(app, open: url, options: options) else {
             return true
         }
 

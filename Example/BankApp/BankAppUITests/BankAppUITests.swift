@@ -20,11 +20,11 @@ class BankAppUITests: XCTestCase {
         app.launchArguments.append("--logged-out")
     }
 
-    func testProjectVerifyButton() {
+    func testZenKeyButton() {
         app.launch()
 
-        let projectVerifyButton = XCUIApplication().buttons["Project Verify Button"]
-        XCTAssert(projectVerifyButton.exists)
-        projectVerifyButton.tap()
+        let zenKeyButton = XCUIApplication().buttons["ZenKey Button"]
+        XCTAssert(zenKeyButton.exists)
+        zenKeyButton.tap()
     }
 }
