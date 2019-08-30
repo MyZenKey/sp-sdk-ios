@@ -66,10 +66,18 @@ The ZenKey services itself does not accumulate the personal data used for authen
 To get started integrating the ZenKey with your applications, there are a few things you should do:
 
 * Register your application - Access the Service Provider portal to register your application and obtain a valid `clientId` and `clientSecret`.
+* Identify user information data you want to capture - The ZenKey enrollment process includes asking for personal user data. The ZenKey services itself does not accumulate the personal data used for authentication. That data remains secured by the user's  wireless carrier. Encrypted user information is only shared with Service Providers upon subscriber consent. Users are able to choose whether to share their data and specifically what data will be shared with each participating Service Provider. There are various user data  "scopes" already defined in the ZenKey which you can select to be captured during the enrollment process, such as email address, name, phone number.
+* Identify if you need custom redirect URIs - Redirect URIs will be used for callbacks to several ZenKey services
 * Identify user information data you want to capture - The ZenKey enrollment process includes asking for personal user data. The ZenKey service itself does not accumulate the personal data used for authentication. That data remains secured by the user's wireless carrier. Encrypted user information is only shared with Service Providers upon subscriber consent. Users are able to choose whether to share their data and specifically what data will be shared with each participating Service Provider.
   * Because applications must get authorization to access user information, scopes must be defined to allow actions. There are various user data "scopes" already defined in ZenKey which you can select to be captured during the enrollment process. Examples of these are email address, name and phone number. These scopes are used to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
 * Identify if you need custom redirect URIs - Redirect URIs will be used for callbacks to several ZenKey services.
 * Decide to require PIN and/or Biometric - You can choose if you'd like to require the user to authenticate with a PIN and/or a biometric from their primary device (e.g. finger print, facial recognition, etc). In your setup, you can choose to have an experience with or without requiring both a PIN or biometric.
+
+**Note:** For Pre-Release: set up Git Access - While the SDK is under development (Pre-Release), we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
+
+```bash
+git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
+```
 
 ## 3.0 Add the ZenKey SDK
 
@@ -78,33 +86,23 @@ From the Service Provider Portal, add the ZenKey SDK to your project. Review the
 To integrate ZenKey with your application project by: 
 
 * Using CocoaPods, 
-* Adding the SDK as a git submodule, or
-* Adding the SDK source to your project directory manually
+* Adding the SDK source to your Xcode project manually
 
 **NOTE:** Use of Carthage for development is not currently supported.
 
 ### 3.1 Using CocoaPods
 
-You can include the ZenKey SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following code to your Podfile.
+You can include the ZenKey SDK in your project as a development CocoaPod. After you place the source code in your project directory, add the following code to your Podfile.
 
 ```ruby
   pod 'ZenKeySDK', path: '{your-relative-path}/ZenKeySDK.podspec'
 ```
-### 3.2 Adding the SDK as a Submodule
 
-1. Access your app repo. 
-2. Add the SDK as a submodule by entering the following command.:
-
-```bash
-git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
-```
-3. Commit your change.
-
-### 3.3 Adding the SDK Source Manually to the Project Directory
+### 3.2 Adding the SDK Source Manually to the Project Directory
 
 To add the SDK source manually to your Xcode project:
 
-1. Copy and paste the ZenKey SDK source directly to the project directory.
+1. Move the ZenKey SDK source directly to the project directory.
 1. Add `ZenKeySDK.xcodeproj` to your application's Xcode project.
 1. After adding the project, confirm that the deployment targets are less than or equal to your deployment target.
 1. View your project's "Embedded Binaries" under your project's "General" panel. Add the `ZenKeySDK` framework. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
@@ -138,8 +136,6 @@ The default URI is  `{your client Id}://com.xci.provider.sdk`.  Use this URI by 
         </dict>
     </array>
 ```
-
-
 
 To create a custom redirect URI, access the Service Provider Portal and follow the instructions. 
 
@@ -219,18 +215,13 @@ class LoginViewController {
 
 #### 6.1.1 Dark Button
 
-You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the ZenKey button uses the dark style specified as follows:
-
-```swift
-    zenKeyButton
-```
-The dark button style looks like this:
+You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the ZenKey button uses the dark style. The dark button style looks like this:
 
  <img src="image/zenkey_button_dark.png" alt="Verify Button Dark" width="360">
 
 #### 6.1.2 Light Button
 
-A light button style is appropriate to use with dark backgrounds. For the light style, specify the light parameter as follows:
+A light button style is appropriate to use with dark backgrounds. You can change the style by setting the button's style property as follows:
 
 ```swift
     zenKeyButton.style = .light
@@ -294,9 +285,9 @@ For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/
 
 Additional parameters that you can configure include:
 
-* ACR Values - Authenticator Assurance Levels (AAL) identify the strength of an authentication transaction. Stronger authentication (i.e., a higher AAL value) requires malicious actors to have better capabilities and expend greater resources to successfully subvert the authentication process. The values returned in the `id_token` will contain `aal`. 
+* ACR Values - Authenticator Assurance Levels (AAL) identify the strength of an authentication transaction. Stronger authentication (i.e., a higher AAL value) requires malicious actors to have better capabilities and expend greater resources to successfully subvert the authentication process. The `id_token` will contain an `acr` key with the achieved AAL value.
 
-  * Ask for `aal1` when you need a low level of authentication. Users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require second factor authentication (pin | bio).
+* Ask for `aal1` when you need a low level of authentication. Users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require second factor authentication (pin | bio).
   
 * Ask for `aal2` or `aal3` when you want to ensure the user has provided their (pin | bio). 
 
@@ -313,7 +304,7 @@ Additional parameters that you can configure include:
 * Prompt - The user needs to approve a transaction with each request.  
 
   * `prompt=login` At login, prompt the user to authenticate again.
-  * `prompt=consent` Prompt the user to explicitly re-confirm agreeement with exposing personal data. (The carrier recaptures user consent for listed scopes).
+  * `prompt=consent` Prompt the user to explicitly re-confirm access to their personal data (the carrier recaptures user consent for listed scopes).
 
 For more information about each of these parameters and instructions on how to use them, view the documentation for `ZenKeyAuthorizeButton`. There is also more information on the enumerated values in `PromptValue.swift`.
 
@@ -358,7 +349,9 @@ Refer to:
 
 ## 8.0 Error Handling
 
-`AuthorizationError` defines the `code`, `description` and `errorType` to help the developer debug the error or present a description to the user. The `errorType` is of type `ErrorType` which identifies a class of error during the Authorization flow, such as`invalidRequest` or `requestDenied`. The developer can include further information, with `code` adding context for the origin of the error, `description` a possible explanation and possible remedy.
+`AuthorizationError` defines the `code`, `description` and `errorType` to help the developer debug the error or present a description to the user. The `errorType` is of type `ErrorType` which identifies a class of error during the Authorization flow, such as`invalidRequest` or `requestDenied`. When creating a recovery suggestion or diagnosing an issue, the error's `code` and `description` can help provide context and a possible remedy.
+
+The developer can include further information, with `code` adding context for the origin of the error, `description` a possible explanation and possible remedy.
 
 The following table summarizes the `AuthorizationError` error types and potential recovery suggestions for each.
 
