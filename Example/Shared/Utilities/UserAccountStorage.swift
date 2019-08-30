@@ -8,7 +8,7 @@
 
 import Foundation
 
-// NOTE: Never store sensetive credentials in UserDefaults, always use the keychain.
+// NOTE: Never store sensitive credentials in UserDefaults, always use the keychain.
 struct UserAccountStorage {
     private static let userNameKey =  "UserAccountStorage.username"
     private static let accountKey =  "UserAccountStorage"

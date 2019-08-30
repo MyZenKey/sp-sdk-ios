@@ -8,8 +8,6 @@
 
 import Foundation
 
-
-
 struct TokenRequest: Encodable {
     let grantType = "authorization_code"
     let code: String

@@ -57,7 +57,7 @@ extension HTTPURLResponse {
 protocol ServiceProviderAPIProtocol {
 
     /// Authenticate a user without ZenKey, this represents what your sign in flow might look
-    /// currently.
+    /// currently – driven by a traditional username and password authentication.
     ///
     /// - Parameters:
     ///   - username: The user's username for your application.
@@ -68,9 +68,9 @@ protocol ServiceProviderAPIProtocol {
         password: String,
         completion: @escaping (AuthPayload?, Error?) -> Void)
 
-    /// Authenticate a user with a ZenKey using the authorization code from a successful
+    /// Authenticate a user with ZenKey using the authorization code from a successful
     /// authorization by a ZenKey user. Each of these fields (with the exception of
-    /// completion are returned from the `authrorize(...)` request the SDK performs.
+    /// completion are returned from the `authorize(...)` request the SDK performs.
     ///
     /// With the auth code, mcc, and mnc, you have everything you need to re-perform discovery
     /// on your secure server and use the discovered token endpoint to request an access token
@@ -79,7 +79,7 @@ protocol ServiceProviderAPIProtocol {
     /// the domain of your application.
     ///
     /// - Parameters:
-    ///   - code: The authrorization code.
+    ///   - code: The authorization code.
     ///   - redirectURI: The redirect URI used to produce this code.
     ///   - mcc: The mobile country code value (used to perform discovery on the server).
     ///   - mnc: The mobile network code value (used to perform discovery on the server).
@@ -95,14 +95,14 @@ protocol ServiceProviderAPIProtocol {
     /// the second factor use case where ZenKey provides the user with a second form of
     /// consent to ensure they originate the login action.
     ///
-    /// Your server is responsible performing the token request as you would when using ZenKey
+    /// Your server is responsible for performing the token request as you would when using ZenKey
     /// as the primary means of authentication. The successfully returned token request
     /// validates that the user has approved the second factor request. You can store the user's sub
     /// value and compare it against future requests to ensure the correct user is approving the
     /// action.
     ///
     /// - Parameters:
-    ///   - code: The authrorization code.
+    ///   - code: The authorization code.
     ///   - redirectURI: The redirect URI used to produce this code.
     ///   - mcc: The mobile country code value (used to perform discovery on the server).
     ///   - mnc: The mobile network code value (used to perform discovery on the server).
@@ -129,14 +129,14 @@ protocol ServiceProviderAPIProtocol {
     /// Approve some action with ZenKey for which you've requested the `authorize` scope and
     /// an appropriate context string.
     ///
-    /// Your server is responsible performing the token request as you would when using ZenKey
+    /// Your server is responsible for performing the token request as you would when using ZenKey
     /// to authenticate. The successful token request will return a value containing a JWT
     /// for the field id_token. You should introspect this token to verify that the nonce value and
     /// context string are the same as those requested from the user via ZenKey. This
     /// ensures the integrity of the request and consent from the user.
     ///
     /// - Parameters:
-    ///   - code: The authrorization code.
+    ///   - code: The authorization code.
     ///   - redirectURI: The redirect URI used to produce this code.
     ///   - userContext: The context string you've requested. It should be compared with the context
     ///     value returned in the id_token from the token endpoint to ensure integrity.
