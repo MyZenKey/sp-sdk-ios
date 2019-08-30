@@ -46,25 +46,26 @@ Consumer verification and authorization flows to Carrier auth, the service provi
 
 ## 2.0 Getting Started
 
-To get started integrating the ZenKey API with your applications, there are a few things you should do:
+To get started integrating the ZenKey with your applications, there are a few things you should do:
 
 * Register your application - Access the Service Provider portal to register your application and obtain a valid `clientId` and `clientSecret`.
-* Identify user information data your want to capture - The ZenKey enrollment process includes asking for personal user data. Of course, the user determines whether or not to submit this data to you.  There are various user data  "scopes" already defined in the ZenKey API which you can select to be captured during the enrollment process, such as email address, name, phone number.
+* Identify user information data you want to capture - The ZenKey enrollment process includes asking for personal user data. The ZenKey services itself does not accumulate the personal data used for authentication. That data remains secured by the user's  wireless carrier. Encrypted user information is only shared with Service Providers upon subscriber consent. Users are able to choose whether to share their data and specifically what data will be shared with each participating Service Provider. There are various user data  "scopes" already defined in the ZenKey which you can select to be captured during the enrollment process, such as email address, name, phone number.
 * Identify if you need custom redirect URIs - Redirect URIs will be used for callbacks to several ZenKey services
-* Set up Git Access - While the SDK is under development (Pre-Release), we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
+* For Pre-Release: set up Git Access - While the SDK is under development (Pre-Release), we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
 
 ```bash
 git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
 ```
 
-## 3.0 Download the ZenKey SDK
+## 3.0 Add the ZenKey SDK
 
-From the Service Provider Portal, download the ZenKey SDK. Review the various components as noted in this README. 
+From the Service Provider Portal, add the ZenKey SDK to your project. Review the various components as noted in this README. 
 
 To integrate ZenKey with your application project by: 
 
-* Using CocoaPods, or 
-* Adding the SDK source manually 
+* Using CocoaPods, 
+* Adding the SDK as a git submodule, or
+* Adding the SDK source to your project directory manually
 
 **NOTE:** Use of Carthage for development is not currently supported.
 
@@ -75,14 +76,21 @@ You can include the ZenKey SDK in your project as a development CocoaPod. After 
 ```ruby
   pod 'CarriersSharedAPI', path: '{your-relative-path}/CarriersSharedAPI.podspec'
 ```
+### 3.2 Adding the SDK as a Submodule
 
-Then, run`pod install`. This command adds the local source code to your application's workspace.
+1. Access your app repo. 
+2. Add the SDK as a submodule by entering the following command.:
 
-### 3.2 Adding the SDK Source Manually
+```bash
+git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
+```
+3. Commit your change.
 
-Another option for integrating the SDK is to add the source manually to your application process:
+### 3.3 Adding the SDK Source Manually to the Project Directory
 
-1. Add the ZenKey source manually either as a git submodule or by copying the source directly to the project directory.
+To add the SDK source manually to your Xcode project:
+
+1. Copy and paste the ZenKey SDK source directly to the project directory.
 1. Add `CarriersSharedAPI.xcodeproj` to your application's Xcode project.
 1. After adding the project, confirm that the deployment targets are less than or equal to your deployment target.
 1. View your project's "Embedded Binaries" under your project's "General" panel. Add the `CarriersSharedAPI` framework. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
@@ -90,14 +98,14 @@ Another option for integrating the SDK is to add the source manually to your app
 
 ## 4.0 Configure Client ID and Redirect URI
 
-Retrieve your client Id from the ZenKey dashboard and add the following key to your application’s `Info.plist`:
+All Service Providers must add their application's client Id to their `Info.plist`.  Retrieve your client Id from the ZenKey dashboard and add the following key to your application’s `Info.plist`:
 
 ```xml
     <key>ProjectVerifyClientId</key>
     <string>{your application's client id}</string>
 ```
 
-You also need to configure the redirect URI to be used. The redirect URI is used for callbacks to the SDK and several ZenKey services. You can use the default, pre-configured URI or create a custom redirect URI.
+You also need to configure the redirect URI to be used. The redirect URI is used for callbacks to the SDK from several ZenKey services. You can use the default, pre-configured URI or create a custom redirect URI.
 
 The default URI is  `{your client Id}://com.xci.provider.sdk`.  Use this URI by adding your client Id to your `Info.plist` as a custom scheme:
 
@@ -121,7 +129,7 @@ The default URI is  `{your client Id}://com.xci.provider.sdk`.  Use this URI by 
 
 To create a custom redirect URI, access the Service Provider Portal and follow the instructions. 
 
-**NOTE: **To add an extra layer of security to your integration, we recommend specifying your redirect URI as a universal link. This requires having the appropriately configured app association and entitlements. Refer to e Apple’s [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links). 
+**NOTE:** To add an extra layer of security to your integration, we recommend specifying your redirect URI as a universal link. This requires having the appropriately configured app association and entitlements. Refer to e Apple’s [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links). 
 
 To apply your custom redirect URI, specify the custom scheme, host, and path in the `Info.plist` file.
 
@@ -136,7 +144,7 @@ To apply your custom redirect URI, specify the custom scheme, host, and path in 
 
 ## 5.0 Instantiate ZenKey
 
-To support ZenKey, you must instantiate ZenKey in the application delegate as follows:
+To support ZenKey SDK within your application, you must instantiate ZenKey in the application delegate as follows:
 
 ```swift
 import CarriersSharedAPI
@@ -171,9 +179,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 ## 6.0 Request Authorization Code
 
-The SDK provides the branded button `ProjectVerifyAuthorizationButton` to automatically submit a request for ZenKey authorization.
+A ZenKey authorization can provide your application with the means to secure a user's registration, login, or authorization to processing an important transaction. The SDK provides the branded button `ProjectVerifyAuthorizationButton` to automatically submit a request for ZenKey authorization.
 
-### 6.1 Add Authorization Button
+### 6.1 Add ZenKey Button 
 
 Add the ZenKey  `ProjectVerifyAuthorizationButton` to your UIView.
 
@@ -204,7 +212,7 @@ You can customize the appearance of the button. A dark button style is appropria
 ```
 The dark button style looks like this:
 
- <img src="image/verify_button_dark.png" alt="Verify Button Dark" width="360">
+ <img src="image/zenkey_button_dark.png" alt="Verify Button Dark" width="360">
 
 #### 6.1.2 Light Button
 
@@ -215,7 +223,7 @@ A light button style is appropriate to use with dark backgrounds. For the light 
 ```
 The light button style looks like this:
 
-<img src="image/verify_button_light.png" alt="Verify Button Light" width="360">
+<img src="image/zenkey_button_light.png" alt="Verify Button Light" width="360">
 
 #### 6.1.3 Custom Button or View
 
@@ -223,7 +231,7 @@ Instead of the default `ProjectVerifyAuthorizationButton`, you can invoke ZenKey
 
 ### 6.2 Receive Callbacks
 
-In order to receive the response from the ZenKey request, implement the `ProjectVerifyAuthorizeButtonDelegate` to handle the events.
+In order to receive the responses from a ZenKey request, implement  `ProjectVerifyAuthorizeButtonDelegate`.
 
 ```swift
 extension LoginViewController: ProjectVerifyAuthorizeButtonDelegate {
@@ -260,7 +268,7 @@ There are several parameters that you can configure with your authorization requ
 
 Select each of the userinfo `scopes` to be added to the authorization request. 
 
-**NOTE: ** The `.openid` scope is required. 
+**NOTE:** The `.openid` scope is required. 
 
 ```swift
     let scopes: [Scope] = [.openid, .email, .name]
@@ -272,7 +280,7 @@ For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/
 
 Additional parameters that you can configure include:
 
-* ACR Values - Authenticator Assurance Levels (AAL) identify the strength of an authentication transaction. Stronger authentication (i.e., a higher AALx value) requires malicious actors to have better capabilities and expend greater resources to successfully subvert the authentication process. The values returned in the `id_token` will contain `aalx`. 
+* ACR Values - Authenticator Assurance Levels (AAL) identify the strength of an authentication transaction. Stronger authentication (i.e., a higher AAL value) requires malicious actors to have better capabilities and expend greater resources to successfully subvert the authentication process. The values returned in the `id_token` will contain `aal`. 
 
   * Ask for `aal1` when you need a low level of authentication. Users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require second factor authentication (pin | bio).
   
@@ -286,12 +294,12 @@ Additional parameters that you can configure include:
 
   **Note:** Use the same `correlation_id`for code, token, and userinfo requests. But the carrier may not enforce this. 
 
-* Context - You can submit “text string” to accompany the authorization request in the ZenKey application. For example, a bank transfer may prompt the user: "Do you want to authorize a $200 transfer to your checking account?".  The best practice is that a server-initiated request should contain a context parameter for a user to understand the reason for the interaction. The maximum size is <280> characters. Any request with a context that is too large will result in an OIDC error (i.e., an invalid request).  
+* Context - You can submit a string to accompany the authorization request in the ZenKey application. For example, a bank transfer may prompt the user: "Do you want to authorize a $200 transfer to your checking account?".  The best practice is that a server-initiated request should contain a context parameter for a user to understand the reason for the interaction. The maximum size is <280> characters. Any request with a context that is too large will result in an OIDC error (i.e., an invalid request).  
   
 * Prompt - The user needs to approve a transaction with each request.  
 
-  * `prompt=login` - At login, prompt the user to authenticate again.
-  * `prompt=consent` - Prompt the user to explicitly re-confirm agreeement with exposing personal data. (The carrier recaptures user consent for listed scopes).
+  * `prompt=login` At login, prompt the user to authenticate again.
+  * `prompt=consent` Prompt the user to explicitly re-confirm agreeement with exposing personal data. (The carrier recaptures user consent for listed scopes).
 
 For more information about each of these parameters and instructions on how to use them, view the documentation for `ProjectVerifyAuthorizeButton`. There is also more information on the enumerated values in `PromptValue.swift`.
 
