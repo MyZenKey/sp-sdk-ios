@@ -65,7 +65,8 @@ To get started integrating the ZenKey with your applications, there are a few th
 * Register your application - Access the Service Provider portal to register your application and obtain a valid `clientId` and `clientSecret`.
 * Identify user information data you want to capture - The ZenKey enrollment process includes asking for personal user data. The ZenKey services itself does not accumulate the personal data used for authentication. That data remains secured by the user's  wireless carrier. Encrypted user information is only shared with Service Providers upon subscriber consent. Users are able to choose whether to share their data and specifically what data will be shared with each participating Service Provider. There are various user data  "scopes" already defined in the ZenKey which you can select to be captured during the enrollment process, such as email address, name, phone number.
 * Identify if you need custom redirect URIs - Redirect URIs will be used for callbacks to several ZenKey services
-* For Pre-Release: set up Git Access - While the SDK is under development (Pre-Release), we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
+
+**Note:** For Pre-Release: set up Git Access - While the SDK is under development (Pre-Release), we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
 
 ```bash
 git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
@@ -78,33 +79,23 @@ From the Service Provider Portal, add the ZenKey SDK to your project. Review the
 To integrate ZenKey with your application project by: 
 
 * Using CocoaPods, 
-* Adding the SDK as a git submodule, or
-* Adding the SDK source to your project directory manually
+* Adding the SDK source to your Xcode project manually
 
 **NOTE:** Use of Carthage for development is not currently supported.
 
 ### 3.1 Using CocoaPods
 
-You can include the ZenKey SDK in your project as a development CocoaPod. After you place the source code in your repository, add the following code to your Podfile.
+You can include the ZenKey SDK in your project as a development CocoaPod. After you place the source code in your project directory, add the following code to your Podfile.
 
 ```ruby
   pod 'ZenKeySDK', path: '{your-relative-path}/ZenKeySDK.podspec'
 ```
-### 3.2 Adding the SDK as a Submodule
 
-1. Access your app repo. 
-2. Add the SDK as a submodule by entering the following command.:
-
-```bash
-git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
-```
-3. Commit your change.
-
-### 3.3 Adding the SDK Source Manually to the Project Directory
+### 3.2 Adding the SDK Source Manually to the Project Directory
 
 To add the SDK source manually to your Xcode project:
 
-1. Copy and paste the ZenKey SDK source directly to the project directory.
+1. Move the ZenKey SDK source directly to the project directory.
 1. Add `ZenKeySDK.xcodeproj` to your application's Xcode project.
 1. After adding the project, confirm that the deployment targets are less than or equal to your deployment target.
 1. View your project's "Embedded Binaries" under your project's "General" panel. Add the `ZenKeySDK` framework. Be sure to select the corresponding framework for the platform you are targeting (the iOS framework for an iOS target).
@@ -138,8 +129,6 @@ The default URI is  `{your client Id}://com.xci.provider.sdk`.  Use this URI by 
         </dict>
     </array>
 ```
-
-
 
 To create a custom redirect URI, access the Service Provider Portal and follow the instructions. 
 
