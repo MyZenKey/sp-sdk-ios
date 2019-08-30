@@ -297,7 +297,7 @@ Additional parameters that you can configure include:
 * Prompt - The user needs to approve a transaction with each request.  
 
   * `prompt=login` At login, prompt the user to authenticate again.
-  * `prompt=consent` Prompt the user to explicitly re-confirm agreeement with exposing personal data. (The carrier recaptures user consent for listed scopes).
+  * `prompt=consent` Prompt the user to explicitly re-confirm access to their personal data (the carrier recaptures user consent for listed scopes).
 
 For more information about each of these parameters and instructions on how to use them, view the documentation for `ZenKeyAuthorizeButton`. There is also more information on the enumerated values in `PromptValue.swift`.
 
