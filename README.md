@@ -208,18 +208,13 @@ class LoginViewController {
 
 #### 6.1.1 Dark Button
 
-You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the ZenKey button uses the dark style specified as follows:
-
-```swift
-    zenKeyButton
-```
-The dark button style looks like this:
+You can customize the appearance of the button. A dark button style is appropriate to use with light backgrounds. By default, the ZenKey button uses the dark style. The dark button style looks like this:
 
  <img src="image/zenkey_button_dark.png" alt="Verify Button Dark" width="360">
 
 #### 6.1.2 Light Button
 
-A light button style is appropriate to use with dark backgrounds. For the light style, specify the light parameter as follows:
+A light button style is appropriate to use with dark backgrounds. You can change the style by setting the button's style property as follows:
 
 ```swift
     zenKeyButton.style = .light
