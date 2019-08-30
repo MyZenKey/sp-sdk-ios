@@ -2,7 +2,7 @@
 
 # iOS Integration Guide
 
-This guide is for developers integrating ZenKey with their iOS applicaitons.
+This guide is for developers integrating ZenKey with their iOS applications.
 
 ## 1.0 Background
 
