@@ -342,7 +342,9 @@ Refer to:
 
 ## 8.0 Error Handling
 
-`AuthorizationError` defines the `code`, `description` and `errorType` to help the developer debug the error or present a description to the user. The `errorType` is of type `ErrorType` which identifies a class of error during the Authorization flow, such as`invalidRequest` or `requestDenied`. The developer can include further information, with `code` adding context for the origin of the error, `description` a possible explanation and possible remedy.
+`AuthorizationError` defines the `code`, `description` and `errorType` to help the developer debug the error or present a description to the user. The `errorType` is of type `ErrorType` which identifies a class of error during the Authorization flow, such as`invalidRequest` or `requestDenied`. When creating a recovery suggestion or diagnosing an issue, the error's `code` and `description` can help provide context and a possible remedy.
+
+The developer can include further information, with `code` adding context for the origin of the error, `description` a possible explanation and possible remedy.
 
 The following table summarizes the `AuthorizationError` error types and potential recovery suggestions for each.
 
