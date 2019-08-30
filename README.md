@@ -139,7 +139,7 @@ The default URI is  `{your client Id}://com.xci.provider.sdk`.  Use this URI by 
 
 To create a custom redirect URI, access the Service Provider Portal and follow the instructions. 
 
-**NOTE:** To add an extra layer of security to your integration, we recommend specifying your redirect URI as a universal link. This requires having the appropriately configured app association and entitlements. Refer to e Apple’s [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links). 
+**NOTE:** To add an extra layer of security to your integration, we recommend specifying your redirect URI as a universal link. This requires having the appropriately configured app association and entitlements. Refer to Apple’s [documentation on the topic](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content/enabling_universal_links). 
 
 To apply your custom redirect URI, specify the custom scheme, host, and path in the `Info.plist` file.
 
