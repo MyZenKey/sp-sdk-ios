@@ -8,61 +8,6 @@
 
 import Foundation
 
-struct AuthPayload {
-    let token: String
-}
-struct UserInfo {
-    let username: String
-    let email: String?
-    let name: String?
-    let givenName: String?
-    let familyName: String?
-    let birthdate: String?
-    let postalCode: String?
-}
-
-struct Transaction {}
-
-enum TransactionError: Error {
-    case unableToParseToken
-    case mismatchedTransaction
-}
-
-enum LoginError: Error {
-    case invalidCredentials
-}
-
-protocol ServiceAPIProtocol {
-    func login(
-        withAuthCode code: String,
-        redirectURI: URL,
-        mcc: String,
-        mnc: String,
-        completion: @escaping (AuthPayload?, Error?) -> Void)
-
-    func login(
-        withUsername username: String,
-        password: String,
-        completion: @escaping (AuthPayload?, Error?) -> Void)
-
-    func addSecondFactor(
-        withAuthCode code: String,
-        redirectURI: URL,
-        mcc: String,
-        mnc: String,
-        completion: @escaping (AuthPayload?, Error?) -> Void)
-
-    func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void)
-
-    func approveTransfer(withAuthCode code: String,
-                         redirectURI: URL,
-                         userContext: String,
-                         nonce: String,
-                         completion: @escaping (Transaction?, Error?) -> Void)
-
-    func logout(completion: @escaping (Error?) -> Void)
-}
-
 struct TokenRequest: Encodable {
     let grantType = "authorization_code"
     let code: String
@@ -153,7 +98,7 @@ struct DiscoveryResponse: Decodable {
     }
 }
 
-class ClientSideServiceAPI: ServiceAPIProtocol {
+class ClientSideServiceAPI: ServiceProviderAPIProtocol {
 
     private static let clientId: String = {
         guard let clientId = Bundle.main.infoDictionary?["ZenKeyClientId"] as? String else {
@@ -396,6 +341,7 @@ private extension ClientSideServiceAPI {
                 var errorResult: Error? = error
 
                 defer { completion(result, errorResult) }
+
 
                 if let statusError = (response as? HTTPURLResponse)?.errorValue, error == nil {
                     errorResult = statusError

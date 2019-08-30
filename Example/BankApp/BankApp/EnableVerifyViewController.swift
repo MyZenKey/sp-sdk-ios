@@ -52,7 +52,7 @@ class EnableVerifyViewController: BankAppViewController {
         return button
     }()
 
-    private let clientSideServiceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
+    private let clientSideServiceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()

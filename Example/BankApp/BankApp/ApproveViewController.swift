@@ -31,7 +31,7 @@ class ApproveViewController: BankAppViewController {
         return button
     }()
 
-    private var serviceAPI: ServiceAPIProtocol = ClientSideServiceAPI()
+    private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
