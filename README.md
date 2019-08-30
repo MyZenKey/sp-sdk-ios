@@ -1,12 +1,12 @@
-![Zenkey](image/ZenKey_rgb.png "ZenKey")
+![Logo](/image/ZenKey_rgb.png)
 
-# iOS Integration Guide
+# Server and Web Integration Guide
 
-This guide is for developers integrating ZenKey with their iOS applications.
+This guide is for developers integrating ZenKey into their Web applications as well as backend services for clients.
 
 ## 1.0 Background
 
-ZenKey is a secure bridge between your users and the apps and services you provide. The platform is a joint undertaking of the Mobile Authentication Taskforce, a joint venture of the four major US wireless carriers. 
+ZenKey is a secure bridge between your users and the apps and services you provide. The platform is a joint undertaking of the Mobile Authentication Taskforce, a joint venture of the four major US wireless carriers.
 
 ZenKey leverages encryption technologies in a user's mobile phone and mobile network. The platform packages multiple factors of authentication into a streamlined experience for app and website providers, taking advantage of the unique capabilities and insights of the wireless carriers. It then applies those capabilities to provide an easy and secure way to register, login, and perform other types of authorizations within apps and services. The result for Service Providers is a better user experience and a more secure link to your users.
 
@@ -26,7 +26,8 @@ Users establish their mobile device as their primary device by installing the ca
 
 *Note:* This primary device is also the device users can use to authenticate requests from other devices, such as desktops and tablets. See Section 1.2.2 Authorization on Secondary Devices.
 
- <img src="image/high_level_flow_app_pri.png" alt="High Level Flow - App" width="550">
+##### High-level Architecture on a Primary Device
+ <img src="image/ZK_HL_Arch_Primary.png" alt="High Level Flow - App" width="550">
 
 **Step 1:** The Service Provider's mobile app or website makes an authorization code request to the local ZenKey app.
 
@@ -40,13 +41,14 @@ Users can also use ZenKey to authenticate on devices other than their primary de
 
 User's pressing the ZenKey button on a secondary device will see a visual and numeric code as a part of the secondary device authorization process. This code allows the user to associate that secondary device with their primary device. From there, they are then instructed to open the ZenKey application on their primary device, where they will be able to complete the authentication request.
 
- <img src="image/high_level_flow_web_sec.png" alt="High Level Flow - Web" width="550">
+##### High-level Architecture on a Secondary Device
+ <img src="image/ZK_HL_Arch_Secondary.png" alt="High Level Flow - Web" width="550">
 
-**Step 1:** The user is taken to the Carrier Discovery UI website, where they choose the carrier associated with their primary device. If the user is authorizing a secondary device from an app on a tablet, the SDK will use a webview for this step.
+**Step 1:** The user is taken to a website where they can select the appropriate carrier. This is known as the carrier Discovery UI website, and is where the user chooses the carrier associated with their primary device. If the user is authorizing a secondary device from an app on a tablet, the SDK will use a webview for this step.
 
 **Step 2:** The user then scans the visual code or enters the numeric code into the ZenKey app on their primary device.
 
-**Step 3:** Once the user approves the request in the ZenKey app on their primary device, the Carrier Discovery UI website gets redirected to perform authorization with a `login_hint_token`.
+**Step 3:** Once the user approves the request in the ZenKey app on their primary device, the carrier Discovery UI website gets redirected to perform authorization with a `login_hint_token`.
 
 **Step 4:** Your backend server makes an authorization code request to the appropriate carrier, to perform SIM and user authentication, receives the auth code back at your Redirect URI.
 
@@ -56,20 +58,17 @@ User's pressing the ZenKey button on a secondary device will see a visual and nu
 
 To create a secure experience, user info is only shared via a web request from your secure backend to the user's carrier backend. By using a backend server to make calls to the user's carrier, and not the client application, the `clientId`, `clientSecret` and user ID token are not revealed to your client.
 
-The ZenKey services itself does not accumulate the personal data used for authentication. That data remains secured by the user's  wireless carrier. Encrypted user information is only shared with Service Providers upon subscriber consent. Users are able to choose whether to share their data and specifically what data will be shared with each participating Service Provider.
+The ZenKey services itself does not accumulate the personal data used for authentication. That data remains secured by the user's  wireless carrier. Encrypted user information is only shared with Service Providers upon user consent. Users are able to choose whether to share their data and specifically what data will be shared with each participating Service Provider.
+
 
 ## 2.0 Getting Started
 
 To get started integrating the ZenKey with your applications, there are a few things you should do:
 
 * Register your application - Access the Service Provider portal to register your application and obtain a valid `clientId` and `clientSecret`.
-* Identify user information data you want to capture - The ZenKey enrollment process includes asking for personal user data. The ZenKey services itself does not accumulate the personal data used for authentication. That data remains secured by the user's  wireless carrier. Encrypted user information is only shared with Service Providers upon subscriber consent. Users are able to choose whether to share their data and specifically what data will be shared with each participating Service Provider. There are various user data  "scopes" already defined in the ZenKey which you can select to be captured during the enrollment process, such as email address, name, phone number.
-* Identify if you need custom redirect URIs - Redirect URIs will be used for callbacks to several ZenKey services
-* For Pre-Release: set up Git Access - While the SDK is under development (Pre-Release), we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
-
-```bash
-git submodule add https://git.xcijv.net/sp-sdk/sp-sdk-ios
-```
+* Identify user information data you want to capture - The ZenKey enrollment process includes asking for personal user data. The ZenKey services itself does not accumulate the personal data used for authentication. That data remains secured by the user's wireless carrier. Encrypted user information is only shared with Service Providers upon subscriber consent. Users are able to choose whether to share their data and specifically what data will be shared with each participating Service Provider.      * Because applications must get authorization to access user information, scopes must be defined to allow actions. There are various user data "scopes" already defined in ZenKey which you can select to be captured during the enrollment process. Examples of these are email address, name and phone number. These scopes are used to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
+* Identify if you need custom redirect URIs - Redirect URIs will be used for callbacks to several ZenKey services.
+* Decide to require Pin and/or Biometric - You can choose if you'd like to require the user to authenticate with a PIN and/or a biometric from their primary device (e.g. finger print, facial recognition, etc). In your setup, you can choose to have an experience with or without requiring both a PIN or biometric.
 
 ## 3.0 Add the ZenKey SDK
 
