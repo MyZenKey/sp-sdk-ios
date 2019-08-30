@@ -1,8 +1,8 @@
 ![Logo](/image/ZenKey_rgb.png)
 
-# Server and Web Integration Guide
+# iOS Integration Guide
 
-This guide is for developers integrating ZenKey into their Web applications as well as backend services for clients.
+This guide is for developers integrating ZenKey with their iOS applicaitons.
 
 ## 1.0 Background
 
