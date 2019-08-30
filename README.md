@@ -278,9 +278,9 @@ For more information, see [Scope.swift](https://git.xcijv.net/sp-sdk/sp-sdk-ios/
 
 Additional parameters that you can configure include:
 
-* ACR Values - Authenticator Assurance Levels (AAL) identify the strength of an authentication transaction. Stronger authentication (i.e., a higher AAL value) requires malicious actors to have better capabilities and expend greater resources to successfully subvert the authentication process. The values returned in the `id_token` will contain `aal`. 
+* ACR Values - Authenticator Assurance Levels (AAL) identify the strength of an authentication transaction. Stronger authentication (i.e., a higher AAL value) requires malicious actors to have better capabilities and expend greater resources to successfully subvert the authentication process. The `id_token` will contain an `acr` key with the achieved AAL value.
 
-  * Ask for `aal1` when you need a low level of authentication. Users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require second factor authentication (pin | bio).
+* Ask for `aal1` when you need a low level of authentication. Users will not be asked for their pin or biometrics. Any user holding the device will be able to authenticate/authorize the transaction unless the user has configured their account to always require second factor authentication (pin | bio).
   
 * Ask for `aal2` or `aal3` when you want to ensure the user has provided their (pin | bio). 
 
