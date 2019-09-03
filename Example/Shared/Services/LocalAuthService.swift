@@ -194,7 +194,7 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
                     var request = URLRequest(url: oidc.userInfoEndpoint)
                     request.httpMethod = "GET"
                     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-                    request.addValue("Accept", forHTTPHeaderField: "application/json")
+                    request.addValue("application/json", forHTTPHeaderField: "Accept")
                     sself.requestJSON(request: request) { (userInfoResponse: UserInfoResponse?, error: Error?) in
                         let userInfo = userInfoResponse?
                             .toUserInfo(withUsername: UserAccountStorage.userName ?? "zenkey_user")
@@ -318,7 +318,7 @@ private extension ClientSideServiceAPI {
                     var request = URLRequest(url: oidc.tokenEndpoint)
                     request.httpMethod = "POST"
                     request.addValue(ClientSideServiceAPI.authHeaderValue, forHTTPHeaderField: "Authorization")
-                    request.addValue("Accept", forHTTPHeaderField: "application/x-www-form-urlencoded")
+                    request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Accept")
                     let tokenRequest = TokenRequest(
                         clientId: ClientSideServiceAPI.clientId,
                         code: code,
