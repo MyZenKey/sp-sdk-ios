@@ -154,3 +154,30 @@ protocol ServiceProviderAPIProtocol {
     /// - Parameter completion: An async callback with the result of the request.
     func logout(completion: @escaping (Error?) -> Void)
 }
+
+extension ServiceProviderAPIProtocol {
+    static func log(_ str: String) {
+        print("|ServiceProviderAPI| \(str)")
+    }
+
+    static func log(request urlRequest: URLRequest) {
+        guard
+            let url = urlRequest.url,
+            let method = urlRequest.httpMethod else {
+                log("invalid request: \(urlRequest)")
+                return
+        }
+
+        log("requesting: \(urlRequest)")
+        print("curl -v -X \(method) \\")
+        urlRequest.allHTTPHeaderFields?.forEach() { key, value in
+            print("-H '\(key): \(value)' \\")
+        }
+
+        if let httpBody = urlRequest.httpBody, let bodyString = String(data: httpBody, encoding: .utf8) {
+            print("-d \"\(bodyString)\" \\")
+        }
+
+        print("\"\(url.absoluteString)\"")
+    }
+}
