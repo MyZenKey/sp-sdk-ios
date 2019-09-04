@@ -194,7 +194,7 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
                     var request = URLRequest(url: oidc.userInfoEndpoint)
                     request.httpMethod = "GET"
                     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-                    request.addValue("Accept", forHTTPHeaderField: "application/json")
+                    request.addValue("application/json", forHTTPHeaderField: "Accept")
                     sself.requestJSON(request: request) { (userInfoResponse: UserInfoResponse?, error: Error?) in
                         let userInfo = userInfoResponse?
                             .toUserInfo(withUsername: UserAccountStorage.userName ?? "zenkey_user")
@@ -318,7 +318,7 @@ private extension ClientSideServiceAPI {
                     var request = URLRequest(url: oidc.tokenEndpoint)
                     request.httpMethod = "POST"
                     request.addValue(ClientSideServiceAPI.authHeaderValue, forHTTPHeaderField: "Authorization")
-                    request.addValue("Accept", forHTTPHeaderField: "application/x-www-form-urlencoded")
+                    request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Accept")
                     let tokenRequest = TokenRequest(
                         clientId: ClientSideServiceAPI.clientId,
                         code: code,
@@ -334,9 +334,12 @@ private extension ClientSideServiceAPI {
     func requestJSON<T: Decodable>(
         request: URLRequest,
         completion: @escaping (T?, Error?) -> Void) {
-        let task = session.dataTask(with: request) { data, response, error in
 
+        ClientSideServiceAPI.log("performing request: \(request)")
+        ClientSideServiceAPI.log(request: request)
+        let task = session.dataTask(with: request) { data, response, error in
             DispatchQueue.main.async {
+                ClientSideServiceAPI.log("concluding request: \(request.url!) with: \((response as? HTTPURLResponse)?.statusCode ?? 0)")
                 var result: T?
                 var errorResult: Error? = error
 
@@ -392,7 +395,7 @@ extension String {
             bodyBase64String = bodyBase64String + padding
         }
         guard let data = Data(base64Encoded: bodyBase64String, options: .ignoreUnknownCharacters) else {
-            print("Warning: unable to parse JWT")
+            ClientSideServiceAPI.log("Warning: unable to parse JWT")
             return nil
         }
 
@@ -403,7 +406,7 @@ extension String {
 
             return json
         } catch {
-            print("Warning: unable to parse JWT")
+            ClientSideServiceAPI.log("Warning: unable to parse JWT")
             return nil
         }
     }
@@ -413,9 +416,9 @@ extension Data {
     func printJSON() {
         do {
             let json = try JSONSerialization.jsonObject(with: self, options: [])
-            print(json)
+            ClientSideServiceAPI.log("\(json)")
         } catch {
-            print("invalid json")
+            ClientSideServiceAPI.log("invalid json")
         }
     }
 }
