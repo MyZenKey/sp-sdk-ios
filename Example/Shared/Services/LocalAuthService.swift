@@ -24,18 +24,33 @@ struct TokenRequest: Encodable {
         case code
     }
 
+    let encodeValue: (String) -> String? = {
+        return $0.addingPercentEncoding(withAllowedCharacters: .alphanumerics)
+    }
+
     var urlFormEncodedData: Data {
-        var components = URLComponents()
-        components.queryItems = [
+        // from MDN: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
+        // > application/x-www-form-urlencoded: the keys and values are encoded in key-value tuples
+        // > separated by '&', with a '=' between the key and the value. Non-alphanumeric characters
+        // > in both keys and values are percent encoded: this is the reason why this type is not
+        // > suitable to use with binary data (use multipart/form-data instead)
+        let query = [
             CodingKeys.grantType.rawValue: grantType,
             CodingKeys.redirectURI.rawValue: redirectURI,
             CodingKeys.code.rawValue: code,
         ]
-        .map { key, value in URLQueryItem(name: key, value: value) }
-
-        guard let query = components.percentEncodedQuery else {
-            fatalError("unable to percent encode query components")
+        .reduce([String]()) { acc, next in
+            guard
+                let encodedKey = encodeValue(next.key),
+                let encodedValue = encodeValue(next.value) else {
+                return acc
+            }
+            var acc = acc
+            acc.append("\(encodedKey)=\(encodedValue)")
+            return acc
         }
+        .joined(separator: "&")
+
         return query.data(using: .utf8)!
     }
 }
@@ -318,7 +333,7 @@ private extension ClientSideServiceAPI {
                     var request = URLRequest(url: oidc.tokenEndpoint)
                     request.httpMethod = "POST"
                     request.addValue(ClientSideServiceAPI.authHeaderValue, forHTTPHeaderField: "Authorization")
-                    request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Accept")
+                    request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
                     let tokenRequest = TokenRequest(
                         clientId: ClientSideServiceAPI.clientId,
                         code: code,
