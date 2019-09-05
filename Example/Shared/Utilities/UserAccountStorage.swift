@@ -27,7 +27,7 @@ struct UserAccountStorage {
     static var mccmnc: (mcc: String, mnc: String)? {
         guard
             let mcc = UserDefaults.standard.string(forKey: mccKey),
-            let mnc = UserDefaults.standard.string(forKey: mccKey) else {
+            let mnc = UserDefaults.standard.string(forKey: mncKey) else {
                 return nil
         }
         return (mcc: mcc, mnc: mnc)
