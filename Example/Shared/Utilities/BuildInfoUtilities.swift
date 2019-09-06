@@ -94,12 +94,15 @@ class DebugController {
     static var actions: [UIAlertAction] {
         return [
             UIAlertAction(
-                title: "Mock Bank App Host: is \(BuildInfo.isMockDemoService)",
+                title: "Toggle Mock App Service (current \(BuildInfo.isMockDemoService))",
                 style: .default,
-                handler: { _ in BuildInfo.toggleMockDemoService() }
+                handler: { _ in
+                    BuildInfo.toggleMockDemoService()
+                    fatalError("restarting app")
+                }
             ),
             UIAlertAction(
-                title: "Toggle JV Host (will force quit app)",
+                title: "Toggle QA JV Host (current \(BuildInfo.isQAHost))",
                 style: .default,
                 handler: { _ in
                     BuildInfo.toggleHost()
@@ -126,7 +129,7 @@ class DebugController {
         }
 
         let controller = UIAlertController(
-            title: "Debug Menu",
+            title: "Debug Menu (changing settings will force quit app)",
             message: nil,
             preferredStyle: .actionSheet
         )
