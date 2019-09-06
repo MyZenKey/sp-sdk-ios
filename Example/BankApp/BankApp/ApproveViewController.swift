@@ -67,7 +67,7 @@ class ApproveViewController: BankAppViewController {
         if zenKeyButton.isAuthorizing {
             zenKeyButton.cancel()
         } else {
-            navigationController?.popViewController(animated: true)
+            sharedRouter.pop(animated: true)
         }
     }
 
@@ -80,14 +80,13 @@ class ApproveViewController: BankAppViewController {
 
                 guard error == nil else {
                     self.showAlert(title: "Error", message: "A problem occured with this transaction. \(error!)") { [weak self] in
-                        self?.navigationController?.popViewController(animated: true)
+                        self?.sharedRouter.pop(animated: true)
                     }
                     return
                 }
 
-                self.showAlert(title: "Success", message: "Your transfer has succeeded") { [weak self] in
-                    self?.navigationController?.popViewController(animated: true)
-                }
+                self.sharedRouter.showTransfersScreen(animated: true)
+
         }
     }
 

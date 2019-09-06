@@ -67,7 +67,7 @@ class HomeViewController: BankAppViewController {
     }
     
     @objc func sendMoneyTouched(_ sender: Any) {
-        navigationController?.pushViewController(ApproveViewController(), animated: true)
+        sharedRouter.showApproveViewController(animated: true)
     }
     
     func layoutView() {
@@ -126,7 +126,6 @@ private extension HomeViewController {
         userInfoLabel.text = """
         user: \(userInfo.username)
         name: \(userInfo.name ?? "{name}")
-        birthdate: \(userInfo.birthdate ?? "{birthdate}")
         email: \(userInfo.email ?? "{email}") | zip: \(userInfo.postalCode ?? "{postal code}")
         """
     }

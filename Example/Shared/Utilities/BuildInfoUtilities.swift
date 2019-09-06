@@ -12,6 +12,7 @@ import ZenKeySDK
 struct BuildInfo {
 
     private static let hostToggleKey = "qaHost"
+    private static let mockDemoServiceKey = "bankAppMockServiceKey"
 
     static var isQAHost: Bool {
         return UserDefaults.standard.value(forKey: hostToggleKey) != nil
@@ -23,6 +24,18 @@ struct BuildInfo {
             return
         }
         UserDefaults.standard.set(true, forKey: hostToggleKey)
+    }
+
+    static var isMockDemoService: Bool {
+        return UserDefaults.standard.value(forKey: mockDemoServiceKey) != nil
+    }
+
+    static func toggleMockDemoService() {
+        guard !isMockDemoService else  {
+            UserDefaults.standard.set(nil, forKey: mockDemoServiceKey)
+            return
+        }
+        UserDefaults.standard.set(true, forKey: mockDemoServiceKey)
     }
 
     static var zenKeyOptions: ZenKeyOptions {
@@ -38,21 +51,91 @@ struct BuildInfo {
         return options
     }
 
-    static func makeWatermarkLabel() -> UILabel {
+    static func makeWatermarkLabel(lightText: Bool = false) -> UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
 
         let illustrationText = "For illustration purposes only"
         let serverText: String? = isQAHost ? "Connected to QA Server" : nil
-        label.text = [illustrationText, serverText]
+        let demoAppServiceText: String? = isMockDemoService ? "Mocking Demo App Service" : nil
+        label.text = [illustrationText, serverText, demoAppServiceText]
             .compactMap() { $0 }
             .joined(separator: "\n")
         label.textAlignment = .center
         label.numberOfLines = 0
+        if lightText {
+            label.textColor = .white
+        }
         return label
     }
 
     static func serviceProviderAPI() -> ServiceProviderAPIProtocol {
-        return ClientSideServiceAPI()
+        if isMockDemoService {
+            return MockAuthService()
+        } else {
+            return ClientSideServiceAPI()
+        }
+    }
+}
+
+class DebugController {
+
+    static func addMenu(toView view: UIView) {
+        let debugGesture = UITapGestureRecognizer(target: self, action: #selector(show))
+        debugGesture.numberOfTapsRequired = 3
+        debugGesture.numberOfTouchesRequired = 2
+        view.addGestureRecognizer(debugGesture)
+    }
+
+    static func addMenu(toViewController viewController: UIViewController) {
+        addMenu(toView: viewController.view)
+    }
+
+    static var actions: [UIAlertAction] {
+        return [
+            UIAlertAction(
+                title: "Toggle Mock App Service (current \(BuildInfo.isMockDemoService))",
+                style: .default,
+                handler: { _ in
+                    BuildInfo.toggleMockDemoService()
+                    fatalError("restarting app")
+                }
+            ),
+            UIAlertAction(
+                title: "Toggle QA JV Host (current \(BuildInfo.isQAHost))",
+                style: .default,
+                handler: { _ in
+                    BuildInfo.toggleHost()
+                    fatalError("restarting app")
+                }
+            ),
+            UIAlertAction(
+                title: "Cancel",
+                style: .cancel,
+                handler: nil
+            ),
+        ]
+    }
+
+    @objc static func show() {
+        guard let delegate = UIApplication.shared.delegate as? AppDelegate,
+            let rootViewController = delegate.window?.rootViewController else {
+                return
+        }
+
+        var topMostViewController: UIViewController? = rootViewController
+        while topMostViewController?.presentedViewController != nil {
+            topMostViewController = topMostViewController?.presentedViewController!
+        }
+
+        let controller = UIAlertController(
+            title: "Debug Menu (changing settings will force quit app)",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+
+        DebugController.actions.forEach() { controller.addAction($0) }
+
+        topMostViewController?.present(controller, animated: true, completion: nil)
     }
 }

@@ -28,15 +28,7 @@ extension UIViewController {
 // MARK: - Navigation
 
 extension UIViewController {
-    func launchHomeScreen() {
-        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-        appDelegate.launchHomeScreen()
-    }
-
-    func launchLoginScreen() {
-        // TODO: - fix this up, shouldn't be digging into app delegate but quickest refactor
-        let appDelegate = UIApplication.shared.delegate! as! AppDelegate
-        appDelegate.launchLoginScreen()
+    var sharedRouter: BankAppRouter {
+        return (UIApplication.shared.delegate! as! AppDelegate).router
     }
 }
