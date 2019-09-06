@@ -56,7 +56,7 @@ class LoginViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Register", for: .normal)
         button.contentHorizontalAlignment = .right
-        // Button disabled until register flow story
+        button.addTarget(self, action: #selector(registerButtonPressed), for: .touchUpInside)
         return button
     }()
     
@@ -105,6 +105,10 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutView()
+    }
+
+    @objc func registerButtonPressed() {
+        sharedRouter.showRegisterViewController(animated: true)
     }
 
     @objc func signInButtonPressed() {
