@@ -87,7 +87,7 @@ class RegisterViewController: BankAppViewController {
     lazy var zenKeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
         button.style = .dark
-        let scopes: [Scope] = [.openid, .authenticate, .register, .name, .email, .postalCode]
+        let scopes: [Scope] = [.openid, .register, .name, .email, .postalCode]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.delegate = self
