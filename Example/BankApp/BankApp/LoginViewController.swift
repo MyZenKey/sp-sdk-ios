@@ -71,7 +71,7 @@ class LoginViewController: UIViewController {
     lazy var zenKeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
         button.style = .light
-        let scopes: [Scope] = [.openid, .authenticate, .register, .name, .email, .birthdate, .postalCode]
+        let scopes: [Scope] = [.openid, .authenticate, .register, .name, .email, .postalCode]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.brandingDelegate = self
@@ -89,14 +89,7 @@ class LoginViewController: UIViewController {
         return label
     }()
 
-    lazy var toggleEnv: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        let currentHost = BuildInfo.isQAHost ? "QA" : "Prod"
-        button.setTitle("Toggle Host: current host \(currentHost)", for: .normal)
-        button.addTarget(self, action: #selector(toggleHost), for: .touchUpInside)
-        return button
-    }()
+    let watermarkLabel = BuildInfo.makeWatermarkLabel(lightText: true)
 
     lazy var inputToolbar: UIToolbar = {
         let toolbar = UIToolbar()
@@ -131,21 +124,14 @@ class LoginViewController: UIViewController {
         }
     }
 
-    @objc func toggleHost(_ sender: Any) {
-        BuildInfo.toggleHost()
-        showAlert(
-            title: "Host Updated",
-            message: "The app will now exit, restart for the new host to take effect.") {
-            fatalError("restarting app")
-        }
-    }
-
     @objc func dismissKeyboard() {
         idTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
     }
-    
+
     func layoutView() {
+        DebugController.addMenu(toViewController: self)
+
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
         let safeAreaGuide = getSafeLayoutGuide()
@@ -159,7 +145,7 @@ class LoginViewController: UIViewController {
         view.addSubview(registerButton)
         view.addSubview(zenKeyButton)
         view.addSubview(poweredByLabel)
-        view.addSubview(toggleEnv)
+        view.addSubview(watermarkLabel)
 
         gradientBackground.frame = view.frame
 
@@ -202,8 +188,9 @@ class LoginViewController: UIViewController {
         constraints.append(poweredByLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(poweredByLabel.widthAnchor.constraint(equalTo: zenKeyButton.widthAnchor))
 
-        constraints.append(toggleEnv.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(toggleEnv.topAnchor.constraint(equalTo: poweredByLabel.bottomAnchor, constant: 20.0))
+        constraints.append(watermarkLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
+        constraints.append(watermarkLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
+        constraints.append(watermarkLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
 
         NSLayoutConstraint.activate(constraints)
     }

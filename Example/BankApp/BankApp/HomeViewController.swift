@@ -126,7 +126,6 @@ private extension HomeViewController {
         userInfoLabel.text = """
         user: \(userInfo.username)
         name: \(userInfo.name ?? "{name}")
-        birthdate: \(userInfo.birthdate ?? "{birthdate}")
         email: \(userInfo.email ?? "{email}") | zip: \(userInfo.postalCode ?? "{postal code}")
         """
     }
