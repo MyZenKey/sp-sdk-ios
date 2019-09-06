@@ -67,7 +67,7 @@ class HomeViewController: BankAppViewController {
     }
     
     @objc func sendMoneyTouched(_ sender: Any) {
-        navigationController?.pushViewController(ApproveViewController(), animated: true)
+        sharedRouter.showApproveViewController(animated: true)
     }
     
     func layoutView() {

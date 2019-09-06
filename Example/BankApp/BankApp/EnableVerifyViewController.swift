@@ -60,7 +60,7 @@ class EnableVerifyViewController: BankAppViewController {
     }
     
     @objc func cancelVerify(_ sender: Any) {
-        navigationController?.popToRootViewController(animated: true)
+        sharedRouter.popToRoot(animated: true)
     }
 
     func layoutView() {
@@ -126,7 +126,7 @@ extension EnableVerifyViewController: ZenKeyAuthorizeButtonDelegate {
                 }
 
                 AccountManager.login(withToken: accountToken)
-                self?.launchHomeScreen()
+                self?.sharedRouter.startAppFlow()
         })
     }
 }

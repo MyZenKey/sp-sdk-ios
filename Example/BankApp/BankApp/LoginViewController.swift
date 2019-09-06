@@ -127,8 +127,7 @@ class LoginViewController: UIViewController {
                     return
                 }
                 AccountManager.login(withToken: auth.token)
-                self?.navigationController?
-                    .pushViewController(EnableVerifyViewController(), animated: true)
+                self?.sharedRouter.showEnableVerifyViewController(animated: true)
         }
     }
 
@@ -241,7 +240,7 @@ extension LoginViewController: ZenKeyAuthorizeButtonDelegate {
                 }
 
                 AccountManager.login(withToken: accountToken)
-                self?.launchHomeScreen()
+                self?.sharedRouter.startAppFlow()
         })
     }
 }
