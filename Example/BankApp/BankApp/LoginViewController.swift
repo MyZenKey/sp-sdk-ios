@@ -119,7 +119,7 @@ class LoginViewController: UIViewController {
                     )
                     return
                 }
-                AccountManager.login(withToken: auth.token)
+
                 self?.sharedRouter.showEnableVerifyViewController(animated: true)
         }
     }
