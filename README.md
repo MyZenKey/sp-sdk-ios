@@ -1,4 +1,4 @@
-![Logo](/image/ZenKey_rgb.png)
+![Logo](image/ZenKey_rgb.png)
 
 # iOS Integration Guide
 
@@ -30,7 +30,7 @@ Users establish their mobile device as their primary device by installing the ca
 
 **Step 2:** &nbsp; The User's ZenKey app determines the appropriate wireless carrier to perform SIM and user authentication with and returns an authorization code to your Redirect URI (see section on Redirect URI).
 
-**Step 3:** &nbsp; Because you user has consented to share with you, your backend server may make a token request for user info or other resources.
+**Step 3:** &nbsp; Because your user has consented to share with you, your backend server may make a token request for user info or other resources.
 
 #### 1.2.2 Authorization on Secondary Devices
 
@@ -44,7 +44,7 @@ Users pressing the ZenKey button on a secondary device will see a visual and num
 
 **Step 3:** &nbsp; Once the user approves the request in the ZenKey app on their primary device, the carrier Discovery UI website gets redirected to perform authorization with a `login_hint_token`.
 
-**Step 4:** &nbsp; Your backend server makes an authorization code request to the appropriate carrier, to perform SIM and user authentication, receives the auth code back at your Redirect URI.
+**Step 4:** &nbsp; Your backend server makes an authorization code request to the appropriate carrier, to perform SIM and user authentication, and receives the auth code back at your Redirect URI.
 
 **Step 5:** &nbsp; Because you user has consented to share with you, your backend server may make a token request for user info or other resources.
 
@@ -61,7 +61,7 @@ To get started integrating the ZenKey with your applications, there are a few th
 * Register your application - Access the Service Provider portal to register your application and obtain a valid `clientId` and `clientSecret`.
 * Identify if you need custom redirect URIs - Redirect URIs will be used for callbacks to several ZenKey services
 * Identify user information data you want to capture - The ZenKey enrollment process includes asking for personal user data. The ZenKey service itself does not accumulate the personal data used for authentication. That data remains secured by the user's wireless carrier. Encrypted user information is only shared with Service Providers upon subscriber consent. Users are able to choose whether to share their data and specifically what data will be shared with each participating Service Provider.
-  * Because applications must get authorization to access user information, scopes must be defined to allow actions. There are various user data "scopes" already defined in ZenKey which you can select to be captured during the enrollment process. Examples of these are email address, name and phone number. These scopes are used to verify users. OpenID is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
+  * Because applications must get authorization to access user information, "scopes" must be defined to allow actions. There are various user data scopes already defined in ZenKey which you can select to be captured during the enrollment process. Examples of these are email address, name and phone number. The scopes are used to verify users. `OpenID` is the only required scope and is added by default on every request. All others are optional depending on the needs of your application.
 * Decide to require PIN and/or Biometric - You can choose if you'd like to require the user to authenticate with a PIN and/or a biometric from their primary device (e.g. finger print, facial recognition, etc). In your setup, you can choose to have an experience with or without requiring both a PIN or biometric.
 
 **Note:** For Pre-Release: set up Git Access - While the SDK is under development (Pre-Release), we recommend maintaining the Provider SDK source code as a [git submodule](https://git-scm.com/docs/git-submodule). If that is not possible, download the source [here](https://git.xcijv.net/sp-sdk/sp-sdk-ios) and place it in your project directory.
@@ -416,8 +416,9 @@ NOTICE: © 2019 XCI JV, LLC. ZENKEY IS A TRADEMARK OF XCI JV, LLC. ALL RIGHTS RE
 
 | Date   | Version      | Description |
 | -------- | --------- | ------------------------------------------------------ |
+| 9.9.2019 | 0.9.12 | Added minor edits. |
 | 8.29.2019 | 0.9.11 | Updating verbiage and instructions |
 |8.27.2019 | 0.9.10     | Updated high-level flows; Updated sample code.  |
 |8.20.2019 | 0.9.9     | Added section numbers; Added revision history; Added additional info about Redirect URIs to section 4.0 |
 
-<sub> Last Update: Document Version 0.9.11 - August 279, 2019</sub>
+<sub> Last Update: Document Version 0.9.12 - September 9, 2019</sub>
