@@ -119,14 +119,14 @@ public class ZenKeyBrandedButton: UIButton {
         }
     }
 
+    /// The unconstrained size of the button's content area: image + title
     private func trueContentSize() -> CGSize {
         let titleSize: CGSize = measuredTitleSize
-
         let iconSize = measuredImageSize
 
         let contentWidth =
-            iconSize.width +
-            titleSize.width +
+            ceil(iconSize.width) +
+            ceil(titleSize.width) +
             CGFloat(spaceTitleAndImageRects ? Constants.interitemSpacing : 0.0)
 
         return CGSize(width: contentWidth, height: max(titleSize.height, iconSize.height))
@@ -135,6 +135,7 @@ public class ZenKeyBrandedButton: UIButton {
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         guard !isHidden else { return .zero }
         let contentSize = trueContentSize()
+        // return the unconstrianed size + desired margins
         return CGSize(
             width: contentSize.width + (2 * Insets.horizontal),
             height: contentSize.height + (2 * Insets.vertical)
@@ -146,6 +147,7 @@ public class ZenKeyBrandedButton: UIButton {
             return .zero
         }
 
+        // if we're not bigger than the smallest margins, return zero
         guard
             bounds.size.width >= 2 * Insets.Minimum.horizontal,
             bounds.size.height >= 2 * Insets.Minimum.vertical else {

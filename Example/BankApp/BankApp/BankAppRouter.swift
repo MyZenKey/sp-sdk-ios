@@ -47,6 +47,10 @@ class BankAppRouter {
         navigationController.pushViewController(ApproveViewController(), animated: animated)
     }
 
+    func showRegisterViewController(animated: Bool) {
+        navigationController.pushViewController(RegisterViewController(), animated: animated)
+    }
+
     func showTransfersScreen(animated: Bool) {
         navigationController.setViewControllers([
             HomeViewController(),
