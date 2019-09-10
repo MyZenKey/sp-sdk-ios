@@ -103,6 +103,8 @@ class RegisterViewController: BankAppViewController {
 
         let safeAreaGuide = getSafeLayoutGuide()
 
+        isNavigationCancelButtonHidden = false
+
         view.addSubview(titleLabel)
         view.addSubview(userNameTextField)
         view.addSubview(emailTextField)

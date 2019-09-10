@@ -57,6 +57,12 @@ class LogoGradientView: GradientView {
         return logo
     }()
 
+    let leadingButtonAreaLayoutGuide: UILayoutGuide = {
+        let guide = UILayoutGuide()
+        guide.identifier = "leading button area layout guide"
+        return guide
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         sharedInit()
@@ -74,6 +80,7 @@ class LogoGradientView: GradientView {
         }
 
         addSubview(logo)
+        addLayoutGuide(leadingButtonAreaLayoutGuide)
 
         let yAdjustment: CGFloat
         if #available(iOS 11.0, *) {
@@ -86,6 +93,11 @@ class LogoGradientView: GradientView {
             logo.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor),
             logo.centerYAnchor.constraint(equalTo: layoutMarginsGuide.centerYAnchor,
                                           constant: yAdjustment / 2),
+
+            leadingButtonAreaLayoutGuide.leadingAnchor.constraint(equalTo: leadingAnchor),
+            leadingButtonAreaLayoutGuide.trailingAnchor.constraint(equalTo: logo.leadingAnchor),
+            leadingButtonAreaLayoutGuide.topAnchor.constraint(equalTo: logo.topAnchor),
+            leadingButtonAreaLayoutGuide.bottomAnchor.constraint(equalTo: logo.bottomAnchor),
         ])
     }
 }
