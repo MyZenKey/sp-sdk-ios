@@ -8,3 +8,247 @@
 
 import Foundation
 
+/// This service uses a mix of Joint Venture endpoints for performing real token / user info
+/// exchanges and mocked responses to supporte demo functionality.
+class DemoAuthService: ServiceProviderAPIProtocol {
+    enum Env {
+        case dev
+        case qa
+        case prod
+
+        var host: URL {
+            switch self {
+            case .dev:
+                return URL(string: "https://ube-dev.xcijv.com")!
+            case .qa: return
+                URL(string: "https://ube-qa.xcijv.com")!
+            case .prod:
+                return URL(string: "https://ube.xcijv.com/")!
+            }
+        }
+    }
+
+    private static let clientId: String = {
+        guard let clientId = Bundle.main.infoDictionary?["ZenKeyClientId"] as? String else {
+            fatalError("missing client id")
+        }
+        return clientId
+    }()
+
+    fileprivate static let jsonEncoder = JSONEncoder()
+
+    private var env: Env = .qa
+
+    private let session = URLSession(
+        configuration: .ephemeral,
+        delegate: nil,
+        delegateQueue: Foundation.OperationQueue.main
+    )
+
+    func login(withUsername username: String,
+               password: String,
+               completion: @escaping (AuthPayload?, Error?) -> Void) {
+
+    }
+
+    func login(withAuthCode code: String,
+               redirectURI: URL,
+               mcc: String,
+               mnc: String,
+               completion: @escaping (AuthPayload?, Error?) -> Void) {
+
+        requestToken(withAuthCode: code,
+                     redirectURI: redirectURI,
+                     mcc: mcc,
+                     mnc: mnc) { result, error in
+
+        }
+    }
+
+    func addSecondFactor(withAuthCode code: String,
+                         redirectURI: URL,
+                         mcc: String,
+                         mnc: String,
+                         completion: @escaping (AuthPayload?, Error?) -> Void) {
+
+        requestToken(withAuthCode: code,
+                     redirectURI: redirectURI,
+                     mcc: mcc,
+                     mnc: mnc) { result, error in
+
+
+        }
+    }
+
+    func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void) {
+
+        guard
+            let token = UserAccountStorage.accessToken,
+            let mccmnc = UserAccountStorage.mccmnc else {
+                completion(nil, ServiceError.invalidToken)
+                return
+        }
+
+        var request = makeRequest(forPath: "/oauth/userinfo")
+        let requestBody = UserInfoRequest(
+            clientId: DemoAuthService.clientId,
+            mcc: mccmnc.mcc,
+            mnc: mccmnc.mnc,
+            token: token
+        )
+
+        guard let body = try? DemoAuthService.jsonEncoder.encode(requestBody) else {
+            Logger.log(.error, "unable to encode body from: \(requestBody)")
+            completion(nil, ServiceError.unknownError)
+            return
+        }
+
+        request.httpMethod = "GET"
+        request.httpBody = body
+        session.requestJSON(request: request) { (result: UserInfoResponse?, error: Error?) in
+            guard let result = result, error == nil else {
+                completion(nil, error)
+                return
+            }
+
+        }
+    }
+
+    func approveTransfer(withAuthCode code: String,
+                         redirectURI: URL,
+                         userContext: String,
+                         nonce: String,
+                         completion: @escaping (Transaction?, Error?) -> Void) {
+
+        guard
+            let mccmnc = UserAccountStorage.mccmnc else {
+                completion(nil, ServiceError.invalidToken)
+                return
+        }
+
+        requestToken(withAuthCode: code,
+                     redirectURI: redirectURI,
+                     mcc: mccmnc.mcc,
+                     mnc: mccmnc.mnc) { result, error in
+
+        }
+    }
+
+    func logout(completion: @escaping (Error?) -> Void) {
+        UserAccountStorage.clearUser()
+        DispatchQueue.main.async {
+            completion(nil)
+        }
+    }
+}
+
+private extension DemoAuthService {
+    func requestToken(withAuthCode code: String,
+                      redirectURI: URL,
+                      mcc: String,
+                      mnc: String,
+                      completion: @escaping (TokenResponse?, Error?) -> Void) {
+
+        var request = makeRequest(forPath: "/oauth/usertoken")
+        let requestBody = TokenRequest(
+            clientId: DemoAuthService.clientId,
+            code: code,
+            redirectURI: redirectURI,
+            mcc: mcc,
+            mnc: mnc
+        )
+        guard let body = try? DemoAuthService.jsonEncoder.encode(requestBody) else {
+            Logger.log(.error, "unable to encode body from: \(requestBody)")
+            completion(nil, ServiceError.unknownError)
+            return
+        }
+        request.httpMethod = "POST"
+        request.httpBody = body
+        session.requestJSON(request: request) { (result: TokenResponse?, error: Error?) in
+            guard let result = result, error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            UserAccountStorage.setUser(withAccessToken: result.accessToken)
+            UserAccountStorage.setMCCMNC(mcc: mcc, mnc: mnc)
+
+            completion(result, error)
+        }
+    }
+
+    func makeRequest(forPath path: String) -> URLRequest {
+        guard var components = URLComponents(url: env.host, resolvingAgainstBaseURL: false) else {
+            fatalError("invalid url \(env.host)")
+        }
+
+        components.path = path
+
+        guard let url = components.url else {
+            fatalError("invalid components \(components)")
+        }
+
+        var request = URLRequest(url: url)
+
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        return request
+    }
+}
+
+// MARK: - Token
+
+private struct TokenRequest: Encodable {
+    let code: String
+    let redirectURI: String
+    let clientId: String
+    let mccmnc: String
+
+    init(clientId: String, code: String, redirectURI: URL, mcc: String, mnc: String) {
+        self.clientId = clientId
+        self.code = "Bearer \(code)"
+        self.redirectURI = redirectURI.absoluteString
+        self.mccmnc = "\(mcc)\(mnc)"
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case clientId = "client_id"
+        case redirectURI = "redirect_uri"
+        case code
+        case mccmnc
+    }
+}
+
+private struct TokenResponse: Decodable {
+    var accessToken: String
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+    }
+}
+
+// MARK: - User Info
+
+private struct UserInfoRequest: Encodable {
+    let token: String
+    let clientId: String
+    let mccmnc: String
+
+    init(clientId: String, mcc: String, mnc: String, token: String) {
+        self.clientId = clientId
+        self.mccmnc = "\(mcc)\(mnc)"
+        self.token = token
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case clientId = "client_id"
+        case mccmnc
+        case token
+    }
+}
+
+private struct UserInfoResponse: Decodable {
+
+}
+
+// MARK: -
+
