@@ -58,14 +58,14 @@ class MockAuthService: NSObject, ServiceProviderAPIProtocol {
         }
     }
 
-    func approveTransfer(withAuthCode code: String,
+    func requestTransfer(withAuthCode code: String,
                          redirectURI: URL,
-                         userContext: String,
+                         transaction: Transaction,
                          nonce: String,
                          completion: @escaping (Transaction?, Error?) -> Void) {
 
         DispatchQueue.main.async {
-            completion(Transaction(), nil)
+            completion(transaction, nil)
         }
     }
 

@@ -10,13 +10,14 @@ import ZenKeySDK
 
 class ApproveViewController: BankAppViewController {
 
-    static let userName = "nmel1234"
-    static let amount = "$100.00"
+//    static let userName = "nmel1234"
+//    static let amount = "$100.00"
+    static let transaction = Transaction(time: Date(), recipiant: "nmel1234", amount: "$100.00")
 
     let promptLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Would you like to transfer \(ApproveViewController.amount) to \(ApproveViewController.userName)?"
+        label.text = "Would you like to transfer \(ApproveViewController.transaction.amount) to \(ApproveViewController.transaction.recipiant)?"
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -41,7 +42,7 @@ class ApproveViewController: BankAppViewController {
     }()
 
     let nonce = RandomStringGenerator.generateNonceSuitableString()!
-    let context = "Confirm you would like to transfer \(ApproveViewController.amount) to \(ApproveViewController.userName)."
+    let context = ApproveViewController.transaction.contextString()
 
     lazy var zenKeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
@@ -72,11 +73,11 @@ class ApproveViewController: BankAppViewController {
     }
 
     func completeFlow(withAuthChode code: String, redirectURI: URL, mcc: String, mnc: String) {
-        serviceAPI.approveTransfer(
+        serviceAPI.requestTransfer(
             withAuthCode: code,
             redirectURI: redirectURI,
-            userContext: context,
-            nonce: nonce) { transaction, error in
+            transaction: ApproveViewController.transaction,
+            nonce: nonce) { completeTransaction, error in
 
                 guard error == nil else {
                     self.showAlert(title: "Error", message: "A problem occured with this transaction. \(error!)") { [weak self] in
@@ -84,7 +85,8 @@ class ApproveViewController: BankAppViewController {
                     }
                     return
                 }
-
+                // transfer complete, log to activity history and present success
+                print("Transaction: \(String(describing: completeTransaction))")
                 self.sharedRouter.showTransfersScreen(animated: true)
 
         }

@@ -218,9 +218,9 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
         }
     }
 
-    func approveTransfer(withAuthCode code: String,
+    func requestTransfer(withAuthCode code: String,
                          redirectURI: URL,
-                         userContext: String,
+                         transaction: Transaction,
                          nonce: String,
                          completion: @escaping (Transaction?, Error?) -> Void) {
 
@@ -246,12 +246,17 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
             let returnedContext = parsed["context"] as? String
             let returnedNonce = parsed["nonce"] as? String
 
-            guard returnedContext == userContext, returnedNonce == nonce else {
+            guard returnedContext == transaction.contextString(), returnedNonce == nonce else {
                 completion(nil, TransactionError.mismatchedTransaction)
                 return
             }
 
-            completion(Transaction(), nil)
+            // Build new timestamped Transaction
+            let completedTransaction = Transaction(time: Date(),
+                                                   recipiant: transaction.recipiant,
+                                                   amount: transaction.amount)
+
+            completion(completedTransaction, nil)
         }
     }
 
