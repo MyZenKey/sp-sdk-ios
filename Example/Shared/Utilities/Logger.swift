@@ -1,5 +1,5 @@
 //
-//  Log.swift
+//  Logger.swift
 //  BankApp
 //
 //  Created by Adam Tierney on 9/11/19.
@@ -10,8 +10,8 @@ import Foundation
 
 /// A logging structure. Pass a log level to the ZenKey launch options to enable logging
 /// for use during debugging.
-public struct Log {
-    static private(set) var logLevel: Level = .off
+public struct Logger {
+    static private(set) var logLevel: Level = .verbose //.off
 
     public enum Level: Int {
         case off, error, warn, info, verbose
@@ -45,7 +45,7 @@ public struct Log {
     }
 }
 
-private extension Log {
+private extension Logger {
     static let dateformatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "Y-MM-dd H:m:ss.SSSS"

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TokenRequest: Encodable {
+private struct TokenRequest: Encodable {
     let grantType = "authorization_code"
     let code: String
     let redirectURI: String
@@ -55,7 +55,7 @@ struct TokenRequest: Encodable {
     }
 }
 
-struct UserInfoResponse: Codable {
+private struct UserInfoResponse: Codable {
     let sub: String
     let name: String?
     let givenName: String?
@@ -90,7 +90,7 @@ struct UserInfoResponse: Codable {
     }
 }
 
-struct TokenResponse: Codable {
+private struct TokenResponse: Codable {
     let idToken: String
     let accessToken: String
     let tokenType: String
@@ -106,7 +106,7 @@ struct TokenResponse: Codable {
     }
 }
 
-struct DiscoveryResponse: Decodable {
+private struct DiscoveryResponse: Decodable {
     let tokenEndpoint: URL
     let userInfoEndpoint: URL
 
@@ -159,7 +159,7 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
                 return
             }
 
-            UserAccountStorage.setUser(withTokenResponse: tokenResponse)
+            UserAccountStorage.setUser(withAccessToken: tokenResponse.accessToken)
             UserAccountStorage.setMCCMNC(mcc: mcc, mnc: mnc)
             completion(AuthPayload(token: "my_pretend_auth_token"), nil)
         }
@@ -266,19 +266,6 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
         }
     }
 
-    func getOIDC(forMCC mcc: String,
-                andMNC mnc: String,
-                handleError: @escaping (Error?) -> Void,
-                then: @escaping (DiscoveryResponse) -> Void) {
-        getOIDC(mcc: mcc, mnc: mnc) { oidc, error in
-            guard let oidc = oidc else {
-                handleError(error)
-                return
-            }
-            then(oidc)
-        }
-    }
-
     func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void) {
         completion(UserAccountStorage.getTransactionHistory().reversed(), nil)
     }
@@ -306,8 +293,22 @@ private extension ClientSideServiceAPI {
         phone: "(212) 555-1234"
     )
 
+
     var isMockUser: Bool {
         return UserAccountStorage.userName == ClientSideServiceAPI.mockUserName
+    }
+
+    func getOIDC(forMCC mcc: String,
+                 andMNC mnc: String,
+                 handleError: @escaping (Error?) -> Void,
+                 then: @escaping (DiscoveryResponse) -> Void) {
+        getOIDC(mcc: mcc, mnc: mnc) { oidc, error in
+            guard let oidc = oidc else {
+                handleError(error)
+                return
+            }
+            then(oidc)
+        }
     }
 
     func getOIDC(mcc: String,
@@ -391,7 +392,7 @@ extension String {
             bodyBase64String = bodyBase64String + padding
         }
         guard let data = Data(base64Encoded: bodyBase64String, options: .ignoreUnknownCharacters) else {
-            Log.log(.info, "Warning: unable to parse JWT")
+            Logger.log(.info, "Warning: unable to parse JWT")
             return nil
         }
 
@@ -402,7 +403,7 @@ extension String {
 
             return json
         } catch {
-            Log.log(.info, "Warning: unable to parse JWT")
+            Logger.log(.info, "Warning: unable to parse JWT")
             return nil
         }
     }

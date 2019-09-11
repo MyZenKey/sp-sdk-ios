@@ -16,13 +16,8 @@ struct UserAccountStorage {
     private static let mncKey =  "UserAccountStorage.mnc"
     private static let historyKey =  "UserTransactionHistory"
 
-    static func setUser(withTokenResponse tokenResponse: TokenResponse) {
-        do {
-            let data = try PropertyListEncoder().encode(tokenResponse)
-            UserDefaults.standard.set(data, forKey: accountKey)
-        } catch {
-            fatalError("invalid login tokens: \(error)")
-        }
+    static func setUser(withAccessToken token: String) {
+        UserDefaults.standard.set(token, forKey: accountKey)
     }
 
     static var mccmnc: (mcc: String, mnc: String)? {
@@ -67,32 +62,13 @@ struct UserAccountStorage {
         return [Transaction]()
     }
 
-    static var idToken: String? {
-        do {
-            guard let data: Data = UserDefaults.standard.value(forKey: accountKey) as? Data else {
-                clearUser()
-                return nil
-            }
-
-            let tokenResponse = try PropertyListDecoder().decode(TokenResponse.self, from: data)
-            return tokenResponse.idToken
-        } catch {
-            fatalError("invalid login tokens: \(error)")
-        }
-    }
-
     static var accessToken: String? {
-        do {
-            guard let data: Data = UserDefaults.standard.value(forKey: accountKey) as? Data else {
-                clearUser()
-                return nil
-            }
-
-            let tokenResponse = try PropertyListDecoder().decode(TokenResponse.self, from: data)
-            return tokenResponse.accessToken
-        } catch {
-            fatalError("invalid login tokens: \(error)")
+        guard let accessToken: String = UserDefaults.standard.string(forKey: accountKey) else {
+            clearUser()
+            return nil
         }
+
+        return accessToken
     }
 
     static func clearUser() {

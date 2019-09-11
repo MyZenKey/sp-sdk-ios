@@ -171,10 +171,12 @@ extension URLSession {
     func requestJSON<T: Decodable>(
         request: URLRequest,
         completion: @escaping (T?, Error?) -> Void) {
-        Log.log(.info, "performing request: \(request)")
-        Log.logRequest(.info, urlRequest: request)
+        Logger.log(.info, "performing request: \(request)")
+        Logger.logRequest(.info, urlRequest: request)
         let task = self.dataTask(with: request) { data, response, error in
-            Log.log(.info, "concluding request: \(request.url!) with: \((response as? HTTPURLResponse)?.statusCode ?? 0)")
+            Logger.logJSON(.verbose, data: data)
+            Logger.log(.info, "concluding request: \(request.url!) with: \((response as? HTTPURLResponse)?.statusCode ?? 0)")
+
             DispatchQueue.main.async {
                 var result: T?
                 var errorResult: Error? = error
@@ -203,13 +205,27 @@ extension URLSession {
     }
 }
 
-extension Log {
+extension Logger {
     static func logRequest(_ logLevel: Level, urlRequest: URLRequest) {
         guard let curlString = urlRequest.curlString else {
-            Log.log(.error, "attemptint to log curl for \(urlRequest) but it is an invalid request")
+            Logger.log(.error, "attemptint to log curl for \(urlRequest) but it is an invalid request")
             return
         }
-        Log.log(logLevel, "Requesting: \n\(curlString)")
+        Logger.log(logLevel, "Requesting: \n\(curlString)")
+    }
+
+    static func logJSON(_ logLevel: Level, data: Data?) {
+        guard let data = data else {
+            Logger.log(logLevel, "no data to log json for")
+            return
+        }
+
+        do {
+            let json = try JSONSerialization.jsonObject(with: data, options: [])
+            Logger.log(logLevel, "\(json)")
+        } catch {
+            Logger.log(logLevel, "invalid json")
+        }
     }
 }
 
@@ -233,16 +249,5 @@ extension URLRequest {
         curlString += "\"\(url.absoluteString)\"\n"
 
         return curlString
-    }
-}
-
-extension Data {
-    func printJSON() {
-        do {
-            let json = try JSONSerialization.jsonObject(with: self, options: [])
-            Log.log(.info, "\(json)")
-        } catch {
-            Log.log(.info, "invalid json")
-        }
     }
 }
