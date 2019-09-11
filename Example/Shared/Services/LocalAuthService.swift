@@ -136,7 +136,6 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
     }()
 
     private static var config: [String: DiscoveryResponse] = [:]
-    private static let jsonDecoder = JSONDecoder()
     private static let jsonEncoder = JSONEncoder()
 
     private let session = URLSession(
@@ -213,7 +212,7 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
                     request.httpMethod = "GET"
                     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
                     request.addValue("application/json", forHTTPHeaderField: "Accept")
-                    sself.requestJSON(request: request) { (userInfoResponse: UserInfoResponse?, error: Error?) in
+                    sself.session.requestJSON(request: request) { (userInfoResponse: UserInfoResponse?, error: Error?) in
                         let userInfo = userInfoResponse?
                             .toUserInfo(withUsername: UserAccountStorage.userName ?? "zenkey_user")
                         completion(userInfo, error)
@@ -332,7 +331,7 @@ private extension ClientSideServiceAPI {
                    mnc: String,
                    completion: @escaping (DiscoveryResponse?, Error?) -> Void) {
         let endpoint = URLRequest(url: discoveryEndpoint(mcc: mcc, mnc: mnc))
-        requestJSON(request: endpoint, completion: completion)
+        session.requestJSON(request: endpoint, completion: completion)
     }
 
     func requestToken(forMCC mcc: String,
@@ -359,43 +358,8 @@ private extension ClientSideServiceAPI {
                     let encoded = tokenRequest.urlFormEncodedData
 
                     request.httpBody = encoded
-                    sself.requestJSON(request: request, completion: completion)
+                    sself.session.requestJSON(request: request, completion: completion)
         }
-    }
-
-    func requestJSON<T: Decodable>(
-        request: URLRequest,
-        completion: @escaping (T?, Error?) -> Void) {
-
-        ClientSideServiceAPI.log("performing request: \(request)")
-        ClientSideServiceAPI.log(request: request)
-        let task = session.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                ClientSideServiceAPI.log("concluding request: \(request.url!) with: \((response as? HTTPURLResponse)?.statusCode ?? 0)")
-                var result: T?
-                var errorResult: Error? = error
-
-                defer { completion(result, errorResult) }
-
-
-                if let statusError = (response as? HTTPURLResponse)?.errorValue, error == nil {
-                    errorResult = statusError
-                }
-
-                guard errorResult == nil, let data = data else {
-                    return
-                }
-                do {
-                    result = try ClientSideServiceAPI.jsonDecoder.decode(
-                        T.self,
-                        from: data
-                    )
-                } catch let parseError {
-                    errorResult = parseError
-                }
-            }
-        }
-        task.resume()
     }
 
     func discoveryEndpoint(mcc: String, mnc: String) -> URL {
@@ -427,7 +391,7 @@ extension String {
             bodyBase64String = bodyBase64String + padding
         }
         guard let data = Data(base64Encoded: bodyBase64String, options: .ignoreUnknownCharacters) else {
-            ClientSideServiceAPI.log("Warning: unable to parse JWT")
+            Log.log(.info, "Warning: unable to parse JWT")
             return nil
         }
 
@@ -438,19 +402,8 @@ extension String {
 
             return json
         } catch {
-            ClientSideServiceAPI.log("Warning: unable to parse JWT")
+            Log.log(.info, "Warning: unable to parse JWT")
             return nil
-        }
-    }
-}
-
-extension Data {
-    func printJSON() {
-        do {
-            let json = try JSONSerialization.jsonObject(with: self, options: [])
-            ClientSideServiceAPI.log("\(json)")
-        } catch {
-            ClientSideServiceAPI.log("invalid json")
         }
     }
 }

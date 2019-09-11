@@ -18,6 +18,8 @@
 		7D89C9D41FFE82F400AE1EF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D89C9D31FFE82F400AE1EF4 /* AppDelegate.swift */; };
 		7D89C9DB1FFE82F400AE1EF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DA1FFE82F400AE1EF4 /* Assets.xcassets */; };
 		7D89C9DE1FFE82F400AE1EF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DC1FFE82F400AE1EF4 /* LaunchScreen.storyboard */; };
+		8A2CE1D42329764D001EADF8 /* DemoAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2CE1D32329764D001EADF8 /* DemoAuthService.swift */; };
+		8A2CE1D6232989A7001EADF8 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2CE1D5232989A7001EADF8 /* Log.swift */; };
 		8A855D152315890F0012AF60 /* LocalAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855D122315890D0012AF60 /* LocalAuthService.swift */; };
 		8A855D162315890F0012AF60 /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855D132315890E0012AF60 /* MockAuthService.swift */; };
 		8A855D172315890F0012AF60 /* ServiceProviderAPIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855D142315890E0012AF60 /* ServiceProviderAPIProtocol.swift */; };
@@ -85,6 +87,8 @@
 		7D89C9DD1FFE82F400AE1EF4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D89C9DF1FFE82F400AE1EF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89F9A01A772197F60C3FF63C /* Pods-BankApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BankApp/Pods-BankApp.debug.xcconfig"; sourceTree = "<group>"; };
+		8A2CE1D32329764D001EADF8 /* DemoAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DemoAuthService.swift; path = ../../Shared/Services/DemoAuthService.swift; sourceTree = "<group>"; };
+		8A2CE1D5232989A7001EADF8 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Log.swift; path = ../../Shared/Utilities/Log.swift; sourceTree = "<group>"; };
 		8A855D122315890D0012AF60 /* LocalAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalAuthService.swift; path = ../../Shared/Services/LocalAuthService.swift; sourceTree = "<group>"; };
 		8A855D132315890E0012AF60 /* MockAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockAuthService.swift; path = ../../Shared/Services/MockAuthService.swift; sourceTree = "<group>"; };
 		8A855D142315890E0012AF60 /* ServiceProviderAPIProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServiceProviderAPIProtocol.swift; path = ../../Shared/Services/ServiceProviderAPIProtocol.swift; sourceTree = "<group>"; };
@@ -224,6 +228,7 @@
 		8A855D182315891E0012AF60 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				8A2CE1D5232989A7001EADF8 /* Log.swift */,
 				8A855D1A23158E2B0012AF60 /* AccountManager.swift */,
 				8A855D1E23158E650012AF60 /* BuildInfoUtilities.swift */,
 				63EACC81233289860076DC7B /* DebugViewController.swift */,
@@ -240,6 +245,7 @@
 				8A855D122315890D0012AF60 /* LocalAuthService.swift */,
 				8A855D132315890E0012AF60 /* MockAuthService.swift */,
 				8A855D142315890E0012AF60 /* ServiceProviderAPIProtocol.swift */,
+				8A2CE1D32329764D001EADF8 /* DemoAuthService.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -448,9 +454,11 @@
 			files = (
 				8C87BE0C212666A900B24707 /* LoginViewController.swift in Sources */,
 				E66B5DD622F225D4005C7FD7 /* UITestLaunchArguments.swift in Sources */,
+				8A2CE1D6232989A7001EADF8 /* Log.swift in Sources */,
 				8C87BE1221268FD500B24707 /* HomeViewController.swift in Sources */,
 				8AC710D123231CDB000D3EC8 /* RegisterViewController.swift in Sources */,
 				8A92ED1522C40C5D00E0B2CA /* UIViewController+Helpers.swift in Sources */,
+				8A2CE1D42329764D001EADF8 /* DemoAuthService.swift in Sources */,
 				8C87BE0E212669DF00B24707 /* BankAppButton.swift in Sources */,
 				8A855D2323158E870012AF60 /* UIViewController+ExampleApps.swift in Sources */,
 				8CFE96FF2121F22900542F46 /* ApproveViewController.swift in Sources */,

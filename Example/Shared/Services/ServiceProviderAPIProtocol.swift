@@ -167,29 +167,82 @@ protocol ServiceProviderAPIProtocol {
     func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void)
 }
 
-extension ServiceProviderAPIProtocol {
-    static func log(_ str: String) {
-        print("|ServiceProviderAPI| \(str)")
+extension URLSession {
+    func requestJSON<T: Decodable>(
+        request: URLRequest,
+        completion: @escaping (T?, Error?) -> Void) {
+        Log.log(.info, "performing request: \(request)")
+        Log.logRequest(.info, urlRequest: request)
+        let task = self.dataTask(with: request) { data, response, error in
+            Log.log(.info, "concluding request: \(request.url!) with: \((response as? HTTPURLResponse)?.statusCode ?? 0)")
+            DispatchQueue.main.async {
+                var result: T?
+                var errorResult: Error? = error
+
+                defer { completion(result, errorResult) }
+
+
+                if let statusError = (response as? HTTPURLResponse)?.errorValue, error == nil {
+                    errorResult = statusError
+                }
+
+                guard errorResult == nil, let data = data else {
+                    return
+                }
+                do {
+                    result = try JSONDecoder().decode(
+                        T.self,
+                        from: data
+                    )
+                } catch let parseError {
+                    errorResult = parseError
+                }
+            }
+        }
+        task.resume()
     }
+}
 
-    static func log(request urlRequest: URLRequest) {
+extension Log {
+    static func logRequest(_ logLevel: Level, urlRequest: URLRequest) {
+        guard let curlString = urlRequest.curlString else {
+            Log.log(.error, "attemptint to log curl for \(urlRequest) but it is an invalid request")
+            return
+        }
+        Log.log(logLevel, "Requesting: \n\(curlString)")
+    }
+}
+
+extension URLRequest {
+    var curlString: String? {
         guard
-            let url = urlRequest.url,
-            let method = urlRequest.httpMethod else {
-                log("invalid request: \(urlRequest)")
-                return
+            let url = url,
+            let method = httpMethod else {
+                return nil
         }
 
-        log("requesting: \(urlRequest)")
-        print("curl -v -X \(method) \\")
-        urlRequest.allHTTPHeaderFields?.forEach() { key, value in
-            print("-H '\(key): \(value)' \\")
+        var curlString = "curl -v -X \(method) \\\n"
+        allHTTPHeaderFields?.forEach() { key, value in
+            curlString += "-H '\(key): \(value)' \\\n"
         }
 
-        if let httpBody = urlRequest.httpBody, let bodyString = String(data: httpBody, encoding: .utf8) {
-            print("-d \"\(bodyString)\" \\")
+        if let httpBody = httpBody, let bodyString = String(data: httpBody, encoding: .utf8) {
+            curlString += "-d \"\(bodyString)\" \\\n"
         }
 
-        print("\"\(url.absoluteString)\"")
+        curlString += "\"\(url.absoluteString)\"\n"
+
+        return curlString
+    }
+}
+
+extension Data {
+    func printJSON() {
+        do {
+            let json = try JSONSerialization.jsonObject(with: self, options: [])
+            Log.log(.info, "\(json)")
+        } catch {
+            Log.log(.info, "invalid json")
+        }
     }
 }
