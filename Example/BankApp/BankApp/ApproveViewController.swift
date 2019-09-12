@@ -10,8 +10,6 @@ import ZenKeySDK
 
 class ApproveViewController: BankAppViewController {
 
-//    static let userName = "nmel1234"
-//    static let amount = "$100.00"
     static let transaction = Transaction(time: Date(), recipiant: "nmel1234", amount: "$100.00")
 
     let promptLabel: UILabel = {
@@ -85,8 +83,18 @@ class ApproveViewController: BankAppViewController {
                     }
                     return
                 }
+                guard let newTransaction = completeTransaction else {
+                    self.showAlert(title: "Error", message: "Transaction data missing") { [weak self] in
+                        self?.sharedRouter.pop(animated: true)
+                    }
+                    return
+                }
                 // transfer complete, log to activity history and present success
-                print("Transaction: \(String(describing: completeTransaction))")
+                print("Transaction: \(String(describing: newTransaction))")
+                var transactions = UserAccountStorage.getTransactionHistory()
+                transactions.append(newTransaction)
+                print("History: \(String(describing: transactions))")
+                UserAccountStorage.setTransactionHistory(transactions)
                 self.sharedRouter.showTransfersScreen(animated: true)
 
         }

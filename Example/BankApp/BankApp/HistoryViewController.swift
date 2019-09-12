@@ -10,21 +10,67 @@ import UIKit
 
 class HistoryViewController: UIViewController {
 
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.separatorStyle = .singleLine
+        tableView.backgroundColor = .white
+        return tableView
+    }()
+    private var transactions: [Transaction]
+
+    init() {
+        transactions = UserAccountStorage.getTransactionHistory()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "History"
+        // Table
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        let safeAreaGuide = getSafeLayoutGuide()
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
+            ])
+        tableView.dataSource = self
 
-        // Do any additional setup after loading the view.
+        tableView.reloadData()
     }
-    
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
     }
-    */
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.isNavigationBarHidden = true
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension HistoryViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return transactions.count
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "TransactionCell")
+        cell.translatesAutoresizingMaskIntoConstraints = false
+        let transaction = transactions[indexPath.row]
+        cell.textLabel?.text = "Transfered \(transaction.amount) to \(transaction.recipiant)"
+        cell.detailTextLabel?.text = transaction.time.description
+        cell.accessoryType = .checkmark
+        return cell
+    }
 }
