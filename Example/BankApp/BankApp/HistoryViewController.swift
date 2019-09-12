@@ -21,7 +21,7 @@ class HistoryViewController: UIViewController {
     private var transactions: [Transaction]
 
     init() {
-        transactions = UserAccountStorage.getTransactionHistory()
+        transactions = UserAccountStorage.getTransactionHistory().reversed()
         super.init(nibName: nil, bundle: nil)
     }
 
