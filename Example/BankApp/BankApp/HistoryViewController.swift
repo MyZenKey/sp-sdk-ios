@@ -69,7 +69,13 @@ extension HistoryViewController: UITableViewDataSource {
         cell.translatesAutoresizingMaskIntoConstraints = false
         let transaction = transactions[indexPath.row]
         cell.textLabel?.text = "Transfered \(transaction.amount) to \(transaction.recipiant)"
-        cell.detailTextLabel?.text = transaction.time.description
+
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .medium
+
+        let dateString = formatter.string(from: transaction.time)
+        cell.detailTextLabel?.text = dateString
         cell.accessoryType = .checkmark
         return cell
     }
