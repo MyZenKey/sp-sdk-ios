@@ -61,7 +61,6 @@ struct UserAccountStorage {
         if let transactions = defaults.object(forKey: historyKey) as? Data {
             let decoder = JSONDecoder()
             if let loadedTransactions = try? decoder.decode([Transaction].self, from: transactions) {
-                print(loadedTransactions)
                 return loadedTransactions
             }
         }
@@ -101,5 +100,6 @@ struct UserAccountStorage {
         UserDefaults.standard.removeObject(forKey: mccKey)
         UserDefaults.standard.removeObject(forKey: mncKey)
         UserDefaults.standard.removeObject(forKey: userNameKey)
+        UserDefaults.standard.removeObject(forKey: historyKey)
     }
 }

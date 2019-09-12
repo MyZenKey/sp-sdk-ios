@@ -27,7 +27,7 @@ struct Transaction: Codable {
     let recipiant: String
     let amount: String
 
-    func contextString() -> String {
+    var contextString: String {
         return "Confirm you would like to transfer \(amount) to \(recipiant)."
     }
 }
@@ -161,6 +161,9 @@ protocol ServiceProviderAPIProtocol {
     ///
     /// - Parameter completion: An async callback with the result of the request.
     func logout(completion: @escaping (Error?) -> Void)
+
+    /// Returns an array of previous transactions
+    func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void)
 }
 
 extension ServiceProviderAPIProtocol {

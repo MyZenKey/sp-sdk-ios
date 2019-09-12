@@ -40,7 +40,7 @@ class ApproveViewController: BankAppViewController {
     }()
 
     let nonce = RandomStringGenerator.generateNonceSuitableString()!
-    let context = ApproveViewController.transaction.contextString()
+    let context = ApproveViewController.transaction.contextString
 
     lazy var zenKeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
@@ -83,16 +83,7 @@ class ApproveViewController: BankAppViewController {
                     }
                     return
                 }
-                guard let newTransaction = completeTransaction else {
-                    self.showAlert(title: "Error", message: "Transaction data missing") { [weak self] in
-                        self?.sharedRouter.pop(animated: true)
-                    }
-                    return
-                }
-                // transfer complete, log to activity history and present success
-                var transactions = UserAccountStorage.getTransactionHistory()
-                transactions.append(newTransaction)
-                UserAccountStorage.setTransactionHistory(transactions)
+
                 self.sharedRouter.showTransfersScreen(animated: true)
 
         }

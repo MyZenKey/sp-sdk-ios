@@ -18,10 +18,10 @@ class HistoryViewController: UIViewController {
         tableView.backgroundColor = .white
         return tableView
     }()
-    private var transactions: [Transaction]
+    private var transactions = [Transaction]()
+    private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     init() {
-        transactions = UserAccountStorage.getTransactionHistory().reversed()
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -45,6 +45,13 @@ class HistoryViewController: UIViewController {
         tableView.dataSource = self
 
         tableView.reloadData()
+        // fetch data
+        serviceAPI.getTransactions() { [weak self] transactions,_ in
+            guard let newTransactions = transactions else {
+                return
+            }
+            self?.updateTransactions(newTransactions)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -55,6 +62,13 @@ class HistoryViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.isNavigationBarHidden = true
+    }
+}
+
+private extension HistoryViewController {
+    func updateTransactions(_ newTransactions: [Transaction]) {
+        transactions = newTransactions
+        tableView.reloadData()
     }
 }
 

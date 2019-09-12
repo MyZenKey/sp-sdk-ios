@@ -246,7 +246,7 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
             let returnedContext = parsed["context"] as? String
             let returnedNonce = parsed["nonce"] as? String
 
-            guard returnedContext == transaction.contextString(), returnedNonce == nonce else {
+            guard returnedContext == transaction.contextString, returnedNonce == nonce else {
                 completion(nil, TransactionError.mismatchedTransaction)
                 return
             }
@@ -255,6 +255,10 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
             let completedTransaction = Transaction(time: Date(),
                                                    recipiant: transaction.recipiant,
                                                    amount: transaction.amount)
+
+            var transactions = UserAccountStorage.getTransactionHistory()
+            transactions.append(completedTransaction)
+            UserAccountStorage.setTransactionHistory(transactions)
 
             completion(completedTransaction, nil)
         }
@@ -271,6 +275,10 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
             }
             then(oidc)
         }
+    }
+
+    func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void) {
+        completion(UserAccountStorage.getTransactionHistory().reversed(), nil)
     }
 
     func logout(completion: @escaping (Error?) -> Void) {
