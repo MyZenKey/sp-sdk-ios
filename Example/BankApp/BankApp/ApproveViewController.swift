@@ -90,10 +90,8 @@ class ApproveViewController: BankAppViewController {
                     return
                 }
                 // transfer complete, log to activity history and present success
-                print("Transaction: \(String(describing: newTransaction))")
                 var transactions = UserAccountStorage.getTransactionHistory()
                 transactions.append(newTransaction)
-                print("History: \(String(describing: transactions))")
                 UserAccountStorage.setTransactionHistory(transactions)
                 self.sharedRouter.showTransfersScreen(animated: true)
 
