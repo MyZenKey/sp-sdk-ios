@@ -34,6 +34,15 @@ class HomeViewController: BankAppViewController {
         button.backgroundColor = UIColor(red: 0.36, green: 0.56, blue: 0.93, alpha: 1.0)
         return button
     }()
+
+    let viewHistoryButton: BankAppButton = {
+        let button = BankAppButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("View History", for: .normal)
+        button.addTarget(self, action: #selector(viewHistoryTouched(_:)), for: .touchUpInside)
+        button.backgroundColor = UIColor(red: 0.36, green: 0.56, blue: 0.93, alpha: 1.0)
+        return button
+    }()
     
     let logoutButton: BankAppButton = {
         let button = BankAppButton()
@@ -65,40 +74,49 @@ class HomeViewController: BankAppViewController {
     @objc func logoutButtonTouched(_ sender: Any) {
         (UIApplication.shared.delegate as? AppDelegate)?.logout()
     }
-    
+
+    @objc func viewHistoryTouched(_ sender: Any) {
+        sharedRouter.showHistoryScreen(animated: true)
+    }
+
     @objc func sendMoneyTouched(_ sender: Any) {
         sharedRouter.showApproveViewController(animated: true)
     }
-    
+
     func layoutView() {
         view.backgroundColor = .white
-        var constraints: [NSLayoutConstraint] = []
         let safeAreaGuide = getSafeLayoutGuide()
         
         view.addSubview(titleLabel)
         view.addSubview(userInfoLabel)
         view.addSubview(sendMoneyButton)
+        view.addSubview(viewHistoryButton)
         view.addSubview(logoutButton)
-        
-        constraints.append(titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
-        constraints.append(titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
-        constraints.append(titleLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
 
-        constraints.append(userInfoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20))
-        constraints.append(userInfoLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor))
-        constraints.append(userInfoLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor))
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100),
+            titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30),
+            titleLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30),
 
-        constraints.append(sendMoneyButton.topAnchor.constraint(equalTo: userInfoLabel.bottomAnchor, constant: 20))
-        constraints.append(sendMoneyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(sendMoneyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(sendMoneyButton.heightAnchor.constraint(equalToConstant: 48))
+            userInfoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            userInfoLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            userInfoLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
 
-        constraints.append(logoutButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -50))
-        constraints.append(logoutButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(logoutButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(logoutButton.heightAnchor.constraint(equalToConstant: 48))
+            sendMoneyButton.topAnchor.constraint(equalTo: userInfoLabel.bottomAnchor, constant: 20),
+            sendMoneyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
+            sendMoneyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
+            sendMoneyButton.heightAnchor.constraint(equalToConstant: 48),
 
-        NSLayoutConstraint.activate(constraints)
+            viewHistoryButton.topAnchor.constraint(equalTo: sendMoneyButton.bottomAnchor, constant: 20),
+            viewHistoryButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
+            viewHistoryButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
+            viewHistoryButton.heightAnchor.constraint(equalToConstant: 48),
+
+            logoutButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -50),
+            logoutButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
+            logoutButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
+            logoutButton.heightAnchor.constraint(equalToConstant: 48),
+            ])
     }
 }
 

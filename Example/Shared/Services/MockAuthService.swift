@@ -10,7 +10,6 @@ import UIKit
 
 /// A mock implementation of the service provider API protocol
 class MockAuthService: NSObject, ServiceProviderAPIProtocol {
-
     let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: Foundation.OperationQueue.main)
     var dataTask: URLSessionDataTask?
 
@@ -58,21 +57,32 @@ class MockAuthService: NSObject, ServiceProviderAPIProtocol {
         }
     }
 
-    func approveTransfer(withAuthCode code: String,
+    func requestTransfer(withAuthCode code: String,
                          redirectURI: URL,
-                         userContext: String,
+                         transaction: Transaction,
                          nonce: String,
                          completion: @escaping (Transaction?, Error?) -> Void) {
 
         DispatchQueue.main.async {
-            completion(Transaction(), nil)
+            let completedTransaction = Transaction(time: Date(),
+                                                   recipiant: transaction.recipiant,
+                                                   amount: transaction.amount)
+            var transactions = UserAccountStorage.getTransactionHistory()
+            transactions.append(completedTransaction)
+            UserAccountStorage.setTransactionHistory(transactions)
+            completion(transaction, nil)
         }
     }
 
     func logout(completion: @escaping (Error?) -> Void) {
+        UserAccountStorage.clearUser()
         DispatchQueue.main.async {
             completion(nil)
         }
+    }
+
+    func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void) {
+        completion(UserAccountStorage.getTransactionHistory().reversed(), nil)
     }
 
     /// Log in.

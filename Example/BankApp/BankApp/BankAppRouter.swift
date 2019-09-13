@@ -57,4 +57,11 @@ class BankAppRouter {
             TransfersViewController(),
         ], animated: animated)
     }
+
+    func showHistoryScreen(animated: Bool) {
+        navigationController.setViewControllers([
+            HomeViewController(),
+            HistoryViewController(),
+            ], animated: animated)
+    }
 }

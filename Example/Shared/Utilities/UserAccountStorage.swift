@@ -14,6 +14,7 @@ struct UserAccountStorage {
     private static let accountKey =  "UserAccountStorage"
     private static let mccKey =  "UserAccountStorage.mcc"
     private static let mncKey =  "UserAccountStorage.mnc"
+    private static let historyKey =  "UserTransactionHistory"
 
     static func setUser(withTokenResponse tokenResponse: TokenResponse) {
         do {
@@ -45,6 +46,25 @@ struct UserAccountStorage {
         set {
             UserDefaults.standard.set(newValue, forKey: userNameKey)
         }
+    }
+
+    static func setTransactionHistory(_ transactions: [Transaction]) {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(transactions) {
+            let defaults = UserDefaults.standard
+            defaults.set(encoded, forKey: historyKey)
+        }
+    }
+
+    static func getTransactionHistory() -> [Transaction]{
+        let defaults = UserDefaults.standard
+        if let transactions = defaults.object(forKey: historyKey) as? Data {
+            let decoder = JSONDecoder()
+            if let loadedTransactions = try? decoder.decode([Transaction].self, from: transactions) {
+                return loadedTransactions
+            }
+        }
+        return [Transaction]()
     }
 
     static var idToken: String? {
@@ -80,5 +100,6 @@ struct UserAccountStorage {
         UserDefaults.standard.removeObject(forKey: mccKey)
         UserDefaults.standard.removeObject(forKey: mncKey)
         UserDefaults.standard.removeObject(forKey: userNameKey)
+        UserDefaults.standard.removeObject(forKey: historyKey)
     }
 }

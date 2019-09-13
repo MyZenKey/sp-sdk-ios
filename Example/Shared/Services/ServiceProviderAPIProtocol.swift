@@ -22,7 +22,15 @@ struct UserInfo {
     let postalCode: String?
 }
 
-struct Transaction {}
+struct Transaction: Codable {
+    let time: Date
+    let recipiant: String
+    let amount: String
+
+    var contextString: String {
+        return "Confirm you would like to transfer \(amount) to \(recipiant)."
+    }
+}
 
 enum TransactionError: Error {
     case unableToParseToken
@@ -138,14 +146,14 @@ protocol ServiceProviderAPIProtocol {
     /// - Parameters:
     ///   - code: The authorization code.
     ///   - redirectURI: The redirect URI used to produce this code.
-    ///   - userContext: The context string you've requested. It should be compared with the context
+    ///   - transaction: The transaction you've requested. Its contextString should be compared with the context
     ///     value returned in the id_token from the token endpoint to ensure integrity.
     ///   - nonce: The nonce value you passed. It should be compared with the nonce value returned
     ///     in the id_token from the token endpoint to ensure integrity.
     ///   - completion: An async callback with the result of the request.
-    func approveTransfer(withAuthCode code: String,
+    func requestTransfer(withAuthCode code: String,
                          redirectURI: URL,
-                         userContext: String,
+                         transaction: Transaction,
                          nonce: String,
                          completion: @escaping (Transaction?, Error?) -> Void)
 
@@ -153,6 +161,9 @@ protocol ServiceProviderAPIProtocol {
     ///
     /// - Parameter completion: An async callback with the result of the request.
     func logout(completion: @escaping (Error?) -> Void)
+
+    /// Returns an array of previous transactions
+    func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void)
 }
 
 extension ServiceProviderAPIProtocol {
