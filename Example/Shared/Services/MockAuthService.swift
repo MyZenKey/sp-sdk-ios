@@ -49,7 +49,8 @@ class MockAuthService: NSObject, ServiceProviderAPIProtocol {
             givenName: "Jane",
             familyName: "Doe",
             birthdate: "1/1/1000",
-            postalCode: "00000"
+            postalCode: "00000",
+            phone: "(212) 555-1234"
         )
 
         DispatchQueue.main.async {
