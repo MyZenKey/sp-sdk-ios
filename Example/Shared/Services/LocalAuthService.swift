@@ -399,7 +399,7 @@ private extension ClientSideServiceAPI {
             "client_id": ClientSideServiceAPI.clientId,
             "mccmnc": "\(mcc)\(mnc)",
         ]
-        let url = URL(string: "https://discoveryissuer.xcijv.com/.well-known/openid_configuration")!
+        let url = URL(string: "https://discoveryissuer.myzenkey.com/.well-known/openid_configuration")!
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         components.queryItems = params.map() { return URLQueryItem(name: $0, value: $1)  }
         return components.url!

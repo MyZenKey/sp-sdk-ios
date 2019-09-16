@@ -124,7 +124,7 @@ extension MobileNetworkSelectionService {
     }
 
     struct Request {
-        ///  the discovery ui resource ie. "https://app.xcijv.com/ui/discovery-ui"
+        ///  the discovery ui resource ie. "https://app.myzenkey.com/ui/discovery-ui"
         let resource: URL
         let clientId: String
         let redirectURI: String

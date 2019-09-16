@@ -13,10 +13,10 @@ struct ZenKeyNetworkConfig {
     let scheme = "https"
 
     enum Host: String {
-        case staging = "app.xcijv.com"
+        case staging = "app.myzenkey.com"
         // swiftlint:disable:next identifier_name
-        case qa = "discoveryissuer-qa.xcijv.com"
-        case production = "discoveryissuer.xcijv.com"
+        case qa = "discoveryissuer-qa.myzenkey.com"
+        case production = "discoveryissuer.myzenkey.com"
     }
 
     let host: Host
