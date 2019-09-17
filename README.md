@@ -408,17 +408,25 @@ Information on setting up your secure server can be found in the "ZenKey Server 
 ## Support
 For technical questions, contact [support](mailto:techsupport@mobileauthtaskforce.com).
 
-## Proprietary and Confidential
+## License
+Copyright © 2019 XCI JV, LLC.
 
-NOTICE: © 2019 XCI JV, LLC. ZENKEY IS A TRADEMARK OF XCI JV, LLC. ALL RIGHTS RESERVED. XCI JV, LLC PROPRIETARY AND CONFIDENTIAL.THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE. CONFIDENTIAL MATERIAL DISCLOSED FOR REVIEW ONLY AS PERMITTED UNDER THE MUTUAL NONDISCLOSURE AGREEMENT. NO RECIPIENT MAY DISCLOSE,DISTRIBUTE, OR POST THIS DOCUMENT WITHOUT XCI JV, LLC’S EXPRESS WRITTEN AUTHORIZATION.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+NOTICE: © 2019 XCI JV, LLC. ZENKEY IS A TRADEMARK OF XCI JV, LLC. ALL RIGHTS RESERVED. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE
 
 ## Revision History
 
 | Date   | Version      | Description |
 | -------- | --------- | ------------------------------------------------------ |
+| 9.17.2019 | 0.9.13 | Updated license with Apache 2.0 text. |
 | 9.9.2019 | 0.9.12 | Added minor edits. |
 | 8.29.2019 | 0.9.11 | Updating verbiage and instructions |
 |8.27.2019 | 0.9.10     | Updated high-level flows; Updated sample code.  |
 |8.20.2019 | 0.9.9     | Added section numbers; Added revision history; Added additional info about Redirect URIs to section 4.0 |
 
-<sub> Last Update: Document Version 0.9.12 - September 9, 2019</sub>
+<sub> Last Update: Document Version 0.9.13 - September 17, 2019</sub>
