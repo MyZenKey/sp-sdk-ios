@@ -71,7 +71,7 @@ class LoginViewController: UIViewController {
     lazy var zenKeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
         button.style = .light
-        let scopes: [Scope] = [.openid, .authenticate, .register, .name, .email, .postalCode]
+        let scopes: [Scope] = [.openid, .authenticate, .name, .email, .postalCode, .phone]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.brandingDelegate = self

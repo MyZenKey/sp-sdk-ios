@@ -63,6 +63,7 @@ struct UserInfoResponse: Codable {
     let birthdate: String?
     let email: String?
     let postalCode: String?
+    let phone: String?
 
     enum CodingKeys: String, CodingKey {
         case sub
@@ -72,6 +73,7 @@ struct UserInfoResponse: Codable {
         case birthdate = "birthdate"
         case email = "email"
         case postalCode = "postal_code"
+        case phone
     }
 
     fileprivate func toUserInfo(withUsername username: String) -> UserInfo {
@@ -82,7 +84,8 @@ struct UserInfoResponse: Codable {
             givenName: givenName,
             familyName: familyName,
             birthdate: birthdate,
-            postalCode: postalCode
+            postalCode: postalCode,
+            phone: phone
         )
     }
 }
@@ -300,7 +303,8 @@ private extension ClientSideServiceAPI {
         givenName: "Jane",
         familyName: "Doe",
         birthdate: "1/1/1000",
-        postalCode: "00000"
+        postalCode: "00000",
+        phone: "(212) 555-1234"
     )
 
     var isMockUser: Bool {

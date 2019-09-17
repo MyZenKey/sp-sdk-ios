@@ -20,6 +20,7 @@ struct UserInfo {
     let familyName: String?
     let birthdate: String?
     let postalCode: String?
+    let phone: String?
 }
 
 struct Transaction: Codable {

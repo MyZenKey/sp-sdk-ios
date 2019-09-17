@@ -67,6 +67,15 @@ class RegisterViewController: BankAppViewController {
         return field
     }()
 
+    let phoneTextField: UITextField = {
+        let field = UITextField()
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.borderStyle = .roundedRect
+        field.minimumFontSize = 17
+        field.placeholder = "Phone"
+        return field
+    }()
+
     let signUpButton: UIButton = {
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +96,7 @@ class RegisterViewController: BankAppViewController {
     lazy var zenKeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
         button.style = .dark
-        let scopes: [Scope] = [.openid, .register, .name, .email, .postalCode]
+        let scopes: [Scope] = [.openid, .register, .name, .email, .postalCode, .phone]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
         button.delegate = self
@@ -111,6 +120,7 @@ class RegisterViewController: BankAppViewController {
         view.addSubview(passwordTextField)
         view.addSubview(confirmPasswordTextField)
         view.addSubview(postalCodeTextField)
+        view.addSubview(phoneTextField)
         view.addSubview(signUpButton)
         view.addSubview(dividerLabel)
         view.addSubview(zenKeyButton)
@@ -142,7 +152,11 @@ class RegisterViewController: BankAppViewController {
             postalCodeTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
             postalCodeTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
 
-            signUpButton.topAnchor.constraint(equalTo: postalCodeTextField.bottomAnchor, constant: 10),
+            phoneTextField.topAnchor.constraint(equalTo: postalCodeTextField.bottomAnchor, constant: 10),
+            phoneTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
+            phoneTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
+
+            signUpButton.topAnchor.constraint(equalTo: phoneTextField.bottomAnchor, constant: 10),
             signUpButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
             signUpButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
             signUpButton.heightAnchor.constraint(equalToConstant: 40),
