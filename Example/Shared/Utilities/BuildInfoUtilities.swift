@@ -177,7 +177,7 @@ extension DebugViewController: UITableViewDelegate {
         switch indexPath.row {
         case 0:
             let controller = UIAlertController(
-                title: "Set backend",
+                title: "Set Backend",
                 message: "Requires reset",
                 preferredStyle: .alert
             )
@@ -209,7 +209,7 @@ extension DebugViewController: UITableViewDelegate {
             present(controller, animated: true, completion: nil)
         case 1:
             let controller = UIAlertController(
-                title: "set JV Host Environment",
+                title: "Set JV Host Environment",
                 message: "Requires reset",
                 preferredStyle: .alert
             )
@@ -241,12 +241,12 @@ extension DebugViewController: UITableViewDelegate {
             present(controller, animated: true, completion: nil)
         case 2:
             let controller = UIAlertController(
-                title: "Set auth mode",
+                title: "Set Auth Mode",
                 message: nil,
                 preferredStyle: .alert
             )
             controller.addAction(UIAlertAction(
-                title: "1 Factor",
+                title: "AAL1: 1 Factor",
                 style: .default,
                 handler: { [weak self] _ in
                     BuildInfo.setAuthMode(.aal1)
@@ -254,7 +254,7 @@ extension DebugViewController: UITableViewDelegate {
             }
             ))
             controller.addAction(UIAlertAction(
-                title: "2 Factor - 30 minute",
+                title: "AAL2: 2 Factor, 30 minute",
                 style: .default,
                 handler: { [weak self] _ in
                     BuildInfo.setAuthMode(.aal2)
@@ -262,7 +262,7 @@ extension DebugViewController: UITableViewDelegate {
             }
             ))
             controller.addAction(UIAlertAction(
-                title: "2 Factor - every time",
+                title: "AAL3: 2 Factor, every time",
                 style: .default,
                 handler: { [weak self] _ in
                     BuildInfo.setAuthMode(.aal3)
@@ -291,28 +291,31 @@ extension DebugViewController: UITableViewDataSource {
 
         switch indexPath.row {
         case 0:
-            var currentService = "Make Requests From Client App"
+            cell.textLabel?.text = "Application Backend:"
             if BuildInfo.isMockDemoService {
-                currentService = "Mock All Success"
+                cell.detailTextLabel?.text = "Mock All Success"
+            } else {
+                cell.detailTextLabel?.text = "Make Requests From Client App"
             }
-            cell.textLabel?.text = "Application Backend: \(currentService)"
         case 1:
-            var currentEnvironment = "Production"
+            cell.textLabel?.text = "JV Host Environment:"
             if BuildInfo.isQAHost {
-                currentEnvironment = "QA"
+                cell.detailTextLabel?.text = "QA"
+            } else {
+                cell.detailTextLabel?.text = "Production"
             }
-            cell.textLabel?.text = "JV Host Environment: \(currentEnvironment)"
         case 2:
+            cell.textLabel?.text = "Auth mode:"
             switch BuildInfo.currentAuthMode {
             case .aal1:
-                cell.textLabel?.text = "Auth mode: 1 Factor"
+                cell.detailTextLabel?.text = "AAL1: 1 Factor"
             case .aal2:
-                cell.textLabel?.text = "Auth mode: 2 Factor - 30 minute"
+                cell.detailTextLabel?.text = "AAL2: 2 Factor, 30 minute"
             case .aal3:
-                cell.textLabel?.text = "Auth mode: 2 Factor - every time"
+                cell.detailTextLabel?.text = "AAL3: 2 Factor, every time"
             }
         default:
-            cell.textLabel?.text = "Debug test item"
+            break
         }
         return cell
     }
