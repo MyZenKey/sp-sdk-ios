@@ -76,6 +76,7 @@ class LoginViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.brandingDelegate = self
         button.delegate = self
+        button.acrValues = [BuildInfo.currentAuthMode]
         button.accessibilityIdentifier = "ZenKey Button"
         return button
     }()
@@ -134,7 +135,7 @@ class LoginViewController: UIViewController {
     }
 
     func layoutView() {
-        DebugController.addMenu(toViewController: self)
+        DebugViewController.addMenu(toViewController: self)
 
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
