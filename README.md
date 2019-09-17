@@ -423,9 +423,10 @@ NOTICE: © 2019 XCI JV, LLC. ZENKEY IS A TRADEMARK OF XCI JV, LLC. ALL RIGHTS RE
 
 | Date   | Version      | Description |
 | -------- | --------- | ------------------------------------------------------ |
+| 9.17.2019 | 0.9.13 | Updated license with Apache 2.0 text. |
 | 9.9.2019 | 0.9.12 | Added minor edits. |
 | 8.29.2019 | 0.9.11 | Updating verbiage and instructions |
 |8.27.2019 | 0.9.10     | Updated high-level flows; Updated sample code.  |
 |8.20.2019 | 0.9.9     | Added section numbers; Added revision history; Added additional info about Redirect URIs to section 4.0 |
 
-<sub> Last Update: Document Version 0.9.12 - September 9, 2019</sub>
+<sub> Last Update: Document Version 0.9.13 - September 17, 2019</sub>
