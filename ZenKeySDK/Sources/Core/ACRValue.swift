@@ -39,8 +39,14 @@ public enum ACRValue: String {
     /// factors is required through secure authentication protocol(s). Approved cryptographic
     /// techniques are required at AAL2 and above.
     ///
+    /// Authentication of the subscriber SHALL be repeated at least once per 12 hours during an
+    /// extended usage session, regardless of user activity. Reauthentication of the subscriber
+    /// SHALL be repeated following any period of inactivity lasting 30 minutes or longer. The
+    /// session SHALL be terminated (i.e., logged out) when either of these time limits is reached.
+    ///
     /// Service Providers should ask for aal2 or aal3 anytime they want to ensure the user has
     /// provided their (pin | bio).
+
     case aal2
     /// AAL3 provides very high confidence that the claimant controls authenticator(s) bound to the
     /// subscriber’s account. Authentication at AAL3 is based on proof of possession of a key

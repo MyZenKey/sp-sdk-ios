@@ -134,7 +134,7 @@ class LoginViewController: UIViewController {
     }
 
     func layoutView() {
-        DebugController.addMenu(toViewController: self)
+        DebugViewController.addMenu(toViewController: self)
 
         view.backgroundColor = .white
         var constraints: [NSLayoutConstraint] = []
@@ -202,7 +202,9 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController: ZenKeyAuthorizeButtonDelegate {
 
-    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) { }
+    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) {
+        zenKeyButton.acrValues = [BuildInfo.currentAuthMode]
+    }
 
     func buttonDidFinish(_ button: ZenKeyAuthorizeButton, withResult result: AuthorizationResult) {
         switch result {
