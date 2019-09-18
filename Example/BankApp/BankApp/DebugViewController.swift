@@ -152,7 +152,7 @@ private extension DebugViewController {
 
     func makeAuthModePicker() -> UIAlertController {
         let controller = UIAlertController(
-            title: "Set Auth Mode",
+            title: "Set Login Auth Mode",
             message: nil,
             preferredStyle: .alert
         )
@@ -233,7 +233,7 @@ extension DebugViewController: UITableViewDataSource {
                 cell.detailTextLabel?.text = "Production"
             }
         case 2:
-            cell.textLabel?.text = "Auth mode:"
+            cell.textLabel?.text = "Login Auth mode:"
             switch BuildInfo.currentAuthMode {
             case .aal1:
                 cell.detailTextLabel?.text = "1 Factor (aal1)"
