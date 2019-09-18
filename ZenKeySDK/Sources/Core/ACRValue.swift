@@ -22,7 +22,7 @@ import Foundation
 /// Authenticator Assurance Values.
 ///
 /// For more informaiton see the [NIST guidelines](https://pages.nist.gov/800-63-3/sp800-63b.html)
-public enum ACRValue: String, Codable {
+public enum ACRValue: String {
     /// AAL1 provides some assurance that the claimant controls an authenticator bound to the
     /// subscriber’s account. AAL1 requires either single-factor or multi-factor authentication
     /// using a wide range of available authentication technologies. Successful authentication
