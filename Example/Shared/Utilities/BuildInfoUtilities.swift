@@ -93,7 +93,7 @@ struct BuildInfo {
         case .mocked:
             return MockAuthService()
         case .client:
-            return ClientSideServiceAPI()
+            return ClientSideAuthServive()
         case .ube:
             return DemoAuthService()
         }

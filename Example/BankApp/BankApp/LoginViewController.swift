@@ -100,7 +100,7 @@ class LoginViewController: UIViewController {
         return toolbar
     }()
 
-    private let clientSideServiceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
+    private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,7 +112,7 @@ class LoginViewController: UIViewController {
     }
 
     @objc func signInButtonPressed() {
-        clientSideServiceAPI.login(
+        serviceAPI.login(
             withUsername: idTextField.text?.lowercased() ?? "",
             password: passwordTextField.text?.lowercased() ?? "") { [weak self] auth, error in
 
@@ -219,7 +219,7 @@ extension LoginViewController: ZenKeyAuthorizeButtonDelegate {
 
     func authorizeUser(authorizedResponse: AuthorizedResponse) {
         let code = authorizedResponse.code
-        clientSideServiceAPI.login(
+        serviceAPI.login(
             withAuthCode: code,
             redirectURI: authorizedResponse.redirectURI,
             mcc: authorizedResponse.mcc,

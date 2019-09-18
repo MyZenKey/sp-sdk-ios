@@ -167,9 +167,62 @@ protocol ServiceProviderAPIProtocol {
     func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void)
 }
 
+// MARK: - Shared Response Types
+
+struct UserInfoResponse: Codable {
+    let sub: String
+    let name: String?
+    let givenName: String?
+    let familyName: String?
+    let birthdate: String?
+    let email: String?
+    let postalCode: String?
+    let phone: String?
+
+    enum CodingKeys: String, CodingKey {
+        case sub
+        case name
+        case givenName = "given_name"
+        case familyName = "family_name"
+        case birthdate = "birthdate"
+        case email = "email"
+        case postalCode = "postal_code"
+        case phone
+    }
+
+    func toUserInfo(withUsername username: String) -> UserInfo {
+        return UserInfo(
+            username: username,
+            email: email,
+            name: name,
+            givenName: givenName,
+            familyName: familyName,
+            birthdate: birthdate,
+            postalCode: postalCode,
+            phone: phone
+        )
+    }
+}
+
+struct TokenResponse: Codable {
+    let idToken: String
+    let accessToken: String
+    let tokenType: String
+    let expiresIn: Int
+    let refreshToken: String?
+
+    enum CodingKeys: String, CodingKey {
+        case idToken = "id_token"
+        case accessToken = "access_token"
+        case tokenType = "token_type"
+        case expiresIn = "expires_in"
+        case refreshToken = "refresh_token"
+    }
+}
+
+// MARK: - Helpers
 
 extension ServiceProviderAPIProtocol {
-
     func save(transaction: Transaction,
               with idToken: String,
               matchingNonce nonce: String) -> (transaction: Transaction?, error: Error?) {
@@ -197,7 +250,6 @@ extension ServiceProviderAPIProtocol {
 
         return (completedTransaction, nil)
     }
-
 }
 
 extension URLSession {

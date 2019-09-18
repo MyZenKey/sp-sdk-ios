@@ -8,115 +8,7 @@
 
 import Foundation
 
-private struct TokenRequest: Encodable {
-    let grantType = "authorization_code"
-    let code: String
-    let redirectURI: String
-
-    init(clientId: String, code: String, redirectURI: URL) {
-        self.code = code
-        self.redirectURI = redirectURI.absoluteString
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case grantType = "grant_type"
-        case redirectURI = "redirect_uri"
-        case code
-    }
-
-    let encodeValue: (String) -> String? = {
-        return $0.addingPercentEncoding(withAllowedCharacters: .alphanumerics)
-    }
-
-    var urlFormEncodedData: Data {
-        // from MDN: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
-        // > application/x-www-form-urlencoded: the keys and values are encoded in key-value tuples
-        // > separated by '&', with a '=' between the key and the value. Non-alphanumeric characters
-        // > in both keys and values are percent encoded: this is the reason why this type is not
-        // > suitable to use with binary data (use multipart/form-data instead)
-        let query = [
-            CodingKeys.grantType.rawValue: grantType,
-            CodingKeys.redirectURI.rawValue: redirectURI,
-            CodingKeys.code.rawValue: code,
-        ]
-        .reduce([String]()) { acc, next in
-            guard
-                let encodedKey = encodeValue(next.key),
-                let encodedValue = encodeValue(next.value) else {
-                return acc
-            }
-            var acc = acc
-            acc.append("\(encodedKey)=\(encodedValue)")
-            return acc
-        }
-        .joined(separator: "&")
-
-        return query.data(using: .utf8)!
-    }
-}
-
-struct UserInfoResponse: Codable {
-    let sub: String
-    let name: String?
-    let givenName: String?
-    let familyName: String?
-    let birthdate: String?
-    let email: String?
-    let postalCode: String?
-    let phone: String?
-
-    enum CodingKeys: String, CodingKey {
-        case sub
-        case name
-        case givenName = "given_name"
-        case familyName = "family_name"
-        case birthdate = "birthdate"
-        case email = "email"
-        case postalCode = "postal_code"
-        case phone
-    }
-
-    func toUserInfo(withUsername username: String) -> UserInfo {
-        return UserInfo(
-            username: username,
-            email: email,
-            name: name,
-            givenName: givenName,
-            familyName: familyName,
-            birthdate: birthdate,
-            postalCode: postalCode,
-            phone: phone
-        )
-    }
-}
-
-struct TokenResponse: Codable {
-    let idToken: String
-    let accessToken: String
-    let tokenType: String
-    let expiresIn: Int
-    let refreshToken: String?
-
-    enum CodingKeys: String, CodingKey {
-        case idToken = "id_token"
-        case accessToken = "access_token"
-        case tokenType = "token_type"
-        case expiresIn = "expires_in"
-        case refreshToken = "refresh_token"
-    }
-}
-
-private struct DiscoveryResponse: Decodable {
-    let tokenEndpoint: URL
-    let userInfoEndpoint: URL
-
-    enum CodingKeys: String, CodingKey {
-        case tokenEndpoint = "token_endpoint"
-        case userInfoEndpoint = "userinfo_endpoint"
-    }
-}
-
-class ClientSideServiceAPI: ServiceProviderAPIProtocol {
+class ClientSideAuthServive: ServiceProviderAPIProtocol {
 
     private static let clientId: String = {
         guard let clientId = Bundle.main.infoDictionary?["ZenKeyClientId"] as? String else {
@@ -259,7 +151,7 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
     }
 }
 
-private extension ClientSideServiceAPI {
+private extension ClientSideAuthServive {
     func getOIDC(forMCC mcc: String,
                  andMNC mnc: String,
                  handleError: @escaping (Error?) -> Void,
@@ -278,12 +170,12 @@ private extension ClientSideServiceAPI {
                  completion: @escaping (DiscoveryResponse?, Error?) -> Void) {
 
         let key = "\(mcc)\(mnc)"
-        if let config = ClientSideServiceAPI.config[key] {
+        if let config = ClientSideAuthServive.config[key] {
             completion(config, nil)
         } else {
             discovery(mcc: mcc, mnc: mnc) { result, error in
                 if let result = result {
-                    ClientSideServiceAPI.config[key] = result
+                    ClientSideAuthServive.config[key] = result
                 }
                 completion(result, error)
             }
@@ -311,10 +203,10 @@ private extension ClientSideServiceAPI {
 
                     var request = URLRequest(url: oidc.tokenEndpoint)
                     request.httpMethod = "POST"
-                    request.addValue(ClientSideServiceAPI.authHeaderValue, forHTTPHeaderField: "Authorization")
+                    request.addValue(ClientSideAuthServive.authHeaderValue, forHTTPHeaderField: "Authorization")
                     request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
                     let tokenRequest = TokenRequest(
-                        clientId: ClientSideServiceAPI.clientId,
+                        clientId: ClientSideAuthServive.clientId,
                         code: code,
                         redirectURI: redirectURI
                     )
@@ -327,7 +219,7 @@ private extension ClientSideServiceAPI {
 
     func discoveryEndpoint(mcc: String, mnc: String) -> URL {
         let params: [String: String] = [
-            "client_id": ClientSideServiceAPI.clientId,
+            "client_id": ClientSideAuthServive.clientId,
             "mccmnc": "\(mcc)\(mnc)",
         ]
 
@@ -340,5 +232,66 @@ private extension ClientSideServiceAPI {
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         components.queryItems = params.map() { return URLQueryItem(name: $0, value: $1)  }
         return components.url!
+    }
+}
+
+// MARK: - Requests
+
+private struct TokenRequest: Encodable {
+    let grantType = "authorization_code"
+    let code: String
+    let redirectURI: String
+
+    init(clientId: String, code: String, redirectURI: URL) {
+        self.code = code
+        self.redirectURI = redirectURI.absoluteString
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case grantType = "grant_type"
+        case redirectURI = "redirect_uri"
+        case code
+    }
+
+    let encodeValue: (String) -> String? = {
+        return $0.addingPercentEncoding(withAllowedCharacters: .alphanumerics)
+    }
+
+    var urlFormEncodedData: Data {
+        // from MDN: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
+        // > application/x-www-form-urlencoded: the keys and values are encoded in key-value tuples
+        // > separated by '&', with a '=' between the key and the value. Non-alphanumeric characters
+        // > in both keys and values are percent encoded: this is the reason why this type is not
+        // > suitable to use with binary data (use multipart/form-data instead)
+        let query = [
+            CodingKeys.grantType.rawValue: grantType,
+            CodingKeys.redirectURI.rawValue: redirectURI,
+            CodingKeys.code.rawValue: code,
+            ]
+            .reduce([String]()) { acc, next in
+                guard
+                    let encodedKey = encodeValue(next.key),
+                    let encodedValue = encodeValue(next.value) else {
+                        return acc
+                }
+                var acc = acc
+                acc.append("\(encodedKey)=\(encodedValue)")
+                return acc
+            }
+            .joined(separator: "&")
+
+        return query.data(using: .utf8)!
+    }
+}
+
+// MARK: - Responses
+
+private struct DiscoveryResponse: Decodable {
+    let tokenEndpoint: URL
+    let userInfoEndpoint: URL
+
+    enum CodingKeys: String, CodingKey {
+        case tokenEndpoint = "token_endpoint"
+        case userInfoEndpoint = "userinfo_endpoint"
     }
 }
