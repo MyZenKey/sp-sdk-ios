@@ -76,7 +76,6 @@ class LoginViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.brandingDelegate = self
         button.delegate = self
-        button.acrValues = [BuildInfo.currentAuthMode]
         button.accessibilityIdentifier = "ZenKey Button"
         return button
     }()
@@ -203,7 +202,9 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController: ZenKeyAuthorizeButtonDelegate {
 
-    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) { }
+    func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) {
+        zenKeyButton.acrValues = [BuildInfo.currentAuthMode]
+    }
 
     func buttonDidFinish(_ button: ZenKeyAuthorizeButton, withResult result: AuthorizationResult) {
         switch result {
