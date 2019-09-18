@@ -167,6 +167,39 @@ protocol ServiceProviderAPIProtocol {
     func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void)
 }
 
+
+extension ServiceProviderAPIProtocol {
+
+    func save(transaction: Transaction,
+              with idToken: String,
+              matchingNonce nonce: String) -> (transaction: Transaction?, error: Error?) {
+
+        // ensure integrity of request
+        guard let parsed = idToken.simpleDecodeTokenBody() else {
+            return (nil, TransactionError.unableToParseToken)
+        }
+
+        let returnedContext = parsed["context"] as? String
+        let returnedNonce = parsed["nonce"] as? String
+
+        guard returnedContext == transaction.contextString, returnedNonce == nonce else {
+            return (nil, TransactionError.mismatchedTransaction)
+        }
+
+        // Build new timestamped Transaction
+        let completedTransaction = Transaction(time: Date(),
+                                               recipiant: transaction.recipiant,
+                                               amount: transaction.amount)
+
+        var transactions = UserAccountStorage.getTransactionHistory()
+        transactions.append(completedTransaction)
+        UserAccountStorage.setTransactionHistory(transactions)
+
+        return (completedTransaction, nil)
+    }
+
+}
+
 extension URLSession {
     func requestJSON<T: Decodable>(
         request: URLRequest,
@@ -251,3 +284,38 @@ extension URLRequest {
         return curlString
     }
 }
+
+private extension String {
+    /// you should use a tool to support token decoding. this just hacks the base64url encoded
+    /// body back to base64, then to json so we don't need to take on dependencies.
+    func simpleDecodeTokenBody() -> [String: Any]? {
+        let bodyBase64URLString = self.split(separator: ".")[1]
+        var bodyBase64String = bodyBase64URLString
+            .replacingOccurrences(of: "-", with: "+")
+            .replacingOccurrences(of: "_", with: "/")
+
+        let length = Double(bodyBase64String.lengthOfBytes(using: .utf8))
+        let requiredLength = 4 * ceil(length / 4.0)
+        let paddingLength = requiredLength - length
+        if paddingLength > 0 {
+            let padding = "".padding(toLength: Int(paddingLength), withPad: "=", startingAt: 0)
+            bodyBase64String = bodyBase64String + padding
+        }
+        guard let data = Data(base64Encoded: bodyBase64String, options: .ignoreUnknownCharacters) else {
+            Logger.log(.info, "Warning: unable to parse JWT")
+            return nil
+        }
+
+        do {
+            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                return nil
+            }
+
+            return json
+        } catch {
+            Logger.log(.info, "Warning: unable to parse JWT")
+            return nil
+        }
+    }
+}
+

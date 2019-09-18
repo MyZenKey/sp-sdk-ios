@@ -10,7 +10,7 @@ import Foundation
 
 /// This service uses a mix of Joint Venture endpoints for performing real token / user info
 /// exchanges and mocked responses to supporte demo functionality.
-class DemoAuthService: ServiceProviderAPIProtocol {
+class DemoAuthService {
     enum Env {
         case dev
         case qa
@@ -37,7 +37,14 @@ class DemoAuthService: ServiceProviderAPIProtocol {
 
     fileprivate static let jsonEncoder = JSONEncoder()
 
-    private var env: Env = .qa
+    private lazy var env: Env = {
+        // toggle qa / prod requires restart so we'll evaluate this once.
+        if BuildInfo.isQAHost {
+            return .qa
+        } else {
+            return .prod
+        }
+    }()
 
     private let session = URLSession(
         configuration: .ephemeral,
@@ -45,12 +52,25 @@ class DemoAuthService: ServiceProviderAPIProtocol {
         delegateQueue: Foundation.OperationQueue.main
     )
 
-    func login(withUsername username: String,
-               password: String,
-               completion: @escaping (AuthPayload?, Error?) -> Void) {
+    func makeRequest(forPath path: String) -> URLRequest {
+        guard var components = URLComponents(url: env.host, resolvingAgainstBaseURL: false) else {
+            fatalError("invalid url \(env.host)")
+        }
 
+        components.path = path
+        guard let url = components.url else {
+            fatalError("invalid components \(components)")
+        }
+
+        var request = URLRequest(url: url)
+
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        return request
     }
+}
 
+extension DemoAuthService: ServiceProviderAPIProtocol {
     func login(withAuthCode code: String,
                redirectURI: URL,
                mcc: String,
@@ -60,8 +80,16 @@ class DemoAuthService: ServiceProviderAPIProtocol {
         requestToken(withAuthCode: code,
                      redirectURI: redirectURI,
                      mcc: mcc,
-                     mnc: mnc) { result, error in
+                     mnc: mnc) { tokenResponse, error in
 
+                        guard let tokenResponse = tokenResponse else {
+                            completion(nil, error)
+                            return
+                        }
+
+                        UserAccountStorage.setUser(withAccessToken: tokenResponse.accessToken)
+                        UserAccountStorage.setMCCMNC(mcc: mcc, mnc: mnc)
+                        completion(AuthPayload(token: "my_pretend_auth_token"), nil)
         }
     }
 
@@ -70,18 +98,10 @@ class DemoAuthService: ServiceProviderAPIProtocol {
                          mcc: String,
                          mnc: String,
                          completion: @escaping (AuthPayload?, Error?) -> Void) {
-
-        requestToken(withAuthCode: code,
-                     redirectURI: redirectURI,
-                     mcc: mcc,
-                     mnc: mnc) { result, error in
-
-
-        }
+        login(withAuthCode: code, redirectURI: redirectURI, mcc: mcc, mnc: mnc, completion: completion)
     }
 
     func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void) {
-
         guard
             let token = UserAccountStorage.accessToken,
             let mccmnc = UserAccountStorage.mccmnc else {
@@ -105,21 +125,18 @@ class DemoAuthService: ServiceProviderAPIProtocol {
 
         request.httpMethod = "GET"
         request.httpBody = body
-        session.requestJSON(request: request) { (result: UserInfoResponse?, error: Error?) in
-            guard let result = result, error == nil else {
-                completion(nil, error)
-                return
-            }
-
+        session.requestJSON(request: request) { (userInfoResponse: UserInfoResponse?, error: Error?) in
+            let userInfo = userInfoResponse?
+                .toUserInfo(withUsername: UserAccountStorage.userName ?? "zenkey_user")
+            completion(userInfo, error)
         }
     }
 
-    func approveTransfer(withAuthCode code: String,
+    func requestTransfer(withAuthCode code: String,
                          redirectURI: URL,
-                         userContext: String,
+                         transaction: Transaction,
                          nonce: String,
                          completion: @escaping (Transaction?, Error?) -> Void) {
-
         guard
             let mccmnc = UserAccountStorage.mccmnc else {
                 completion(nil, ServiceError.invalidToken)
@@ -129,8 +146,37 @@ class DemoAuthService: ServiceProviderAPIProtocol {
         requestToken(withAuthCode: code,
                      redirectURI: redirectURI,
                      mcc: mccmnc.mcc,
-                     mnc: mccmnc.mnc) { result, error in
+                     mnc: mccmnc.mnc) { [weak self] tokenResponse, error in
 
+                        guard
+                            let tokenResponse = tokenResponse,
+                            let saveResult = self?.save(transaction: transaction, with: tokenResponse.idToken, matchingNonce: nonce) else {
+                            completion(nil, error)
+                            return
+                        }
+                        completion(saveResult.transaction, saveResult.error)
+        }
+    }
+
+    // MARK: Mock-ish implementations
+
+    func login(withUsername username: String,
+               password: String,
+               completion: @escaping (AuthPayload?, Error?) -> Void) {
+        guard username == "jane", password == "12345" else {
+            completion(nil, LoginError.invalidCredentials)
+            return
+        }
+
+        UserAccountStorage.userName = UserAccountStorage.mockUserName
+        DispatchQueue.main.async {
+            completion(AuthPayload(token: "my_pretend_auth_token"), nil)
+        }
+    }
+
+    func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void) {
+        DispatchQueue.main.async {
+            completion(UserAccountStorage.getTransactionHistory().reversed(), nil)
         }
     }
 
@@ -143,6 +189,7 @@ class DemoAuthService: ServiceProviderAPIProtocol {
 }
 
 private extension DemoAuthService {
+
     func requestToken(withAuthCode code: String,
                       redirectURI: URL,
                       mcc: String,
@@ -176,27 +223,9 @@ private extension DemoAuthService {
             completion(result, error)
         }
     }
-
-    func makeRequest(forPath path: String) -> URLRequest {
-        guard var components = URLComponents(url: env.host, resolvingAgainstBaseURL: false) else {
-            fatalError("invalid url \(env.host)")
-        }
-
-        components.path = path
-
-        guard let url = components.url else {
-            fatalError("invalid components \(components)")
-        }
-
-        var request = URLRequest(url: url)
-
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        return request
-    }
 }
 
-// MARK: - Token
+// MARK: - Requests
 
 private struct TokenRequest: Encodable {
     let code: String
@@ -219,15 +248,6 @@ private struct TokenRequest: Encodable {
     }
 }
 
-private struct TokenResponse: Decodable {
-    var accessToken: String
-    enum CodingKeys: String, CodingKey {
-        case accessToken = "access_token"
-    }
-}
-
-// MARK: - User Info
-
 private struct UserInfoRequest: Encodable {
     let token: String
     let clientId: String
@@ -245,10 +265,3 @@ private struct UserInfoRequest: Encodable {
         case token
     }
 }
-
-private struct UserInfoResponse: Decodable {
-
-}
-
-// MARK: -
-

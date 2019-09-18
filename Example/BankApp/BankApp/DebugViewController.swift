@@ -92,20 +92,24 @@ private extension DebugViewController {
             title: "Mock All Success",
             style: .destructive,
             handler: { _ in
-                if BuildInfo.isMockDemoService == false {
-                    BuildInfo.toggleMockDemoService()
-                    fatalError("restarting app")
-                }
+                BuildInfo.setServiceProviderHost(.mocked)
+                fatalError("restarting app")
         }
         ))
         controller.addAction(UIAlertAction(
             title: "Make Requests From Client App",
             style: .destructive,
             handler: { _ in
-                if BuildInfo.isMockDemoService {
-                    BuildInfo.toggleMockDemoService()
-                    fatalError("restarting app")
-                }
+                BuildInfo.setServiceProviderHost(.client)
+                fatalError("restarting app")
+        }
+        ))
+        controller.addAction(UIAlertAction(
+            title: "Use UBE",
+            style: .destructive,
+            handler: { _ in
+                BuildInfo.setServiceProviderHost(.ube)
+                fatalError("restarting app")
         }
         ))
         controller.addAction(UIAlertAction(
@@ -118,8 +122,8 @@ private extension DebugViewController {
 
     func makeEnvironmentPicker() -> UIAlertController {
         let controller = UIAlertController(
-            title: "Set JV Host Environment",
-            message: "Requires reset",
+            title: "Set Host Environment",
+            message: "Use QA or Production services for JV and UBE.\nRequires reset",
             preferredStyle: .alert
         )
         controller.addAction(UIAlertAction(
@@ -220,11 +224,7 @@ extension DebugViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0:
             cell.textLabel?.text = "Application Backend:"
-            if BuildInfo.isMockDemoService {
-                cell.detailTextLabel?.text = "Mock All Success"
-            } else {
-                cell.detailTextLabel?.text = "Make Requests From Client App"
-            }
+            cell.detailTextLabel?.text = BuildInfo.serviceProviderHost.behaviorDescription
         case 1:
             cell.textLabel?.text = "JV Host Environment:"
             if BuildInfo.isQAHost {
@@ -246,5 +246,18 @@ extension DebugViewController: UITableViewDataSource {
             break
         }
         return cell
+    }
+}
+
+extension BuildInfo.ServiceProviderHost {
+    var behaviorDescription: String {
+        switch self {
+        case .mocked:
+            return "Mock All Success"
+        case .client:
+            return "Make Requests From Client App"
+        case .ube:
+            return "Use the Universal Backend"
+        }
     }
 }

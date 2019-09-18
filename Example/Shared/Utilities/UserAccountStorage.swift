@@ -79,3 +79,25 @@ struct UserAccountStorage {
         UserDefaults.standard.removeObject(forKey: historyKey)
     }
 }
+
+// MARK: - Account Storage Mock Helpers
+
+extension UserAccountStorage {
+    
+    static let mockUserName = "jane"
+
+    static let mockUserInfo = UserInfo(
+        username: UserAccountStorage.mockUserName,
+        email: "janedoe@rightpoint.com",
+        name: "Jane",
+        givenName: "Jane",
+        familyName: "Doe",
+        birthdate: "1/1/1000",
+        postalCode: "00000",
+        phone: "(212) 555-1234"
+    )
+
+    static var isMockUser: Bool {
+        return UserAccountStorage.userName == UserAccountStorage.mockUserName
+    }
+}

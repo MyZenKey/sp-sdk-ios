@@ -11,8 +11,12 @@ import ZenKeySDK
 
 struct BuildInfo {
 
+    enum ServiceProviderHost: Int {
+        case mocked, client, ube
+    }
+
     private static let hostToggleKey = "qaHost"
-    private static let mockDemoServiceKey = "bankAppMockServiceKey"
+    private static let serviceProviderHostKey = "serviceProviderHost"
     private static let authModeKey = "authModeKey"
 
     static var isQAHost: Bool {
@@ -27,16 +31,16 @@ struct BuildInfo {
         UserDefaults.standard.set(true, forKey: hostToggleKey)
     }
 
-    static var isMockDemoService: Bool {
-        return UserDefaults.standard.value(forKey: mockDemoServiceKey) != nil
+    static var serviceProviderHost: ServiceProviderHost {
+        let hostValue = UserDefaults.standard.integer(forKey: serviceProviderHostKey)
+        guard let host =  ServiceProviderHost(rawValue: hostValue) else {
+            return .mocked
+        }
+        return host
     }
 
-    static func toggleMockDemoService() {
-        guard !isMockDemoService else  {
-            UserDefaults.standard.set(nil, forKey: mockDemoServiceKey)
-            return
-        }
-        UserDefaults.standard.set(true, forKey: mockDemoServiceKey)
+    static func setServiceProviderHost(_ host: ServiceProviderHost) {
+        UserDefaults.standard.set(host.rawValue, forKey: serviceProviderHostKey)
     }
 
     static var currentAuthMode: ACRValue {
@@ -71,7 +75,8 @@ struct BuildInfo {
 
         let illustrationText = "For illustration purposes only"
         let serverText: String? = isQAHost ? "Connected to QA Server" : nil
-        let demoAppServiceText: String? = isMockDemoService ? "Mocking Demo App Service" : nil
+        let showHostString = serviceProviderHost != .ube
+        let demoAppServiceText: String? = showHostString ? "Demo App Service \(serviceProviderHost)" : nil
         label.text = [illustrationText, serverText, demoAppServiceText]
             .compactMap() { $0 }
             .joined(separator: "\n")
@@ -84,10 +89,13 @@ struct BuildInfo {
     }
 
     static func serviceProviderAPI() -> ServiceProviderAPIProtocol {
-        if isMockDemoService {
+        switch serviceProviderHost {
+        case .mocked:
             return MockAuthService()
-        } else {
+        case .client:
             return ClientSideServiceAPI()
+        case .ube:
+            return DemoAuthService()
         }
     }
 }

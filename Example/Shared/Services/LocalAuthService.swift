@@ -55,7 +55,7 @@ private struct TokenRequest: Encodable {
     }
 }
 
-private struct UserInfoResponse: Codable {
+struct UserInfoResponse: Codable {
     let sub: String
     let name: String?
     let givenName: String?
@@ -76,7 +76,7 @@ private struct UserInfoResponse: Codable {
         case phone
     }
 
-    fileprivate func toUserInfo(withUsername username: String) -> UserInfo {
+    func toUserInfo(withUsername username: String) -> UserInfo {
         return UserInfo(
             username: username,
             email: email,
@@ -90,7 +90,7 @@ private struct UserInfoResponse: Codable {
     }
 }
 
-private struct TokenResponse: Codable {
+struct TokenResponse: Codable {
     let idToken: String
     let accessToken: String
     let tokenType: String
@@ -174,7 +174,7 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
             return
         }
 
-        UserAccountStorage.userName = ClientSideServiceAPI.mockUserName
+        UserAccountStorage.userName = UserAccountStorage.mockUserName
         DispatchQueue.main.async {
             completion(AuthPayload(token: "my_pretend_auth_token"), nil)
         }
@@ -192,8 +192,8 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
 
     func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void) {
 
-        guard !isMockUser else {
-            completion(ClientSideServiceAPI.mockUserInfo, nil)
+        guard !UserAccountStorage.isMockUser else {
+            completion(UserAccountStorage.mockUserInfo, nil)
             return
         }
 
@@ -232,37 +232,18 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
                 return
         }
 
-        requestToken(forMCC: mccmnc.mcc, andMNC: mccmnc.mnc, redirectURI: redirectURI, authorizationCode: code) { tokenResponse, error in
-            guard let tokenResponse = tokenResponse else {
-                completion(nil, error)
-                return
-            }
+        requestToken(forMCC: mccmnc.mcc,
+                     andMNC: mccmnc.mnc,
+                     redirectURI: redirectURI,
+                     authorizationCode: code) { [weak self] tokenResponse, error in
 
-            // ensure integrity of request
-            let idToken = tokenResponse.idToken
-            guard let parsed = idToken.simpleDecodeTokenBody() else {
-                completion(nil, TransactionError.unableToParseToken)
-                return
-            }
-
-            let returnedContext = parsed["context"] as? String
-            let returnedNonce = parsed["nonce"] as? String
-
-            guard returnedContext == transaction.contextString, returnedNonce == nonce else {
-                completion(nil, TransactionError.mismatchedTransaction)
-                return
-            }
-
-            // Build new timestamped Transaction
-            let completedTransaction = Transaction(time: Date(),
-                                                   recipiant: transaction.recipiant,
-                                                   amount: transaction.amount)
-
-            var transactions = UserAccountStorage.getTransactionHistory()
-            transactions.append(completedTransaction)
-            UserAccountStorage.setTransactionHistory(transactions)
-
-            completion(completedTransaction, nil)
+                        guard
+                            let tokenResponse = tokenResponse,
+                            let saveResult = self?.save(transaction: transaction, with: tokenResponse.idToken, matchingNonce: nonce) else {
+                                completion(nil, error)
+                                return
+                        }
+                        completion(saveResult.transaction, saveResult.error)
         }
     }
 
@@ -279,25 +260,6 @@ class ClientSideServiceAPI: ServiceProviderAPIProtocol {
 }
 
 private extension ClientSideServiceAPI {
-
-    static let mockUserName = "jane"
-
-    static let mockUserInfo = UserInfo(
-        username: ClientSideServiceAPI.mockUserName,
-        email: "janedoe@rightpoint.com",
-        name: "Jane",
-        givenName: "Jane",
-        familyName: "Doe",
-        birthdate: "1/1/1000",
-        postalCode: "00000",
-        phone: "(212) 555-1234"
-    )
-
-
-    var isMockUser: Bool {
-        return UserAccountStorage.userName == ClientSideServiceAPI.mockUserName
-    }
-
     func getOIDC(forMCC mcc: String,
                  andMNC mnc: String,
                  handleError: @escaping (Error?) -> Void,
@@ -368,43 +330,15 @@ private extension ClientSideServiceAPI {
             "client_id": ClientSideServiceAPI.clientId,
             "mccmnc": "\(mcc)\(mnc)",
         ]
-        let url = URL(string: "https://discoveryissuer.myzenkey.com/.well-known/openid_configuration")!
+
+        let url: URL
+        if BuildInfo.isQAHost {
+            url = URL(string: "https://discoveryissuer-qa.myzenkey.com/.well-known/openid_configuration")!
+        } else {
+            url = URL(string: "https://discoveryissuer.myzenkey.com/.well-known/openid_configuration")!
+        }
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         components.queryItems = params.map() { return URLQueryItem(name: $0, value: $1)  }
         return components.url!
-    }
-}
-
-extension String {
-    /// you should use a tool to support token decoding. this just hacks the base64url encoded
-    /// body back to base64, then to json so we don't need to take on dependencies.
-    func simpleDecodeTokenBody() -> [String: Any]? {
-        let bodyBase64URLString = self.split(separator: ".")[1]
-        var bodyBase64String = bodyBase64URLString
-                .replacingOccurrences(of: "-", with: "+")
-                .replacingOccurrences(of: "_", with: "/")
-
-        let length = Double(bodyBase64String.lengthOfBytes(using: .utf8))
-        let requiredLength = 4 * ceil(length / 4.0)
-        let paddingLength = requiredLength - length
-        if paddingLength > 0 {
-            let padding = "".padding(toLength: Int(paddingLength), withPad: "=", startingAt: 0)
-            bodyBase64String = bodyBase64String + padding
-        }
-        guard let data = Data(base64Encoded: bodyBase64String, options: .ignoreUnknownCharacters) else {
-            Logger.log(.info, "Warning: unable to parse JWT")
-            return nil
-        }
-
-        do {
-            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                return nil
-            }
-
-            return json
-        } catch {
-            Logger.log(.info, "Warning: unable to parse JWT")
-            return nil
-        }
     }
 }
