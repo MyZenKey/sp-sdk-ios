@@ -41,7 +41,7 @@ class DebugViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Debug Menu"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(hide))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(hide))
         // Table
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
