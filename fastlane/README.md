@@ -31,6 +31,11 @@ Builds and submits a Develop release to Hockey
 fastlane ios sprint
 ```
 Builds and submits a Sprint release to Hockey
+### ios bankapp_roundtrip
+```
+fastlane ios bankapp_roundtrip
+```
+Archives BankApp for submission to Browserstack as part of round trip UI testing with the CCID app.
 ### ios generate_docs
 ```
 fastlane ios generate_docs
