@@ -1,5 +1,5 @@
 //
-//  LocalAuthService.swift
+//  ClientSideService.swift
 //  BankApp
 //
 //  Created by Adam Tierney on 7/31/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ClientSideAuthService: ServiceProviderAPIProtocol {
+class ClientSideService: ServiceProviderAPIProtocol {
 
     private static let clientId: String = {
         guard let clientId = Bundle.main.infoDictionary?["ZenKeyClientId"] as? String else {
@@ -151,7 +151,7 @@ class ClientSideAuthService: ServiceProviderAPIProtocol {
     }
 }
 
-private extension ClientSideAuthService {
+private extension ClientSideService {
     func getOIDC(forMCC mcc: String,
                  andMNC mnc: String,
                  handleError: @escaping (Error?) -> Void,
@@ -170,12 +170,12 @@ private extension ClientSideAuthService {
                  completion: @escaping (DiscoveryResponse?, Error?) -> Void) {
 
         let key = "\(mcc)\(mnc)"
-        if let config = ClientSideAuthService.config[key] {
+        if let config = ClientSideService.config[key] {
             completion(config, nil)
         } else {
             discovery(mcc: mcc, mnc: mnc) { result, error in
                 if let result = result {
-                    ClientSideAuthService.config[key] = result
+                    ClientSideService.config[key] = result
                 }
                 completion(result, error)
             }
@@ -203,10 +203,10 @@ private extension ClientSideAuthService {
 
                     var request = URLRequest(url: oidc.tokenEndpoint)
                     request.httpMethod = "POST"
-                    request.addValue(ClientSideAuthService.authHeaderValue, forHTTPHeaderField: "Authorization")
+                    request.addValue(ClientSideService.authHeaderValue, forHTTPHeaderField: "Authorization")
                     request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
                     let tokenRequest = TokenRequest(
-                        clientId: ClientSideAuthService.clientId,
+                        clientId: ClientSideService.clientId,
                         code: code,
                         redirectURI: redirectURI
                     )
@@ -219,7 +219,7 @@ private extension ClientSideAuthService {
 
     func discoveryEndpoint(mcc: String, mnc: String) -> URL {
         let params: [String: String] = [
-            "client_id": ClientSideAuthService.clientId,
+            "client_id": ClientSideService.clientId,
             "mccmnc": "\(mcc)\(mnc)",
         ]
 
