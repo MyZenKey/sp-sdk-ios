@@ -95,7 +95,7 @@ struct BuildInfo {
         case .client:
             return ClientSideAuthService()
         case .ube:
-            return DemoAuthService()
+            return UniversalBackendService()
         }
     }
 }

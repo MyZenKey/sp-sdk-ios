@@ -1,5 +1,5 @@
 //
-//  DemoAuthService.swift
+//  UniversalBackendService.swift
 //  BankApp
 //
 //  Created by Adam Tierney on 9/11/19.
@@ -10,7 +10,7 @@ import Foundation
 
 /// This service uses a mix of Joint Venture endpoints for performing real token / user info
 /// exchanges and mocked responses to support demo functionality.
-class DemoAuthService {
+class UniversalBackendService {
     enum Env {
         case dev
         case qa
@@ -70,7 +70,7 @@ class DemoAuthService {
     }
 }
 
-extension DemoAuthService: ServiceProviderAPIProtocol {
+extension UniversalBackendService: ServiceProviderAPIProtocol {
     func login(withAuthCode code: String,
                redirectURI: URL,
                mcc: String,
@@ -116,13 +116,13 @@ extension DemoAuthService: ServiceProviderAPIProtocol {
 
         var request = makeRequest(forPath: "/oauth/userinfo")
         let requestBody = UserInfoRequest(
-            clientId: DemoAuthService.clientId,
+            clientId: UniversalBackendService.clientId,
             mcc: mccmnc.mcc,
             mnc: mccmnc.mnc,
             token: token
         )
 
-        guard let body = try? DemoAuthService.jsonEncoder.encode(requestBody) else {
+        guard let body = try? UniversalBackendService.jsonEncoder.encode(requestBody) else {
             Logger.log(.error, "unable to encode body from: \(requestBody)")
             completion(nil, ServiceError.unknownError)
             return
@@ -193,7 +193,7 @@ extension DemoAuthService: ServiceProviderAPIProtocol {
     }
 }
 
-private extension DemoAuthService {
+private extension UniversalBackendService {
 
     func requestToken(withAuthCode code: String,
                       redirectURI: URL,
@@ -203,13 +203,13 @@ private extension DemoAuthService {
 
         var request = makeRequest(forPath: "/oauth/usertoken")
         let requestBody = TokenRequest(
-            clientId: DemoAuthService.clientId,
+            clientId: UniversalBackendService.clientId,
             code: code,
             redirectURI: redirectURI,
             mcc: mcc,
             mnc: mnc
         )
-        guard let body = try? DemoAuthService.jsonEncoder.encode(requestBody) else {
+        guard let body = try? UniversalBackendService.jsonEncoder.encode(requestBody) else {
             Logger.log(.error, "unable to encode body from: \(requestBody)")
             completion(nil, ServiceError.unknownError)
             return
