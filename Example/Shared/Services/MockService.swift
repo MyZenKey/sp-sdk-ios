@@ -1,5 +1,5 @@
 //
-//  MockAuthService.swift
+//  MockService.swift
 //  BankApp
 //
 //  Created by Adam Tierney on 8/27/19.
@@ -9,7 +9,7 @@
 import UIKit
 
 /// A mock implementation of the service provider API protocol
-class MockAuthService: NSObject, ServiceProviderAPIProtocol {
+class MockService: NSObject, ServiceProviderAPIProtocol {
     let session = URLSession(configuration: .ephemeral, delegate: nil, delegateQueue: Foundation.OperationQueue.main)
     var dataTask: URLSessionDataTask?
 

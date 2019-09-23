@@ -21,7 +21,7 @@
 		8A2CE1D42329764D001EADF8 /* UniversalBackendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2CE1D32329764D001EADF8 /* UniversalBackendService.swift */; };
 		8A2CE1D6232989A7001EADF8 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2CE1D5232989A7001EADF8 /* Logger.swift */; };
 		8A855D152315890F0012AF60 /* LocalAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855D122315890D0012AF60 /* LocalAuthService.swift */; };
-		8A855D162315890F0012AF60 /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855D132315890E0012AF60 /* MockAuthService.swift */; };
+		8A855D162315890F0012AF60 /* MockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855D132315890E0012AF60 /* MockService.swift */; };
 		8A855D172315890F0012AF60 /* ServiceProviderAPIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855D142315890E0012AF60 /* ServiceProviderAPIProtocol.swift */; };
 		8A855D1C23158E2D0012AF60 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855D1A23158E2B0012AF60 /* AccountManager.swift */; };
 		8A855D1D23158E2D0012AF60 /* UserAccountStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855D1B23158E2C0012AF60 /* UserAccountStorage.swift */; };
@@ -90,7 +90,7 @@
 		8A2CE1D32329764D001EADF8 /* UniversalBackendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UniversalBackendService.swift; path = ../../Shared/Services/UniversalBackendService.swift; sourceTree = "<group>"; };
 		8A2CE1D5232989A7001EADF8 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = ../../Shared/Utilities/Logger.swift; sourceTree = "<group>"; };
 		8A855D122315890D0012AF60 /* LocalAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocalAuthService.swift; path = ../../Shared/Services/LocalAuthService.swift; sourceTree = "<group>"; };
-		8A855D132315890E0012AF60 /* MockAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockAuthService.swift; path = ../../Shared/Services/MockAuthService.swift; sourceTree = "<group>"; };
+		8A855D132315890E0012AF60 /* MockService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockService.swift; path = ../../Shared/Services/MockService.swift; sourceTree = "<group>"; };
 		8A855D142315890E0012AF60 /* ServiceProviderAPIProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServiceProviderAPIProtocol.swift; path = ../../Shared/Services/ServiceProviderAPIProtocol.swift; sourceTree = "<group>"; };
 		8A855D1A23158E2B0012AF60 /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountManager.swift; path = ../../Shared/Utilities/AccountManager.swift; sourceTree = "<group>"; };
 		8A855D1B23158E2C0012AF60 /* UserAccountStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserAccountStorage.swift; path = ../../Shared/Utilities/UserAccountStorage.swift; sourceTree = "<group>"; };
@@ -243,7 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				8A855D122315890D0012AF60 /* LocalAuthService.swift */,
-				8A855D132315890E0012AF60 /* MockAuthService.swift */,
+				8A855D132315890E0012AF60 /* MockService.swift */,
 				8A2CE1D32329764D001EADF8 /* UniversalBackendService.swift */,
 				8A855D142315890E0012AF60 /* ServiceProviderAPIProtocol.swift */,
 			);
@@ -469,7 +469,7 @@
 				8C6E736E212338F4003B15A4 /* DotView.swift in Sources */,
 				63DE42F823299AC600D727AE /* HistoryViewController.swift in Sources */,
 				8AB02C1322D7E0FA00B1673C /* BankAppViewController.swift in Sources */,
-				8A855D162315890F0012AF60 /* MockAuthService.swift in Sources */,
+				8A855D162315890F0012AF60 /* MockService.swift in Sources */,
 				8A855D2223158E870012AF60 /* DemoAppAppDelegate.swift in Sources */,
 				8AC710CF2321CD01000D3EC8 /* TransfersViewController.swift in Sources */,
 				8C87BE1021266A8B00B24707 /* AppTheme.swift in Sources */,

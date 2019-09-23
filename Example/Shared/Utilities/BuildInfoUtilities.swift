@@ -91,7 +91,7 @@ struct BuildInfo {
     static func serviceProviderAPI() -> ServiceProviderAPIProtocol {
         switch serviceProviderHost {
         case .mocked:
-            return MockAuthService()
+            return MockService()
         case .client:
             return ClientSideAuthService()
         case .ube:
