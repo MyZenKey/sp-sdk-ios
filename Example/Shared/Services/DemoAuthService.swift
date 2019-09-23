@@ -102,6 +102,11 @@ extension DemoAuthService: ServiceProviderAPIProtocol {
     }
 
     func getUserInfo(completion: @escaping (UserInfo?, Error?) -> Void) {
+        guard !UserAccountStorage.isMockUser else {
+            completion(UserAccountStorage.mockUserInfo, nil)
+            return
+        }
+
         guard
             let token = UserAccountStorage.accessToken,
             let mccmnc = UserAccountStorage.mccmnc else {
@@ -123,7 +128,7 @@ extension DemoAuthService: ServiceProviderAPIProtocol {
             return
         }
 
-        request.httpMethod = "GET"
+        request.httpMethod = "POST"
         request.httpBody = body
         session.requestJSON(request: request) { (userInfoResponse: UserInfoResponse?, error: Error?) in
             let userInfo = userInfoResponse?
@@ -235,7 +240,7 @@ private struct TokenRequest: Encodable {
 
     init(clientId: String, code: String, redirectURI: URL, mcc: String, mnc: String) {
         self.clientId = clientId
-        self.code = "Bearer \(code)"
+        self.code = code
         self.redirectURI = redirectURI.absoluteString
         self.mccmnc = "\(mcc)\(mnc)"
     }
