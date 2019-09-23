@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ClientSideAuthServive: ServiceProviderAPIProtocol {
+class ClientSideAuthService: ServiceProviderAPIProtocol {
 
     private static let clientId: String = {
         guard let clientId = Bundle.main.infoDictionary?["ZenKeyClientId"] as? String else {
@@ -151,7 +151,7 @@ class ClientSideAuthServive: ServiceProviderAPIProtocol {
     }
 }
 
-private extension ClientSideAuthServive {
+private extension ClientSideAuthService {
     func getOIDC(forMCC mcc: String,
                  andMNC mnc: String,
                  handleError: @escaping (Error?) -> Void,
@@ -170,12 +170,12 @@ private extension ClientSideAuthServive {
                  completion: @escaping (DiscoveryResponse?, Error?) -> Void) {
 
         let key = "\(mcc)\(mnc)"
-        if let config = ClientSideAuthServive.config[key] {
+        if let config = ClientSideAuthService.config[key] {
             completion(config, nil)
         } else {
             discovery(mcc: mcc, mnc: mnc) { result, error in
                 if let result = result {
-                    ClientSideAuthServive.config[key] = result
+                    ClientSideAuthService.config[key] = result
                 }
                 completion(result, error)
             }
@@ -203,10 +203,10 @@ private extension ClientSideAuthServive {
 
                     var request = URLRequest(url: oidc.tokenEndpoint)
                     request.httpMethod = "POST"
-                    request.addValue(ClientSideAuthServive.authHeaderValue, forHTTPHeaderField: "Authorization")
+                    request.addValue(ClientSideAuthService.authHeaderValue, forHTTPHeaderField: "Authorization")
                     request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
                     let tokenRequest = TokenRequest(
-                        clientId: ClientSideAuthServive.clientId,
+                        clientId: ClientSideAuthService.clientId,
                         code: code,
                         redirectURI: redirectURI
                     )
@@ -219,7 +219,7 @@ private extension ClientSideAuthServive {
 
     func discoveryEndpoint(mcc: String, mnc: String) -> URL {
         let params: [String: String] = [
-            "client_id": ClientSideAuthServive.clientId,
+            "client_id": ClientSideAuthService.clientId,
             "mccmnc": "\(mcc)\(mnc)",
         ]
 

@@ -9,7 +9,7 @@
 import Foundation
 
 /// This service uses a mix of Joint Venture endpoints for performing real token / user info
-/// exchanges and mocked responses to supporte demo functionality.
+/// exchanges and mocked responses to support demo functionality.
 class DemoAuthService {
     enum Env {
         case dev
