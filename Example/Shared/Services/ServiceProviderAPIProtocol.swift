@@ -327,7 +327,12 @@ extension URLRequest {
             curlString += "-H '\(key): \(value)' \\\n"
         }
 
-        if let httpBody = httpBody, let bodyString = String(data: httpBody, encoding: .utf8) {
+        if
+            let httpBody = httpBody,
+            var bodyString = String(data: httpBody, encoding: .utf8) {
+            // escape quotes:
+            bodyString = bodyString.replacingOccurrences(of: "\"", with: "\\\"")
+
             curlString += "-d \"\(bodyString)\" \\\n"
         }
 
