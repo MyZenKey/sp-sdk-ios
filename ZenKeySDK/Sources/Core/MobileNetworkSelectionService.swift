@@ -166,7 +166,7 @@ private extension MobileNetworkSelectionService {
         let loginHintToken: String? = response[Keys.loginHintToken.rawValue]
 
         switch validatedSIMInfoResult {
-        case .value(let simInfo):
+        case .success(let simInfo):
             Log.log(.info, "Resolving URL: \(url) with sim info: \(simInfo)")
             dismissUIAndConclude(result: .networkInfo(
                 MobileNetworkSelectionResponse(
@@ -175,9 +175,9 @@ private extension MobileNetworkSelectionService {
                 )
             ))
 
-        case .error(let error):
-            Log.log(.error, "Resolving URL: \(url) with error: \(error)")
-            dismissUIAndConclude(result: .error(error))
+        case .failure(let failure):
+            Log.log(.error, "Resolving URL: \(url) with error: \(failure)")
+            dismissUIAndConclude(result: .error(failure))
         }
     }
 
@@ -237,13 +237,13 @@ extension MobileNetworkSelectionService.Request {
 
 // MARK: - Error Mapping
 
-private extension Result where E == URLResponseError {
-    func promoteResult() -> Result<T, MobileNetworkSelectionError> {
+private extension Result where Failure == URLResponseError {
+    func promoteResult() -> Result<Success, MobileNetworkSelectionError> {
         switch self {
-        case .value(let value):
-            return .value(value)
-        case .error(let error):
-            return .error(.urlResponseError(error))
+        case .success(let success):
+            return .success(success)
+        case .failure(let failure):
+            return .failure(.urlResponseError(failure))
         }
     }
 }

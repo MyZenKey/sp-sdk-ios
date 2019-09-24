@@ -52,14 +52,14 @@ class MockNetworkService: NetworkServiceProtocol {
                         with: decoder,
                         fromData: data,
                         request: request,
-                        error: nil
+                        failure: nil
                 )
 
                 completion(parsed)
             }
 
             if let mockError = mockError {
-                completion(.error(mockError))
+                completion(.failure(mockError))
             }
         }
     }

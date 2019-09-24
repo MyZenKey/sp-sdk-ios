@@ -23,12 +23,12 @@ import Foundation
 extension String {
     func toSIMInfo() -> Result<SIMInfo, MobileNetworkSelectionError> {
         guard count == 6 else {
-            return .error(.invalidMCCMNC)
+            return .failure(.invalidMCCMNC)
         }
         var copy = self
         let mnc = copy.popLast(3)
         let mcc = copy.popLast(3)
-        return .value(SIMInfo(mcc: String(mcc), mnc: String(mnc)))
+        return .success(SIMInfo(mcc: String(mcc), mnc: String(mnc)))
     }
 }
 

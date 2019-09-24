@@ -20,18 +20,13 @@
 
 import Foundation
 
-enum Result<T, E: Error> {
-    case value(T)
-    case error(E)
-}
-
 extension Result {
-    func flatMap<NewValue>(_ transform: (T) throws -> Result<NewValue, E>) rethrows -> Result<NewValue, E> {
+    func flatMap<NewValue>(_ transform: (Success) throws -> Result<NewValue, Failure>) rethrows -> Result<NewValue, Failure> {
         switch self {
-        case .value(let value):
+        case .success(let value):
             return try transform(value)
-        case .error(let error):
-            return Result<NewValue, E>.error(error)
+        case .failure(let error):
+            return Result<NewValue, Failure>.failure(error)
         }
     }
 }

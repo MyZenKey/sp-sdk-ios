@@ -54,7 +54,7 @@ class NetworkService: NetworkServiceProtocol {
                     with: decoder,
                     fromData: data,
                     request: request,
-                    error: error
+                    failure: error
                 )
                 completion(response)
             }
@@ -69,27 +69,27 @@ extension NetworkService {
             with decoder: JSONDecoder,
             fromData data: Data?,
             request: URLRequest,
-            error: Error?) -> Result<T, NetworkServiceError> {
+            failure: Error?) -> Result<T, NetworkServiceError> {
 
-            guard error == nil else {
-                Log.log(.error, "Network response is error \(String(describing: error))")
-                return .error(.networkError(error!))
+            guard failure == nil else {
+                Log.log(.error, "Network response is error \(String(describing: failure))")
+                return .failure(.networkError(failure!))
             }
 
             guard let data = data else {
                 Log.log(.error, "Network response missing data")
-                return .error(NetworkServiceError.invalidResponseBody(request: request))
+                return .failure(NetworkServiceError.invalidResponseBody(request: request))
             }
 
             do {
                 let parsed: T = try decoder.decode(T.self, from: data)
-                return .value(parsed)
+                return .success(parsed)
             } catch let decodingError as DecodingError {
                 Log.log(.error, "Decoding Error \(decodingError)")
-                return .error(.decodingError(decodingError))
+                return .failure(.decodingError(decodingError))
             } catch {
-                Log.log(.error, "Unknown Error \(error)")
-                return .error(.unknownError(error))
+                Log.log(.error, "Unknown Error \(failure)")
+                return .failure(.unknownError(error))
             }
         }
     }
