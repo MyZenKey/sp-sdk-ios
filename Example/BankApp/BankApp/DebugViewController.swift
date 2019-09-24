@@ -92,20 +92,21 @@ private extension DebugViewController {
             title: "Mock All Success",
             style: .destructive,
             handler: { _ in
-                if BuildInfo.isMockDemoService == false {
-                    BuildInfo.toggleMockDemoService()
-                    fatalError("restarting app")
-                }
+                self.setServiceProviderHost(.mocked)
         }
         ))
         controller.addAction(UIAlertAction(
             title: "Make Requests From Client App",
             style: .destructive,
             handler: { _ in
-                if BuildInfo.isMockDemoService {
-                    BuildInfo.toggleMockDemoService()
-                    fatalError("restarting app")
-                }
+                self.setServiceProviderHost(.client)
+        }
+        ))
+        controller.addAction(UIAlertAction(
+            title: "Use Universal Backend",
+            style: .destructive,
+            handler: { _ in
+                self.setServiceProviderHost(.ube)
         }
         ))
         controller.addAction(UIAlertAction(
@@ -118,8 +119,8 @@ private extension DebugViewController {
 
     func makeEnvironmentPicker() -> UIAlertController {
         let controller = UIAlertController(
-            title: "Set JV Host Environment",
-            message: "Requires reset",
+            title: "Set Host Environment",
+            message: "Use QA or Production services for JV and UBE.\nRequires reset",
             preferredStyle: .alert
         )
         controller.addAction(UIAlertAction(
@@ -189,6 +190,16 @@ private extension DebugViewController {
     }
 }
 
+private extension DebugViewController {
+    func setServiceProviderHost(_ host: BuildInfo.ServiceProviderHost) {
+        guard BuildInfo.serviceProviderHost != host else {
+            return
+        }
+        BuildInfo.setServiceProviderHost(host)
+        fatalError("restarting app")
+    }
+}
+
 // MARK: - UITableViewDelegate
 extension DebugViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -220,11 +231,7 @@ extension DebugViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0:
             cell.textLabel?.text = "Application Backend:"
-            if BuildInfo.isMockDemoService {
-                cell.detailTextLabel?.text = "Mock All Success"
-            } else {
-                cell.detailTextLabel?.text = "Make Requests From Client App"
-            }
+            cell.detailTextLabel?.text = BuildInfo.serviceProviderHost.behaviorDescription
         case 1:
             cell.textLabel?.text = "JV Host Environment:"
             if BuildInfo.isQAHost {

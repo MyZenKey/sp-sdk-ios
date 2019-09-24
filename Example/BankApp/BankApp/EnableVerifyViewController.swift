@@ -52,7 +52,7 @@ class EnableVerifyViewController: BankAppViewController {
         return button
     }()
 
-    private let clientSideServiceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
+    private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,7 +112,7 @@ extension EnableVerifyViewController: ZenKeyAuthorizeButtonDelegate {
 
     func authorizeUser(authorizedResponse: AuthorizedResponse) {
         let code = authorizedResponse.code
-        clientSideServiceAPI.addSecondFactor(
+        serviceAPI.addSecondFactor(
             withAuthCode: code,
             redirectURI: authorizedResponse.redirectURI,
             mcc: authorizedResponse.mcc,

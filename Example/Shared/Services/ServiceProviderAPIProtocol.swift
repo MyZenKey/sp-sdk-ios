@@ -167,29 +167,188 @@ protocol ServiceProviderAPIProtocol {
     func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void)
 }
 
-extension ServiceProviderAPIProtocol {
-    static func log(_ str: String) {
-        print("|ServiceProviderAPI| \(str)")
+// MARK: - Shared Response Types
+
+struct UserInfoResponse: Codable {
+    let sub: String
+    let name: String?
+    let givenName: String?
+    let familyName: String?
+    let birthdate: String?
+    let email: String?
+    let postalCode: String?
+    let phone: String?
+
+    enum CodingKeys: String, CodingKey {
+        case sub
+        case name
+        case givenName = "given_name"
+        case familyName = "family_name"
+        case birthdate = "birthdate"
+        case email = "email"
+        case postalCode = "postal_code"
+        case phone
     }
 
-    static func log(request urlRequest: URLRequest) {
-        guard
-            let url = urlRequest.url,
-            let method = urlRequest.httpMethod else {
-                log("invalid request: \(urlRequest)")
-                return
-        }
-
-        log("requesting: \(urlRequest)")
-        print("curl -v -X \(method) \\")
-        urlRequest.allHTTPHeaderFields?.forEach() { key, value in
-            print("-H '\(key): \(value)' \\")
-        }
-
-        if let httpBody = urlRequest.httpBody, let bodyString = String(data: httpBody, encoding: .utf8) {
-            print("-d \"\(bodyString)\" \\")
-        }
-
-        print("\"\(url.absoluteString)\"")
+    func toUserInfo(withUsername username: String) -> UserInfo {
+        return UserInfo(
+            username: username,
+            email: email,
+            name: name,
+            givenName: givenName,
+            familyName: familyName,
+            birthdate: birthdate,
+            postalCode: postalCode,
+            phone: phone
+        )
     }
 }
+
+struct TokenResponse: Codable {
+    let idToken: String
+    let accessToken: String
+    let tokenType: String
+    let expiresIn: Int
+    let refreshToken: String?
+
+    enum CodingKeys: String, CodingKey {
+        case idToken = "id_token"
+        case accessToken = "access_token"
+        case tokenType = "token_type"
+        case expiresIn = "expires_in"
+        case refreshToken = "refresh_token"
+    }
+}
+
+// MARK: - Helpers
+
+extension ServiceProviderAPIProtocol {
+    func save(transaction: Transaction,
+              with idToken: String,
+              matchingNonce nonce: String) -> (transaction: Transaction?, error: Error?) {
+
+        // ensure integrity of request
+        guard let parsed = idToken.simpleDecodeTokenBody() else {
+            return (nil, TransactionError.unableToParseToken)
+        }
+
+        let returnedContext = parsed["context"] as? String
+        let returnedNonce = parsed["nonce"] as? String
+
+        guard returnedContext == transaction.contextString, returnedNonce == nonce else {
+            return (nil, TransactionError.mismatchedTransaction)
+        }
+
+        // Build new timestamped Transaction
+        let completedTransaction = Transaction(time: Date(),
+                                               recipiant: transaction.recipiant,
+                                               amount: transaction.amount)
+
+        var transactions = UserAccountStorage.getTransactionHistory()
+        transactions.append(completedTransaction)
+        UserAccountStorage.setTransactionHistory(transactions)
+
+        return (completedTransaction, nil)
+    }
+}
+
+extension URLSession {
+    func requestJSON<T: Decodable>(
+        request: URLRequest,
+        completion: @escaping (T?, Error?) -> Void) {
+        Logger.log(.info, "performing request: \(request)")
+        Logger.logRequest(.info, urlRequest: request)
+        let task = self.dataTask(with: request) { data, response, error in
+            Logger.logJSON(.verbose, data: data)
+            Logger.log(.info, "concluding request: \(request.url!) with: \((response as? HTTPURLResponse)?.statusCode ?? 0)")
+
+            DispatchQueue.main.async {
+                var result: T?
+                var errorResult: Error? = error
+
+                defer { completion(result, errorResult) }
+
+
+                if let statusError = (response as? HTTPURLResponse)?.errorValue, error == nil {
+                    errorResult = statusError
+                }
+
+                guard errorResult == nil, let data = data else {
+                    return
+                }
+                do {
+                    result = try JSONDecoder().decode(
+                        T.self,
+                        from: data
+                    )
+                } catch let parseError {
+                    errorResult = parseError
+                }
+            }
+        }
+        task.resume()
+    }
+}
+
+extension URLRequest {
+    var curlString: String? {
+        guard
+            let url = url,
+            let method = httpMethod else {
+                return nil
+        }
+
+        var curlString = "curl -v -X \(method) \\\n"
+        allHTTPHeaderFields?.forEach() { key, value in
+            curlString += "-H '\(key): \(value)' \\\n"
+        }
+
+        if
+            let httpBody = httpBody,
+            var bodyString = String(data: httpBody, encoding: .utf8) {
+            // escape quotes:
+            bodyString = bodyString.replacingOccurrences(of: "\"", with: "\\\"")
+
+            curlString += "-d \"\(bodyString)\" \\\n"
+        }
+
+        curlString += "\"\(url.absoluteString)\"\n"
+
+        return curlString
+    }
+}
+
+private extension String {
+    /// you should use a tool to support token decoding. this just hacks the base64url encoded
+    /// body back to base64, then to json so we don't need to take on dependencies.
+    func simpleDecodeTokenBody() -> [String: Any]? {
+        let bodyBase64URLString = self.split(separator: ".")[1]
+        var bodyBase64String = bodyBase64URLString
+            .replacingOccurrences(of: "-", with: "+")
+            .replacingOccurrences(of: "_", with: "/")
+
+        let length = Double(bodyBase64String.lengthOfBytes(using: .utf8))
+        let requiredLength = 4 * ceil(length / 4.0)
+        let paddingLength = requiredLength - length
+        if paddingLength > 0 {
+            let padding = "".padding(toLength: Int(paddingLength), withPad: "=", startingAt: 0)
+            bodyBase64String = bodyBase64String + padding
+        }
+        guard let data = Data(base64Encoded: bodyBase64String, options: .ignoreUnknownCharacters) else {
+            Logger.log(.info, "Warning: unable to parse JWT")
+            return nil
+        }
+
+        do {
+            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                return nil
+            }
+
+            return json
+        } catch {
+            Logger.log(.info, "Warning: unable to parse JWT")
+            return nil
+        }
+    }
+}
+
