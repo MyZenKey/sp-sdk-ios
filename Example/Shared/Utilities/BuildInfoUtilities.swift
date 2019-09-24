@@ -76,7 +76,7 @@ struct BuildInfo {
         let illustrationText = "For illustration purposes only"
         let serverText: String? = isQAHost ? "Connected to QA Server" : nil
         let showHostString = serviceProviderHost != .ube
-        let demoAppServiceText: String? = showHostString ? "Demo App Service \(serviceProviderHost)" : nil
+        let demoAppServiceText: String? = showHostString ? "SP App Service \(serviceProviderHost)" : nil
         label.text = [illustrationText, serverText, demoAppServiceText]
             .compactMap() { $0 }
             .joined(separator: "\n")
