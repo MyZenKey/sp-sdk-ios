@@ -290,30 +290,6 @@ extension URLSession {
     }
 }
 
-extension Logger {
-    static func logRequest(_ logLevel: Level, urlRequest: URLRequest) {
-        guard let curlString = urlRequest.curlString else {
-            Logger.log(.error, "attemptint to log curl for \(urlRequest) but it is an invalid request")
-            return
-        }
-        Logger.log(logLevel, "Requesting: \n\(curlString)")
-    }
-
-    static func logJSON(_ logLevel: Level, data: Data?) {
-        guard let data = data else {
-            Logger.log(logLevel, "no data to log json for")
-            return
-        }
-
-        do {
-            let json = try JSONSerialization.jsonObject(with: data, options: [])
-            Logger.log(logLevel, "\(json)")
-        } catch {
-            Logger.log(logLevel, "invalid json")
-        }
-    }
-}
-
 extension URLRequest {
     var curlString: String? {
         guard

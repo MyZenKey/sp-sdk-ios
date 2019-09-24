@@ -144,7 +144,7 @@ extension UniversalBackendService: ServiceProviderAPIProtocol {
                          completion: @escaping (Transaction?, Error?) -> Void) {
         guard
             let mccmnc = UserAccountStorage.mccmnc else {
-                completion(nil, ServiceError.invalidToken)
+                completion(nil, ServiceError.unknownError)
                 return
         }
 

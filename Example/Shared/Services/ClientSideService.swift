@@ -120,7 +120,7 @@ class ClientSideService: ServiceProviderAPIProtocol {
 
         guard
             let mccmnc = UserAccountStorage.mccmnc else {
-                completion(nil, ServiceError.invalidToken)
+                completion(nil, ServiceError.unknownError)
                 return
         }
 
@@ -155,13 +155,13 @@ private extension ClientSideService {
     func getOIDC(forMCC mcc: String,
                  andMNC mnc: String,
                  handleError: @escaping (Error?) -> Void,
-                 then: @escaping (DiscoveryResponse) -> Void) {
+                 completion: @escaping (DiscoveryResponse) -> Void) {
         getOIDC(mcc: mcc, mnc: mnc) { oidc, error in
             guard let oidc = oidc else {
                 handleError(error)
                 return
             }
-            then(oidc)
+            completion(oidc)
         }
     }
 
@@ -210,7 +210,7 @@ private extension ClientSideService {
                         code: code,
                         redirectURI: redirectURI
                     )
-                    let encoded = tokenRequest.urlFormEncodedData
+                    let encoded = tokenRequest.formURLEncodedData
 
                     request.httpBody = encoded
                     sself.session.requestJSON(request: request, completion: completion)
@@ -257,7 +257,7 @@ private struct TokenRequest: Encodable {
         return $0.addingPercentEncoding(withAllowedCharacters: .alphanumerics)
     }
 
-    var urlFormEncodedData: Data {
+    var formURLEncodedData: Data {
         // from MDN: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
         // > application/x-www-form-urlencoded: the keys and values are encoded in key-value tuples
         // > separated by '&', with a '=' between the key and the value. Non-alphanumeric characters

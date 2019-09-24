@@ -99,3 +99,16 @@ struct BuildInfo {
         }
     }
 }
+
+extension BuildInfo.ServiceProviderHost {
+    var behaviorDescription: String {
+        switch self {
+        case .mocked:
+            return "Mock All Success"
+        case .client:
+            return "Make Requests From Client App"
+        case .ube:
+            return "Use the Universal Backend"
+        }
+    }
+}

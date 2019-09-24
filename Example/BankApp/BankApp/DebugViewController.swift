@@ -92,24 +92,21 @@ private extension DebugViewController {
             title: "Mock All Success",
             style: .destructive,
             handler: { _ in
-                BuildInfo.setServiceProviderHost(.mocked)
-                fatalError("restarting app")
+                self.setServiceProviderHost(.mocked)
         }
         ))
         controller.addAction(UIAlertAction(
             title: "Make Requests From Client App",
             style: .destructive,
             handler: { _ in
-                BuildInfo.setServiceProviderHost(.client)
-                fatalError("restarting app")
+                self.setServiceProviderHost(.client)
         }
         ))
         controller.addAction(UIAlertAction(
-            title: "Use UBE",
+            title: "Use Universal Backend",
             style: .destructive,
             handler: { _ in
-                BuildInfo.setServiceProviderHost(.ube)
-                fatalError("restarting app")
+                self.setServiceProviderHost(.ube)
         }
         ))
         controller.addAction(UIAlertAction(
@@ -193,6 +190,16 @@ private extension DebugViewController {
     }
 }
 
+private extension DebugViewController {
+    func setServiceProviderHost(_ host: BuildInfo.ServiceProviderHost) {
+        guard BuildInfo.serviceProviderHost != host else {
+            return
+        }
+        BuildInfo.setServiceProviderHost(host)
+        fatalError("restarting app")
+    }
+}
+
 // MARK: - UITableViewDelegate
 extension DebugViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -246,18 +253,5 @@ extension DebugViewController: UITableViewDataSource {
             break
         }
         return cell
-    }
-}
-
-extension BuildInfo.ServiceProviderHost {
-    var behaviorDescription: String {
-        switch self {
-        case .mocked:
-            return "Mock All Success"
-        case .client:
-            return "Make Requests From Client App"
-        case .ube:
-            return "Use the Universal Backend"
-        }
     }
 }
