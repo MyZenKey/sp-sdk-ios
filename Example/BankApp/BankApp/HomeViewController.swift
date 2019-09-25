@@ -124,6 +124,13 @@ class HomeViewController: BankAppViewController {
 
 private extension HomeViewController {
     func fetchUserInfoIfNeeded() {
+        // For the time being we'll treat session state as being "authenticated" even if the access
+        // token lapses in the backing endpoint / user defaults.
+        //
+        // To mask this, we'll only fetch user info once at launch and  ignore after. If we want to
+        // refresh user info, log out and log back in.
+        guard userInfo == nil else { return }
+
         serviceAPI.getUserInfo() { [weak self] userInfo, error in
 
             guard error == nil else {
