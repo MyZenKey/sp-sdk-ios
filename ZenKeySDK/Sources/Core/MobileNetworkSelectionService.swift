@@ -240,10 +240,10 @@ extension MobileNetworkSelectionService.Request {
 private extension Result where Failure == URLResponseError {
     func promoteResult() -> Result<Success, MobileNetworkSelectionError> {
         switch self {
-        case .success(let success):
-            return .success(success)
-        case .failure(let failure):
-            return .failure(.urlResponseError(failure))
+        case .success(let value):
+            return .success(value)
+        case .failure(let error):
+            return .failure(.urlResponseError(error))
         }
     }
 }

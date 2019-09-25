@@ -52,7 +52,7 @@ class MockNetworkService: NetworkServiceProtocol {
                         with: decoder,
                         fromData: data,
                         request: request,
-                        failure: nil
+                        error: nil
                 )
 
                 completion(parsed)
