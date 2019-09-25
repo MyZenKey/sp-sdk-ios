@@ -523,43 +523,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0C06AB5E0C855BD83C710D71F47BDD72 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7D80FBFB9DF99504929B5DB1D2FCD70C /* ZenKeySDK.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/ZenKeySDK/ZenKeySDK-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK.modulemap";
-				PRODUCT_MODULE_NAME = ZenKeySDK;
-				PRODUCT_NAME = ZenKeySDK;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		179E13A456CA0B6DB1DED5871C46A86C /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7A44AAABB48CFAAB630D78F76F1F8534 /* Pods-ZenKeyBranding.release.xcconfig */;
@@ -723,6 +686,79 @@
 			};
 			name = Release;
 		};
+		761A8D55D5A27AC38A154BCB977C6777 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D80FBFB9DF99504929B5DB1D2FCD70C /* ZenKeySDK.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/ZenKeySDK/ZenKeySDK-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK.modulemap";
+				PRODUCT_MODULE_NAME = ZenKeySDK;
+				PRODUCT_NAME = ZenKeySDK;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		84FFDA630D3403910EE085D65D77B88F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D80FBFB9DF99504929B5DB1D2FCD70C /* ZenKeySDK.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/ZenKeySDK/ZenKeySDK-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK.modulemap";
+				PRODUCT_MODULE_NAME = ZenKeySDK;
+				PRODUCT_NAME = ZenKeySDK;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 		DA6533F57AD50BE98EC80B83505015BD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D34F4AD73CFA488B21A7869DDEEEC639 /* Pods-ZenKeyBranding.debug.xcconfig */;
@@ -761,42 +797,6 @@
 			};
 			name = Debug;
 		};
-		F101F88C95374800CACF6BA36C5CB050 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7D80FBFB9DF99504929B5DB1D2FCD70C /* ZenKeySDK.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/ZenKeySDK/ZenKeySDK-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK.modulemap";
-				PRODUCT_MODULE_NAME = ZenKeySDK;
-				PRODUCT_NAME = ZenKeySDK;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -812,8 +812,8 @@
 		9FDA318F458C7A16E1AEEC4F329A348A /* Build configuration list for PBXNativeTarget "ZenKeySDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F101F88C95374800CACF6BA36C5CB050 /* Debug */,
-				0C06AB5E0C855BD83C710D71F47BDD72 /* Release */,
+				84FFDA630D3403910EE085D65D77B88F /* Debug */,
+				761A8D55D5A27AC38A154BCB977C6777 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
