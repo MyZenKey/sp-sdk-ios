@@ -57,7 +57,7 @@ TEST_SCHEME = "ZenKeySDKTests"
 platform :ios do
   before_all do
     setup_circle_ci
-    match(type: "enterprise", readonly: true)
+    # match(type: "enterprise", readonly: true)
     if ENV['RZ_ARTIFACTS'] && ENV['RZ_ARTIFACTS'].length > 0
       sh 'rm -rf $RZ_ARTIFACTS && mkdir $RZ_ARTIFACTS'
     end
