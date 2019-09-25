@@ -116,7 +116,7 @@ class LoginViewController: UIViewController {
             withUsername: idTextField.text?.lowercased() ?? "",
             password: passwordTextField.text?.lowercased() ?? "") { [weak self] auth, error in
 
-                guard let auth = auth, error == nil else {
+                guard auth != nil, error == nil else {
                     self?.showAlert(
                         title: "Enter User Name and password",
                         message: "You must enter your user name and password to log in.\nHint: try username: jane and password: 12345"
