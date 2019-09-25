@@ -24,7 +24,6 @@
 		8A65FA1E2315EE24002E7826 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9CF2315EE24002E7826 /* Dependencies.swift */; };
 		8A65FA1F2315EE24002E7826 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D02315EE24002E7826 /* DiscoveryService.swift */; };
 		8A65FA202315EE24002E7826 /* Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D12315EE24002E7826 /* Branding.swift */; };
-		8A65FA212315EE24002E7826 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D22315EE24002E7826 /* Result.swift */; };
 		8A65FA222315EE24002E7826 /* ConfigCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D32315EE24002E7826 /* ConfigCacheService.swift */; };
 		8A65FA232315EE24002E7826 /* Dictionary+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D42315EE24002E7826 /* Dictionary+Helpers.swift */; };
 		8A65FA242315EE24002E7826 /* RandomStringGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D52315EE24002E7826 /* RandomStringGenerator.swift */; };
@@ -143,7 +142,6 @@
 		8A65F9CF2315EE24002E7826 /* Dependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		8A65F9D02315EE24002E7826 /* DiscoveryService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryService.swift; sourceTree = "<group>"; };
 		8A65F9D12315EE24002E7826 /* Branding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Branding.swift; sourceTree = "<group>"; };
-		8A65F9D22315EE24002E7826 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		8A65F9D32315EE24002E7826 /* ConfigCacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigCacheService.swift; sourceTree = "<group>"; };
 		8A65F9D42315EE24002E7826 /* Dictionary+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Helpers.swift"; sourceTree = "<group>"; };
 		8A65F9D52315EE24002E7826 /* RandomStringGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomStringGenerator.swift; sourceTree = "<group>"; };
@@ -308,7 +306,6 @@
 				8A65F9CF2315EE24002E7826 /* Dependencies.swift */,
 				8A65F9D02315EE24002E7826 /* DiscoveryService.swift */,
 				8A65F9D12315EE24002E7826 /* Branding.swift */,
-				8A65F9D22315EE24002E7826 /* Result.swift */,
 				8A65F9D32315EE24002E7826 /* ConfigCacheService.swift */,
 				8A65F9D42315EE24002E7826 /* Dictionary+Helpers.swift */,
 				8A65F9D52315EE24002E7826 /* RandomStringGenerator.swift */,
@@ -420,7 +417,7 @@
 				TargetAttributes = {
 					233AF953220A3B080023059C = {
 						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1030;
 					};
 					8AB309E4228614AA003E08D8 = {
 						CreatedOnToolsVersion = 10.2;
@@ -503,7 +500,6 @@
 				8A65FA132315EE24002E7826 /* Scope.swift in Sources */,
 				8A65FA222315EE24002E7826 /* ConfigCacheService.swift in Sources */,
 				8A65FA172315EE24002E7826 /* Log.swift in Sources */,
-				8A65FA212315EE24002E7826 /* Result.swift in Sources */,
 				8A65FA252315EE24002E7826 /* AuthorizationServiceCurrentRequestStorage.swift in Sources */,
 				8A65FA1D2315EE24002E7826 /* PromptValue.swift in Sources */,
 				8A65FA322315EE24002E7826 /* DeviceInfo.swift in Sources */,
@@ -611,7 +607,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -643,7 +639,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

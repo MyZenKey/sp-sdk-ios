@@ -73,23 +73,23 @@ extension NetworkService {
 
             guard error == nil else {
                 Log.log(.error, "Network response is error \(String(describing: error))")
-                return .error(.networkError(error!))
+                return .failure(.networkError(error!))
             }
 
             guard let data = data else {
                 Log.log(.error, "Network response missing data")
-                return .error(NetworkServiceError.invalidResponseBody(request: request))
+                return .failure(NetworkServiceError.invalidResponseBody(request: request))
             }
 
             do {
                 let parsed: T = try decoder.decode(T.self, from: data)
-                return .value(parsed)
+                return .success(parsed)
             } catch let decodingError as DecodingError {
                 Log.log(.error, "Decoding Error \(decodingError)")
-                return .error(.decodingError(decodingError))
+                return .failure(.decodingError(decodingError))
             } catch {
                 Log.log(.error, "Unknown Error \(error)")
-                return .error(.unknownError(error))
+                return .failure(.unknownError(error))
             }
         }
     }

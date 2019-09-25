@@ -153,7 +153,7 @@ private extension OpenIdService {
             .flatMap({ response.getRequiredValue(ResponseKeys.code.rawValue).promoteResult() })
 
         switch validatedCode {
-        case .value(let code):
+        case .success(let code):
             Log.log(.info, "Resolving URL with successful code.")
             dismissUIAndConclude(
                 result: .code(
@@ -165,9 +165,9 @@ private extension OpenIdService {
                     )
                 )
             )
-        case .error(let error):
-            Log.log(.error, "Resolving URL: \(url) with error: \(error)")
-            dismissUIAndConclude(result: .error(error))
+        case .failure(let failure):
+            Log.log(.error, "Resolving URL: \(url) with error: \(failure)")
+            dismissUIAndConclude(result: .error(failure))
         }
     }
 
@@ -195,13 +195,13 @@ private extension OpenIdService {
 
 // MARK: - Error Mapping
 
-private extension Result where E == URLResponseError {
-    func promoteResult() -> Result<T, OpenIdServiceError> {
+private extension Result where Failure == URLResponseError {
+    func promoteResult() -> Result<Success, OpenIdServiceError> {
         switch self {
-        case .value(let value):
-            return .value(value)
-        case .error(let error):
-            return .error(.urlResponseError(error))
+        case .success(let value):
+            return .success(value)
+        case .failure(let error):
+            return .failure(.urlResponseError(error))
         }
     }
 }

@@ -91,9 +91,9 @@ extension DiscoverySimInfo: Decodable {
         let mccmnc = String(mccmncNumericValue)
         let simInfoResult =  mccmnc.toSIMInfo()
         switch simInfoResult {
-        case .value(let simInfo):
+        case .success(let simInfo):
             self = DiscoverySimInfo(simInfo: simInfo)
-        case .error(let error):
+        case .failure(let error):
             throw error
         }
     }

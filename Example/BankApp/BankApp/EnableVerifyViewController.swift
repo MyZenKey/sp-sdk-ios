@@ -23,7 +23,7 @@ class EnableVerifyViewController: BankAppViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         let text = "We now support\nZenKey"
         let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttributes([NSAttributedStringKey.font :  UIFont.italicSystemFont(ofSize: 38), NSAttributedStringKey.foregroundColor:UIColor.black], range: (text as NSString).range(of: "ZenKey"))
+        attributedString.addAttributes([NSAttributedString.Key.font :  UIFont.italicSystemFont(ofSize: 38), NSAttributedString.Key.foregroundColor:UIColor.black], range: (text as NSString).range(of: "ZenKey"))
         label.attributedText = attributedString
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -35,7 +35,7 @@ class EnableVerifyViewController: BankAppViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         let text = "Would you like to use ZenKey to approve future Bank App logins?"
         let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttributes([NSAttributedStringKey.font :  UIFont.italicSystemFont(ofSize: 18), NSAttributedStringKey.foregroundColor:UIColor.black], range: (text as NSString).range(of: "ZenKey"))
+        attributedString.addAttributes([NSAttributedString.Key.font :  UIFont.italicSystemFont(ofSize: 18), NSAttributedString.Key.foregroundColor:UIColor.black], range: (text as NSString).range(of: "ZenKey"))
         label.attributedText = attributedString
         label.textAlignment = .center
         label.numberOfLines = 0

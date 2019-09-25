@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, DemoAppAppDelegate {
     private(set) var router: BankAppRouter!
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         UITestLaunchArgument.handle()
 
@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, DemoAppAppDelegate {
         return true
     }
 
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 
         guard !ZenKeyAppDelegate.shared.application(app, open: url, options: options) else {
             return true

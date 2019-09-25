@@ -135,7 +135,7 @@ private extension DiscoveryService {
 
             Log.log(.info, "Discovery outcome: \(result)")
             switch result {
-            case .value(let configResult):
+            case .success(let configResult):
                 // Because the endpoint can return either a config _or_ an error, we need to parse the
                 // "inner" result and flatten the success or error.
                 switch configResult {
@@ -157,7 +157,7 @@ private extension DiscoveryService {
                     completion(.error(.issuerError(issuerError)))
                 }
 
-            case .error(let error):
+            case .failure(let error):
                 completion(.error(.networkError(error)))
             }
         }

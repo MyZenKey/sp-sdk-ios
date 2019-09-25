@@ -13,7 +13,7 @@ class DebugViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .singleLine
         tableView.backgroundColor = .white
         return tableView

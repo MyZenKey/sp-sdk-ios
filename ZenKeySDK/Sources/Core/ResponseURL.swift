@@ -59,17 +59,17 @@ struct ResponseURL {
         guard
             let inboundState = queryDictionary[Keys.state.rawValue],
             inboundState == state else {
-                return .error(URLResponseError.stateMismatch)
+                return .failure(URLResponseError.stateMismatch)
         }
 
-        return .value(())
+        return .success(())
     }
 
     func getRequiredValue(_ param: String) -> Result<String, URLResponseError> {
         guard let value = self[param] else {
-            return .error(URLResponseError.missingParameter(param))
+            return .failure(URLResponseError.missingParameter(param))
         }
-        return .value(value)
+        return .success(value)
     }
 }
 
@@ -89,8 +89,8 @@ extension ResponseURL {
         guard errorCode == nil else {
             let errorCode = errorCode!
             let errorDescription = self[ErrorKeys.errorDescription.rawValue]
-            return .error(URLResponseError.errorResponse(errorCode, errorDescription))
+            return .failure(URLResponseError.errorResponse(errorCode, errorDescription))
         }
-        return .value(())
+        return .success(())
     }
 }

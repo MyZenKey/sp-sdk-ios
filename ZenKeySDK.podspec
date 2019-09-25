@@ -26,7 +26,7 @@ TODO: Add long description of the pod here.
   s.license          = { :type => 'custom', :file => 'LICENSE' }
   s.author           = { 'Adam Tierney' => 'atierney@rightpoint.com' }
   s.source           = { :git => 'https://github.com/Raizlabs/XCI-ProviderSDK-iOS.git', :tag => s.version.to_s }
-  s.swift_version    = '4.2'
+  s.swift_version    = '5'
 
   # s.module_name = 'ZenKeySDK'
   s.ios.deployment_target = '10.0'

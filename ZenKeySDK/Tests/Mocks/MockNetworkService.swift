@@ -59,7 +59,7 @@ class MockNetworkService: NetworkServiceProtocol {
             }
 
             if let mockError = mockError {
-                completion(.error(mockError))
+                completion(.failure(mockError))
             }
         }
     }

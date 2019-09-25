@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0E3632E17571F73502FA7B32 /* Pods_BankApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE6212B13800D51B30E3D4A9 /* Pods_BankApp.framework */; };
-		233B6172220C98E8008A0E27 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B616F220C98E8008A0E27 /* Debug.xcconfig */; };
-		233B6173220C98E8008A0E27 /* Develop.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B6170220C98E8008A0E27 /* Develop.xcconfig */; };
-		233B6174220C98E8008A0E27 /* Sprint.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 233B6171220C98E8008A0E27 /* Sprint.xcconfig */; };
 		56172F8822E6C1DB00D4D630 /* BankAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56172F8722E6C1DB00D4D630 /* BankAppUITests.swift */; };
 		63DE42F823299AC600D727AE /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DE42F723299AC600D727AE /* HistoryViewController.swift */; };
 		63EACC82233289860076DC7B /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EACC81233289860076DC7B /* DebugViewController.swift */; };
@@ -328,7 +325,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1030;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "AT&T";
 				TargetAttributes = {
 					56172F8422E6C1DB00D4D630 = {
@@ -383,10 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D89C9DE1FFE82F400AE1EF4 /* LaunchScreen.storyboard in Resources */,
-				233B6174220C98E8008A0E27 /* Sprint.xcconfig in Resources */,
 				7D89C9DB1FFE82F400AE1EF4 /* Assets.xcassets in Resources */,
-				233B6173220C98E8008A0E27 /* Develop.xcconfig in Resources */,
-				233B6172220C98E8008A0E27 /* Debug.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,7 +581,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "${PROVISIONING_PROFILE_DEMO_APPS}";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Develop;
@@ -877,7 +871,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Raizlabs Wildcard App ID";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -903,7 +897,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "${PROVISIONING_PROFILE_DEMO_APPS}";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Sprint;
