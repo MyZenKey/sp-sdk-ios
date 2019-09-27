@@ -127,6 +127,14 @@ platform :ios do
     end
   end
 
+  desc 'Archives BankApp for submission to Browserstack as part of round trip UI testing with the CCID app.'
+  lane :bankapp_roundtrip do
+    buildDemoApp(BANK_APP, "develop-#{BANK_APP}", 'enterprise', {
+      teamID: "XRTVVR644Y",
+      signingCertificate: "iPhone Distribution",
+    })
+  end
+
   # ADMIN ----------------------
 
   desc "Generates Docs"
