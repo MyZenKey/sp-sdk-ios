@@ -23,21 +23,15 @@ class LoginViewController: UIViewController {
         return logo
     }()
     
-    let idTextField: UITextField = {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.minimumFontSize = 17
-        field.placeholder = "Enter your ID"
+    let idTextField: TextField = {
+        let field = TextField()
+        field.placeholder = "User ID"
         return field
     }()
     
-    let passwordTextField: UITextField = {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.minimumFontSize = 17
-        field.placeholder = "Enter your password"
+    let passwordTextField: TextField = {
+        let field = TextField()
+        field.placeholder = "Password"
         return field
     }()
     

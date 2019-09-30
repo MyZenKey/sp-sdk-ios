@@ -3,7 +3,7 @@
 //  BankApp
 //
 //  Created by Adam Tierney on 9/30/19.
-//  Copyright © 2019 AT&T. All rights reserved.
+//  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
 import UIKit
