@@ -15,6 +15,7 @@
 		7D89C9D41FFE82F400AE1EF4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D89C9D31FFE82F400AE1EF4 /* AppDelegate.swift */; };
 		7D89C9DB1FFE82F400AE1EF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DA1FFE82F400AE1EF4 /* Assets.xcassets */; };
 		7D89C9DE1FFE82F400AE1EF4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D89C9DC1FFE82F400AE1EF4 /* LaunchScreen.storyboard */; };
+		8A247DC623427BAA008AAA72 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A247DC523427BAA008AAA72 /* Colors.swift */; };
 		8A2CE1D42329764D001EADF8 /* UniversalBackendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2CE1D32329764D001EADF8 /* UniversalBackendService.swift */; };
 		8A2CE1D6232989A7001EADF8 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2CE1D5232989A7001EADF8 /* Logger.swift */; };
 		8A855D152315890F0012AF60 /* ClientSideService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A855D122315890D0012AF60 /* ClientSideService.swift */; };
@@ -84,6 +85,7 @@
 		7D89C9DD1FFE82F400AE1EF4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D89C9DF1FFE82F400AE1EF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89F9A01A772197F60C3FF63C /* Pods-BankApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BankApp/Pods-BankApp.debug.xcconfig"; sourceTree = "<group>"; };
+		8A247DC523427BAA008AAA72 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		8A2CE1D32329764D001EADF8 /* UniversalBackendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UniversalBackendService.swift; path = ../../Shared/Services/UniversalBackendService.swift; sourceTree = "<group>"; };
 		8A2CE1D5232989A7001EADF8 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = ../../Shared/Utilities/Logger.swift; sourceTree = "<group>"; };
 		8A855D122315890D0012AF60 /* ClientSideService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientSideService.swift; path = ../../Shared/Services/ClientSideService.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				8AC710CE2321CD01000D3EC8 /* TransfersViewController.swift */,
 				63DE42F723299AC600D727AE /* HistoryViewController.swift */,
 				8AC710D023231CDB000D3EC8 /* RegisterViewController.swift */,
+				8A247DC523427BAA008AAA72 /* Colors.swift */,
 			);
 			path = BankApp;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 				8A855D162315890F0012AF60 /* MockService.swift in Sources */,
 				8A855D2223158E870012AF60 /* DemoAppAppDelegate.swift in Sources */,
 				8AC710CF2321CD01000D3EC8 /* TransfersViewController.swift in Sources */,
+				8A247DC623427BAA008AAA72 /* Colors.swift in Sources */,
 				8C87BE1021266A8B00B24707 /* AppTheme.swift in Sources */,
 				8A855D172315890F0012AF60 /* ServiceProviderAPIProtocol.swift in Sources */,
 				63EACC82233289860076DC7B /* DebugViewController.swift in Sources */,
@@ -574,6 +578,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = BankApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -859,6 +864,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = BankApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS";
 				PRODUCT_BUNDLE_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
@@ -886,6 +892,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = BankApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "${PRODUCT_BUNDLE_IDENTIFIER}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
