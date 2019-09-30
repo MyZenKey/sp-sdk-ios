@@ -10,7 +10,9 @@ import ZenKeySDK
 
 class ApproveViewController: BankAppViewController {
 
-    static let transaction = Transaction(time: Date(), recipiant: "nmel1234", amount: "$100.00")
+    static let transaction = Transaction(time: Date(), recipiant: "John Doe", amount: "$100.00")
+
+    let backgroundGradient = BackgroundGradientView()
 
     let promptLabel: UILabel = {
         let label = UILabel()
@@ -98,15 +100,20 @@ class ApproveViewController: BankAppViewController {
     }
 
     func layoutView() {
-        view.backgroundColor = .white
-        var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide = getSafeLayoutGuide()
-        
+        // Heirarchy
+        view.addSubview(backgroundGradient)
         view.addSubview(promptLabel)
         view.addSubview(zenKeyButton)
         view.addSubview(cancelButton)
         view.addSubview(activityIndicator)
 
+        // Style
+        let safeAreaGuide = getSafeLayoutGuide()
+        backgroundGradient.frame = view.bounds
+        view.layer.insertSublayer(backgroundGradient.gradientLayer, at: 0)
+
+        // Constraints
+        var constraints: [NSLayoutConstraint] = []
         constraints.append(promptLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
         constraints.append(promptLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(promptLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
@@ -122,6 +129,7 @@ class ApproveViewController: BankAppViewController {
 
         constraints.append(activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+
 
         NSLayoutConstraint.activate(constraints)
     }
