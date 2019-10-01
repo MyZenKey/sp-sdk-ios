@@ -85,6 +85,7 @@ class ApproveViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.title = "Send Money"
         layoutView()
     }
 
@@ -152,7 +153,6 @@ class ApproveViewController: UIViewController {
 
         // Constraints
         var constraints: [NSLayoutConstraint] = []
-
 
         constraints.append(transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(transferInfoStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -(view.bounds.height / 12)))
