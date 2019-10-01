@@ -16,3 +16,17 @@ enum Fonts {
 
     static let footnote = UIFont.systemFont(ofSize: 10.0, weight: .medium)
 }
+
+extension Fonts {
+
+    static func accessoryText(text: String, withColor color: UIColor) -> NSAttributedString {
+        return NSAttributedString(
+            string: text,
+            attributes: [
+                .font: Fonts.accesory,
+                .foregroundColor: color,
+                .kern: 0.2
+            ])
+    }
+    
+}

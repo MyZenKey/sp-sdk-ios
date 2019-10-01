@@ -35,13 +35,21 @@ final class LoginViewController: UIViewController {
         return button
     }()
 
+    private let poweredByLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
+
     private let usernameTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "User ID"
         return field
     }()
     
-    let passwordTextField: UnderlinedTextFieldView = {
+    private let passwordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "Password"
         return field
@@ -70,13 +78,10 @@ final class LoginViewController: UIViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(
-            NSAttributedString(
-                string: "Forgot User ID or Password?",
-                attributes: [
-                    .font: Fonts.accesory,
-                    .foregroundColor: Colors.heavyText.value,
-                    .kern: 0.2
-                ]),
+            Fonts.accessoryText(
+                text: "Forgot User ID or Password?",
+                withColor: Colors.heavyText.value
+            ),
             for: .normal
         )
         return button
@@ -86,27 +91,14 @@ final class LoginViewController: UIViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(
-            NSAttributedString(
-                string: "Sign up for BankApp",
-                attributes: [
-                    .font: Fonts.accesory,
-                    .foregroundColor: Colors.brightAccent.value,
-                    .kern: 0.2
-                ]),
+            Fonts.accessoryText(
+                text: "Sign up for BankApp",
+                withColor: Colors.brightAccent.value
+            ),
             for: .normal
         )
         button.addTarget(self, action: #selector(registerButtonPressed), for: .touchUpInside)
         return button
-    }()
-
-    // TODO: -
-    private let poweredByLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 12)
-        return label
     }()
 
     private let demoPurposesLabel: UILabel = UIViewController.makeDemoPurposesLabel()
@@ -124,6 +116,7 @@ final class LoginViewController: UIViewController {
         let orDivider = OrDividerView()
         let stackView = UIStackView(arrangedSubviews: [
             zenkeyButton,
+            poweredByLabel,
             orDivider,
             usernameTextField,
             passwordTextField,
@@ -140,6 +133,7 @@ final class LoginViewController: UIViewController {
         stackView.layoutMargins = UIEdgeInsets(top: marign, left: marign, bottom: marign, right: marign)
 
         stackView.setCustomSpacing(15, after: zenkeyButton)
+        stackView.setCustomSpacing(15, after: poweredByLabel)
         stackView.setCustomSpacing(15, after: orDivider)
         stackView.setCustomSpacing(15, after: signInButton)
 
@@ -304,6 +298,16 @@ extension LoginViewController: ZenKeyBrandedButtonDelegate {
 
     func brandingDidUpdate(_ newBranding: Branding,
                            forButton button: ZenKeyBrandedButton) {
-        poweredByLabel.text = newBranding.carrierText
+        guard
+            let carrierText = newBranding.carrierText,
+            !carrierText.isEmpty else {
+            return
+        }
+
+        poweredByLabel.attributedText = Fonts.accessoryText(
+            text: carrierText,
+            withColor: Colors.heavyText.value
+        )
+        poweredByLabel.isHidden = false
     }
 }
