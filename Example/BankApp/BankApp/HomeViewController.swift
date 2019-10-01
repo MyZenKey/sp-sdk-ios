@@ -13,7 +13,6 @@ class HomeViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Welcome!"
         label.font = UIFont.systemFont(ofSize: 24)
-//        label.textAlignment = .center
         return label
     }()
 
@@ -116,7 +115,8 @@ class HomeViewController: UIViewController {
         title = "Home"
 
         // Hamburger
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(viewHistoryTouched(_:)))
+        let hamburgerButton = UIBarButtonItem(image: UIImage(named:"hamburger"), style: .plain, target: self, action: #selector(viewHistoryTouched(_:)))
+        navigationItem.leftBarButtonItem = hamburgerButton
         // Sign Out
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(logoutButtonTouched(_:)))
     }
