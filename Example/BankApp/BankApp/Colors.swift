@@ -13,11 +13,12 @@ enum Colors: String {
 
     case brightAccent
     case lightAccent
+    case gradientMax
 
     case primaryText
     case secondaryText
     case heavyText
-
+    case shadow
     case white
 
     var value: UIColor {

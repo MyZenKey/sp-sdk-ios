@@ -9,7 +9,7 @@ import UIKit
 @IBDesignable
 class BankAppButton: UIButton {
 
-    @IBInspectable var cornerRadius: CGFloat = 5 {
+    @IBInspectable var cornerRadius: CGFloat = 2 {
         didSet(newValue) {
             setNeedsDisplay()
         }
