@@ -14,4 +14,5 @@ enum Fonts {
 
     static let accesory = UIFont.systemFont(ofSize: 13.0, weight: .medium)
 
+    static let footnote = UIFont.systemFont(ofSize: 10.0, weight: .medium)
 }

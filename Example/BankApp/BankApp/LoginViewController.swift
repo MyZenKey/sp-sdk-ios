@@ -48,31 +48,58 @@ final class LoginViewController: UIViewController {
     }()
     
     private let signInButton: BankAppButton = {
+        // TODO: - prioritize a refactor of this type
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.borderWidth = 1.0
-        button.setTitle("SIGN IN", for: .normal)
+        button.borderWidth = 2.0
+
+        button.setTitle("Sign In", for: .normal)
         button.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
+
+        button.borderColor = Colors.brightAccent.value
+        button.backgroundColor = Colors.brightAccent.value
+
+        NSLayoutConstraint.activate([
+            button.heightAnchor.constraint(equalToConstant: 40.0)
+        ])
+
         return button
     }()
 
     private let forgotPassowrdButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentHorizontalAlignment = .left
-        button.setTitle("Forgot User ID or Password", for: .normal)
+        button.setAttributedTitle(
+            NSAttributedString(
+                string: "Forgot User ID or Password?",
+                attributes: [
+                    .font: Fonts.accesory,
+                    .foregroundColor: Colors.heavyText.value,
+                    .kern: 0.2
+                ]),
+            for: .normal
+        )
         return button
     }()
     
     private let registerButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Register", for: .normal)
-        button.contentHorizontalAlignment = .right
+        button.setAttributedTitle(
+            NSAttributedString(
+                string: "Sign up for BankApp",
+                attributes: [
+                    .font: Fonts.accesory,
+                    .foregroundColor: Colors.brightAccent.value,
+                    .kern: 0.2
+                ]),
+            for: .normal
+        )
         button.addTarget(self, action: #selector(registerButtonPressed), for: .touchUpInside)
         return button
     }()
 
+    // TODO: -
     private let poweredByLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -82,14 +109,16 @@ final class LoginViewController: UIViewController {
         return label
     }()
 
-    private lazy var inputToolbar: UIToolbar = {
-        let toolbar = UIToolbar()
-        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
-        toolbar.items = [flex, doneButton]
-        toolbar.sizeToFit()
-        return toolbar
-    }()
+    private let demoPurposesLabel: UILabel = UIViewController.makeDemoPurposesLabel()
+
+//    private lazy var inputToolbar: UIToolbar = {
+//        let toolbar = UIToolbar()
+//        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+//        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
+//        toolbar.items = [flex, doneButton]
+//        toolbar.sizeToFit()
+//        return toolbar
+//    }()
 
     private lazy var buttonsStack: UIStackView = {
         let orDivider = OrDividerView()
@@ -118,7 +147,7 @@ final class LoginViewController: UIViewController {
     }()
 
     /// Stack view doesn't draw so mirror it's size and add a shadow to this view:
-    private let stackViewShadowBox: UIView = {
+    private lazy var buttonStackViewContainer: UIView = {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
 
@@ -128,7 +157,34 @@ final class LoginViewController: UIViewController {
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = 4.0
         view.layer.shadowOpacity = 0.24
+
+        view.addSubview(buttonsStack)
+
+        NSLayoutConstraint.activate([
+            buttonsStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            buttonsStack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            buttonsStack.topAnchor.constraint(equalTo: view.topAnchor),
+            buttonsStack.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
         return view
+    }()
+
+    private lazy var contentStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            buttonStackViewContainer,
+            registerButton,
+            demoPurposesLabel
+        ])
+
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = 25
+
+        stackView.setCustomSpacing(15, after: registerButton)
+
+        return stackView
     }()
 
     private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
@@ -147,11 +203,11 @@ final class LoginViewController: UIViewController {
 
         view.addSubview(backgroundImage)
         view.addSubview(logo)
-        view.addSubview(stackViewShadowBox)
-        view.addSubview(buttonsStack)
+        view.addSubview(contentStackView)
 
         NSLayoutConstraint.activate([
-            // relative to the very bottom of the view.
+            // postioned relative to the very bottom of the view and it's edges regardless of
+            // marigns.
             logo.widthAnchor.constraint(lessThanOrEqualTo: safeAreaGuide.widthAnchor),
             logo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
@@ -161,15 +217,9 @@ final class LoginViewController: UIViewController {
             backgroundImage.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundImage.topAnchor.constraint(equalTo: view.topAnchor),
 
-            buttonsStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttonsStack.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-            buttonsStack.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
-            buttonsStack.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -Constants.buttonStackLowerMargin),
-
-            stackViewShadowBox.leadingAnchor.constraint(equalTo: buttonsStack.leadingAnchor),
-            stackViewShadowBox.trailingAnchor.constraint(equalTo: buttonsStack.trailingAnchor),
-            stackViewShadowBox.topAnchor.constraint(equalTo: buttonsStack.topAnchor),
-            stackViewShadowBox.bottomAnchor.constraint(equalTo: buttonsStack.bottomAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
         ])
     }
 
