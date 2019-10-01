@@ -8,28 +8,52 @@
 import UIKit
 import ZenKeySDK
 
-class ApproveViewController: BankAppViewController {
+class ApproveViewController: UIViewController {
 
     static let transaction = Transaction(time: Date(), recipiant: "John Doe", amount: "$100.00")
 
     let backgroundGradient = BackgroundGradientView()
 
-    let promptLabel: UILabel = {
+    let transferLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Would you like to transfer \(ApproveViewController.transaction.amount) to \(ApproveViewController.transaction.recipiant)?"
+        label.text = "Transfer Amount"
+        label.font = UIFont.primaryText
         label.textAlignment = .center
-        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
-    let cancelButton: BankAppButton = {
-        let button = BankAppButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Cancel", for: .normal)
-        button.addTarget(self, action: #selector(cancelTransaction(_:)), for: .touchUpInside)
-        button.backgroundColor = AppTheme.primaryBlue
-        return button
+    let amountLabel: UILabel = {
+        let amount = UILabel()
+        amount.text = ApproveViewController.transaction.amount
+        amount.font = UIFont.heavyText
+        amount.textAlignment = .center
+        amount.translatesAutoresizingMaskIntoConstraints = false
+        return amount
+    }()
+
+    let johnDoeAsset: UIImageView = {
+        let jdasset = UIImage(named: "jd-transfer")
+        let imageView = UIImageView(image: jdasset!)
+        return imageView
+    }()
+
+    let transferInfoStackView: UIStackView = {
+        let transfer = UIStackView()
+        transfer.axis = .vertical
+        transfer.distribution = .equalSpacing
+        transfer.spacing = 30
+        transfer.translatesAutoresizingMaskIntoConstraints = false
+        return transfer
+    }()
+
+    let demoLabel: UILabel = {
+        let demo = UILabel()
+        demo.text = "THIS APP IS FOR DEMO PURPOSES ONLY"
+        demo.font = UIFont.primaryText.withSize(10)
+        demo.textAlignment = .center
+        demo.translatesAutoresizingMaskIntoConstraints = false
+        return demo
     }()
 
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
@@ -62,6 +86,16 @@ class ApproveViewController: BankAppViewController {
         super.viewDidLoad()
 
         layoutView()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.isNavigationBarHidden = true
     }
 
     @objc func cancelTransaction(_ sender: Any) {
@@ -102,10 +136,14 @@ class ApproveViewController: BankAppViewController {
     func layoutView() {
         // Heirarchy
         view.addSubview(backgroundGradient)
-        view.addSubview(promptLabel)
+        view.addSubview(transferInfoStackView)
         view.addSubview(zenKeyButton)
-        view.addSubview(cancelButton)
         view.addSubview(activityIndicator)
+        view.addSubview(demoLabel)
+
+        transferInfoStackView.addArrangedSubview(transferLabel)
+        transferInfoStackView.addArrangedSubview(amountLabel)
+        transferInfoStackView.addArrangedSubview(johnDoeAsset)
 
         // Style
         let safeAreaGuide = getSafeLayoutGuide()
@@ -114,21 +152,20 @@ class ApproveViewController: BankAppViewController {
 
         // Constraints
         var constraints: [NSLayoutConstraint] = []
-        constraints.append(promptLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
-        constraints.append(promptLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
-        constraints.append(promptLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
 
-        constraints.append(zenKeyButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -10))
+
+        constraints.append(transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(transferInfoStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -(view.bounds.height / 12)))
+
         constraints.append(zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
         constraints.append(zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-
-        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -30))
-        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(cancelButton.heightAnchor.constraint(equalTo: zenKeyButton.heightAnchor))
+        constraints.append(zenKeyButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -45))
 
         constraints.append(activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+
+        constraints.append(demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        constraints.append(demoLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12))
 
 
         NSLayoutConstraint.activate(constraints)
@@ -161,5 +198,14 @@ extension ApproveViewController: ZenKeyAuthorizeButtonDelegate {
         case .cancelled:
             cancelFlow()
         }
+    }
+}
+
+extension UIFont {
+    class var primaryText: UIFont {
+        return UIFont.systemFont(ofSize: 42.0, weight: .thin)
+    }
+    class var heavyText: UIFont {
+        return UIFont.systemFont(ofSize: 52.0, weight: .regular)
     }
 }
