@@ -134,7 +134,7 @@ class ApproveViewController: UIViewController {
     }
 
     func layoutView() {
-        // Heirarchy
+        // Hierarchy
         view.addSubview(backgroundGradient)
         view.addSubview(transferInfoStackView)
         view.addSubview(zenKeyButton)
@@ -159,13 +159,13 @@ class ApproveViewController: UIViewController {
 
         constraints.append(zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
         constraints.append(zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(zenKeyButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -45))
+        constraints.append(zenKeyButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -40))
 
         constraints.append(activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
 
         constraints.append(demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(demoLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12))
+        constraints.append(demoLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -12))
 
 
         NSLayoutConstraint.activate(constraints)
