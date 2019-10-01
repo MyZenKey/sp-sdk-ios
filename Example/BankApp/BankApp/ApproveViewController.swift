@@ -85,6 +85,7 @@ class ApproveViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.title = "Send Money"
         layoutView()
     }
 
