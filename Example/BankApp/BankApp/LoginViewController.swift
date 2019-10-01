@@ -254,7 +254,7 @@ final class LoginViewController: ScrollingContentViewController {
                 guard auth != nil, error == nil else {
                     self?.showAlert(
                         title: "Enter User Name and password",
-                        message: "You must enter your user name and password to log in.\nHint: try username: jane and password: 12345"
+                        message: "Your username is “jane” and your password is the answer to “Why was 6 afraid of 7? Because …"
                     )
                     return
                 }
