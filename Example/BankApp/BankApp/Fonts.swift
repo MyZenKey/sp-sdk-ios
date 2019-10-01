@@ -28,5 +28,4 @@ extension Fonts {
                 .kern: 0.2
             ])
     }
-    
 }

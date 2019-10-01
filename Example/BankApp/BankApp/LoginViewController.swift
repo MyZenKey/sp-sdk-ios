@@ -9,7 +9,11 @@
 import UIKit
 import ZenKeySDK
 
-final class LoginViewController: UIViewController {
+final class LoginViewController: ScrollingContentViewController {
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     private let logo: UIImageView = {
         let logo = UIImageView(image: UIImage(named: "bankapp-logo"))
@@ -74,7 +78,7 @@ final class LoginViewController: UIViewController {
         return button
     }()
 
-    private let forgotPassowrdButton: UIButton = {
+    private let forgotPasswordButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(
@@ -103,15 +107,6 @@ final class LoginViewController: UIViewController {
 
     private let demoPurposesLabel: UILabel = UIViewController.makeDemoPurposesLabel()
 
-//    private lazy var inputToolbar: UIToolbar = {
-//        let toolbar = UIToolbar()
-//        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-//        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
-//        toolbar.items = [flex, doneButton]
-//        toolbar.sizeToFit()
-//        return toolbar
-//    }()
-
     private lazy var buttonsStack: UIStackView = {
         let orDivider = OrDividerView()
         let stackView = UIStackView(arrangedSubviews: [
@@ -121,7 +116,7 @@ final class LoginViewController: UIViewController {
             usernameTextField,
             passwordTextField,
             signInButton,
-            forgotPassowrdButton,
+            forgotPasswordButton,
         ])
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -129,13 +124,24 @@ final class LoginViewController: UIViewController {
         stackView.alignment = .fill
         stackView.spacing = 22
         stackView.isLayoutMarginsRelativeArrangement = true
-        let marign: CGFloat = 15
-        stackView.layoutMargins = UIEdgeInsets(top: marign, left: marign, bottom: marign, right: marign)
 
-        stackView.setCustomSpacing(15, after: zenkeyButton)
-        stackView.setCustomSpacing(15, after: poweredByLabel)
-        stackView.setCustomSpacing(15, after: orDivider)
-        stackView.setCustomSpacing(15, after: signInButton)
+        let marign: CGFloat = Constants.smallSpace
+        stackView.layoutMargins = UIEdgeInsets(
+            top: marign,
+            left: marign,
+            bottom: marign - forgotPasswordButton.layoutMargins.bottom,
+            right: marign
+        )
+
+        let smallerSpacer: CGFloat = Constants.smallSpace
+        stackView.setCustomSpacing(smallerSpacer, after: zenkeyButton)
+        stackView.setCustomSpacing(smallerSpacer, after: poweredByLabel)
+        stackView.setCustomSpacing(smallerSpacer, after: orDivider)
+        // text buttons don't count marign in sizing
+        stackView.setCustomSpacing(
+            smallerSpacer - forgotPasswordButton.layoutMargins.top,
+            after: signInButton
+        )
 
         return stackView
     }()
@@ -174,9 +180,17 @@ final class LoginViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.alignment = .fill
-        stackView.spacing = 25
+        stackView.spacing = Constants.largeSpace
 
-        stackView.setCustomSpacing(15, after: registerButton)
+        stackView.setCustomSpacing(
+            Constants.largeSpace - registerButton.layoutMargins.top,
+            after: buttonStackViewContainer
+        )
+
+        stackView.setCustomSpacing(
+            Constants.smallSpace - registerButton.layoutMargins.bottom,
+            after: registerButton
+        )
 
         return stackView
     }()
@@ -193,27 +207,36 @@ final class LoginViewController: UIViewController {
 
         view.backgroundColor = Colors.white.value
 
-        let safeAreaGuide = getSafeLayoutGuide()
+        scrollView.delegate = self
+        updateMargins()
 
-        view.addSubview(backgroundImage)
-        view.addSubview(logo)
-        view.addSubview(contentStackView)
+        contentView.addSubview(backgroundImage)
+        contentView.addSubview(logo)
+        contentView.addSubview(contentStackView)
 
         NSLayoutConstraint.activate([
             // postioned relative to the very bottom of the view and it's edges regardless of
             // marigns.
-            logo.widthAnchor.constraint(lessThanOrEqualTo: safeAreaGuide.widthAnchor),
-            logo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
+            logo.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
+            logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            logo.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
 
-            backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Constants.bottomAreaHeight),
-            backgroundImage.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundImage.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundImage.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor),
+            backgroundImage.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -Constants.bottomAreaHeight
+            ),
 
-            contentStackView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            // we want no scrolling horizontally, so pin widths to scroll view
+            backgroundImage.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            backgroundImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+
+            contentStackView.bottomAnchor.constraint(
+                equalTo: contentView.layoutMarginsGuide.bottomAnchor,
+                constant: -8
+            ),
+            contentStackView.leadingAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.trailingAnchor),
         ])
     }
 
@@ -251,6 +274,24 @@ private extension LoginViewController {
         /// the 'reserved' white area at the bottom of the screen's height
         static let bottomAreaHeight: CGFloat = 175
         static let buttonStackLowerMargin: CGFloat = 75
+        static let largeSpace: CGFloat = 25
+        static let smallSpace: CGFloat = 15
+    }
+
+    /// The margins are not quite right out of the box, update them to reflect the horizontal marigns
+    /// we expect and add no additional marign to the safe area at the bottom.
+    func updateMargins() {
+        var margins = contentView.layoutMargins
+        margins.bottom = 0.0
+        margins.left = Constants.largeSpace
+        margins.right = Constants.largeSpace
+        contentView.layoutMargins = margins
+    }
+}
+
+extension LoginViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        dismissKeyboard()
     }
 }
 
