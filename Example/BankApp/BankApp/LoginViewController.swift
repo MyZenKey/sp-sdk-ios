@@ -208,13 +208,20 @@ final class LoginViewController: ScrollingContentViewController {
         view.backgroundColor = Colors.white.value
 
         scrollView.delegate = self
+
         updateMargins()
 
         contentView.addSubview(backgroundImage)
         contentView.addSubview(logo)
         contentView.addSubview(contentStackView)
 
+        // try to be the screen size if able:
+        let tendTowardScreenSizeConstraint = contentView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height)
+        tendTowardScreenSizeConstraint.priority = .defaultHigh
+
         NSLayoutConstraint.activate([
+            tendTowardScreenSizeConstraint,
+
             // postioned relative to the very bottom of the view and it's edges regardless of
             // marigns.
             logo.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
