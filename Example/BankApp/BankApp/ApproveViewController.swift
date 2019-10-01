@@ -10,7 +10,16 @@ import ZenKeySDK
 
 class ApproveViewController: UIViewController {
 
-    static let transaction = Transaction(time: Date(), recipiant: "John Doe", amount: "$100.00")
+    static let transaction = Transaction(time: Date(), recipiant: "John Doe", amount: "$100.00", id: ApproveViewController.createID())
+
+    static func createID() -> String {
+        var num = ""
+        for _ in 0 ... 10 {
+            num.append(String(Int.random(in: 0 ..< 10)))
+        }
+        print(num)
+        return num
+    }
 
     let backgroundGradient = BackgroundGradientView()
 
@@ -156,6 +165,8 @@ class ApproveViewController: UIViewController {
 
         constraints.append(transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(transferInfoStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -(view.bounds.height / 12)))
+        constraints.append(transferInfoStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25))
+        constraints.append(transferInfoStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25))
 
         constraints.append(zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
         constraints.append(zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))

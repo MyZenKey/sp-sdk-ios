@@ -27,6 +27,7 @@ struct Transaction: Codable {
     let time: Date
     let recipiant: String
     let amount: String
+    let id: String
 
     var contextString: String {
         return "Confirm you would like to transfer \(amount) to \(recipiant)."
@@ -242,7 +243,8 @@ extension ServiceProviderAPIProtocol {
         // Build new timestamped Transaction
         let completedTransaction = Transaction(time: Date(),
                                                recipiant: transaction.recipiant,
-                                               amount: transaction.amount)
+                                               amount: transaction.amount,
+                                               id: transaction.id)
 
         var transactions = UserAccountStorage.getTransactionHistory()
         transactions.append(completedTransaction)
