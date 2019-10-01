@@ -157,6 +157,8 @@ class ApproveViewController: UIViewController {
 
         constraints.append(transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(transferInfoStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -(view.bounds.height / 12)))
+        constraints.append(transferInfoStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25))
+        constraints.append(transferInfoStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25))
 
         constraints.append(zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
         constraints.append(zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
