@@ -12,4 +12,6 @@ enum Fonts {
 
     static let textField = UIFont.systemFont(ofSize: 13.0)
 
+    static let accesory = UIFont.systemFont(ofSize: 13.0, weight: .medium)
+
 }
