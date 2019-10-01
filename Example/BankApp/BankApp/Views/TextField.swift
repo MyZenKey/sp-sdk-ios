@@ -13,6 +13,11 @@ class TextField: UIView {
         return true
     }
 
+    var textFieldDelegate: UITextFieldDelegate? {
+        get { return field.delegate }
+        set { field.delegate = newValue }
+    }
+
     var text: String? {
         get { return field.text }
         set { field.text = newValue }
@@ -31,11 +36,6 @@ class TextField: UIView {
                 attributes: Constants.placeholderAttributes
             )
         }
-    }
-
-    override var inputAccessoryView: UIView? {
-        get { return field.inputAccessoryView }
-        set { field.inputAccessoryView = newValue }
     }
 
     private let field: UITextField = {
@@ -77,6 +77,12 @@ class TextField: UIView {
         } else {
             hairline.backgroundColor = Colors.lightAccent.value
         }
+    }
+
+    @discardableResult
+    override func resignFirstResponder() -> Bool {
+        super.resignFirstResponder()
+        return field.resignFirstResponder()
     }
 }
 

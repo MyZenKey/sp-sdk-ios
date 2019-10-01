@@ -85,15 +85,6 @@ class LoginViewController: UIViewController {
 
     let watermarkLabel = BuildInfo.makeWatermarkLabel(lightText: true)
 
-    lazy var inputToolbar: UIToolbar = {
-        let toolbar = UIToolbar()
-        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
-        toolbar.items = [flex, doneButton]
-        toolbar.sizeToFit()
-        return toolbar
-    }()
-
     private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func viewDidLoad() {
@@ -147,9 +138,6 @@ class LoginViewController: UIViewController {
 
         gradientBackground.frame = view.frame
 
-        idTextField.inputAccessoryView = inputToolbar
-        passwordTextField.inputAccessoryView = inputToolbar
-
         constraints.append(logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 80))
         constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
         constraints.append(logo.heightAnchor.constraint(equalToConstant: 20))
@@ -157,13 +145,11 @@ class LoginViewController: UIViewController {
         constraints.append(idTextField.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 50))
         constraints.append(idTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(idTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        constraints.append(idTextField.heightAnchor.constraint(equalToConstant: 39))
         
         constraints.append(passwordTextField.topAnchor.constraint(equalTo: idTextField.bottomAnchor, constant: 20))
         constraints.append(passwordTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(passwordTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        constraints.append(passwordTextField.heightAnchor.constraint(equalToConstant: 39))
-        
+
         constraints.append(signInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20))
         constraints.append(signInButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
         constraints.append(signInButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
