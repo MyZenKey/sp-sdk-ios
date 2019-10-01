@@ -19,6 +19,7 @@ class ApproveViewController: UIViewController {
         label.text = "Transfer Amount"
         label.font = UIFont.primaryText
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
