@@ -195,6 +195,13 @@ final class LoginViewController: ScrollingContentViewController {
         return stackView
     }()
 
+    private lazy var footerView: UIView = {
+        let view = UIView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = Colors.white.value
+        return view
+    }()
+
     private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func viewDidLoad() {
@@ -207,18 +214,23 @@ final class LoginViewController: ScrollingContentViewController {
 
         view.backgroundColor = Colors.white.value
 
-        scrollView.delegate = self
+        scrollView.keyboardDismissMode = .onDrag
 
         updateMargins()
 
         contentView.addSubview(backgroundImage)
+        contentView.addSubview(footerView)
         contentView.addSubview(logo)
         contentView.addSubview(contentStackView)
 
-        // try to be the screen size if able:
-        let tendTowardScreenSizeConstraint = contentView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height)
+        // background image should aspire to be about 83% of the safe area's height:
+        let tendTowardScreenSizeConstraint = backgroundImage.heightAnchor.constraint(
+            equalTo: scrollView.safeAreaLayoutGuide.heightAnchor,
+            multiplier: 0.83
+        )
         tendTowardScreenSizeConstraint.priority = .defaultHigh
 
+        outsetConstraint = backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor)
         NSLayoutConstraint.activate([
             tendTowardScreenSizeConstraint,
 
@@ -226,25 +238,37 @@ final class LoginViewController: ScrollingContentViewController {
             // marigns.
             logo.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
             logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            logo.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
+            logo.topAnchor.constraint(equalTo: contentView.topAnchor),
 
-            backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor),
-            backgroundImage.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -Constants.bottomAreaHeight
-            ),
+            backgroundImage.bottomAnchor.constraint(equalTo: footerView.topAnchor),
 
             // we want no scrolling horizontally, so pin widths to scroll view
-            backgroundImage.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            backgroundImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            backgroundImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backgroundImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            backgroundImage.widthAnchor.constraint(equalTo: view.widthAnchor),
 
             contentStackView.bottomAnchor.constraint(
-                equalTo: contentView.layoutMarginsGuide.bottomAnchor,
+                equalTo: footerView.bottomAnchor,
                 constant: -8
             ),
-            contentStackView.leadingAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.trailingAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+
+            footerView.heightAnchor.constraint(equalToConstant: Constants.bottomAreaHeight),
+            footerView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            outsetConstraint,
         ])
+    }
+
+    private var outsetConstraint: NSLayoutConstraint!
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+
+        // push the photo out by the amount that we get inset
+        outsetConstraint.constant = -view.safeAreaInsets.top
     }
 
     // MARK: -  Actions
@@ -269,11 +293,6 @@ final class LoginViewController: ScrollingContentViewController {
                 self?.sharedRouter.showEnableVerifyViewController(animated: true)
         }
     }
-
-    @objc func dismissKeyboard() {
-        usernameTextField.resignFirstResponder()
-        passwordTextField.resignFirstResponder()
-    }
 }
 
 private extension LoginViewController {
@@ -293,12 +312,6 @@ private extension LoginViewController {
         margins.left = Constants.largeSpace
         margins.right = Constants.largeSpace
         contentView.layoutMargins = margins
-    }
-}
-
-extension LoginViewController: UIScrollViewDelegate {
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        dismissKeyboard()
     }
 }
 

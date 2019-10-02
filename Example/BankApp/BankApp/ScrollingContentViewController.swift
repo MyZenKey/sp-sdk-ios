@@ -10,8 +10,6 @@ import UIKit
 
 class ScrollingContentViewController: UIViewController {
 
-    typealias ScrollViewContentConstraints = (width: NSLayoutConstraint, height: NSLayoutConstraint)
-
     var scrollView: UIScrollView {
         return view as! UIScrollView
     }
@@ -22,91 +20,44 @@ class ScrollingContentViewController: UIViewController {
         return contentView
     }()
 
-    var minimumSize: CGSize = UIScreen.main.bounds.size {
-        didSet {
-            NSLayoutConstraint.deactivate([
-                scrollViewContentConstraints.width,
-                scrollViewContentConstraints.height,
-            ])
-
-            scrollViewContentConstraints = makeNewScrollViewContentConstraints(forSize: minimumSize)
-
-            NSLayoutConstraint.activate([
-                scrollViewContentConstraints.width,
-                scrollViewContentConstraints.height,
-            ])
-        }
-    }
-
-    private var keyboardObserver: AnyObject?
-
-    private var scrollViewContentConstraints: ScrollViewContentConstraints!
+    private var token: ObservationToken?
 
     override func loadView() {
-        view = UIScrollView(frame: UIScreen.main.bounds)
-        view.translatesAutoresizingMaskIntoConstraints = false
+        view = UIScrollView()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        token = startAvoidingKeyboard(additionalAnimations: nil)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        token = nil
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        keyboardObserver = addKeyboardObserver()
-
         scrollView.addSubview(contentView)
-        // NOTE: this class should default to full screen and subclasses should use the layout
-        // marigns to postion content relative to safe area or pure anchors for not.
-        scrollView.contentInsetAdjustmentBehavior = .never
 
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
 
-        // track content view constraints for updating the content view size:
-        scrollViewContentConstraints = makeNewScrollViewContentConstraints(forSize: minimumSize)
-
         NSLayoutConstraint.activate([
-            scrollView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            scrollView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height),
+            contentView.widthAnchor.constraint(
+                greaterThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor
+            ),
+            contentView.heightAnchor.constraint(
+                greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor
+            ),
 
-            scrollViewContentConstraints.width,
-            scrollViewContentConstraints.height,
-
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
     }
 }
 
-private extension ScrollingContentViewController {
-
-    func addKeyboardObserver() -> AnyObject {
-        return NotificationCenter.default.addObserver(
-            forName: UIResponder.keyboardWillChangeFrameNotification,
-            object: nil,
-            queue: .main) { [weak self] notification in
-
-                guard
-                    let sself = self,
-                    let frameValue: NSValue = (notification as NSNotification).userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
-                    return
-                }
-
-                let frame = frameValue.cgRectValue
-                var currentInsets = sself.scrollView.contentInset
-                currentInsets.bottom = (UIScreen.main.bounds.height - frame.minY)
-                self?.scrollView.contentInset = currentInsets
-        }
-    }
-
-    func makeNewScrollViewContentConstraints(forSize size: CGSize) -> ScrollViewContentConstraints {
-        return (
-            width: contentView.widthAnchor.constraint(
-                greaterThanOrEqualToConstant: size.width
-            ),
-            height: contentView.heightAnchor.constraint(
-                greaterThanOrEqualToConstant: size.height
-            )
-        )
-    }
-}
+extension ScrollingContentViewController: KeyboardAvoiding { }
