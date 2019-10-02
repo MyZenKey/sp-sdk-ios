@@ -84,6 +84,20 @@ class UnderlinedTextFieldView: UIView {
         super.resignFirstResponder()
         return field.resignFirstResponder()
     }
+
+
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        guard !isHidden else { return .zero }
+
+        return CGSize(
+            width: size.width,
+            height: max(size.height, Constants.intrinsicHeight)
+        )
+    }
+
+    override var intrinsicContentSize: CGSize {
+        return sizeThatFits(.zero)
+    }
 }
 
 private extension UnderlinedTextFieldView {
@@ -106,8 +120,6 @@ private extension UnderlinedTextFieldView {
         addSubview(hairline)
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: Constants.height),
-
             field.topAnchor.constraint(equalTo: topAnchor),
             field.bottomAnchor.constraint(equalTo: bottomAnchor),
             field.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.horizontalInset),
@@ -121,7 +133,7 @@ private extension UnderlinedTextFieldView {
     }
 
     enum Constants {
-        static let height: CGFloat = 40
+        static let intrinsicHeight: CGFloat = 40
         static let horizontalInset: CGFloat = 7
         static let hairlineHeight: CGFloat = 2
         static let textAttributes: [NSAttributedString.Key: Any] = [
