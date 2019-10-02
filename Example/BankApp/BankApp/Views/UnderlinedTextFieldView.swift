@@ -1,5 +1,5 @@
 //
-//  TextField.swift
+//  UnderlinedTextFieldView.swift
 //  BankApp
 //
 //  Created by Adam Tierney on 9/30/19.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TextField: UIView {
+class UnderlinedTextFieldView: UIView {
     override class var requiresConstraintBasedLayout: Bool {
         return true
     }
@@ -86,7 +86,7 @@ class TextField: UIView {
     }
 }
 
-private extension TextField {
+private extension UnderlinedTextFieldView {
     func sharedInit() {
 
         backgroundColor = Colors.fieldBackground.value

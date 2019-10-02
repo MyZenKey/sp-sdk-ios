@@ -23,14 +23,14 @@ class LoginViewController: UIViewController {
         return logo
     }()
     
-    let idTextField: TextField = {
-        let field = TextField()
+    let idTextField: UnderlinedTextFieldView = {
+        let field = UnderlinedTextFieldView()
         field.placeholder = "User ID"
         return field
     }()
     
-    let passwordTextField: TextField = {
-        let field = TextField()
+    let passwordTextField: UnderlinedTextFieldView = {
+        let field = UnderlinedTextFieldView()
         field.placeholder = "Password"
         return field
     }()
