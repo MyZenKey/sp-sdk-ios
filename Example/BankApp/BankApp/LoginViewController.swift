@@ -202,6 +202,8 @@ final class LoginViewController: ScrollingContentViewController {
         return view
     }()
 
+    private var outsetConstraint: NSLayoutConstraint!
+
     private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func viewDidLoad() {
@@ -231,8 +233,12 @@ final class LoginViewController: ScrollingContentViewController {
         tendTowardScreenSizeConstraint.priority = .defaultHigh
 
         outsetConstraint = backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor)
+
         NSLayoutConstraint.activate([
+
             tendTowardScreenSizeConstraint,
+
+            outsetConstraint,
 
             // postioned relative to the very bottom of the view and it's edges regardless of
             // marigns.
@@ -259,14 +265,11 @@ final class LoginViewController: ScrollingContentViewController {
             footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
-            outsetConstraint,
         ])
     }
 
-    private var outsetConstraint: NSLayoutConstraint!
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-
         // push the photo out by the amount that we get inset
         outsetConstraint.constant = -view.safeAreaInsets.top
     }
