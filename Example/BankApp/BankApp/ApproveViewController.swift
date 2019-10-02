@@ -12,8 +12,6 @@ class ApproveViewController: UIViewController {
 
     static let transaction = Transaction(time: Date(), recipiant: "John Doe", amount: "$100.00")
 
-    let backgroundGradient = BackgroundGradientView()
-
     let transferLabel: UILabel = {
         let label = UILabel()
         label.text = "Transfer Amount"
@@ -33,9 +31,9 @@ class ApproveViewController: UIViewController {
         return amount
     }()
 
-    let johnDoeAsset: UIImageView = {
-        let jdasset = UIImage(named: "jd-transfer")
-        let imageView = UIImageView(image: jdasset!)
+    let johnDoeAvatar: UIImageView = {
+        let jdavatar = UIImage(named: "jd-transfer")
+        let imageView = UIImageView(image: jdavatar)
         return imageView
     }()
 
@@ -85,6 +83,13 @@ class ApproveViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let backgroundGradient = GradientView()
+        backgroundGradient.startColor = UIColor(white: 255.0 / 255.0, alpha: 1.0)
+        backgroundGradient.endColor = UIColor(white: 213.0 / 255.0, alpha: 1.0)
+        backgroundGradient.startLocation = 0.0
+        backgroundGradient.endLocation = 1.0
+        view = backgroundGradient
 
         self.title = "Send Money"
         layoutView()
@@ -137,7 +142,6 @@ class ApproveViewController: UIViewController {
 
     func layoutView() {
         // Hierarchy
-        view.addSubview(backgroundGradient)
         view.addSubview(transferInfoStackView)
         view.addSubview(zenKeyButton)
         view.addSubview(activityIndicator)
@@ -145,34 +149,30 @@ class ApproveViewController: UIViewController {
 
         transferInfoStackView.addArrangedSubview(transferLabel)
         transferInfoStackView.addArrangedSubview(amountLabel)
-        transferInfoStackView.addArrangedSubview(johnDoeAsset)
+        transferInfoStackView.addArrangedSubview(johnDoeAvatar)
 
         // Style
         let safeAreaGuide = getSafeLayoutGuide()
-        backgroundGradient.frame = view.bounds
-        view.layer.insertSublayer(backgroundGradient.gradientLayer, at: 0)
 
         // Constraints
-        var constraints: [NSLayoutConstraint] = []
+        NSLayoutConstraint.activate([
 
+            transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            transferInfoStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            transferInfoStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
 
-        constraints.append(transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(transferInfoStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -(view.bounds.height / 12)))
-        constraints.append(transferInfoStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25))
-        constraints.append(transferInfoStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25))
+            zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+            zenKeyButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -40),
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            demoLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -12),
 
-        constraints.append(zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(zenKeyButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -40))
+            ])
 
-        constraints.append(activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+        NSLayoutConstraint(item: transferInfoStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0).isActive = true
 
-        constraints.append(demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(demoLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -12))
-
-
-        NSLayoutConstraint.activate(constraints)
     }
 }
 
@@ -205,7 +205,7 @@ extension ApproveViewController: ZenKeyAuthorizeButtonDelegate {
     }
 }
 
-extension UIFont {
+extension UIFont { //FIXME: Refactor fonts to be system-wide
     class var primaryText: UIFont {
         return UIFont.systemFont(ofSize: 42.0, weight: .thin)
     }
