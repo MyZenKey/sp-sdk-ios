@@ -10,8 +10,6 @@ import UIKit
 
 class TransfersViewController: UIViewController {
 
-    let backgroundGradient = BackgroundGradientView()
-
     let successStackView: UIStackView = {
         let success = UIStackView()
         success.axis = .vertical
@@ -37,7 +35,6 @@ class TransfersViewController: UIViewController {
         return imageView
     }()
 
-
     let successInfoLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.heavyText.withSize(17)
@@ -48,7 +45,6 @@ class TransfersViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
 
     let doneButton: UIButton = {
         let button = BankAppButton()
@@ -91,6 +87,14 @@ class TransfersViewController: UIViewController {
         super.viewDidLoad()
         self.title = "Confirmation"
         self.navigationItem.setHidesBackButton(true, animated:true)
+
+        let backgroundGradient = GradientView()
+        backgroundGradient.startColor = UIColor(white: 255.0 / 255.0, alpha: 1.0)
+        backgroundGradient.endColor = UIColor(white: 213.0 / 255.0, alpha: 1.0)
+        backgroundGradient.startLocation = 0.0
+        backgroundGradient.endLocation = 1.0
+        view = backgroundGradient
+
         layoutView()
     }
 
@@ -110,7 +114,6 @@ class TransfersViewController: UIViewController {
 
     func layoutView() {
         // Hierarchy
-        view.addSubview(backgroundGradient)
         view.addSubview(successStackView)
         view.addSubview(transactionNumberLabel)
         view.addSubview(transactionNumberLiteralLabel)
@@ -126,40 +129,34 @@ class TransfersViewController: UIViewController {
 
         // Style
         let safeAreaGuide = getSafeLayoutGuide()
-        backgroundGradient.frame = view.bounds
 
-        view.layer.insertSublayer(backgroundGradient.gradientLayer, at: 0)
         underlineView.backgroundColor = UIColor(white: 151.0 / 255.0, alpha: 1.0)
         underlineView.translatesAutoresizingMaskIntoConstraints = false
 
         // Constraints
-        var constraints: [NSLayoutConstraint] = []
+        NSLayoutConstraint.activate([
 
-        constraints.append(successStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(successStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -(view.bounds.height / 12)))
-        constraints.append(successStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 68))
-        constraints.append(successStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -68))
+            successStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            successStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 68),
+            successStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -68),
+            demoLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -8),
+            transactionNumberLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            transactionNumberLabel.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -33),
+            transactionNumberLiteralLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+            transactionNumberLiteralLabel.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -33),
+            underlineView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
+            underlineView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
+            underlineView.topAnchor.constraint(equalTo: transactionNumberLabel.bottomAnchor, constant: 3),
+            underlineView.heightAnchor.constraint(equalToConstant: 1),
+            doneButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -16),
+            doneButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            doneButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+            doneButton.heightAnchor.constraint(equalToConstant: 40),
+            demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-        constraints.append(transactionNumberLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25))
-        constraints.append(transactionNumberLabel.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -33))
+            ])
 
-        constraints.append(transactionNumberLiteralLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25))
-        constraints.append(transactionNumberLiteralLabel.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -33))
-
-        constraints.append(underlineView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25))
-        constraints.append(underlineView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25))
-        constraints.append(underlineView.topAnchor.constraint(equalTo: transactionNumberLabel.bottomAnchor, constant: 3))
-        constraints.append(underlineView.heightAnchor.constraint(equalToConstant: 1))
-
-        constraints.append(doneButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -16))
-        constraints.append(doneButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25))
-        constraints.append(doneButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25))
-        doneButton.frame.size.height = 40
-
-        constraints.append(demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(demoLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -12))
-
-        NSLayoutConstraint.activate(constraints)
+        NSLayoutConstraint(item: successStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0).isActive = true
 
     }
 }
