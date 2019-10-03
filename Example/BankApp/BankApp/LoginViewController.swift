@@ -264,7 +264,7 @@ final class LoginViewController: ScrollingContentViewController {
             photoHeightRestrictionConstraint,
             outsetConstraint,
 
-            // postioned relative to the very bottom of the view and it's edges regardless of
+            // postioned relative to the very bottom of the view and it's edges regardless o
             // marigns.
             logo.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
             logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),

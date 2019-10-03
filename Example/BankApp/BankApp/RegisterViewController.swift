@@ -18,7 +18,7 @@ class RegisterViewController: ScrollingContentViewController {
         return backgroundImage
     }()
 
-    lazy var zenkeyButton: ZenKeyAuthorizeButton = {
+    private lazy var zenkeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
         button.style = .dark
         let scopes: [Scope] = [.openid, .register, .name, .email, .postalCode, .phone]
@@ -28,7 +28,7 @@ class RegisterViewController: ScrollingContentViewController {
         return button
     }()
 
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.attributedText = Fonts.headlineText(
@@ -36,46 +36,54 @@ class RegisterViewController: ScrollingContentViewController {
             withColor: Colors.primaryText.value
         )
         label.textAlignment = .center
+        label.numberOfLines = 2
         return label
     }()
 
-    let userNameTextField: UnderlinedTextFieldView = {
+    private let orDivider: OrDividerView = {
+        let orDivider = OrDividerView()
+        let height = orDivider.heightAnchor.constraint(equalToConstant: Constants.mediumSpace)
+        height.isActive = true
+        return orDivider
+    }()
+
+    private let userNameTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "User ID"
         return field
     }()
 
-    let emailTextField: UnderlinedTextFieldView = {
+    private let emailTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "Email"
         return field
     }()
 
-    let phoneTextField: UnderlinedTextFieldView = {
+    private let phoneTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "Phone Number"
         return field
     }()
 
-    let passwordTextField: UnderlinedTextFieldView = {
+    private let passwordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "Password"
         return field
     }()
 
-    let confirmPasswordTextField: UnderlinedTextFieldView = {
+    private let confirmPasswordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "Confirm Password"
         return field
     }()
 
-    let postalCodeTextField: UnderlinedTextFieldView = {
+    private let postalCodeTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "Postal Code"
         return field
     }()
 
-    let signUpButton: UIButton = {
+    private let signUpButton: UIButton = {
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.borderWidth = 2.0
@@ -93,7 +101,6 @@ class RegisterViewController: ScrollingContentViewController {
     private let demoPurposesLabel: UILabel = UIViewController.makeDemoPurposesLabel()
 
     private lazy var formStack: UIStackView = {
-        let orDivider = OrDividerView()
         let stackView = UIStackView(arrangedSubviews: [
             titleLabel,
             zenkeyButton,
@@ -172,7 +179,9 @@ class RegisterViewController: ScrollingContentViewController {
         return view
     }()
 
-    private var outsetConstraint: NSLayoutConstraint!
+    fileprivate var cardToTopConstraint: NSLayoutConstraint!
+
+    fileprivate var outsetConstraint: NSLayoutConstraint!
 
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
@@ -190,19 +199,16 @@ class RegisterViewController: ScrollingContentViewController {
         contentView.addSubview(footerView)
         contentView.addSubview(contentStackView)
 
-        // background image should aspire to be about 83% of the safe area's height:
-        let tendTowardScreenSizeConstraint = backgroundImage.heightAnchor.constraint(
-            equalTo: scrollView.safeAreaLayoutGuide.heightAnchor,
-            multiplier: 0.80
-        )
-        tendTowardScreenSizeConstraint.priority = .defaultHigh
+        // background image should shrink to support keeping the distance between card and top
+        // of the screen fixed to it's desired scale.
+        backgroundImage.setContentCompressionResistancePriority(.fittingSizeLevel, for: .vertical)
 
+        cardToTopConstraint = contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor)
         outsetConstraint = backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor)
 
         NSLayoutConstraint.activate([
 
-            tendTowardScreenSizeConstraint,
-
+            cardToTopConstraint,
             outsetConstraint,
 
             backgroundImage.bottomAnchor.constraint(equalTo: footerView.topAnchor),
@@ -236,6 +242,14 @@ class RegisterViewController: ScrollingContentViewController {
         super.viewSafeAreaInsetsDidChange()
         // push the photo out by the amount that we get inset
         outsetConstraint.constant = -view.safeAreaInsets.top
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // on smaller screens, reduce the top float to a percentage of the screen's height
+        // but don't grow over 166 for very large screens.
+        cardToTopConstraint.constant = min(166, scrollView.frame.height * 0.2)
     }
 
     @objc func signUpPressed() {
