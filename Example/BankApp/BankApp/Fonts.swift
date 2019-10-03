@@ -9,6 +9,9 @@
 import UIKit
 
 enum Fonts {
+    static let headline = UIFont.systemFont(ofSize: 17.0, weight: .bold)
+
+    static let lightHeadline = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
 
     static let textField = UIFont.systemFont(ofSize: 13.0)
 
@@ -18,6 +21,16 @@ enum Fonts {
 }
 
 extension Fonts {
+
+    static func headlineText(text: String, withColor color: UIColor) -> NSAttributedString {
+        return NSAttributedString(
+            string: text,
+            attributes: [
+                .font: Fonts.headline,
+                .foregroundColor: color,
+                .kern: 0.03
+            ])
+    }
 
     static func accessoryText(text: String, withColor color: UIColor) -> NSAttributedString {
         return NSAttributedString(

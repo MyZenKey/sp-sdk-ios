@@ -31,8 +31,10 @@ class RegisterViewController: ScrollingContentViewController {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.text = "Sign Up for BankApp"
+        label.attributedText = Fonts.headlineText(
+            text: "Start your futrue with BankApp.",
+            withColor: Colors.primaryText.value
+        )
         label.textAlignment = .center
         return label
     }()
@@ -163,6 +165,14 @@ class RegisterViewController: ScrollingContentViewController {
         return stackView
     }()
 
+    private lazy var footerView: UIView = {
+        let view = UIView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = Colors.white.value
+        return view
+    }()
+
+    private var outsetConstraint: NSLayoutConstraint!
 
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
@@ -172,42 +182,66 @@ class RegisterViewController: ScrollingContentViewController {
         view.backgroundColor = Colors.white.value
         signUpButton.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
 
-//        scrollView.delegate = self
+        scrollView.keyboardDismissMode = .onDrag
+
         updateMargins()
 
         contentView.addSubview(backgroundImage)
+        contentView.addSubview(footerView)
         contentView.addSubview(contentStackView)
 
-        // try to be the screen size if able:
-        let tendTowardScreenSizeConstraint = contentView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height)
-        tendTowardScreenSizeConstraint.priority = .fittingSizeLevel
+        // background image should aspire to be about 83% of the safe area's height:
+        let tendTowardScreenSizeConstraint = backgroundImage.heightAnchor.constraint(
+            equalTo: scrollView.safeAreaLayoutGuide.heightAnchor,
+            multiplier: 0.80
+        )
+        tendTowardScreenSizeConstraint.priority = .defaultHigh
+
+        outsetConstraint = backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor)
 
         NSLayoutConstraint.activate([
+
             tendTowardScreenSizeConstraint,
 
-            backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor),
-            backgroundImage.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -Constants.bottomAreaHeight
-            ),
+            outsetConstraint,
+
+            backgroundImage.bottomAnchor.constraint(equalTo: footerView.topAnchor),
 
             // we want no scrolling horizontally, so pin widths to scroll view
-            backgroundImage.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            backgroundImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            backgroundImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backgroundImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            backgroundImage.widthAnchor.constraint(equalTo: view.widthAnchor),
 
             contentStackView.bottomAnchor.constraint(
-                equalTo: contentView.layoutMarginsGuide.bottomAnchor,
+                equalTo: footerView.bottomAnchor,
                 constant: -8
             ),
-            contentStackView.leadingAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.leadingAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.trailingAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+
+            footerView.heightAnchor.constraint(equalToConstant: Constants.bottomAreaHeight),
+            footerView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        title = "Register"
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        // push the photo out by the amount that we get inset
+        outsetConstraint.constant = -view.safeAreaInsets.top
     }
 
     @objc func signUpPressed() {
         showAlert(
             title: "Not Supported",
-            message: "We don't support manual sign up yet, try ZenKey instead!"
+            message: "We don’t support manual sign up, yet. Try ZenKey instead!"
         )
     }
 }
@@ -215,8 +249,7 @@ class RegisterViewController: ScrollingContentViewController {
 private extension RegisterViewController {
     enum Constants {
         /// the 'reserved' white area at the bottom of the screen's height
-        static let bottomAreaHeight: CGFloat = 175
-        static let buttonStackLowerMargin: CGFloat = 75
+        static let bottomAreaHeight: CGFloat = 157
         static let largeSpace: CGFloat = 25
         static let mediumSpace: CGFloat = 15
         static let smallSpace: CGFloat = 10

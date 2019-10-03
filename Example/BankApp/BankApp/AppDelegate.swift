@@ -38,6 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, DemoAppAppDelegate {
         }
         window.makeKeyAndVisible()
 
+        NavigationBarAppearance.configureNavBar()
+
         return true
     }
 

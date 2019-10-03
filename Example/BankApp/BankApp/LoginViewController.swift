@@ -291,6 +291,11 @@ final class LoginViewController: ScrollingContentViewController {
         ])
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
         // The photo should sit at the top of the screen. This will be pushed outside of the
