@@ -161,6 +161,7 @@ class ApproveViewController: UIViewController {
         // Constraints
         NSLayoutConstraint.activate([
 
+            NSLayoutConstraint(item: transferInfoStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
             transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             transferInfoStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
             transferInfoStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
