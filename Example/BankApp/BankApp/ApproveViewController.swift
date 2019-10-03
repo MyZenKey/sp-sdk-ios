@@ -81,16 +81,20 @@ class ApproveViewController: UIViewController {
         return button
     }()
 
+    override func loadView() {
+        let backgroundGradient = GradientView()
+        backgroundGradient.startColor = Colors.white.value
+        backgroundGradient.midColor = Colors.gradientMid.value
+        backgroundGradient.endColor = Colors.gradientMax.value
+        backgroundGradient.startLocation = 0.0
+        backgroundGradient.midLocation = 0.45
+        backgroundGradient.endLocation = 1.0
+        backgroundGradient.midPointMode = true
+        view = backgroundGradient
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let backgroundGradient = GradientView()
-        backgroundGradient.startColor = UIColor(white: 255.0 / 255.0, alpha: 1.0)
-        backgroundGradient.endColor = UIColor(white: 213.0 / 255.0, alpha: 1.0)
-        backgroundGradient.startLocation = 0.0
-        backgroundGradient.endLocation = 1.0
-        view = backgroundGradient
-
         self.title = "Send Money"
         layoutView()
     }
@@ -157,6 +161,7 @@ class ApproveViewController: UIViewController {
         // Constraints
         NSLayoutConstraint.activate([
 
+            NSLayoutConstraint(item: transferInfoStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
             transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             transferInfoStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
             transferInfoStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
@@ -171,7 +176,6 @@ class ApproveViewController: UIViewController {
 
             ])
 
-        NSLayoutConstraint(item: transferInfoStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0).isActive = true
 
     }
 }
