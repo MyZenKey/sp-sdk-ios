@@ -203,6 +203,15 @@ final class LoginViewController: ScrollingContentViewController {
     }()
 
     private var outsetConstraint: NSLayoutConstraint!
+    private var photoHeightRestrictionConstraint: NSLayoutConstraint!
+
+    fileprivate var outsetConstraintConstant: CGFloat {
+        return -view.safeAreaInsets.top
+    }
+
+    fileprivate var photoHeightConstraintConstant: CGFloat {
+        return -(Constants.bottomAreaHeight + (view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom))
+    }
 
     private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
@@ -225,19 +234,17 @@ final class LoginViewController: ScrollingContentViewController {
         contentView.addSubview(logo)
         contentView.addSubview(contentStackView)
 
-        // background image should aspire to be about 83% of the safe area's height:
-        let tendTowardScreenSizeConstraint = backgroundImage.heightAnchor.constraint(
-            equalTo: scrollView.safeAreaLayoutGuide.heightAnchor,
-            multiplier: 0.83
-        )
-        tendTowardScreenSizeConstraint.priority = .defaultHigh
-
         outsetConstraint = backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor)
+
+        // the photo should take the space of the screen above the footer area
+        photoHeightRestrictionConstraint = backgroundImage.heightAnchor.constraint(
+            equalTo: scrollView.frameLayoutGuide.heightAnchor,
+            constant: photoHeightConstraintConstant
+        )
 
         NSLayoutConstraint.activate([
 
-            tendTowardScreenSizeConstraint,
-
+            photoHeightRestrictionConstraint,
             outsetConstraint,
 
             // postioned relative to the very bottom of the view and it's edges regardless of
@@ -264,14 +271,18 @@ final class LoginViewController: ScrollingContentViewController {
             footerView.widthAnchor.constraint(equalTo: view.widthAnchor),
             footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-
         ])
     }
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        // push the photo out by the amount that we get inset
-        outsetConstraint.constant = -view.safeAreaInsets.top
+        // The photo should sit at the top of the screen. This will be pushed outside of the
+        // scroll view's content area by the size of the safe area:
+        outsetConstraint.constant = outsetConstraintConstant
+        // The photo height should scale to fill the space on all screen sizes, less the bottom
+        // space. This is the bottom space constant height adjusted for the unmodified safe area
+        // insets:
+        photoHeightRestrictionConstraint.constant = photoHeightConstraintConstant
     }
 
     // MARK: -  Actions
