@@ -68,12 +68,14 @@ class RegisterViewController: ScrollingContentViewController {
     private let passwordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "Password"
+        field.isSecureTextEntry = true
         return field
     }()
 
     private let confirmPasswordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "Confirm Password"
+        field.isSecureTextEntry = true
         return field
     }()
 
