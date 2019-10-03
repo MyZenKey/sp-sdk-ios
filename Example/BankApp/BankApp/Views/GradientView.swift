@@ -19,7 +19,6 @@ class GradientView: UIView {
     @IBInspectable var diagonalMode:    Bool =  false { didSet { updatePoints() }}
     @IBInspectable var midPointMode:    Bool =  false { didSet { updateLocations(); updateColors() }}
 
-
     // Trick to make the CALayer be the CAGradientLayer which you control (returns the class)
     override class var layerClass: AnyClass { return CAGradientLayer.self }
 
