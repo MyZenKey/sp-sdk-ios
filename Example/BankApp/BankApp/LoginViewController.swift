@@ -56,6 +56,7 @@ final class LoginViewController: ScrollingContentViewController {
     private let passwordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
         field.placeholder = "Password"
+        field.isSecureTextEntry = true
         return field
     }()
     
