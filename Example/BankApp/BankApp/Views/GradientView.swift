@@ -10,11 +10,14 @@ import UIKit
 class GradientView: UIView {
     
     @IBInspectable var startColor:   UIColor = AppTheme.gradientTopColor { didSet { updateColors() }}
+    @IBInspectable var midColor:   UIColor = AppTheme.gradientTopColor { didSet { updateColors() }}
     @IBInspectable var endColor:     UIColor = AppTheme.gradientBottomColor { didSet { updateColors() }}
     @IBInspectable var startLocation: Double =   0.05 { didSet { updateLocations() }}
+    @IBInspectable var midLocation: Double =   0.5 { didSet { updateLocations() }}
     @IBInspectable var endLocation:   Double =   0.95 { didSet { updateLocations() }}
     @IBInspectable var horizontalMode:  Bool =  false { didSet { updatePoints() }}
     @IBInspectable var diagonalMode:    Bool =  false { didSet { updatePoints() }}
+    @IBInspectable var midPointMode:    Bool =  false { didSet { updateLocations(); updateColors() }}
 
     // Trick to make the CALayer be the CAGradientLayer which you control (returns the class)
     override class var layerClass: AnyClass { return CAGradientLayer.self }
@@ -33,11 +36,19 @@ class GradientView: UIView {
     }
 
     func updateLocations() {
-        gradientLayer.locations = [startLocation as NSNumber, endLocation as NSNumber]
+        if midPointMode {
+            gradientLayer.locations = [startLocation as NSNumber, midLocation as NSNumber, endLocation as NSNumber]
+        } else {
+            gradientLayer.locations = [startLocation as NSNumber, endLocation as NSNumber]
+        }
     }
 
     func updateColors() {
-        gradientLayer.colors    = [startColor.cgColor, endColor.cgColor]
+        if midPointMode {
+            gradientLayer.colors = [startColor.cgColor, midColor.cgColor, endColor.cgColor]
+        } else {
+            gradientLayer.colors    = [startColor.cgColor, endColor.cgColor]
+        }
     }
 
     override func layoutSubviews() {

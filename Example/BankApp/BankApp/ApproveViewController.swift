@@ -28,6 +28,7 @@ class ApproveViewController: UIViewController {
         label.text = "Transfer Amount"
         label.font = UIFont.primaryText
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -41,9 +42,9 @@ class ApproveViewController: UIViewController {
         return amount
     }()
 
-    let johnDoeAsset: UIImageView = {
-        let jdasset = UIImage(named: "jd-transfer")
-        let imageView = UIImageView(image: jdasset!)
+    let johnDoeAvatar: UIImageView = {
+        let jdavatar = UIImage(named: "jd-transfer")
+        let imageView = UIImageView(image: jdavatar)
         return imageView
     }()
 
@@ -91,9 +92,24 @@ class ApproveViewController: UIViewController {
         return button
     }()
 
+    override func loadView() {
+        let backgroundGradient = GradientView()
+        backgroundGradient.startColor = Colors.white.value
+        backgroundGradient.midColor = Colors.gradientMid.value
+        backgroundGradient.endColor = Colors.gradientMax.value
+        backgroundGradient.startLocation = 0.0
+        backgroundGradient.midLocation = 0.45
+        backgroundGradient.endLocation = 1.0
+        backgroundGradient.midPointMode = true
+        view = backgroundGradient
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+<<<<<<< HEAD
 
+=======
+>>>>>>> task/XCI-4982-update-send-money
         self.title = "Send Money"
         layoutView()
     }
@@ -145,7 +161,6 @@ class ApproveViewController: UIViewController {
 
     func layoutView() {
         // Hierarchy
-        view.addSubview(backgroundGradient)
         view.addSubview(transferInfoStackView)
         view.addSubview(zenKeyButton)
         view.addSubview(activityIndicator)
@@ -153,14 +168,13 @@ class ApproveViewController: UIViewController {
 
         transferInfoStackView.addArrangedSubview(transferLabel)
         transferInfoStackView.addArrangedSubview(amountLabel)
-        transferInfoStackView.addArrangedSubview(johnDoeAsset)
+        transferInfoStackView.addArrangedSubview(johnDoeAvatar)
 
         // Style
         let safeAreaGuide = getSafeLayoutGuide()
-        backgroundGradient.frame = view.bounds
-        view.layer.insertSublayer(backgroundGradient.gradientLayer, at: 0)
 
         // Constraints
+<<<<<<< HEAD
         var constraints: [NSLayoutConstraint] = []
 
         constraints.append(transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
@@ -180,6 +194,24 @@ class ApproveViewController: UIViewController {
 
 
         NSLayoutConstraint.activate(constraints)
+=======
+        NSLayoutConstraint.activate([
+
+            NSLayoutConstraint(item: transferInfoStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
+            transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            transferInfoStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            transferInfoStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+
+            zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+            zenKeyButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -40),
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            demoLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -12),
+
+            ])
+>>>>>>> task/XCI-4982-update-send-money
     }
 }
 
@@ -212,7 +244,7 @@ extension ApproveViewController: ZenKeyAuthorizeButtonDelegate {
     }
 }
 
-extension UIFont {
+extension UIFont { //FIXME: Refactor fonts to be system-wide
     class var primaryText: UIFont {
         return UIFont.systemFont(ofSize: 42.0, weight: .thin)
     }
