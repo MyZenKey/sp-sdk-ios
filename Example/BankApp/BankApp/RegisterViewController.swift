@@ -32,7 +32,7 @@ class RegisterViewController: ScrollingContentViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.attributedText = Fonts.headlineText(
-            text: "Start your futrue with BankApp.",
+            text: "Start your future with BankApp.",
             withColor: Colors.primaryText.value
         )
         label.textAlignment = .center
