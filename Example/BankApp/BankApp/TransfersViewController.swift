@@ -127,11 +127,8 @@ class TransfersViewController: UIViewController {
         if let mostRecentTransaction = transaction.last {
             transactionNumberLiteralLabel.text = "#\(mostRecentTransaction.id)"
             successInfoLabel.text = "You have sent \(mostRecentTransaction.amount) USD \nto \(mostRecentTransaction.recipiant)."
-        } else {
-            return
         }
     }
-
 
     func layoutView() {
 
