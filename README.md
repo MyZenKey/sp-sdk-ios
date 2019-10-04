@@ -392,7 +392,83 @@ public struct Log {
 
 ```
 
-## 9.0 Next Steps
+## 9.0 Account Migration
+
+When users change carriers, ZenKey provides you with the support you need. This section describes the migration process and best practices.
+
+### 9.1 Migration Process
+
+Take a look at the various interactions between user, Service Provider, carrier and ZenKey when a user ports his/her account from one carrier to another.
+
+**Sample User Account Attributes**
+
+* Phone's Internal Sub= 001001-carrierid
+* Phone=555
+* User has visited at least one Service Provider
+* SP sees a `SUB=001001-B`
+* SP has created a user federated to verify=001001-B
+
+**Process Flow**
+
+1. The user migrates phone 555 from mobile provider MNO1 to MNO2 by keeping the current device but changing the SIM.
+
+2. After migrating the phone number from the carrier to carrier (e.g., within 15 minutes), the user tries to connect to a Service Provider app, and the SP triggers a login prompt with the phone number.  
+
+3. The SP SDK submits a discovery request with the new `mccmnc` to retrieve the OpenID configuration for MNO2.
+
+4. The SP SDK constructs the authentication URL to MNO, opening in the device browser to MNO2's web authentication endpoint.
+
+5. MNO2 sees the mobile user agent and posts a banner encouraging the user to download the CCID app.
+
+6. The  user downloads, installs, and launches the CCID application for MNO2 .
+
+7. MNO2 notices that the user is not yet registered for the new phone number and:
+
+   a. Asks: “Would you like to register a CCID?” or “Would you like to PORT your CCID from your previous MNO?”
+
+   b. Upon seeing that the device has a recently migrated phone line, offers a migration option.
+
+8. The user selects the option to migrate the existing CCID and is redirected in a WebView to MNO1’s authentication endpoint. (Because the MNO1 authentication request contains the `port_data` scope, MNO1 knows the authentication is for migration.)
+
+9. MNO1 completes the user authentication before returning the user to MNO2:
+	a. MNO1 may require the user to perform multiple recovery methods because EAP-AKA (SIM) authentication will not work for the user.
+	b. MNO1 signs a port token for each SP using the slow rotating key present in the OpenID configuration reference.
+
+10. The user completes MNO2 account setup steps:
+
+    a. MNO2 prepopulates the registration page with the previous name, email, address, etc.
+
+    b. The user chooses a new pin.
+
+    c. MNO2 stores port tokens for each of the previous Service Providers used at MNO1.
+
+11. MNO2 asks if the user wants to port his/her previously-defined consents for each of the SPs, and then returns the user to the Service Provider application with an authentication code.
+
+12. The Service Provider issues an `access_token` and `id_token`:
+    * `SUB=002002-Z`
+    * `AKA: port_token: signedjwt {old sub : 001001-B }`
+
+13. The Service Provider does not recognize this `sub`and instead uses the ISS to access MNO1’s `port_token` signing key, and verifies the signature of the `port_token`.
+
+14. The Service Provider updates the user's `sub`in its database with the new value. For example, from `001001-B` to `002002-Z`.
+
+### 9.2 Migration Best Practices 
+
+When an SP first authenticates a user, the first `id_token` should contain a single subject claim. The SP should store this as a reference rather than a phone number or email address which could later change.
+
+If an SP receives a new `id_token` that contains an AKA claim and an unrecognized sub, the SP should take the following steps:
+
+1. Open the AKA `port_token`.
+2. Verify the `port_token` issuer is a trusted carrier. **NOTE:**  The SP portal will contain a list of valid `iss` URLs.
+3. Use the `port_token :iss`  value to extract the OpenID configuration` of the old MNO.
+4. Use the  OpenID configuration to extract the JWKs for the old MNO. 
+5. Use the key ID (KID) in the `port_token` to identify which JWK key to use to verify the token's signature.
+6. If the SP has a recorded a user with the old subject, update the references to the new subject from the new carrier.
+
+**Note:** Because a user may choose to not port his/her CCID user account, or change carriers by getting a new phone number with the new carrier, the Service Provider should host methods to update the CCID references.
+
+
+## 10.0 Next Steps
 
 On your secure server, perform discovery and use the discovered token endpoint to request an access token from ZenKey with the processes already detailed:
 
@@ -422,11 +498,12 @@ NOTICE: © 2019 XCI JV, LLC. ZENKEY IS A TRADEMARK OF XCI JV, LLC. ALL RIGHTS RE
 ## Revision History
 
 | Date   | Version      | Description |
-| -------- | --------- | ------------------------------------------------------ |
+| -------- | --------- | --------------------------------------------- |
+| 10.4.2019   | 0.9.14   | Added Migrating Accounts section |
 | 9.17.2019 | 0.9.13 | Updated license with Apache 2.0 text. |
 | 9.9.2019 | 0.9.12 | Added minor edits. |
 | 8.29.2019 | 0.9.11 | Updating verbiage and instructions |
 |8.27.2019 | 0.9.10     | Updated high-level flows; Updated sample code.  |
 |8.20.2019 | 0.9.9     | Added section numbers; Added revision history; Added additional info about Redirect URIs to section 4.0 |
 
-<sub> Last Update: Document Version 0.9.13 - September 17, 2019</sub>
+<sub> Last Update: Document Version 0.9.14 - October 4, 2019</sub>
