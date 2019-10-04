@@ -28,9 +28,9 @@ class TransfersViewController: UIViewController {
         return label
     }()
 
-    let checkBoxAsset: UIImageView = {
+    let checkCircleView: UIImageView = {
         let asset = UIImage(named: "checkbox")
-        let imageView = UIImageView(image: asset!)
+        let imageView = UIImageView(image: asset)
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -38,7 +38,6 @@ class TransfersViewController: UIViewController {
     let successInfoLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.heavyText.withSize(17)
-        label.text = "You have sent \(ApproveViewController.transaction.amount) USD to \(ApproveViewController.transaction.recipiant)."
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -50,7 +49,7 @@ class TransfersViewController: UIViewController {
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Done", for: .normal)
-        button.backgroundColor = UIColor.init(red: 37.0 / 255.0, green: 67.0 / 255.0, blue: 141.0 / 255.0, alpha: 1.0)
+        button.backgroundColor = Colors.brightAccent.value
         return button
     }()
 
@@ -66,7 +65,6 @@ class TransfersViewController: UIViewController {
     let transactionNumberLiteralLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.heavyText.withSize(13)
-        label.text = "#\(ApproveViewController.transaction.id)"
         label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -82,6 +80,8 @@ class TransfersViewController: UIViewController {
         demo.translatesAutoresizingMaskIntoConstraints = false
         return demo
     }()
+
+    private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func loadView() {
         let backgroundGradient = GradientView()
@@ -99,6 +99,13 @@ class TransfersViewController: UIViewController {
         super.viewDidLoad()
         self.title = "Confirmation"
         self.navigationItem.setHidesBackButton(true, animated:true)
+        // fetch data
+        serviceAPI.getTransactions() { [weak self] transactions,_ in
+            guard let newTransactions = transactions else {
+                return
+            }
+            self?.updateWithTransaction(transaction: newTransactions)
+        }
         layoutView()
     }
 
@@ -116,7 +123,17 @@ class TransfersViewController: UIViewController {
         sharedRouter.pop(animated: true)
     }
 
+    func updateWithTransaction(transaction: [Transaction]) {
+        if let mostRecentTransaction = transaction.last {
+            transactionNumberLiteralLabel.text = "#\(mostRecentTransaction.id)"
+            successInfoLabel.text = "You have sent \(mostRecentTransaction.amount) USD \nto \(mostRecentTransaction.recipiant)."
+        } else {
+            return
+        }
+    }
+
     func layoutView() {
+
         // Hierarchy
         view.addSubview(successStackView)
         view.addSubview(demoLabel)
@@ -126,7 +143,7 @@ class TransfersViewController: UIViewController {
         view.addSubview(transactionNumberLiteralLabel)
 
         successStackView.addArrangedSubview(successLabel)
-        successStackView.addArrangedSubview(checkBoxAsset)
+        successStackView.addArrangedSubview(checkCircleView)
         successStackView.addArrangedSubview(successInfoLabel)
 
         doneButton.addTarget(self, action: #selector(okayPressed), for: .touchUpInside)
@@ -134,7 +151,7 @@ class TransfersViewController: UIViewController {
         // Style
         let safeAreaGuide = getSafeLayoutGuide()
 
-        underlineView.backgroundColor = UIColor(white: 151.0 / 255.0, alpha: 1.0)
+        underlineView.backgroundColor = Colors.brownGrey.value
         underlineView.translatesAutoresizingMaskIntoConstraints = false
 
         // Constraints

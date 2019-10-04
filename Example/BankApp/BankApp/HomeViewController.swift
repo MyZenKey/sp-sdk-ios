@@ -71,7 +71,6 @@ class HomeViewController: BankAppViewController {
         fetchUserInfoIfNeeded()
     }
 
-
     @objc func logoutButtonTouched(_ sender: Any) {
         (UIApplication.shared.delegate as? AppDelegate)?.logout()
     }

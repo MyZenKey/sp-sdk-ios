@@ -67,8 +67,7 @@ class MockService: NSObject, ServiceProviderAPIProtocol {
         DispatchQueue.main.async {
             let completedTransaction = Transaction(time: Date(),
                                                    recipiant: transaction.recipiant,
-                                                   amount: transaction.amount,
-                                                   id: transaction.id)
+                                                   amount: transaction.amount)
             var transactions = UserAccountStorage.getTransactionHistory()
             transactions.append(completedTransaction)
             UserAccountStorage.setTransactionHistory(transactions)

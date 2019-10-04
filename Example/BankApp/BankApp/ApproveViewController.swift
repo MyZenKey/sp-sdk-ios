@@ -10,16 +10,7 @@ import ZenKeySDK
 
 class ApproveViewController: UIViewController {
 
-    static let transaction = Transaction(time: Date(), recipiant: "John Doe", amount: "$100.00", id: ApproveViewController.createID())
-
-    static func createID() -> String {
-        var num = ""
-        for _ in 0 ... 10 {
-            num.append(String(Int.random(in: 0 ..< 10)))
-        }
-        print(num)
-        return num
-    }
+    let transaction = Transaction(time: Date(), recipiant: "John Doe", amount: "$100.00")
 
     let transferLabel: UILabel = {
         let label = UILabel()
@@ -33,7 +24,6 @@ class ApproveViewController: UIViewController {
 
     let amountLabel: UILabel = {
         let amount = UILabel()
-        amount.text = ApproveViewController.transaction.amount
         amount.font = UIFont.heavyText
         amount.textAlignment = .center
         amount.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +64,7 @@ class ApproveViewController: UIViewController {
     }()
 
     let nonce = RandomStringGenerator.generateNonceSuitableString()!
-    let context = ApproveViewController.transaction.contextString
+
 
     lazy var zenKeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
@@ -86,7 +76,6 @@ class ApproveViewController: UIViewController {
         button.acrValues = [.aal2]
         // TODO: new nonce per-press when we make this more realistic.
         button.nonce = nonce
-        button.context = context
         return button
     }()
 
@@ -105,6 +94,7 @@ class ApproveViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Send Money"
+        updateWithTransaction()
         layoutView()
     }
 
@@ -126,11 +116,17 @@ class ApproveViewController: UIViewController {
         }
     }
 
+    func updateWithTransaction() {
+        let context = self.transaction.contextString
+        zenKeyButton.context = context
+        amountLabel.text = self.transaction.amount
+    }
+
     func completeFlow(withAuthChode code: String, redirectURI: URL, mcc: String, mnc: String) {
         serviceAPI.requestTransfer(
             withAuthCode: code,
             redirectURI: redirectURI,
-            transaction: ApproveViewController.transaction,
+            transaction: self.transaction,
             nonce: nonce) { completeTransaction, error in
 
                 guard error == nil else {
