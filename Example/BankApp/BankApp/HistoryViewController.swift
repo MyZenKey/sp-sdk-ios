@@ -8,18 +8,19 @@
 
 import UIKit
 
-class HistoryViewController: UIViewController {
+class HistoryViewController: UITableViewController {
 
-    private let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.separatorStyle = .singleLine
-        tableView.backgroundColor = .white
-        return tableView
-    }()
     private var transactions = [Transaction]()
+
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
+
+    private(set) lazy var demoPurposes = UIViewController.makeDemoPurposesLabel()
+
+    private(set) lazy var backgroundView: UIView = {
+        let backgroundView = UIView(frame: .zero)
+        backgroundView.addSubview(demoPurposes)
+        return backgroundView
+    }()
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -31,27 +32,25 @@ class HistoryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "History"
-        // Table
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        let safeAreaGuide = getSafeLayoutGuide()
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
-            ])
+
+        self.title = "Transfer Log"
+
+        tableView.backgroundColor = Colors.white.value
+        tableView.backgroundView = backgroundView
+
         tableView.dataSource = self
 
-        tableView.reloadData()
-        // fetch data
-        serviceAPI.getTransactions() { [weak self] transactions,_ in
-            guard let newTransactions = transactions else {
-                return
-            }
-            self?.updateTransactions(newTransactions)
-        }
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.separatorStyle = .singleLine
+
+        NSLayoutConstraint.activate([
+            demoPurposes.leadingAnchor.constraint(equalTo: backgroundView.layoutMarginsGuide.leadingAnchor),
+            demoPurposes.trailingAnchor.constraint(equalTo: backgroundView.layoutMarginsGuide.trailingAnchor),
+            demoPurposes.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
+
+        syncTransactions()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -63,9 +62,30 @@ class HistoryViewController: UIViewController {
         super.viewWillDisappear(animated)
         navigationController?.isNavigationBarHidden = true
     }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        let safeAreaInset = view.safeAreaInsets.bottom
+        tableView.contentInset = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: safeAreaInset + 28.0,
+            right: 0
+        )
+    }
 }
 
 private extension HistoryViewController {
+    func syncTransactions() {
+        // fetch data
+        serviceAPI.getTransactions() { [weak self] transactions,_ in
+            guard let newTransactions = transactions else {
+                return
+            }
+            self?.updateTransactions(newTransactions)
+        }
+    }
+
     func updateTransactions(_ newTransactions: [Transaction]) {
         transactions = newTransactions
         tableView.reloadData()
@@ -73,12 +93,12 @@ private extension HistoryViewController {
 }
 
 // MARK: - UITableViewDelegate
-
-extension HistoryViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension HistoryViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return transactions.count
     }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "TransactionCell")
         cell.translatesAutoresizingMaskIntoConstraints = false
         let transaction = transactions[indexPath.row]
