@@ -19,6 +19,8 @@ enum Colors: String {
     case heavyText
 
     case white
+    case gradientMax
+    case gradientMid
 
     var value: UIColor {
         guard let color = UIColor(named: self.rawValue) else {

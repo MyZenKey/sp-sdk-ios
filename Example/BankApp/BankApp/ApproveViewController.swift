@@ -8,26 +8,51 @@
 import UIKit
 import ZenKeySDK
 
-class ApproveViewController: BankAppViewController {
+class ApproveViewController: UIViewController {
 
-    static let transaction = Transaction(time: Date(), recipiant: "nmel1234", amount: "$100.00")
+    static let transaction = Transaction(time: Date(), recipiant: "John Doe", amount: "$100.00")
 
-    let promptLabel: UILabel = {
+    let transferLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Would you like to transfer \(ApproveViewController.transaction.amount) to \(ApproveViewController.transaction.recipiant)?"
+        label.text = "Transfer Amount"
+        label.font = UIFont.primaryText
         label.textAlignment = .center
-        label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
-    let cancelButton: BankAppButton = {
-        let button = BankAppButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Cancel", for: .normal)
-        button.addTarget(self, action: #selector(cancelTransaction(_:)), for: .touchUpInside)
-        button.backgroundColor = AppTheme.primaryBlue
-        return button
+    let amountLabel: UILabel = {
+        let amount = UILabel()
+        amount.text = ApproveViewController.transaction.amount
+        amount.font = UIFont.heavyText
+        amount.textAlignment = .center
+        amount.translatesAutoresizingMaskIntoConstraints = false
+        return amount
+    }()
+
+    let johnDoeAvatar: UIImageView = {
+        let jdavatar = UIImage(named: "jd-transfer")
+        let imageView = UIImageView(image: jdavatar)
+        return imageView
+    }()
+
+    let transferInfoStackView: UIStackView = {
+        let transfer = UIStackView()
+        transfer.axis = .vertical
+        transfer.distribution = .equalSpacing
+        transfer.spacing = 30
+        transfer.translatesAutoresizingMaskIntoConstraints = false
+        return transfer
+    }()
+
+    let demoLabel: UILabel = {
+        let demo = UILabel()
+        demo.text = "THIS APP IS FOR DEMO PURPOSES ONLY"
+        demo.font = UIFont.primaryText.withSize(10)
+        demo.textAlignment = .center
+        demo.translatesAutoresizingMaskIntoConstraints = false
+        return demo
     }()
 
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
@@ -56,10 +81,32 @@ class ApproveViewController: BankAppViewController {
         return button
     }()
 
+    override func loadView() {
+        let backgroundGradient = GradientView()
+        backgroundGradient.startColor = Colors.white.value
+        backgroundGradient.midColor = Colors.gradientMid.value
+        backgroundGradient.endColor = Colors.gradientMax.value
+        backgroundGradient.startLocation = 0.0
+        backgroundGradient.midLocation = 0.45
+        backgroundGradient.endLocation = 1.0
+        backgroundGradient.midPointMode = true
+        view = backgroundGradient
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title = "Send Money"
         layoutView()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.isNavigationBarHidden = true
     }
 
     @objc func cancelTransaction(_ sender: Any) {
@@ -98,32 +145,36 @@ class ApproveViewController: BankAppViewController {
     }
 
     func layoutView() {
-        view.backgroundColor = .white
-        var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide = getSafeLayoutGuide()
-        
-        view.addSubview(promptLabel)
+        // Hierarchy
+        view.addSubview(transferInfoStackView)
         view.addSubview(zenKeyButton)
-        view.addSubview(cancelButton)
         view.addSubview(activityIndicator)
+        view.addSubview(demoLabel)
 
-        constraints.append(promptLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
-        constraints.append(promptLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
-        constraints.append(promptLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
+        transferInfoStackView.addArrangedSubview(transferLabel)
+        transferInfoStackView.addArrangedSubview(amountLabel)
+        transferInfoStackView.addArrangedSubview(johnDoeAvatar)
 
-        constraints.append(zenKeyButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -10))
-        constraints.append(zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+        // Style
+        let safeAreaGuide = getSafeLayoutGuide()
 
-        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -30))
-        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(cancelButton.heightAnchor.constraint(equalTo: zenKeyButton.heightAnchor))
+        // Constraints
+        NSLayoutConstraint.activate([
 
-        constraints.append(activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+            NSLayoutConstraint(item: transferInfoStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
+            transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            transferInfoStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            transferInfoStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
 
-        NSLayoutConstraint.activate(constraints)
+            zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+            zenKeyButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -40),
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            demoLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -12),
+
+            ])
     }
 }
 
@@ -153,5 +204,14 @@ extension ApproveViewController: ZenKeyAuthorizeButtonDelegate {
         case .cancelled:
             cancelFlow()
         }
+    }
+}
+
+extension UIFont { //FIXME: Refactor fonts to be system-wide
+    class var primaryText: UIFont {
+        return UIFont.systemFont(ofSize: 42.0, weight: .thin)
+    }
+    class var heavyText: UIFont {
+        return UIFont.systemFont(ofSize: 52.0, weight: .regular)
     }
 }
