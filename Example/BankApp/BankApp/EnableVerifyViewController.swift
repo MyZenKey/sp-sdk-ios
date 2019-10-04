@@ -13,18 +13,21 @@ class EnableVerifyViewController: UIViewController {
     let backgroundClouds: UIImageView = {
         let clouds = UIImage(named: "clouds")
         let cloudsImage = UIImageView(image: clouds)
+        cloudsImage.translatesAutoresizingMaskIntoConstraints = false
         return cloudsImage
     }()
 
     let zenkeyLogo: UIImageView = {
         let zenkey = UIImage(named: "zenKeyLogo")
         let zenkeyImage = UIImageView(image: zenkey)
+        zenkeyImage.contentMode = .scaleAspectFit
         return zenkeyImage
     }()
 
     let centralSymbol: UIImageView = {
         let symbol = UIImage(named: "interstitialSymbol")
         let centerSymbol = UIImageView(image: symbol)
+        centerSymbol.contentMode = .scaleAspectFit
         return centerSymbol
     }()
 
@@ -33,6 +36,8 @@ class EnableVerifyViewController: UIViewController {
         approve.text = "Would you like to use ZenKey to \napprove future \"Bank App\" logins?"
         approve.font = UIFont.heavyText.withSize(17)
         approve.textAlignment = .center
+        approve.numberOfLines = 0
+        approve.lineBreakMode = .byWordWrapping
         approve.translatesAutoresizingMaskIntoConstraints = false
         return approve
     }()
@@ -41,7 +46,16 @@ class EnableVerifyViewController: UIViewController {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .equalSpacing
-        stack.spacing = 33
+        stack.spacing = 45
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+
+    let interactiveStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.distribution = .equalSpacing
+        stack.spacing = 15
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -117,24 +131,37 @@ class EnableVerifyViewController: UIViewController {
         symbolLogoStackView.addArrangedSubview(zenkeyLogo)
         symbolLogoStackView.addArrangedSubview(centralSymbol)
 
+        interactiveStackView.addArrangedSubview(zenKeyButton)
+        interactiveStackView.addArrangedSubview(cancelButton)
+        interactiveStackView.addArrangedSubview(demoLabel)
+
         view.addSubview(backgroundClouds)
         view.addSubview(symbolLogoStackView)
         view.addSubview(approvalLabel)
-        view.addSubview(zenKeyButton)
-        view.addSubview(cancelButton)
-        view.addSubview(demoLabel)
-        
+        view.addSubview(interactiveStackView)
+
         // Style
         let safeAreaGuide = getSafeLayoutGuide()
 
         // Layout
         NSLayoutConstraint.activate([
 
-            NSLayoutConstraint(item: symbolLogoStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
+            NSLayoutConstraint(item: backgroundClouds, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.9, constant: 0),
+            backgroundClouds.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
+            NSLayoutConstraint(item: symbolLogoStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
             symbolLogoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             symbolLogoStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
             symbolLogoStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -47),
+
+            interactiveStackView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -8),
+            interactiveStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            interactiveStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+
+            approvalLabel.bottomAnchor.constraint(equalTo: interactiveStackView.topAnchor, constant: -62),
+            approvalLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            approvalLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25)
+
             ])
     }
 }
