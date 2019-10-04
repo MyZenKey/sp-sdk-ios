@@ -154,6 +154,7 @@ final class LoginViewController: ScrollingContentViewController {
 
         view.backgroundColor = Colors.white.value
 
+        // FIXME: - Let's abstract this out so it can be easily handled by dark mode.
         view.layer.shadowColor = Colors.shadow.value.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = 4.0
@@ -206,6 +207,14 @@ final class LoginViewController: ScrollingContentViewController {
     private var outsetConstraint: NSLayoutConstraint!
     private var photoHeightRestrictionConstraint: NSLayoutConstraint!
 
+    private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
+        let gestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleTapGesture)
+        )
+        return gestureRecognizer
+    }()
+
     fileprivate var outsetConstraintConstant: CGFloat {
         return -view.safeAreaInsets.top
     }
@@ -229,6 +238,13 @@ final class LoginViewController: ScrollingContentViewController {
         scrollView.keyboardDismissMode = .onDrag
 
         updateMargins()
+
+        view.addGestureRecognizer(tapGestureRecognizer)
+        forgotPasswordButton.addTarget(
+            self,
+            action: #selector(forgotPasswordButtonPressed),
+            for: .touchUpInside
+        )
 
         contentView.addSubview(backgroundImage)
         contentView.addSubview(footerView)
@@ -288,6 +304,10 @@ final class LoginViewController: ScrollingContentViewController {
 
     // MARK: -  Actions
 
+    @objc func forgotPasswordButtonPressed() {
+        showPasswordReminderAlert()
+    }
+
     @objc func registerButtonPressed() {
         sharedRouter.showRegisterViewController(animated: true)
     }
@@ -298,15 +318,17 @@ final class LoginViewController: ScrollingContentViewController {
             password: passwordTextField.text?.lowercased() ?? "") { [weak self] auth, error in
 
                 guard auth != nil, error == nil else {
-                    self?.showAlert(
-                        title: "Enter User Name and password",
-                        message: "Your username is “jane” and your password is the answer to “Why was 6 afraid of 7? Because …"
-                    )
+                    self?.showPasswordReminderAlert()
                     return
                 }
 
                 self?.sharedRouter.showEnableVerifyViewController(animated: true)
         }
+    }
+
+    @objc func handleTapGesture() {
+        usernameTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
     }
 }
 
@@ -327,6 +349,13 @@ private extension LoginViewController {
         margins.left = Constants.largeSpace
         margins.right = Constants.largeSpace
         contentView.layoutMargins = margins
+    }
+
+    func showPasswordReminderAlert() {
+        showAlert(
+            title: "Enter User Name and password",
+            message: "Your username is “jane” and your password is the answer to “Why was 6 afraid of 7? Because …"
+        )
     }
 }
 
