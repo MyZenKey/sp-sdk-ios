@@ -100,6 +100,14 @@ class RegisterViewController: ScrollingContentViewController {
         return button
     }()
 
+    private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
+        let gestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleTapGesture)
+        )
+        return gestureRecognizer
+    }()
+
     private let demoPurposesLabel: UILabel = UIViewController.makeDemoPurposesLabel()
 
     private lazy var formStack: UIStackView = {
@@ -193,6 +201,8 @@ class RegisterViewController: ScrollingContentViewController {
         view.backgroundColor = Colors.white.value
         signUpButton.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
 
+        view.addGestureRecognizer(tapGestureRecognizer)
+
         scrollView.keyboardDismissMode = .onDrag
 
         updateMargins()
@@ -259,6 +269,17 @@ class RegisterViewController: ScrollingContentViewController {
             title: "Not Supported",
             message: "We don’t support manual sign up, yet. Try ZenKey instead!"
         )
+    }
+
+    @objc func handleTapGesture() {
+        [
+            userNameTextField,
+            emailTextField,
+            phoneTextField,
+            passwordTextField,
+            confirmPasswordTextField,
+            postalCodeTextField,
+        ].forEach() { $0.resignFirstResponder() }
     }
 }
 
