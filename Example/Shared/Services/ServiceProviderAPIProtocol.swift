@@ -27,10 +27,18 @@ struct Transaction: Codable {
     let time: Date
     let recipiant: String
     let amount: String
+    let id = String(Int.random(in: 0 ..< 100000000))
 
     var contextString: String {
         return "Confirm you would like to transfer \(amount) to \(recipiant)."
     }
+
+    init(time: Date, recipiant: String, amount: String) {
+        self.time = time
+        self.recipiant = recipiant
+        self.amount = amount
+    }
+
 }
 
 enum TransactionError: Error {
