@@ -28,6 +28,7 @@ class EnableVerifyViewController: UIViewController {
         let symbol = UIImage(named: "interstitialSymbol")
         let centerSymbol = UIImageView(image: symbol)
         centerSymbol.contentMode = .scaleAspectFit
+        centerSymbol.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         return centerSymbol
     }()
 
@@ -158,6 +159,7 @@ class EnableVerifyViewController: UIViewController {
             interactiveStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
             interactiveStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
 
+            approvalLabel.topAnchor.constraint(greaterThanOrEqualTo: symbolLogoStackView.bottomAnchor, constant: 10),
             approvalLabel.bottomAnchor.constraint(equalTo: interactiveStackView.topAnchor, constant: -62),
             approvalLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
             approvalLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25)
