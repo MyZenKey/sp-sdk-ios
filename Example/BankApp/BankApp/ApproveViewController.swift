@@ -214,4 +214,8 @@ extension UIFont { //FIXME: Refactor fonts to be system-wide
     class var heavyText: UIFont {
         return UIFont.systemFont(ofSize: 52.0, weight: .regular)
     }
+    class var mediumText: UIFont {
+        return UIFont.systemFont(ofSize: 13, weight: .medium)
+    }
+
 }

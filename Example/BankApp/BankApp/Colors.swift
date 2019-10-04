@@ -13,12 +13,15 @@ enum Colors: String {
 
     case brightAccent
     case lightAccent
+    case mediumAccent
 
     case primaryText
     case secondaryText
     case heavyText
 
+    // Gradient Values
     case white
+    case ice
     case gradientMax
     case gradientMid
 
