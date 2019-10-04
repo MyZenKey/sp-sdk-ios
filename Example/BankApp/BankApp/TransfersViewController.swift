@@ -83,18 +83,22 @@ class TransfersViewController: UIViewController {
         return demo
     }()
 
+    override func loadView() {
+        let backgroundGradient = GradientView()
+        backgroundGradient.startColor = Colors.white.value
+        backgroundGradient.midColor = Colors.gradientMid.value
+        backgroundGradient.endColor = Colors.gradientMax.value
+        backgroundGradient.startLocation = 0.0
+        backgroundGradient.midLocation = 0.45
+        backgroundGradient.endLocation = 1.0
+        backgroundGradient.midPointMode = true
+        view = backgroundGradient
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Confirmation"
         self.navigationItem.setHidesBackButton(true, animated:true)
-
-        let backgroundGradient = GradientView()
-        backgroundGradient.startColor = UIColor(white: 255.0 / 255.0, alpha: 1.0)
-        backgroundGradient.endColor = UIColor(white: 213.0 / 255.0, alpha: 1.0)
-        backgroundGradient.startLocation = 0.0
-        backgroundGradient.endLocation = 1.0
-        view = backgroundGradient
-
         layoutView()
     }
 
@@ -115,11 +119,11 @@ class TransfersViewController: UIViewController {
     func layoutView() {
         // Hierarchy
         view.addSubview(successStackView)
+        view.addSubview(demoLabel)
+        view.addSubview(doneButton)
+        view.addSubview(underlineView)
         view.addSubview(transactionNumberLabel)
         view.addSubview(transactionNumberLiteralLabel)
-        view.addSubview(doneButton)
-        view.addSubview(demoLabel)
-        view.addSubview(underlineView)
 
         successStackView.addArrangedSubview(successLabel)
         successStackView.addArrangedSubview(checkBoxAsset)
@@ -139,24 +143,26 @@ class TransfersViewController: UIViewController {
             successStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             successStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 68),
             successStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -68),
+            NSLayoutConstraint(item: successStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
+
+            demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             demoLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -8),
-            transactionNumberLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
-            transactionNumberLabel.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -33),
-            transactionNumberLiteralLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
-            transactionNumberLiteralLabel.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -33),
-            underlineView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
-            underlineView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
-            underlineView.topAnchor.constraint(equalTo: transactionNumberLabel.bottomAnchor, constant: 3),
-            underlineView.heightAnchor.constraint(equalToConstant: 1),
+
             doneButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -16),
             doneButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
             doneButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
             doneButton.heightAnchor.constraint(equalToConstant: 40),
-            demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            underlineView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            underlineView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+            underlineView.topAnchor.constraint(equalTo: transactionNumberLabel.bottomAnchor, constant: 3),
+            underlineView.heightAnchor.constraint(equalToConstant: 1),
+
+            transactionNumberLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            transactionNumberLabel.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -33),
+            transactionNumberLiteralLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+            transactionNumberLiteralLabel.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -33),
 
             ])
-
-        NSLayoutConstraint(item: successStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0).isActive = true
-
     }
 }

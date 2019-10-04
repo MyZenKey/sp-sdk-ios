@@ -21,8 +21,6 @@ class ApproveViewController: UIViewController {
         return num
     }
 
-    let backgroundGradient = BackgroundGradientView()
-
     let transferLabel: UILabel = {
         let label = UILabel()
         label.text = "Transfer Amount"
@@ -106,10 +104,6 @@ class ApproveViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-<<<<<<< HEAD
-
-=======
->>>>>>> task/XCI-4982-update-send-money
         self.title = "Send Money"
         layoutView()
     }
@@ -174,27 +168,6 @@ class ApproveViewController: UIViewController {
         let safeAreaGuide = getSafeLayoutGuide()
 
         // Constraints
-<<<<<<< HEAD
-        var constraints: [NSLayoutConstraint] = []
-
-        constraints.append(transferInfoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(transferInfoStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -(view.bounds.height / 12)))
-        constraints.append(transferInfoStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25))
-        constraints.append(transferInfoStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25))
-
-        constraints.append(zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(zenKeyButton.bottomAnchor.constraint(equalTo: demoLabel.topAnchor, constant: -40))
-
-        constraints.append(activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor))
-
-        constraints.append(demoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(demoLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -12))
-
-
-        NSLayoutConstraint.activate(constraints)
-=======
         NSLayoutConstraint.activate([
 
             NSLayoutConstraint(item: transferInfoStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
@@ -211,7 +184,6 @@ class ApproveViewController: UIViewController {
             demoLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -12),
 
             ])
->>>>>>> task/XCI-4982-update-send-money
     }
 }
 
