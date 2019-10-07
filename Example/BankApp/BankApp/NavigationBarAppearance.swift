@@ -17,7 +17,5 @@ enum NavigationBarAppearance {
         ]
 
         UINavigationBar.appearance().tintColor = Colors.heavyText.value
-
-        UINavigationBar.appearance().backIndicatorImage = UIImage(named: "back-arrow")
     }
 }
