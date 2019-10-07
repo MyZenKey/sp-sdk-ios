@@ -61,7 +61,8 @@ final class LoginViewController: ScrollingContentViewController {
     }()
     
     private let signInButton: BankAppButton = {
-        // TODO: - prioritize a refactor of this type
+        // TODO: - The api surface area of BankAppButton is crufty and doesn’t intuitively reflect
+        // the redesign requirements. Refractor for a slimmer profile.
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.borderWidth = 2.0
