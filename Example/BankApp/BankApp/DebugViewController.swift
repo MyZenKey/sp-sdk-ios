@@ -22,8 +22,8 @@ class DebugViewController: UIViewController {
     private let versionView: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.text = "Version \(UIApplication.appVersion ?? "N/A")   Build \(UIApplication.appBuild ?? "N/A")"
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "BankApp \(UIApplication.appVersion ?? "N/A") (\(UIApplication.appBuild ?? "N/A"))"
+        label.font = label.font.withSize(15)
         return label
     }()
 
@@ -52,7 +52,6 @@ class DebugViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(hide))
         // Table
         view.addSubview(tableView)
-        view.addSubview(versionView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         let safeAreaGuide = getSafeLayoutGuide()
         view.backgroundColor = .white
@@ -61,12 +60,11 @@ class DebugViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
-            versionView.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor),
-            versionView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
             ])
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = versionView
+        versionView.sizeToFit()
 
         tableView.reloadData()
     }
