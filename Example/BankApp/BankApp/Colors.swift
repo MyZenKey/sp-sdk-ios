@@ -22,8 +22,12 @@ enum Colors: String {
     // Gradient Values
     case white
     case overlayWhite
+
     case gradientMax
     case gradientMid
+    case brownGrey
+
+    case shadow
 
     var value: UIColor {
         guard let color = UIColor(named: self.rawValue) else {

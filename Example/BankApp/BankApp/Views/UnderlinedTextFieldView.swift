@@ -38,6 +38,11 @@ class UnderlinedTextFieldView: UIView {
         }
     }
 
+    var isSecureTextEntry: Bool {
+        get { return field.isSecureTextEntry }
+        set { field.isSecureTextEntry = newValue }
+    }
+
     private let field: UITextField = {
         let field = UITextField(frame: .zero)
         field.translatesAutoresizingMaskIntoConstraints = false

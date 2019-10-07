@@ -23,6 +23,20 @@ extension UIViewController {
             }
         }
     }
+
+    static func makeDemoPurposesLabel() -> UILabel {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.attributedText = NSAttributedString(
+            string: "This app is for demo purposes only.".uppercased(),
+            attributes: [
+                .font: Fonts.footnote,
+                .foregroundColor: Colors.primaryText.value,
+                .kern: 0.2,
+        ])
+        return label
+    }
 }
 
 // MARK: - Navigation

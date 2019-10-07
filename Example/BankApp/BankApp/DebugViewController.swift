@@ -19,6 +19,14 @@ class DebugViewController: UIViewController {
         return tableView
     }()
 
+    private let versionView: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.text = "BankApp \(UIApplication.appVersion ?? "N/A") (\(UIApplication.appBuild ?? "N/A"))"
+        label.font = label.font.withSize(15)
+        return label
+    }()
+
     static func addMenu(toView view: UIView) {
         let debugGesture = UITapGestureRecognizer(target: self, action: #selector(show))
         debugGesture.numberOfTapsRequired = 3
@@ -46,6 +54,7 @@ class DebugViewController: UIViewController {
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         let safeAreaGuide = getSafeLayoutGuide()
+        view.backgroundColor = .white
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor),
@@ -54,6 +63,8 @@ class DebugViewController: UIViewController {
             ])
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.tableFooterView = versionView
+        versionView.sizeToFit()
 
         tableView.reloadData()
     }
@@ -253,5 +264,14 @@ extension DebugViewController: UITableViewDataSource {
             break
         }
         return cell
+    }
+}
+
+extension UIApplication {
+    static var appVersion: String? {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+    }
+    static var appBuild: String? {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
     }
 }
