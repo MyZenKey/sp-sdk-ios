@@ -69,7 +69,7 @@ final class HistoryViewController: UITableViewController {
         NSLayoutConstraint.activate([
             demoPurposes.leadingAnchor.constraint(equalTo: backgroundView.layoutMarginsGuide.leadingAnchor),
             demoPurposes.trailingAnchor.constraint(equalTo: backgroundView.layoutMarginsGuide.trailingAnchor),
-            demoPurposes.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            demoPurposes.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.smallSpacer),
         ])
 
         syncTransactions()
@@ -93,7 +93,7 @@ final class HistoryViewController: UITableViewController {
         tableView.contentInset = UIEdgeInsets(
             top: 0,
             left: 0,
-            bottom: demoPurposes.frame.height + Constants.smallSpacer,
+            bottom: demoPurposes.frame.height + (2 * Constants.smallSpacer),
             right: 0
         )
     }
