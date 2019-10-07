@@ -1,76 +1,35 @@
 //
 //  LoginViewController.swift
+//  BankApp
 //
-//  © 2018 AT&T INTELLECTUAL PROPERTY. ALL RIGHTS RESERVED. AT&T PROPRIETARY / CONFIDENTIAL MATERIALS AND AN AT&T CONTRIBUTED ITEM UNDER THE EXPENSE AND INFORMATION SHARING AGREEMENT DATED FEBRUARY 7, 2018.
+//  Created by Adam Tierney on 9/30/19.
+//  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
 import UIKit
 import ZenKeySDK
 
-class LoginViewController: UIViewController {
-    
-    let gradientBackground: GradientView = {
-        let gradientBackground = GradientView()
-        gradientBackground.translatesAutoresizingMaskIntoConstraints = false
-        return gradientBackground
-    }()
-    
-    let logo: UIImageView = {
-        let logo = UIImageView()
+final class LoginViewController: ScrollingContentViewController {
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+
+    private let logo: UIImageView = {
+        let logo = UIImageView(image: UIImage(named: "bankapp-logo"))
         logo.translatesAutoresizingMaskIntoConstraints = false
-        logo.image = UIImage(named: "applogo_white")
-        logo.contentMode = .scaleAspectFit
         return logo
     }()
-    
-    let idTextField: UITextField = {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.minimumFontSize = 17
-        field.placeholder = "Enter your ID"
-        return field
-    }()
-    
-    let passwordTextField: UITextField = {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.minimumFontSize = 17
-        field.placeholder = "Enter your password"
-        return field
-    }()
-    
-    let signInButton: BankAppButton = {
-        let button = BankAppButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.borderWidth = 1.0
-        button.borderColor = .white
-        button.setTitle("SIGN IN", for: .normal)
-        button.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
-        return button
-    }()
-    
-    let registerButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Register", for: .normal)
-        button.contentHorizontalAlignment = .right
-        button.addTarget(self, action: #selector(registerButtonPressed), for: .touchUpInside)
-        return button
-    }()
-    
-    let forgotButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentHorizontalAlignment = .left
-        button.setTitle("Forgot User ID or Password", for: .normal)
-        return button
+
+    private let backgroundImage: UIImageView = {
+        let backgroundImage = UIImageView(image: UIImage(named: "login-background-image"))
+        backgroundImage.translatesAutoresizingMaskIntoConstraints = false
+        backgroundImage.contentMode = .scaleAspectFill
+        return backgroundImage
     }()
 
-    lazy var zenKeyButton: ZenKeyAuthorizeButton = {
+    lazy var zenkeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
-        button.style = .light
         let scopes: [Scope] = [.openid, .authenticate, .name, .email, .postalCode, .phone]
         button.scopes = scopes
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -80,25 +39,190 @@ class LoginViewController: UIViewController {
         return button
     }()
 
-    let poweredByLabel: UILabel = {
+    private let poweredByLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.isHidden = true
         return label
     }()
 
-    let watermarkLabel = BuildInfo.makeWatermarkLabel(lightText: true)
-
-    lazy var inputToolbar: UIToolbar = {
-        let toolbar = UIToolbar()
-        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
-        toolbar.items = [flex, doneButton]
-        toolbar.sizeToFit()
-        return toolbar
+    private let usernameTextField: UnderlinedTextFieldView = {
+        let field = UnderlinedTextFieldView()
+        field.placeholder = "User ID"
+        return field
     }()
+    
+    private let passwordTextField: UnderlinedTextFieldView = {
+        let field = UnderlinedTextFieldView()
+        field.placeholder = "Password"
+        field.isSecureTextEntry = true
+        return field
+    }()
+    
+    private let signInButton: BankAppButton = {
+        // TODO: - The api surface area of BankAppButton is crufty and doesn’t intuitively reflect
+        // the redesign requirements. Refractor for a slimmer profile.
+        let button = BankAppButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.borderWidth = 2.0
+
+        button.setTitle("Sign In", for: .normal)
+        button.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
+
+        button.borderColor = Colors.brightAccent.value
+        button.backgroundColor = Colors.brightAccent.value
+
+        NSLayoutConstraint.activate([
+            button.heightAnchor.constraint(equalToConstant: 40.0)
+        ])
+
+        return button
+    }()
+
+    private let forgotPasswordButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setAttributedTitle(
+            Fonts.accessoryText(
+                text: "Forgot User ID or Password?",
+                withColor: Colors.heavyText.value
+            ),
+            for: .normal
+        )
+        return button
+    }()
+    
+    private let registerButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setAttributedTitle(
+            Fonts.accessoryText(
+                text: "Sign up for BankApp",
+                withColor: Colors.brightAccent.value
+            ),
+            for: .normal
+        )
+        button.addTarget(self, action: #selector(registerButtonPressed), for: .touchUpInside)
+        return button
+    }()
+
+    private let demoPurposesLabel: UILabel = UIViewController.makeDemoPurposesLabel()
+
+    private lazy var buttonsStack: UIStackView = {
+        let orDivider = OrDividerView()
+        let stackView = UIStackView(arrangedSubviews: [
+            zenkeyButton,
+            poweredByLabel,
+            orDivider,
+            usernameTextField,
+            passwordTextField,
+            signInButton,
+            forgotPasswordButton,
+        ])
+
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = 22
+        stackView.isLayoutMarginsRelativeArrangement = true
+
+        let marign: CGFloat = Constants.smallSpace
+        stackView.layoutMargins = UIEdgeInsets(
+            top: marign,
+            left: marign,
+            bottom: marign - forgotPasswordButton.layoutMargins.bottom,
+            right: marign
+        )
+
+        let smallerSpacer: CGFloat = Constants.smallSpace
+        stackView.setCustomSpacing(smallerSpacer, after: zenkeyButton)
+        stackView.setCustomSpacing(smallerSpacer, after: poweredByLabel)
+        stackView.setCustomSpacing(smallerSpacer, after: orDivider)
+        // text buttons don't count marign in sizing
+        stackView.setCustomSpacing(
+            smallerSpacer - forgotPasswordButton.layoutMargins.top,
+            after: signInButton
+        )
+
+        return stackView
+    }()
+
+    /// Stack view doesn't draw so mirror it's size and add a shadow to this view:
+    private lazy var buttonStackViewContainer: UIView = {
+        let view = UIView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+
+        view.backgroundColor = Colors.white.value
+
+        // FIXME: - Let's abstract this out so it can be easily handled by dark mode.
+        view.layer.shadowColor = Colors.shadow.value.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = 4.0
+        view.layer.shadowOpacity = 0.24
+
+        view.addSubview(buttonsStack)
+
+        NSLayoutConstraint.activate([
+            buttonsStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            buttonsStack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            buttonsStack.topAnchor.constraint(equalTo: view.topAnchor),
+            buttonsStack.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
+        return view
+    }()
+
+    private lazy var contentStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            buttonStackViewContainer,
+            registerButton,
+            demoPurposesLabel
+        ])
+
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = Constants.largeSpace
+
+        stackView.setCustomSpacing(
+            Constants.largeSpace - registerButton.layoutMargins.top,
+            after: buttonStackViewContainer
+        )
+
+        stackView.setCustomSpacing(
+            Constants.smallSpace - registerButton.layoutMargins.bottom,
+            after: registerButton
+        )
+
+        return stackView
+    }()
+
+    private lazy var footerView: UIView = {
+        let view = UIView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = Colors.white.value
+        return view
+    }()
+
+    private var outsetConstraint: NSLayoutConstraint!
+    private var photoHeightRestrictionConstraint: NSLayoutConstraint!
+
+    private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
+        let gestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleTapGesture)
+        )
+        return gestureRecognizer
+    }()
+
+    fileprivate var outsetConstraintConstant: CGFloat {
+        return -view.safeAreaInsets.top
+    }
+
+    fileprivate var photoHeightConstraintConstant: CGFloat {
+        return -(Constants.bottomAreaHeight + (view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom))
+    }
 
     private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
@@ -107,20 +231,95 @@ class LoginViewController: UIViewController {
         layoutView()
     }
 
+    func layoutView() {
+        DebugViewController.addMenu(toViewController: self)
+
+        view.backgroundColor = Colors.white.value
+
+        scrollView.keyboardDismissMode = .onDrag
+
+        updateMargins()
+
+        view.addGestureRecognizer(tapGestureRecognizer)
+        forgotPasswordButton.addTarget(
+            self,
+            action: #selector(forgotPasswordButtonPressed),
+            for: .touchUpInside
+        )
+
+        contentView.addSubview(backgroundImage)
+        contentView.addSubview(footerView)
+        contentView.addSubview(logo)
+        contentView.addSubview(contentStackView)
+
+        outsetConstraint = backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor)
+
+        // the photo should take the space of the screen above the footer area
+        photoHeightRestrictionConstraint = backgroundImage.heightAnchor.constraint(
+            equalTo: scrollView.frameLayoutGuide.heightAnchor,
+            constant: photoHeightConstraintConstant
+        )
+
+        NSLayoutConstraint.activate([
+
+            photoHeightRestrictionConstraint,
+            outsetConstraint,
+
+            // postioned relative to the very bottom of the view and it's edges regardless of
+            // marigns.
+            logo.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
+            logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            logo.topAnchor.constraint(equalTo: contentView.topAnchor),
+
+            backgroundImage.bottomAnchor.constraint(equalTo: footerView.topAnchor),
+
+            // we want no scrolling horizontally, so pin widths to scroll view
+            backgroundImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backgroundImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            backgroundImage.widthAnchor.constraint(equalTo: view.widthAnchor),
+
+            contentStackView.bottomAnchor.constraint(
+                equalTo: footerView.bottomAnchor,
+                constant: -8
+            ),
+            contentStackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+
+            footerView.heightAnchor.constraint(equalToConstant: Constants.bottomAreaHeight),
+            footerView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        // The photo should sit at the top of the screen. This will be pushed outside of the
+        // scroll view's content area by the size of the safe area:
+        outsetConstraint.constant = outsetConstraintConstant
+        // The photo height should scale to fill the space on all screen sizes, less the bottom
+        // space. This is the bottom space constant height adjusted for the unmodified safe area
+        // insets:
+        photoHeightRestrictionConstraint.constant = photoHeightConstraintConstant
+    }
+
+    // MARK: -  Actions
+
+    @objc func forgotPasswordButtonPressed() {
+        showPasswordReminderAlert()
+    }
+
     @objc func registerButtonPressed() {
         sharedRouter.showRegisterViewController(animated: true)
     }
 
     @objc func signInButtonPressed() {
         serviceAPI.login(
-            withUsername: idTextField.text?.lowercased() ?? "",
+            withUsername: usernameTextField.text?.lowercased() ?? "",
             password: passwordTextField.text?.lowercased() ?? "") { [weak self] auth, error in
 
                 guard auth != nil, error == nil else {
-                    self?.showAlert(
-                        title: "Enter User Name and password",
-                        message: "You must enter your user name and password to log in.\nHint: try username: jane and password: 12345"
-                    )
+                    self?.showPasswordReminderAlert()
                     return
                 }
 
@@ -128,82 +327,43 @@ class LoginViewController: UIViewController {
         }
     }
 
-    @objc func dismissKeyboard() {
-        idTextField.resignFirstResponder()
+    @objc func handleTapGesture() {
+        usernameTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
     }
+}
 
-    func layoutView() {
-        DebugViewController.addMenu(toViewController: self)
+private extension LoginViewController {
+    enum Constants {
+        /// the 'reserved' white area at the bottom of the screen's height
+        static let bottomAreaHeight: CGFloat = 175
+        static let buttonStackLowerMargin: CGFloat = 75
+        static let largeSpace: CGFloat = 25
+        static let smallSpace: CGFloat = 15
+    }
 
-        view.backgroundColor = .white
-        var constraints: [NSLayoutConstraint] = []
-        let safeAreaGuide = getSafeLayoutGuide()
+    /// The margins are not quite right out of the box, update them to reflect the horizontal marigns
+    /// we expect and add no additional marign to the safe area at the bottom.
+    func updateMargins() {
+        var margins = contentView.layoutMargins
+        margins.bottom = 0.0
+        margins.left = Constants.largeSpace
+        margins.right = Constants.largeSpace
+        contentView.layoutMargins = margins
+    }
 
-        view.addSubview(gradientBackground)
-        view.addSubview(logo)
-        view.addSubview(idTextField)
-        view.addSubview(passwordTextField)
-        view.addSubview(signInButton)
-        view.addSubview(forgotButton)
-        view.addSubview(registerButton)
-        view.addSubview(zenKeyButton)
-        view.addSubview(poweredByLabel)
-        view.addSubview(watermarkLabel)
-
-        gradientBackground.frame = view.frame
-
-        idTextField.inputAccessoryView = inputToolbar
-        passwordTextField.inputAccessoryView = inputToolbar
-
-        constraints.append(logo.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 80))
-        constraints.append(logo.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor))
-        constraints.append(logo.heightAnchor.constraint(equalToConstant: 20))
-        
-        constraints.append(idTextField.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 50))
-        constraints.append(idTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
-        constraints.append(idTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        constraints.append(idTextField.heightAnchor.constraint(equalToConstant: 39))
-        
-        constraints.append(passwordTextField.topAnchor.constraint(equalTo: idTextField.bottomAnchor, constant: 20))
-        constraints.append(passwordTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
-        constraints.append(passwordTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        constraints.append(passwordTextField.heightAnchor.constraint(equalToConstant: 39))
-        
-        constraints.append(signInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20))
-        constraints.append(signInButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
-        constraints.append(signInButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        constraints.append(signInButton.heightAnchor.constraint(equalToConstant: 39))
-        
-        constraints.append(forgotButton.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 5))
-        constraints.append(forgotButton.leadingAnchor.constraint(equalTo: signInButton.leadingAnchor, constant: 0))
-        constraints.append(forgotButton.heightAnchor.constraint(equalToConstant: 39))
-        
-        constraints.append(registerButton.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 5))
-        constraints.append(registerButton.leadingAnchor.constraint(equalTo: forgotButton.trailingAnchor, constant: 10))
-        constraints.append(registerButton.trailingAnchor.constraint(equalTo: signInButton.trailingAnchor, constant: 0))
-        constraints.append(registerButton.heightAnchor.constraint(equalToConstant: 39))
-
-        constraints.append(zenKeyButton.topAnchor.constraint(equalTo: forgotButton.bottomAnchor, constant: 20.0))
-        constraints.append(zenKeyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(zenKeyButton.widthAnchor.constraint(equalTo: signInButton.widthAnchor))
-
-        constraints.append(poweredByLabel.topAnchor.constraint(equalTo: zenKeyButton.bottomAnchor, constant: 10.0))
-        constraints.append(poweredByLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(poweredByLabel.widthAnchor.constraint(equalTo: zenKeyButton.widthAnchor))
-
-        constraints.append(watermarkLabel.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor))
-        constraints.append(watermarkLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor))
-        constraints.append(watermarkLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor))
-
-        NSLayoutConstraint.activate(constraints)
+    func showPasswordReminderAlert() {
+        showAlert(
+            title: "Enter User Name and password",
+            message: "Your username is “jane” and your password is the answer to “Why was 6 afraid of 7? Because …"
+        )
     }
 }
 
 extension LoginViewController: ZenKeyAuthorizeButtonDelegate {
 
     func buttonWillBeginAuthorizing(_ button: ZenKeyAuthorizeButton) {
-        zenKeyButton.acrValues = [BuildInfo.currentAuthMode]
+        zenkeyButton.acrValues = [BuildInfo.currentAuthMode]
     }
 
     func buttonDidFinish(_ button: ZenKeyAuthorizeButton, withResult result: AuthorizationResult) {
@@ -240,11 +400,20 @@ extension LoginViewController: ZenKeyAuthorizeButtonDelegate {
 
 extension LoginViewController: ZenKeyBrandedButtonDelegate {
     func brandingWillUpdate(_ oldBranding: Branding,
-                            forButton button: ZenKeyBrandedButton) {
-    }
+                            forButton button: ZenKeyBrandedButton) { }
 
     func brandingDidUpdate(_ newBranding: Branding,
                            forButton button: ZenKeyBrandedButton) {
-        poweredByLabel.text = newBranding.carrierText
+        guard
+            let carrierText = newBranding.carrierText,
+            !carrierText.isEmpty else {
+            return
+        }
+
+        poweredByLabel.attributedText = Fonts.accessoryText(
+            text: carrierText,
+            withColor: Colors.heavyText.value
+        )
+        poweredByLabel.isHidden = false
     }
 }

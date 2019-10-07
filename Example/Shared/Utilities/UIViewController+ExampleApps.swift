@@ -38,7 +38,7 @@ extension UIViewController {
     }
 
     func cancelFlow() {
-        showAlert(title: "Cancelled", message: "The transaction was cancelled")
+        showAlert(title: "Transfer Cancelled", message: "This transfer was not approved in ZenKey and has been cancelled.")
     }
 
     func showAlert(title: String, message: String, onDismiss: (() -> Void)? = nil) {
