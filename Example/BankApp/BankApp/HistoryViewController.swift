@@ -10,6 +10,12 @@ import UIKit
 
 final class HistoryViewController: UITableViewController {
 
+    fileprivate static let transactionHistoryDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, yyyy - h:mm a"
+        return formatter
+    }()
+
     private var transactions = [Transaction]()
 
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
@@ -137,12 +143,14 @@ extension HistoryViewController {
             fatalError("TransactionTableCell cell unavailable, check table configuration")
         }
 
-//        let transaction = transactions[indexPath.row]
+        let transaction = transactions[indexPath.row]
         cell.circleText = "JD"
-        cell.titleText = "Sent some money"
-        cell.subtitleText = "99999999"
-        cell.footerText = "Sept 1, 2019 - 5:55 PM"
-        cell.accessoryText = "$100"
+        cell.titleText = "John Doe"
+        cell.subtitleText = "#\(transaction.id)"
+        cell.footerText = HistoryViewController.transactionHistoryDateFormatter.string(
+            from: transaction.time
+        )
+        cell.accessoryText = transaction.amount
 
         return cell
     }
