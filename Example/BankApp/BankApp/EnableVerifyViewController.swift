@@ -43,7 +43,7 @@ class EnableVerifyViewController: UIViewController {
         return approve
     }()
 
-    let symbolLogoStackView: UIStackView = {
+    let imageStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .equalSpacing
@@ -52,7 +52,7 @@ class EnableVerifyViewController: UIViewController {
         return stack
     }()
 
-    let interactiveStackView: UIStackView = {
+    let interactiveStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .equalSpacing
@@ -75,7 +75,7 @@ class EnableVerifyViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("No, thanks", for: .normal)
-        button.addTarget(self, action: #selector(cancelVerify(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(cancelVerification(_:)), for: .touchUpInside)
         button.setTitleColor(Colors.mediumAccent.value, for: .normal)
         button.titleLabel?.font = UIFont.mediumText
         return button
@@ -94,8 +94,8 @@ class EnableVerifyViewController: UIViewController {
 
     override func loadView() {
         let gradient = GradientView()
-        gradient.startColor = Colors.ice.value
-        gradient.midColor = Colors.ice.value
+        gradient.startColor = Colors.overlayWhite.value
+        gradient.midColor = Colors.overlayWhite.value
         gradient.endColor = Colors.white.value
 
         gradient.startLocation = 0.0
@@ -123,23 +123,25 @@ class EnableVerifyViewController: UIViewController {
     }
 
     
-    @objc func cancelVerify(_ sender: Any) {
+    @objc func cancelVerification(_ sender: Any) {
         sharedRouter.popToRoot(animated: true)
     }
 
     func layoutView() {
         // Heirarchy
-        symbolLogoStackView.addArrangedSubview(zenkeyLogo)
-        symbolLogoStackView.addArrangedSubview(centralSymbol)
+        imageStack.addArrangedSubview(zenkeyLogo)
+        imageStack.addArrangedSubview(centralSymbol)
 
-        interactiveStackView.addArrangedSubview(zenKeyButton)
-        interactiveStackView.addArrangedSubview(cancelButton)
-        interactiveStackView.addArrangedSubview(demoLabel)
+        interactiveStack.addArrangedSubview(zenKeyButton)
+        interactiveStack.addArrangedSubview(cancelButton)
+        interactiveStack.addArrangedSubview(demoLabel)
 
         view.addSubview(backgroundClouds)
-        view.addSubview(symbolLogoStackView)
+        view.addSubview(imageStack)
         view.addSubview(approvalLabel)
-        view.addSubview(interactiveStackView)
+        view.addSubview(interactiveStack)
+        let approvalGuide = UILayoutGuide()
+        view.addLayoutGuide(approvalGuide)
 
         // Style
         let safeAreaGuide = getSafeLayoutGuide()
@@ -149,20 +151,24 @@ class EnableVerifyViewController: UIViewController {
 
             NSLayoutConstraint(item: backgroundClouds, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.9, constant: 0),
             backgroundClouds.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            backgroundClouds.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
+            backgroundClouds.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
 
-            NSLayoutConstraint(item: symbolLogoStackView, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
-            symbolLogoStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            symbolLogoStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            symbolLogoStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -47),
+            NSLayoutConstraint(item: imageStack, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
+            imageStack.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
+            imageStack.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
 
-            interactiveStackView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -8),
-            interactiveStackView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
-            interactiveStackView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+            interactiveStack.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -8),
+            interactiveStack.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            interactiveStack.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
 
-            approvalLabel.topAnchor.constraint(greaterThanOrEqualTo: symbolLogoStackView.bottomAnchor, constant: 10),
-            approvalLabel.bottomAnchor.constraint(equalTo: interactiveStackView.topAnchor, constant: -62),
-            approvalLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
-            approvalLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25)
+            approvalGuide.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
+            approvalGuide.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
+            approvalGuide.topAnchor.constraint(equalTo: imageStack.bottomAnchor),
+            approvalGuide.bottomAnchor.constraint(equalTo: interactiveStack.topAnchor),
+
+            NSLayoutConstraint(item: approvalLabel, attribute: .centerY, relatedBy: .equal, toItem: approvalGuide, attribute: .centerY, multiplier: 1, constant: 0),
+            approvalLabel.centerXAnchor.constraint(equalTo: approvalGuide.centerXAnchor)
 
             ])
     }

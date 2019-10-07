@@ -21,7 +21,7 @@ enum Colors: String {
 
     // Gradient Values
     case white
-    case ice
+    case overlayWhite
     case gradientMax
     case gradientMid
 
