@@ -88,10 +88,7 @@ class RegisterViewController: ScrollingContentViewController {
     private let signUpButton: UIButton = {
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.borderWidth = 2.0
-        button.setTitle("Sign Up", for: .normal)
-        button.borderColor = Colors.brightAccent.value
-        button.backgroundColor = Colors.brightAccent.value
+        button.buttonTitle = "Sign Up"
 
         NSLayoutConstraint.activate([
             button.heightAnchor.constraint(equalToConstant: 40.0)

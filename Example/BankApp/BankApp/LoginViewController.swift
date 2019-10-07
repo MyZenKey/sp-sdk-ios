@@ -60,23 +60,14 @@ final class LoginViewController: ScrollingContentViewController {
         return field
     }()
     
-    private let signInButton: BankAppButton = {
-        // TODO: - The api surface area of BankAppButton is crufty and doesn’t intuitively reflect
-        // the redesign requirements. Refractor for a slimmer profile.
+    private lazy var signInButton: BankAppButton = {
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.borderWidth = 2.0
-
-        button.setTitle("Sign In", for: .normal)
-        button.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
-
-        button.borderColor = Colors.brightAccent.value
-        button.backgroundColor = Colors.brightAccent.value
-
+        button.buttonTitle = "Sign In"
         NSLayoutConstraint.activate([
             button.heightAnchor.constraint(equalToConstant: 40.0)
         ])
-
+        button.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
         return button
     }()
 
@@ -93,7 +84,7 @@ final class LoginViewController: ScrollingContentViewController {
         return button
     }()
     
-    private let registerButton: UIButton = {
+    private lazy var registerButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(

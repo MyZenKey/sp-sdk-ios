@@ -49,7 +49,6 @@ class TransfersViewController: UIViewController {
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Done", for: .normal)
-        button.backgroundColor = Colors.brightAccent.value
         return button
     }()
 

@@ -1,75 +1,93 @@
 //
 //  BankAppButton.swift
+//  BankApp
 //
-//  © 2018 AT&T INTELLECTUAL PROPERTY. ALL RIGHTS RESERVED. AT&T PROPRIETARY / CONFIDENTIAL MATERIALS AND AN AT&T CONTRIBUTED ITEM UNDER THE EXPENSE AND INFORMATION SHARING AGREEMENT DATED FEBRUARY 7, 2018.
+//  Created by Adam Tierney on 10/7/19.
+//  Copyright © 2019 XCI JV, LLC. All rights reserved.
 //
 
 import UIKit
 
-@IBDesignable
-class BankAppButton: UIButton {
+final class BankAppButton: UIButton {
 
-    @IBInspectable var cornerRadius: CGFloat = 2 {
-        didSet(newValue) {
-            setNeedsDisplay()
-        }
-    }
-
-    @IBInspectable var borderColor: UIColor = AppTheme.primaryBlue {
-        didSet(newValue) {
-            setNeedsDisplay()
-        }
-    }
-    
-    @IBInspectable var borderWidth: CGFloat = 0 {
-        didSet(newValue) {
-            setNeedsDisplay()
-        }
-    }
-
-    private var stashedBackground: UIColor?
-    override var backgroundColor: UIColor? {
+    override var isHighlighted: Bool {
         didSet {
-            if isEnabled {
-                stashedBackground = backgroundColor
-            }
+            updateTint()
         }
     }
 
     override var isEnabled: Bool {
         didSet {
-            backgroundColor = isEnabled ?
-                stashedBackground :
-                UIColor.lightGray.withAlphaComponent(0.6)
+            updateTint()
+        }
+    }
+
+    var buttonTitle: String = "" {
+        didSet {
+            updateButton(withText: buttonTitle)
         }
     }
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        myInit()
+        sharedInit()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        myInit()
+        sharedInit()
     }
 
-    private func myInit() {
-        
-        imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
-    }
-    
-    func updateLayer() {
-        layer.borderColor = borderColor.cgColor
-        layer.borderWidth = borderWidth
-        layer.masksToBounds = false
-        layer.rasterizationScale = UIScreen.main.scale
-        layer.shouldRasterize = true
-        layer.cornerRadius = cornerRadius
-    }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
-        updateLayer()
+
+        layer.shadowColor = Colors.shadow.value.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowRadius = 2
+        layer.shadowOpacity = 0.24
+    }
+}
+
+private extension BankAppButton {
+    func sharedInit() {
+        layer.cornerRadius = 2
+        updateTint()
+        updateButton(withText: buttonTitle)
+    }
+
+    func updateButton(withText: String) {
+
+        let normalText = Fonts.semiboldHeadlineText(
+            text: buttonTitle,
+            withColor: Colors.white.value
+        )
+
+        setAttributedTitle(
+            normalText,
+            for: .normal
+        )
+
+        let highlightedText = Fonts.semiboldHeadlineText(
+            text: buttonTitle,
+            withColor: Colors.primaryText.value
+        )
+
+        setAttributedTitle(
+            highlightedText,
+            for: .highlighted
+        )
+
+        setAttributedTitle(
+            highlightedText,
+            for: .disabled
+        )
+    }
+
+    func updateTint() {
+        if isHighlighted || !isEnabled {
+            backgroundColor = Colors.fieldBackground.value
+        } else {
+            backgroundColor = Colors.brightAccent.value
+        }
     }
 }
