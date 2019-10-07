@@ -168,7 +168,7 @@ extension UniversalBackendService: ServiceProviderAPIProtocol {
     func login(withUsername username: String,
                password: String,
                completion: @escaping (AuthPayload?, Error?) -> Void) {
-        guard username == "jane", password == "12345" else {
+        guard username == "jane", password == "789" else {
             completion(nil, LoginError.invalidCredentials)
             return
         }
