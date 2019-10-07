@@ -139,7 +139,7 @@ final class TransactionTableCell: UITableViewCell {
 
     var circleText: String = "" {
         didSet {
-            circleLabel.attributedText = Fonts.boldHeadlineText(
+            circleLabel.attributedText = Fonts.mediumCalloutText(
                 text: circleText,
                 withColor: Colors.white.value
             )
@@ -166,7 +166,7 @@ final class TransactionTableCell: UITableViewCell {
 
     var footerText: String = "" {
         didSet {
-            footerLabel.attributedText = Fonts.accessoryText(
+            footerLabel.attributedText = Fonts.regularAccessoryText(
                 text: footerText,
                 withColor: Colors.primaryText.value
             )

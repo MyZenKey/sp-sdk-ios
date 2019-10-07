@@ -11,11 +11,17 @@ import UIKit
 enum Fonts {
     static let headline = UIFont.systemFont(ofSize: 17.0, weight: .bold)
 
+    static let regularHeadline = UIFont.systemFont(ofSize: 17.0, weight: .regular)
+
     static let lightHeadline = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
+
+    static let mediumCallout = UIFont.systemFont(ofSize: 15.0, weight: .medium)
 
     static let textField = UIFont.systemFont(ofSize: 13.0)
 
-    static let accesory = UIFont.systemFont(ofSize: 13.0, weight: .medium)
+    static let mediumAccesory = UIFont.systemFont(ofSize: 13.0, weight: .medium)
+
+    static let regularAccesory = UIFont.systemFont(ofSize: 13.0, weight: .regular)
 
     static let footnote = UIFont.systemFont(ofSize: 10.0, weight: .medium)
 }
@@ -36,17 +42,37 @@ extension Fonts {
         return NSAttributedString(
             string: text,
             attributes: [
-                .font: Fonts.headline,
+                .font: Fonts.regularHeadline,
                 .foregroundColor: color,
                 .kern: 0.03
             ])
     }
 
-    static func accessoryText(text: String, withColor color: UIColor) -> NSAttributedString {
+    static func mediumAccessoryText(text: String, withColor color: UIColor) -> NSAttributedString {
         return NSAttributedString(
             string: text,
             attributes: [
-                .font: Fonts.accesory,
+                .font: Fonts.mediumAccesory,
+                .foregroundColor: color,
+                .kern: 0.2
+            ])
+    }
+
+    static func regularAccessoryText(text: String, withColor color: UIColor) -> NSAttributedString {
+        return NSAttributedString(
+            string: text,
+            attributes: [
+                .font: Fonts.regularAccesory,
+                .foregroundColor: color,
+                .kern: 0.2
+            ])
+    }
+
+    static func mediumCalloutText(text: String, withColor color: UIColor) -> NSAttributedString {
+        return NSAttributedString(
+            string: text,
+            attributes: [
+                .font: Fonts.mediumCallout,
                 .foregroundColor: color,
                 .kern: 0.2
             ])

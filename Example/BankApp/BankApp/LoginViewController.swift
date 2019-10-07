@@ -83,7 +83,7 @@ final class LoginViewController: ScrollingContentViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(
-            Fonts.accessoryText(
+            Fonts.mediumAccessoryText(
                 text: "Forgot User ID or Password?",
                 withColor: Colors.heavyText.value
             ),
@@ -96,7 +96,7 @@ final class LoginViewController: ScrollingContentViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(
-            Fonts.accessoryText(
+            Fonts.mediumAccessoryText(
                 text: "Sign up for BankApp",
                 withColor: Colors.brightAccent.value
             ),
@@ -414,7 +414,7 @@ extension LoginViewController: ZenKeyBrandedButtonDelegate {
             return
         }
 
-        poweredByLabel.attributedText = Fonts.accessoryText(
+        poweredByLabel.attributedText = Fonts.mediumAccessoryText(
             text: carrierText,
             withColor: Colors.heavyText.value
         )
