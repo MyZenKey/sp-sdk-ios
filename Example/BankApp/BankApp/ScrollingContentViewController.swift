@@ -61,5 +61,3 @@ class ScrollingContentViewController: UIViewController {
 }
 
 extension ScrollingContentViewController: KeyboardAvoiding { }
-
-
