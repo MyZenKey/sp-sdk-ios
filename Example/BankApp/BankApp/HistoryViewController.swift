@@ -50,7 +50,12 @@ final class HistoryViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = Colors.primaryText.value
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 25.0, bottom: 0, right: 25.0)
+        tableView.separatorInset = UIEdgeInsets(
+            top: 0,
+            left: Constants.largeSpacer,
+            bottom: 0,
+            right: Constants.largeSpacer
+        )
 
         // hide extra cell separators
         tableView.tableFooterView = UIView()
@@ -74,19 +79,28 @@ final class HistoryViewController: UITableViewController {
         navigationController?.isNavigationBarHidden = true
     }
 
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        let safeAreaInset = view.safeAreaInsets.bottom
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // Add an additional inset for the demo purposes label's height. The demo lable is pinned
+        // to the safe area bottom and the table's content is inset as much by default. Add the
+        // label's height + padding to have it show when you scroll to the bottom:
         tableView.contentInset = UIEdgeInsets(
             top: 0,
             left: 0,
-            bottom: safeAreaInset + 28.0,
+            bottom: demoPurposes.frame.height + Constants.smallSpacer,
             right: 0
         )
     }
 }
 
 private extension HistoryViewController {
+
+    enum Constants {
+        static let largeSpacer: CGFloat = 25
+        static let mediumSpacer: CGFloat = 15
+        static let smallSpacer: CGFloat = 8
+    }
+
     func syncTransactions() {
         // fetch data
         serviceAPI.getTransactions() { [weak self] transactions,_ in
@@ -104,8 +118,8 @@ private extension HistoryViewController {
 
     func updateMargins() {
         var margins = tableView.layoutMargins
-        margins.left = 25.0
-        margins.right = 25.0
+        margins.left = Constants.largeSpacer
+        margins.right = Constants.largeSpacer
         margins.bottom = 0
         tableView.layoutMargins = margins
     }
