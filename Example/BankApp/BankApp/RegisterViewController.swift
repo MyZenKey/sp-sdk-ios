@@ -31,7 +31,7 @@ class RegisterViewController: ScrollingContentViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.attributedText = Fonts.headlineText(
+        label.attributedText = Fonts.boldHeadlineText(
             text: "Start your future with BankApp.",
             withColor: Colors.primaryText.value
         )

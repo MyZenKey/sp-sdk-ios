@@ -22,7 +22,17 @@ enum Fonts {
 
 extension Fonts {
 
-    static func headlineText(text: String, withColor color: UIColor) -> NSAttributedString {
+    static func boldHeadlineText(text: String, withColor color: UIColor) -> NSAttributedString {
+        return NSAttributedString(
+            string: text,
+            attributes: [
+                .font: Fonts.headline,
+                .foregroundColor: color,
+                .kern: 0.03
+            ])
+    }
+
+    static func regularHeadlineText(text: String, withColor color: UIColor) -> NSAttributedString {
         return NSAttributedString(
             string: text,
             attributes: [
