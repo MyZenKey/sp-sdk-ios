@@ -19,6 +19,14 @@ class DebugViewController: UIViewController {
         return tableView
     }()
 
+    private let versionView: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.text = "Version \(UIApplication.appVersion ?? "N/A")   Build \(UIApplication.appBuild ?? "N/A")"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
     static func addMenu(toView view: UIView) {
         let debugGesture = UITapGestureRecognizer(target: self, action: #selector(show))
         debugGesture.numberOfTapsRequired = 3
@@ -44,16 +52,21 @@ class DebugViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(hide))
         // Table
         view.addSubview(tableView)
+        view.addSubview(versionView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         let safeAreaGuide = getSafeLayoutGuide()
+        view.backgroundColor = .white
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
+            versionView.centerXAnchor.constraint(equalTo: safeAreaGuide.centerXAnchor),
+            versionView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
             ])
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.tableFooterView = versionView
 
         tableView.reloadData()
     }
@@ -253,5 +266,14 @@ extension DebugViewController: UITableViewDataSource {
             break
         }
         return cell
+    }
+}
+
+extension UIApplication {
+    static var appVersion: String? {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+    }
+    static var appBuild: String? {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
     }
 }
