@@ -104,6 +104,8 @@ final class TransactionTableCell: UITableViewCell {
         let label = UILabel(frame: .zero)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.66
         return label
     }()
 
