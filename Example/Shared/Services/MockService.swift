@@ -65,7 +65,8 @@ class MockService: NSObject, ServiceProviderAPIProtocol {
                          completion: @escaping (Transaction?, Error?) -> Void) {
 
         DispatchQueue.main.async {
-            let completedTransaction = Transaction(time: Date(),
+            let completedTransaction = Transaction(id: transaction.id,
+                                                   time: Date(),
                                                    recipiant: transaction.recipiant,
                                                    amount: transaction.amount)
             var transactions = UserAccountStorage.getTransactionHistory()

@@ -72,14 +72,7 @@ class TransfersViewController: UIViewController {
 
     var underlineView = UIView()
 
-    let demoLabel: UILabel = {
-        let demo = UILabel()
-        demo.text = "THIS APP IS FOR DEMO PURPOSES ONLY."
-        demo.font = UIFont.primaryText.withSize(10)
-        demo.textAlignment = .center
-        demo.translatesAutoresizingMaskIntoConstraints = false
-        return demo
-    }()
+    let demoLabel: UILabel = UIViewController.makeDemoPurposesLabel()
 
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
@@ -124,7 +117,8 @@ class TransfersViewController: UIViewController {
     }
 
     func updateWithTransaction(transaction: [Transaction]) {
-        if let mostRecentTransaction = transaction.last {
+        // reverse chronological, most recent transaction is first
+        if let mostRecentTransaction = transaction.first {
             transactionNumberLiteralLabel.text = "#\(mostRecentTransaction.id)"
             successInfoLabel.text = "You have sent \(mostRecentTransaction.amount) USD \nto \(mostRecentTransaction.recipiant)."
         }
@@ -178,6 +172,6 @@ class TransfersViewController: UIViewController {
             transactionNumberLiteralLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
             transactionNumberLiteralLabel.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -33),
 
-            ])
+        ])
     }
 }
