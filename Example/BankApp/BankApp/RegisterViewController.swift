@@ -186,9 +186,20 @@ class RegisterViewController: ScrollingContentViewController {
         return view
     }()
 
-    fileprivate var cardToTopConstraint: NSLayoutConstraint!
-
     fileprivate var outsetConstraint: NSLayoutConstraint!
+    fileprivate var photoHeightRestrictionConstraint: NSLayoutConstraint!
+
+    private var overScrollValue: CGFloat {
+        return -min(0, scrollView.contentOffset.y)
+    }
+
+    fileprivate var outsetConstraintConstant: CGFloat {
+        return -(view.safeAreaInsets.top + overScrollValue)
+    }
+
+    fileprivate var photoHeightConstraintConstant: CGFloat {
+        return -(Constants.bottomAreaHeight + (view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom)) + overScrollValue
+    }
 
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
@@ -209,17 +220,27 @@ class RegisterViewController: ScrollingContentViewController {
         contentView.addSubview(footerView)
         contentView.addSubview(contentStackView)
 
-        // background image should shrink to support keeping the distance between card and top
-        // of the screen fixed to it's desired scale.
-        backgroundImage.setContentCompressionResistancePriority(.fittingSizeLevel, for: .vertical)
-
-        cardToTopConstraint = contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor)
         outsetConstraint = backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor)
 
-        NSLayoutConstraint.activate([
+        photoHeightRestrictionConstraint = backgroundImage.heightAnchor.constraint(
+            equalTo: scrollView.frameLayoutGuide.heightAnchor,
+            constant: photoHeightConstraintConstant
+        )
 
-            cardToTopConstraint,
+        // the photo should take the space of the screen above the footer area.
+        // but should not get so small that the whole stack can't fit on a smaller screen.
+        //
+        // so demote the priority to one below the default conent compression resistance priority:
+        photoHeightRestrictionConstraint.priority = .defaultHigh - 1
+        // set its intrinsic compression resistance to be very low so it will obey most layouts:
+        backgroundImage.setContentCompressionResistancePriority(
+            .defaultLow,
+            for: .vertical
+        )
+
+        NSLayoutConstraint.activate([
             outsetConstraint,
+            photoHeightRestrictionConstraint,
 
             backgroundImage.bottomAnchor.constraint(equalTo: footerView.topAnchor),
 
@@ -228,6 +249,11 @@ class RegisterViewController: ScrollingContentViewController {
             backgroundImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundImage.widthAnchor.constraint(equalTo: view.widthAnchor),
 
+            // ensure the content stack always is at least inside the nav bar:
+            contentStackView.topAnchor.constraint(
+                greaterThanOrEqualTo: contentView.layoutMarginsGuide.topAnchor,
+                constant: Constants.largeSpace
+            ),
             contentStackView.bottomAnchor.constraint(
                 equalTo: footerView.bottomAnchor,
                 constant: -8
@@ -251,14 +277,6 @@ class RegisterViewController: ScrollingContentViewController {
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
         updatePhotoConstraints()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // on smaller screens, reduce the top float to a percentage of the screen's height
-        // but don't grow over 166 for very large screens.
-        cardToTopConstraint.constant = min(166, scrollView.frame.height * 0.2)
     }
 
     @objc func signUpPressed() {
@@ -300,8 +318,8 @@ private extension RegisterViewController {
     }
 
     func updatePhotoConstraints() {
-        // push the photo out by the amount that we get inset
-        outsetConstraint.constant = -(view.safeAreaInsets.top + -min(0, scrollView.contentOffset.y))
+        outsetConstraint.constant = outsetConstraintConstant
+        photoHeightRestrictionConstraint.constant = photoHeightConstraintConstant
     }
 }
 
