@@ -13,37 +13,22 @@ class UnderlinedTextFieldView: UIView {
         return true
     }
 
-    var textFieldDelegate: UITextFieldDelegate? {
-        get { return field.delegate }
-        set { field.delegate = newValue }
-    }
-
-    var text: String? {
-        get { return field.text }
-        set { field.text = newValue }
-    }
-
-    var placeholder: String? {
-        get { return field.placeholder }
+    var attributedPlaceholder: String? {
+        get { return textField.placeholder }
         set {
             guard let newValue = newValue else {
-                field.attributedPlaceholder = nil
+                textField.attributedPlaceholder = nil
                 return
             }
             
-            field.attributedPlaceholder = NSAttributedString(
+            textField.attributedPlaceholder = NSAttributedString(
                 string: newValue,
                 attributes: Constants.placeholderAttributes
             )
         }
     }
 
-    var isSecureTextEntry: Bool {
-        get { return field.isSecureTextEntry }
-        set { field.isSecureTextEntry = newValue }
-    }
-
-    private let field: UITextField = {
+    let textField: UITextField = {
         let field = UITextField(frame: .zero)
         field.translatesAutoresizingMaskIntoConstraints = false
         var attributes: [NSAttributedString.Key: Any] = [
@@ -77,7 +62,7 @@ class UnderlinedTextFieldView: UIView {
     }
 
     @objc func updateState() {
-        if field.isEditing {
+        if textField.isEditing {
             hairline.backgroundColor = Colors.brightAccent.value
         } else {
             hairline.backgroundColor = Colors.lightAccent.value
@@ -87,7 +72,7 @@ class UnderlinedTextFieldView: UIView {
     @discardableResult
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
-        return field.resignFirstResponder()
+        return textField.resignFirstResponder()
     }
 
 
@@ -107,28 +92,27 @@ class UnderlinedTextFieldView: UIView {
 
 private extension UnderlinedTextFieldView {
     func sharedInit() {
-
         backgroundColor = Colors.fieldBackground.value
 
         translatesAutoresizingMaskIntoConstraints = false
 
         setupViews()
 
-        field.addTarget(self, action: #selector(updateState), for: .editingDidBegin)
-        field.addTarget(self, action: #selector(updateState), for: .editingDidEnd)
+        textField.addTarget(self, action: #selector(updateState), for: .editingDidBegin)
+        textField.addTarget(self, action: #selector(updateState), for: .editingDidEnd)
 
         updateState()
     }
 
     func setupViews() {
-        addSubview(field)
+        addSubview(textField)
         addSubview(hairline)
 
         NSLayoutConstraint.activate([
-            field.topAnchor.constraint(equalTo: topAnchor),
-            field.bottomAnchor.constraint(equalTo: bottomAnchor),
-            field.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.horizontalInset),
-            field.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalInset),
+            textField.topAnchor.constraint(equalTo: topAnchor),
+            textField.bottomAnchor.constraint(equalTo: bottomAnchor),
+            textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.horizontalInset),
+            textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.horizontalInset),
 
             hairline.bottomAnchor.constraint(equalTo: bottomAnchor),
             hairline.leadingAnchor.constraint(equalTo: leadingAnchor),

@@ -49,14 +49,15 @@ final class LoginViewController: ScrollingContentViewController {
 
     private let usernameTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.placeholder = "User ID"
+        field.attributedPlaceholder = "User ID"
         return field
     }()
     
     private let passwordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.placeholder = "Password"
-        field.isSecureTextEntry = true
+        field.attributedPlaceholder = "Password"
+        field.textField.isSecureTextEntry = true
+        field.textField.returnKeyType = .go
         return field
     }()
     
@@ -229,6 +230,8 @@ final class LoginViewController: ScrollingContentViewController {
 
         scrollView.keyboardDismissMode = .onDrag
 
+        passwordTextField.textField.delegate = self
+
         updateMargins()
 
         view.addGestureRecognizer(tapGestureRecognizer)
@@ -311,8 +314,8 @@ final class LoginViewController: ScrollingContentViewController {
 
     @objc func signInButtonPressed() {
         serviceAPI.login(
-            withUsername: usernameTextField.text?.lowercased() ?? "",
-            password: passwordTextField.text?.lowercased() ?? "") { [weak self] auth, error in
+            withUsername: usernameTextField.textField.text?.lowercased() ?? "",
+            password: passwordTextField.textField.text?.lowercased() ?? "") { [weak self] auth, error in
 
                 guard auth != nil, error == nil else {
                     self?.showPasswordReminderAlert()
@@ -353,6 +356,17 @@ private extension LoginViewController {
             title: "Enter User Name and password",
             message: "Your username is “jane” and your password is the answer to “Why was 6 afraid of 7? Because …"
         )
+    }
+}
+
+extension LoginViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard textField != passwordTextField.textField else {
+            signInButtonPressed()
+            return true
+        }
+
+        return true
     }
 }
 
