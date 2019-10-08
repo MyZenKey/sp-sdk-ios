@@ -14,6 +14,7 @@ class EnableVerifyViewController: UIViewController {
         let clouds = UIImage(named: "clouds")
         let cloudsImage = UIImageView(image: clouds)
         cloudsImage.translatesAutoresizingMaskIntoConstraints = false
+        cloudsImage.contentMode = .scaleAspectFit
         return cloudsImage
     }()
 
