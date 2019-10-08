@@ -200,7 +200,8 @@ class RegisterViewController: ScrollingContentViewController {
 
         view.addGestureRecognizer(tapGestureRecognizer)
 
-        scrollView.keyboardDismissMode = .onDrag
+        scrollView.keyboardDismissMode = .interactive
+        scrollView.delegate = self
 
         updateMargins()
 
@@ -249,8 +250,7 @@ class RegisterViewController: ScrollingContentViewController {
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        // push the photo out by the amount that we get inset
-        outsetConstraint.constant = -view.safeAreaInsets.top
+        updatePhotoConstraints()
     }
 
     override func viewDidLayoutSubviews() {
@@ -297,6 +297,17 @@ private extension RegisterViewController {
         margins.left = Constants.largeSpace
         margins.right = Constants.largeSpace
         contentView.layoutMargins = margins
+    }
+
+    func updatePhotoConstraints() {
+        // push the photo out by the amount that we get inset
+        outsetConstraint.constant = -(view.safeAreaInsets.top + -min(0, scrollView.contentOffset.y))
+    }
+}
+
+extension RegisterViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updatePhotoConstraints()
     }
 }
 

@@ -197,9 +197,6 @@ final class LoginViewController: ScrollingContentViewController {
         return view
     }()
 
-    private var outsetConstraint: NSLayoutConstraint!
-    private var photoHeightRestrictionConstraint: NSLayoutConstraint!
-
     private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
         let gestureRecognizer = UITapGestureRecognizer(
             target: self,
@@ -208,12 +205,19 @@ final class LoginViewController: ScrollingContentViewController {
         return gestureRecognizer
     }()
 
+    private var outsetConstraint: NSLayoutConstraint!
+    private var photoHeightRestrictionConstraint: NSLayoutConstraint!
+
+    private var overScrollValue: CGFloat {
+        return -min(0, scrollView.contentOffset.y)
+    }
+
     fileprivate var outsetConstraintConstant: CGFloat {
-        return -view.safeAreaInsets.top
+        return -(view.safeAreaInsets.top + overScrollValue)
     }
 
     fileprivate var photoHeightConstraintConstant: CGFloat {
-        return -(Constants.bottomAreaHeight + (view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom))
+        return -(Constants.bottomAreaHeight + (view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom)) + overScrollValue
     }
 
     private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
@@ -228,9 +232,10 @@ final class LoginViewController: ScrollingContentViewController {
 
         view.backgroundColor = Colors.white.value
 
-        scrollView.keyboardDismissMode = .onDrag
+        scrollView.keyboardDismissMode = .interactive
 
         passwordTextField.textField.delegate = self
+        scrollView.delegate = self
 
         updateMargins()
 
@@ -259,7 +264,7 @@ final class LoginViewController: ScrollingContentViewController {
             photoHeightRestrictionConstraint,
             outsetConstraint,
 
-            // postioned relative to the very bottom of the view and it's edges regardless o
+            // positioned relative to the very bottom of the view and it's edges regardless of
             // marigns.
             logo.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
             logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -293,13 +298,7 @@ final class LoginViewController: ScrollingContentViewController {
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        // The photo should sit at the top of the screen. This will be pushed outside of the
-        // scroll view's content area by the size of the safe area:
-        outsetConstraint.constant = outsetConstraintConstant
-        // The photo height should scale to fill the space on all screen sizes, less the bottom
-        // space. This is the bottom space constant height adjusted for the unmodified safe area
-        // insets:
-        photoHeightRestrictionConstraint.constant = photoHeightConstraintConstant
+        updatePhotoConstraints()
     }
 
     // MARK: -  Actions
@@ -357,6 +356,16 @@ private extension LoginViewController {
             message: "Your username is “jane” and your password is the answer to “Why was 6 afraid of 7? Because …"
         )
     }
+
+    func updatePhotoConstraints() {
+        // The photo should sit at the top of the screen. This will be pushed outside of the
+        // scroll view's content area by the size of the safe area:
+        outsetConstraint.constant = outsetConstraintConstant
+        // The photo height should scale to fill the space on all screen sizes, less the bottom
+        // space. This is the bottom space constant height adjusted for the unmodified safe area
+        // insets:
+        photoHeightRestrictionConstraint.constant = photoHeightConstraintConstant
+    }
 }
 
 extension LoginViewController: UITextFieldDelegate {
@@ -365,8 +374,13 @@ extension LoginViewController: UITextFieldDelegate {
             signInButtonPressed()
             return true
         }
-
         return true
+    }
+}
+
+extension LoginViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updatePhotoConstraints()
     }
 }
 
