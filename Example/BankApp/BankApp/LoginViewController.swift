@@ -265,7 +265,7 @@ final class LoginViewController: ScrollingContentViewController {
             photoHeightRestrictionConstraint,
             outsetConstraint,
 
-            // postioned relative to the very bottom of the view and it's edges regardless of
+            // postioned relative to the very bottom of the view and it's edges regardless o
             // marigns.
             logo.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
             logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -290,6 +290,11 @@ final class LoginViewController: ScrollingContentViewController {
             footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
     override func viewSafeAreaInsetsDidChange() {
