@@ -57,7 +57,7 @@ class HomeViewController: UIViewController {
     }()
 
     let checkingCard: AccountCard = {
-        let card = AccountCard("Checking", icon: UIImage(named: "check") ?? UIImage())
+        let card = AccountCard("Preferred Checking", icon: UIImage(named: "check") ?? UIImage())
         card.translatesAutoresizingMaskIntoConstraints = false
 
         return card
@@ -368,7 +368,7 @@ class AccountCard: UIView {
             accountLabel.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
             accountLabel.topAnchor.constraint(equalTo: textContainer.topAnchor),
 
-            numberLabel.topAnchor.constraint(equalTo: accountLabel.bottomAnchor),
+            numberLabel.topAnchor.constraint(equalTo: accountLabel.bottomAnchor, constant: 4.0),
             numberLabel.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
             numberLabel.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
             numberLabel.bottomAnchor.constraint(equalTo: textContainer.bottomAnchor),
