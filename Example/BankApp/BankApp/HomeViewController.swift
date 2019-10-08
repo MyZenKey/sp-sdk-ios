@@ -34,15 +34,6 @@ class HomeViewController: UIViewController {
         return label
     }()
 
-    let userInfoLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
-    
     let sendMoneyButton: BankAppButton = {
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -53,20 +44,8 @@ class HomeViewController: UIViewController {
         return button
     }()
 
-    let userInfoCard: UIView = {
-        let card = UIView()
-        card.backgroundColor = Colors.white.value
-        card.translatesAutoresizingMaskIntoConstraints = false
-        let avatar = UIImageView(image: UIImage(named: "profile"))
-        avatar.translatesAutoresizingMaskIntoConstraints = false
-        card.addSubview(avatar)
-
-        NSLayoutConstraint.activate([
-            avatar.topAnchor.constraint(equalTo: card.topAnchor, constant: 18),
-            avatar.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 15),
-            avatar.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -18),
-            ])
-        card.addBankShadow()
+    let userInfoCard: UserCardView = {
+        let card = UserCardView()
         return card
     }()
 
@@ -96,6 +75,8 @@ class HomeViewController: UIViewController {
             updateUserInfo()
         }
     }
+
+    private let demoPurposesLabel: UILabel = UIViewController.makeDemoPurposesLabel()
 
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
@@ -152,7 +133,6 @@ class HomeViewController: UIViewController {
 
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
-//        let safeAreaGuide = getSafeLayoutGuide()
 
         contentView.addSubview(titleLabel)
         contentView.addSubview(userInfoCard)
@@ -162,6 +142,7 @@ class HomeViewController: UIViewController {
         contentView.addSubview(creditCard)
         contentView.addSubview(summaryLabel)
         contentView.addSubview(creditCardLabel)
+        contentView.addSubview(demoPurposesLabel)
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -169,7 +150,8 @@ class HomeViewController: UIViewController {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            contentView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            contentView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor),
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -207,8 +189,12 @@ class HomeViewController: UIViewController {
             creditCard.topAnchor.constraint(equalTo: creditCardLabel.bottomAnchor, constant: 10),
             creditCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
             creditCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
-            creditCard.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
 
+            // Allow flexible space before demoPurposesLabel
+            demoPurposesLabel.topAnchor.constraint(greaterThanOrEqualTo: creditCard.bottomAnchor, constant: 20),
+            demoPurposesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
+            demoPurposesLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            demoPurposesLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -20),
             ])
     }
 }
@@ -236,24 +222,90 @@ private extension HomeViewController {
     }
     
     func updateUserInfo() {
+        userInfoCard.userInfo = userInfo
+    }
+
+}
+
+class UserCardView: UIView {
+    public var userInfo: UserInfo? {
+        didSet {
+            updateUserInfo()
+        }
+    }
+
+    let avatarImageView: UIImageView = {
+        let avatar = UIImageView(image: UIImage(named: "profile"))
+        avatar.translatesAutoresizingMaskIntoConstraints = false
+        return avatar
+    }()
+
+    let userInfoLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = Fonts.primaryText
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        return label
+    }()
+
+    init() {
+        super.init(frame: .zero)
+        layout()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func updateUserInfo() {
         guard let userInfo = userInfo else {
             userInfoLabel.text = nil
             return
         }
+        let nameAttributes: [NSAttributedString.Key: Any] = [
+            .font: Fonts.heavyText,
+            .foregroundColor: Colors.heavyText.value,
+        ]
+        let infoAttributes: [NSAttributedString.Key: Any] = [
+            .font: Fonts.primaryText,
+            .foregroundColor: Colors.primaryText.value,
+        ]
+        let nameString = NSAttributedString(
+            string: "\(userInfo.name ?? "{name}")\n",
+            attributes: nameAttributes
+        )
+        let infoString = NSAttributedString(
+            string: "\(userInfo.email ?? "{email}")\n\(userInfo.phone ?? "{phone}")\nPostal Code: \(userInfo.postalCode ?? "{postal code}")",
+            attributes: infoAttributes
+        )
+        let combination = NSMutableAttributedString()
+        combination.append(nameString)
+        combination.append(infoString)
 
-        userInfoLabel.text = """
-        user: \(userInfo.username)
-        name: \(userInfo.name ?? "{name}") | phone: \(userInfo.phone ?? "{phone}")
-        email: \(userInfo.email ?? "{email}") | zip: \(userInfo.postalCode ?? "{postal code}")
-        """
+        userInfoLabel.attributedText = combination
     }
 
-//    func accountCard(_ text: String, icon: UIImage) -> UIView {
-//        let card = UIView()
-//
-//        card.addBankShadow()
-//        return card
-//    }
+    func layout() {
+        backgroundColor = Colors.white.value
+        translatesAutoresizingMaskIntoConstraints = false
+        addSubview(avatarImageView)
+        addSubview(userInfoLabel)
+
+        NSLayoutConstraint.activate([
+            // center avatar
+            avatarImageView.topAnchor.constraint(equalTo: topAnchor, constant: 18),
+            avatarImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
+            avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            avatarImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -18),
+
+            // TODO: Handle dynamic type size - this will overflow if it grows too large
+            userInfoLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 20),
+            userInfoLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
+            userInfoLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            ])
+        addBankShadow()
+    }
 }
 
 class AccountCard: UIView {
@@ -288,7 +340,7 @@ class AccountCard: UIView {
         super.init(frame: .zero)
         layout()
         accountLabel.text = text
-        numberLabel.text = "– \(String(Int.random(in: 0 ..< 100000000)))"
+        numberLabel.text = "– \(String(format: "%04d", Int.random(in: 0 ..< 10000)))"
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -332,13 +384,8 @@ extension UIView {
         layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
         layer.shadowRadius = 4.0
         //FIXME: cgcolor should be set in updateSubviews to accomodate trait changes (light/dark mode)
-        // make color asset wityh alpha?
         layer.shadowColor = Colors.transShadow.value.cgColor
         layer.masksToBounds = false
         layer.shadowOpacity = 1.0
-        //        card.layer.shadowPath = UIBezierPath(rect: bounds).cgPath
-        //        card.layer.shouldRasterize = true
-        //        card.layer.rasterizationScale = scale ? UIScreen.main.scale : 1
-
     }
 }
