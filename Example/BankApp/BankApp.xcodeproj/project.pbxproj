@@ -33,7 +33,6 @@
 		8AC2A38E22D8F17300B72551 /* JsonDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D43BF8F2024FA6700B9BE41 /* JsonDocument.swift */; };
 		8AC710CD2321CABF000D3EC8 /* BankAppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC710CC2321CABF000D3EC8 /* BankAppRouter.swift */; };
 		8AC710CF2321CD01000D3EC8 /* TransfersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC710CE2321CD01000D3EC8 /* TransfersViewController.swift */; };
-		8AC710D123231CDB000D3EC8 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC710D023231CDB000D3EC8 /* RegisterViewController.swift */; };
 		8AD7ED8A23454D5100B8C6FC /* KeyboardAvoiding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD7ED8923454D5100B8C6FC /* KeyboardAvoiding.swift */; };
 		8AD7ED8C23456F4D00B8C6FC /* OrDividerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD7ED8B23456F4D00B8C6FC /* OrDividerView.swift */; };
 		8AD7ED8E234574BC00B8C6FC /* NavigationBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD7ED8D234574BC00B8C6FC /* NavigationBarAppearance.swift */; };
@@ -45,7 +44,10 @@
 		8CDE44DD212DCC4C00F403A2 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDE44DC212DCC4C00F403A2 /* GradientView.swift */; };
 		8CFE96FF2121F22900542F46 /* ApproveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFE96FE2121F22900542F46 /* ApproveViewController.swift */; };
 		E66B5DD622F225D4005C7FD7 /* UITestLaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66B5DD522F225D4005C7FD7 /* UITestLaunchArguments.swift */; };
-		FF1A048F234B960500AFED0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF1A048E234B960500AFED0E /* Assets.xcassets */; };
+		FF30A88F234CE87A0065D4CA /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF30A88E234CE87A0065D4CA /* RegisterViewController.swift */; };
+		FF30A890234CE9600065D4CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF1A048E234B960500AFED0E /* Assets.xcassets */; };
+		FF4B57EB2347D438001032A7 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		FF78EAF6234BD8A000648210 /* (null) in Sources */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +125,7 @@
 		F47BE0F508829E84600C85E1 /* Pods-BankApp.develop.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BankApp.develop.xcconfig"; path = "Pods/Target Support Files/Pods-BankApp/Pods-BankApp.develop.xcconfig"; sourceTree = "<group>"; };
 		FE6212B13800D51B30E3D4A9 /* Pods_BankApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BankApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF1A048E234B960500AFED0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = BankApp/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		FF30A88E234CE87A0065D4CA /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +190,7 @@
 				7D89C9D11FFE82F400AE1EF4 /* Products */,
 				8CBB8CCA2107DE940050A495 /* Frameworks */,
 				A814D1CAEF823D4033B324F9 /* Pods */,
+				FF78EAFA234CE51100648210 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -221,7 +225,7 @@
 				8AC710CC2321CABF000D3EC8 /* BankAppRouter.swift */,
 				8AC710CE2321CD01000D3EC8 /* TransfersViewController.swift */,
 				63DE42F723299AC600D727AE /* HistoryViewController.swift */,
-				8AC710D023231CDB000D3EC8 /* RegisterViewController.swift */,
+				FF30A88E234CE87A0065D4CA /* RegisterViewController.swift */,
 				8A247DC523427BAA008AAA72 /* Colors.swift */,
 				8A2401AC2342B75E00CD1092 /* Fonts.swift */,
 				8A2401B52343D91400CD1092 /* ScrollingContentViewController.swift */,
@@ -296,6 +300,14 @@
 				13DCB7D89258CC6FC6E4F461 /* Pods-BankApp.sprint.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		FF78EAFA234CE51100648210 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				8AC710D023231CDB000D3EC8 /* RegisterViewController.swift */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -400,7 +412,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF1A048F234B960500AFED0E /* Assets.xcassets in Resources */,
+				FF4B57EB2347D438001032A7 /* (null) in Resources */,
+				FF30A890234CE9600065D4CA /* Assets.xcassets in Resources */,
 				7D89C9DE1FFE82F400AE1EF4 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -471,7 +484,6 @@
 				E66B5DD622F225D4005C7FD7 /* UITestLaunchArguments.swift in Sources */,
 				8A2CE1D6232989A7001EADF8 /* Logger.swift in Sources */,
 				8C87BE1221268FD500B24707 /* HomeViewController.swift in Sources */,
-				8AC710D123231CDB000D3EC8 /* RegisterViewController.swift in Sources */,
 				8A2401B62343D91400CD1092 /* ScrollingContentViewController.swift in Sources */,
 				8A92ED1522C40C5D00E0B2CA /* UIViewController+Helpers.swift in Sources */,
 				8A2CE1D42329764D001EADF8 /* UniversalBackendService.swift in Sources */,
@@ -485,12 +497,14 @@
 				8CDE44DD212DCC4C00F403A2 /* GradientView.swift in Sources */,
 				8C6E736E212338F4003B15A4 /* DotView.swift in Sources */,
 				63DE42F823299AC600D727AE /* HistoryViewController.swift in Sources */,
+				FF30A88F234CE87A0065D4CA /* RegisterViewController.swift in Sources */,
 				8AB02C1322D7E0FA00B1673C /* BankAppViewController.swift in Sources */,
 				8A855D162315890F0012AF60 /* MockService.swift in Sources */,
 				8A855D2223158E870012AF60 /* DemoAppAppDelegate.swift in Sources */,
 				8AC710CF2321CD01000D3EC8 /* TransfersViewController.swift in Sources */,
 				8A247DC623427BAA008AAA72 /* Colors.swift in Sources */,
 				8C87BE1021266A8B00B24707 /* AppTheme.swift in Sources */,
+				FF78EAF6234BD8A000648210 /* (null) in Sources */,
 				8A855D172315890F0012AF60 /* ServiceProviderAPIProtocol.swift in Sources */,
 				8A48D6AD23426E4500F6EA95 /* UnderlinedTextFieldView.swift in Sources */,
 				8A2401AD2342B75E00CD1092 /* Fonts.swift in Sources */,
