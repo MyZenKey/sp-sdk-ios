@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,18 +19,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_image" translatesAutoresizingMaskIntoConstraints="NO" id="hQ7-q9-OeX">
-                                <rect key="frame" x="87" y="233" width="200" height="200"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="IBx-CR-86e"/>
-                                    <constraint firstAttribute="height" constant="200" id="Yx1-WK-LD5"/>
-                                </constraints>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bankapp-logo" translatesAutoresizingMaskIntoConstraints="NO" id="EBX-e5-eOY">
+                                <rect key="frame" x="74" y="318" width="227" height="31"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="splashScreenBackground"/>
                         <constraints>
-                            <constraint firstItem="hQ7-q9-OeX" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="5Tr-BX-FbC"/>
-                            <constraint firstItem="hQ7-q9-OeX" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="BI8-AI-BHf"/>
+                            <constraint firstItem="EBX-e5-eOY" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Cqt-5P-b1q"/>
+                            <constraint firstItem="EBX-e5-eOY" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="lyi-f8-qgQ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -40,6 +37,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launch_image" width="167" height="167"/>
+        <image name="bankapp-logo" width="227" height="31"/>
+        <namedColor name="splashScreenBackground">
+            <color red="0.14509803921568629" green="0.2627450980392157" blue="0.55294117647058827" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

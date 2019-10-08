@@ -10,6 +10,7 @@ import UIKit
 
 enum Colors: String {
     case fieldBackground
+    case splashScreenBackground
 
     case brightAccent
     case lightAccent
