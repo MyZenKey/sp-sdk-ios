@@ -15,6 +15,7 @@ class HomeViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Welcome!"
         label.font = Fonts.largeTitle
+        label.textColor = Colors.brightAccent.value
         return label
     }()
 
