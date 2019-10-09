@@ -11,11 +11,11 @@ import ZenKeySDK
 class EnableVerifyViewController: UIViewController {
 
     let backgroundClouds: UIImageView = {
-        let clouds = UIImage(named: "clouds")
-        print(clouds!.size.width)
-        print(clouds!.size.height)
+        guard let clouds = UIImage(named: "clouds") else { return UIImageView() }
+        let aspectRatio = clouds.size.height / clouds.size.width
         let cloudsImage = UIImageView(image: clouds)
         cloudsImage.translatesAutoresizingMaskIntoConstraints = false
+        cloudsImage.heightAnchor.constraint(equalTo: cloudsImage.widthAnchor, multiplier: aspectRatio).isActive = true
         return cloudsImage
     }()
 
@@ -152,10 +152,8 @@ class EnableVerifyViewController: UIViewController {
         NSLayoutConstraint.activate([
 
             NSLayoutConstraint(item: backgroundClouds, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.9, constant: 0),
-            backgroundClouds.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             backgroundClouds.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundClouds.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            NSLayoutConstraint(item: backgroundClouds, attribute: .height, relatedBy: .equal, toItem: backgroundClouds, attribute: .height, multiplier: backgroundClouds.frame.width / backgroundClouds.frame.height, constant: 0),
 
             NSLayoutConstraint(item: imageStack, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
             imageStack.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
