@@ -9,91 +9,16 @@
 import UIKit
 import ZenKeySDK
 
-class RegisterViewController: BankAppViewController {
+class RegisterViewController: ScrollingContentViewController {
 
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.text = "Sign Up for BankApp"
-        label.textAlignment = .center
-        return label
+    private let backgroundImage: UIImageView = {
+        let backgroundImage = UIImageView(image: UIImage(named: "signup-background-image"))
+        backgroundImage.translatesAutoresizingMaskIntoConstraints = false
+        backgroundImage.contentMode = .scaleAspectFill
+        return backgroundImage
     }()
 
-    let userNameTextField: UITextField = {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.minimumFontSize = 17
-        field.placeholder = "Username"
-        return field
-    }()
-
-    let emailTextField: UITextField = {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.minimumFontSize = 17
-        field.placeholder = "Email"
-        return field
-    }()
-
-    let passwordTextField: UITextField = {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.minimumFontSize = 17
-        field.isSecureTextEntry = true
-        field.placeholder = "Password"
-        return field
-    }()
-
-    let confirmPasswordTextField: UITextField = {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.minimumFontSize = 17
-        field.isSecureTextEntry = true
-        field.placeholder = "Confirm Password"
-        return field
-    }()
-
-    let postalCodeTextField: UITextField = {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.minimumFontSize = 17
-        field.placeholder = "Postal Code"
-        return field
-    }()
-
-    let phoneTextField: UITextField = {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.borderStyle = .roundedRect
-        field.minimumFontSize = 17
-        field.placeholder = "Phone"
-        return field
-    }()
-
-    let signUpButton: UIButton = {
-        let button = BankAppButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Sign Up", for: .normal)
-        button.backgroundColor = AppTheme.primaryBlue
-        return button
-    }()
-
-    let dividerLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.text = "- Or -"
-        label.textAlignment = .center
-        return label
-    }()
-
-    lazy var zenKeyButton: ZenKeyAuthorizeButton = {
+    private lazy var zenkeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
         button.style = .dark
         let scopes: [Scope] = [.openid, .register, .name, .email, .postalCode, .phone]
@@ -103,79 +28,278 @@ class RegisterViewController: BankAppViewController {
         return button
     }()
 
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.attributedText = Fonts.boldHeadlineText(
+            text: "Start your future with BankApp.",
+            withColor: Colors.primaryText.value
+        )
+        label.textAlignment = .center
+        label.numberOfLines = 2
+        return label
+    }()
+
+    private let orDivider: OrDividerView = {
+        let orDivider = OrDividerView()
+        let height = orDivider.heightAnchor.constraint(equalToConstant: Constants.mediumSpace)
+        height.isActive = true
+        return orDivider
+    }()
+
+    private let userNameTextField: UnderlinedTextFieldView = {
+        let field = UnderlinedTextFieldView()
+        field.placeholder = "User ID"
+        return field
+    }()
+
+    private let emailTextField: UnderlinedTextFieldView = {
+        let field = UnderlinedTextFieldView()
+        field.placeholder = "Email"
+        return field
+    }()
+
+    private let phoneTextField: UnderlinedTextFieldView = {
+        let field = UnderlinedTextFieldView()
+        field.placeholder = "Phone Number"
+        return field
+    }()
+
+    private let passwordTextField: UnderlinedTextFieldView = {
+        let field = UnderlinedTextFieldView()
+        field.placeholder = "Password"
+        field.isSecureTextEntry = true
+        return field
+    }()
+
+    private let confirmPasswordTextField: UnderlinedTextFieldView = {
+        let field = UnderlinedTextFieldView()
+        field.placeholder = "Confirm Password"
+        field.isSecureTextEntry = true
+        return field
+    }()
+
+    private let postalCodeTextField: UnderlinedTextFieldView = {
+        let field = UnderlinedTextFieldView()
+        field.placeholder = "Postal Code"
+        return field
+    }()
+
+    private let signUpButton: UIButton = {
+        let button = BankAppButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.borderWidth = 2.0
+        button.setTitle("Sign Up", for: .normal)
+        button.borderColor = Colors.brightAccent.value
+        button.backgroundColor = Colors.brightAccent.value
+
+        NSLayoutConstraint.activate([
+            button.heightAnchor.constraint(equalToConstant: 40.0)
+        ])
+
+        return button
+    }()
+
+    private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
+        let gestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleTapGesture)
+        )
+        return gestureRecognizer
+    }()
+
+    private let demoPurposesLabel: UILabel = UIViewController.makeDemoPurposesLabel()
+
+    private lazy var formStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            titleLabel,
+            zenkeyButton,
+            orDivider,
+            userNameTextField,
+            emailTextField,
+            phoneTextField,
+            passwordTextField,
+            confirmPasswordTextField,
+            postalCodeTextField,
+            signUpButton,
+        ])
+
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = 22
+        stackView.isLayoutMarginsRelativeArrangement = true
+
+        let marign: CGFloat = Constants.mediumSpace
+        stackView.layoutMargins = UIEdgeInsets(
+            top: marign,
+            left: marign,
+            bottom: marign,
+            right: marign
+        )
+
+        stackView.setCustomSpacing(Constants.smallSpace, after: zenkeyButton)
+        stackView.setCustomSpacing(Constants.smallSpace, after: orDivider)
+
+        return stackView
+    }()
+
+    /// Stack view doesn't draw so mirror it's size and add a shadow to this view:
+    private lazy var formStackViewContainer: UIView = {
+        let view = UIView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+
+        view.backgroundColor = Colors.white.value
+
+        view.layer.shadowColor = Colors.shadow.value.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowRadius = 4.0
+        view.layer.shadowOpacity = 0.24
+
+        view.addSubview(formStack)
+
+        NSLayoutConstraint.activate([
+            formStack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            formStack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            formStack.topAnchor.constraint(equalTo: view.topAnchor),
+            formStack.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
+        return view
+    }()
+
+    private lazy var contentStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            formStackViewContainer,
+            demoPurposesLabel
+        ])
+
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = Constants.smallSpace
+
+        return stackView
+    }()
+
+    private lazy var footerView: UIView = {
+        let view = UIView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = Colors.white.value
+        return view
+    }()
+
+    fileprivate var cardToTopConstraint: NSLayoutConstraint!
+
+    fileprivate var outsetConstraint: NSLayoutConstraint!
+
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .white
-
-        let safeAreaGuide = getSafeLayoutGuide()
-
-        isNavigationCancelButtonHidden = false
-
-        view.addSubview(titleLabel)
-        view.addSubview(userNameTextField)
-        view.addSubview(emailTextField)
-        view.addSubview(passwordTextField)
-        view.addSubview(confirmPasswordTextField)
-        view.addSubview(postalCodeTextField)
-        view.addSubview(phoneTextField)
-        view.addSubview(signUpButton)
-        view.addSubview(dividerLabel)
-        view.addSubview(zenKeyButton)
-
+        view.backgroundColor = Colors.white.value
         signUpButton.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
 
+        view.addGestureRecognizer(tapGestureRecognizer)
+
+        scrollView.keyboardDismissMode = .onDrag
+
+        updateMargins()
+
+        contentView.addSubview(backgroundImage)
+        contentView.addSubview(footerView)
+        contentView.addSubview(contentStackView)
+
+        // background image should shrink to support keeping the distance between card and top
+        // of the screen fixed to it's desired scale.
+        backgroundImage.setContentCompressionResistancePriority(.fittingSizeLevel, for: .vertical)
+
+        cardToTopConstraint = contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor)
+        outsetConstraint = backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor)
+
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 48),
-            titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            titleLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
 
-            userNameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-            userNameTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            userNameTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
+            cardToTopConstraint,
+            outsetConstraint,
 
-            emailTextField.topAnchor.constraint(equalTo: userNameTextField.bottomAnchor, constant: 10),
-            emailTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            emailTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
+            backgroundImage.bottomAnchor.constraint(equalTo: footerView.topAnchor),
 
-            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 10),
-            passwordTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            passwordTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
+            // we want no scrolling horizontally, so pin widths to scroll view
+            backgroundImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backgroundImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            backgroundImage.widthAnchor.constraint(equalTo: view.widthAnchor),
 
-            confirmPasswordTextField.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 10),
-            confirmPasswordTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            confirmPasswordTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
+            contentStackView.bottomAnchor.constraint(
+                equalTo: footerView.bottomAnchor,
+                constant: -8
+            ),
+            contentStackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
-            postalCodeTextField.topAnchor.constraint(equalTo: confirmPasswordTextField.bottomAnchor, constant: 10),
-            postalCodeTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            postalCodeTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
-
-            phoneTextField.topAnchor.constraint(equalTo: postalCodeTextField.bottomAnchor, constant: 10),
-            phoneTextField.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            phoneTextField.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
-
-            signUpButton.topAnchor.constraint(equalTo: phoneTextField.bottomAnchor, constant: 10),
-            signUpButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            signUpButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
-            signUpButton.heightAnchor.constraint(equalToConstant: 40),
-
-            dividerLabel.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 20),
-            dividerLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            dividerLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
-
-            zenKeyButton.topAnchor.constraint(equalTo: dividerLabel.bottomAnchor, constant: 20),
-            zenKeyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            zenKeyButton.widthAnchor.constraint(equalTo: signUpButton.widthAnchor),
+            footerView.heightAnchor.constraint(equalToConstant: Constants.bottomAreaHeight),
+            footerView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        title = "Register"
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        // push the photo out by the amount that we get inset
+        outsetConstraint.constant = -view.safeAreaInsets.top
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // on smaller screens, reduce the top float to a percentage of the screen's height
+        // but don't grow over 166 for very large screens.
+        cardToTopConstraint.constant = min(166, scrollView.frame.height * 0.2)
     }
 
     @objc func signUpPressed() {
         showAlert(
             title: "Not Supported",
-            message: "We don't support manual sign up yet, try ZenKey instead!"
+            message: "We don’t support manual sign up, yet. Try ZenKey instead!"
         )
+    }
+
+    @objc func handleTapGesture() {
+        [
+            userNameTextField,
+            emailTextField,
+            phoneTextField,
+            passwordTextField,
+            confirmPasswordTextField,
+            postalCodeTextField,
+        ].forEach() { $0.resignFirstResponder() }
+    }
+}
+
+private extension RegisterViewController {
+    enum Constants {
+        /// the 'reserved' white area at the bottom of the screen's height
+        static let bottomAreaHeight: CGFloat = 157
+        static let largeSpace: CGFloat = 25
+        static let mediumSpace: CGFloat = 15
+        static let smallSpace: CGFloat = 10
+    }
+
+    /// The margins are not quite right out of the box, update them to reflect the horizontal marigns
+    /// we expect and add no additional marign to the safe area at the bottom.
+    func updateMargins() {
+        var margins = contentView.layoutMargins
+        margins.bottom = 0.0
+        margins.left = Constants.largeSpace
+        margins.right = Constants.largeSpace
+        contentView.layoutMargins = margins
     }
 }
 

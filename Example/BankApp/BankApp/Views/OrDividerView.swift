@@ -48,7 +48,7 @@ final class OrDividerView: UIStackView {
     private func newOrLabel() -> UILabel {
         let label = UILabel(frame: .zero)
         label.text = "or"
-        label.font = Fonts.accesory
+        label.font = Fonts.mediumAccesory
         label.textColor = Colors.secondaryText.value
         label.translatesAutoresizingMaskIntoConstraints = false
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)

@@ -27,18 +27,25 @@ struct Transaction: Codable {
     let time: Date
     let recipiant: String
     let amount: String
-    let id = String(Int.random(in: 0 ..< 100000000))
+    let id: String
 
     var contextString: String {
         return "Confirm you would like to transfer \(amount) to \(recipiant)."
     }
 
-    init(time: Date, recipiant: String, amount: String) {
+    init(id: String = Transaction.idGenerator(),
+         time: Date,
+         recipiant: String,
+         amount: String) {
+        self.id = id
         self.time = time
         self.recipiant = recipiant
         self.amount = amount
     }
 
+    static func idGenerator() -> String {
+        return String(Int.random(in: 0 ..< 100000000))
+    }
 }
 
 enum TransactionError: Error {
@@ -248,7 +255,8 @@ extension ServiceProviderAPIProtocol {
         }
 
         // Build new timestamped Transaction
-        let completedTransaction = Transaction(time: Date(),
+        let completedTransaction = Transaction(id: transaction.id,
+                                               time: Date(),
                                                recipiant: transaction.recipiant,
                                                amount: transaction.amount)
 

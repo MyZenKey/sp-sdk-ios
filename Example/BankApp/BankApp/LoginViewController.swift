@@ -84,7 +84,7 @@ final class LoginViewController: ScrollingContentViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(
-            Fonts.accessoryText(
+            Fonts.mediumAccessoryText(
                 text: "Forgot User ID or Password?",
                 withColor: Colors.heavyText.value
             ),
@@ -97,7 +97,7 @@ final class LoginViewController: ScrollingContentViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(
-            Fonts.accessoryText(
+            Fonts.mediumAccessoryText(
                 text: "Sign up for BankApp",
                 withColor: Colors.brightAccent.value
             ),
@@ -265,11 +265,11 @@ final class LoginViewController: ScrollingContentViewController {
             photoHeightRestrictionConstraint,
             outsetConstraint,
 
-            // postioned relative to the very bottom of the view and it's edges regardless of
+            // postioned relative to the very bottom of the view and it's edges regardless o
             // marigns.
             logo.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
             logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            logo.topAnchor.constraint(equalTo: contentView.topAnchor),
+            logo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24.0),
 
             backgroundImage.bottomAnchor.constraint(equalTo: footerView.topAnchor),
 
@@ -290,6 +290,11 @@ final class LoginViewController: ScrollingContentViewController {
             footerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             footerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
     override func viewSafeAreaInsetsDidChange() {
@@ -410,7 +415,7 @@ extension LoginViewController: ZenKeyBrandedButtonDelegate {
             return
         }
 
-        poweredByLabel.attributedText = Fonts.accessoryText(
+        poweredByLabel.attributedText = Fonts.mediumAccessoryText(
             text: carrierText,
             withColor: Colors.heavyText.value
         )

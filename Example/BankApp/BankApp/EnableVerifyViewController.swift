@@ -8,38 +8,58 @@
 import UIKit
 import ZenKeySDK
 
-class EnableVerifyViewController: BankAppViewController {
-    let cancelButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("No, thanks", for: .normal)
-        button.addTarget(self, action: #selector(cancelVerify(_:)), for: .touchUpInside)
-        button.setTitleColor(UIColor(red: 0.36, green: 0.56, blue: 0.93, alpha: 1.0), for: .normal)
-        return button
+class EnableVerifyViewController: UIViewController {
+
+    let backgroundClouds: UIImageView = {
+        let clouds = UIImage(named: "clouds")
+        let cloudsImage = UIImageView(image: clouds)
+        cloudsImage.translatesAutoresizingMaskIntoConstraints = false
+        cloudsImage.contentMode = .scaleAspectFit
+        return cloudsImage
     }()
-    
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        let text = "We now support\nZenKey"
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttributes([NSAttributedString.Key.font :  UIFont.italicSystemFont(ofSize: 38), NSAttributedString.Key.foregroundColor:UIColor.black], range: (text as NSString).range(of: "ZenKey"))
-        label.attributedText = attributedString
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
+
+    let zenkeyLogo: UIImageView = {
+        let zenkey = UIImage(named: "zenKeyLogo")
+        let zenkeyImage = UIImageView(image: zenkey)
+        zenkeyImage.contentMode = .scaleAspectFit
+        return zenkeyImage
     }()
-    
-    let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        let text = "Would you like to use ZenKey to approve future Bank App logins?"
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttributes([NSAttributedString.Key.font :  UIFont.italicSystemFont(ofSize: 18), NSAttributedString.Key.foregroundColor:UIColor.black], range: (text as NSString).range(of: "ZenKey"))
-        label.attributedText = attributedString
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
+
+    let centralSymbol: UIImageView = {
+        let symbol = UIImage(named: "interstitialSymbol")
+        let centerSymbol = UIImageView(image: symbol)
+        centerSymbol.contentMode = .scaleAspectFit
+        centerSymbol.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        return centerSymbol
+    }()
+
+    let approvalLabel: UILabel = {
+        let approve = UILabel()
+        approve.text = "Would you like to use ZenKey to \napprove future \"Bank App\" logins?"
+        approve.font = UIFont.heavyText.withSize(17)
+        approve.textAlignment = .center
+        approve.numberOfLines = 0
+        approve.lineBreakMode = .byWordWrapping
+        approve.translatesAutoresizingMaskIntoConstraints = false
+        return approve
+    }()
+
+    let imageStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.distribution = .equalSpacing
+        stack.spacing = 45
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+
+    let interactiveStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.distribution = .equalSpacing
+        stack.spacing = 15
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
 
     lazy var zenKeyButton: ZenKeyAuthorizeButton = {
@@ -52,46 +72,106 @@ class EnableVerifyViewController: BankAppViewController {
         return button
     }()
 
+    let cancelButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("No, thanks", for: .normal)
+        button.addTarget(self, action: #selector(cancelVerification(_:)), for: .touchUpInside)
+        button.setTitleColor(Colors.mediumAccent.value, for: .normal)
+        button.titleLabel?.font = UIFont.mediumText
+        return button
+    }()
+
+    let demoLabel: UILabel = {
+        let demo = UILabel()
+        demo.text = "THIS APP IS FOR DEMO PURPOSES ONLY"
+        demo.font = UIFont.primaryText.withSize(10)
+        demo.textAlignment = .center
+        demo.translatesAutoresizingMaskIntoConstraints = false
+        return demo
+    }()
+
     private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
+
+    override func loadView() {
+        let gradient = GradientView()
+        gradient.startColor = Colors.overlayWhite.value
+        gradient.midColor = Colors.overlayWhite.value
+        gradient.endColor = Colors.white.value
+
+        gradient.startLocation = 0.0
+        gradient.midLocation = 0.32
+        gradient.endLocation = 0.68
+
+        gradient.midPointMode = true
+        view = gradient
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "We Support ZenKey"
         layoutView()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.isNavigationBarHidden = true
+    }
+
     
-    @objc func cancelVerify(_ sender: Any) {
+    @objc func cancelVerification(_ sender: Any) {
         sharedRouter.popToRoot(animated: true)
     }
 
     func layoutView() {
-        view.backgroundColor = .white
-        var constraints: [NSLayoutConstraint] = []
+        // Heirarchy
+        imageStack.addArrangedSubview(zenkeyLogo)
+        imageStack.addArrangedSubview(centralSymbol)
+
+        interactiveStack.addArrangedSubview(zenKeyButton)
+        interactiveStack.addArrangedSubview(cancelButton)
+        interactiveStack.addArrangedSubview(demoLabel)
+
+        view.addSubview(backgroundClouds)
+        view.addSubview(imageStack)
+        view.addSubview(approvalLabel)
+        view.addSubview(interactiveStack)
+        let approvalGuide = UILayoutGuide()
+        view.addLayoutGuide(approvalGuide)
+
+        // Style
         let safeAreaGuide = getSafeLayoutGuide()
-        
-        view.addSubview(titleLabel)
-        view.addSubview(descriptionLabel)
-        view.addSubview(cancelButton)
-        view.addSubview(zenKeyButton)
-        
-        constraints.append(titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100))
-        constraints.append(titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
-        constraints.append(titleLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
-        
-        constraints.append(descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20))
-        constraints.append(descriptionLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30))
-        constraints.append(descriptionLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30))
 
-        constraints.append(zenKeyButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -25))
-        constraints.append(zenKeyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(zenKeyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
+        // Layout
+        NSLayoutConstraint.activate([
 
-        constraints.append(cancelButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -25))
-        constraints.append(cancelButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48))
-        constraints.append(cancelButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48))
-        constraints.append(cancelButton.heightAnchor.constraint(equalToConstant: 48))
+            NSLayoutConstraint(item: backgroundClouds, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.9, constant: 0),
+            backgroundClouds.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            backgroundClouds.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
+            backgroundClouds.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
 
-        NSLayoutConstraint.activate(constraints)
-        
+            NSLayoutConstraint(item: imageStack, attribute: .centerY, relatedBy: .equal, toItem: self.view, attribute: .centerY, multiplier: 0.8, constant: 0),
+            imageStack.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
+            imageStack.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
+
+            interactiveStack.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor, constant: -8),
+            interactiveStack.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 25),
+            interactiveStack.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -25),
+
+            approvalGuide.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
+            approvalGuide.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
+            approvalGuide.topAnchor.constraint(equalTo: imageStack.bottomAnchor),
+            approvalGuide.bottomAnchor.constraint(equalTo: interactiveStack.topAnchor),
+
+            NSLayoutConstraint(item: approvalLabel, attribute: .centerY, relatedBy: .equal, toItem: approvalGuide, attribute: .centerY, multiplier: 1, constant: 0),
+            approvalLabel.centerXAnchor.constraint(equalTo: approvalGuide.centerXAnchor)
+
+            ])
     }
 }
 
