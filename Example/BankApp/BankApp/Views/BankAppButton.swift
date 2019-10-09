@@ -41,7 +41,7 @@ final class BankAppButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        layer.shadowColor = Colors.shadow.value.cgColor
+        layer.shadowColor = Colors.shadow.cgColor
         layer.shadowOffset = CGSize(width: 0, height: 2)
         layer.shadowRadius = 2
         layer.shadowOpacity = 0.24
@@ -59,7 +59,7 @@ private extension BankAppButton {
 
         let normalText = Fonts.semiboldHeadlineText(
             text: buttonTitle,
-            withColor: Colors.white.value
+            withColor: Colors.white
         )
 
         setAttributedTitle(
@@ -69,7 +69,7 @@ private extension BankAppButton {
 
         let highlightedText = Fonts.semiboldHeadlineText(
             text: buttonTitle,
-            withColor: Colors.primaryText.value
+            withColor: Colors.primaryText
         )
 
         setAttributedTitle(
@@ -85,9 +85,9 @@ private extension BankAppButton {
 
     func updateTint() {
         if isHighlighted || !isEnabled {
-            backgroundColor = Colors.fieldBackground.value
+            backgroundColor = Colors.fieldBackground
         } else {
-            backgroundColor = Colors.brightAccent.value
+            backgroundColor = Colors.brightAccent
         }
     }
 }

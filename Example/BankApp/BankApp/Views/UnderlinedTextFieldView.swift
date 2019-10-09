@@ -33,7 +33,7 @@ class UnderlinedTextFieldView: UIView {
         field.translatesAutoresizingMaskIntoConstraints = false
         var attributes: [NSAttributedString.Key: Any] = [
             .font: Fonts.textField,
-            .foregroundColor: Colors.heavyText.value,
+            .foregroundColor: Colors.heavyText,
             .kern: 0.2,
         ]
         field.defaultTextAttributes = attributes
@@ -63,9 +63,9 @@ class UnderlinedTextFieldView: UIView {
 
     @objc func updateState() {
         if textField.isEditing {
-            hairline.backgroundColor = Colors.brightAccent.value
+            hairline.backgroundColor = Colors.brightAccent
         } else {
-            hairline.backgroundColor = Colors.lightAccent.value
+            hairline.backgroundColor = Colors.lightAccent
         }
     }
 
@@ -92,7 +92,7 @@ class UnderlinedTextFieldView: UIView {
 
 private extension UnderlinedTextFieldView {
     func sharedInit() {
-        backgroundColor = Colors.fieldBackground.value
+        backgroundColor = Colors.fieldBackground
 
         translatesAutoresizingMaskIntoConstraints = false
 
@@ -127,12 +127,12 @@ private extension UnderlinedTextFieldView {
         static let hairlineHeight: CGFloat = 2
         static let textAttributes: [NSAttributedString.Key: Any] = [
             .font: Fonts.textField,
-            .foregroundColor: Colors.heavyText.value,
+            .foregroundColor: Colors.heavyText,
             .kern: 0.2,
         ]
         static let placeholderAttributes: [NSAttributedString.Key: Any] = {
             var attributes = Constants.textAttributes
-            attributes[.foregroundColor] = Colors.primaryText.value
+            attributes[.foregroundColor] = Colors.primaryText
             return attributes
         }()
     }

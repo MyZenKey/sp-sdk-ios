@@ -32,7 +32,7 @@ extension UIViewController {
             string: "This app is for demo purposes only.".uppercased(),
             attributes: [
                 .font: Fonts.footnote,
-                .foregroundColor: Colors.primaryText.value,
+                .foregroundColor: Colors.primaryText,
                 .kern: 0.2,
         ])
         return label

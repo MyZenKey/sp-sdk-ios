@@ -12,10 +12,10 @@ enum NavigationBarAppearance {
     static func configureNavBar() {
         UINavigationBar.appearance().titleTextAttributes = [
             .font: Fonts.lightHeadline,
-            .foregroundColor: Colors.heavyText.value,
+            .foregroundColor: Colors.heavyText,
             .kern: -0.41,
         ]
 
-        UINavigationBar.appearance().tintColor = Colors.heavyText.value
+        UINavigationBar.appearance().tintColor = Colors.heavyText
     }
 }

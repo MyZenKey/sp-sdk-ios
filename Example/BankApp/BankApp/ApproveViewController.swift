@@ -81,9 +81,9 @@ class ApproveViewController: UIViewController {
 
     override func loadView() {
         let backgroundGradient = GradientView()
-        backgroundGradient.startColor = Colors.white.value
-        backgroundGradient.midColor = Colors.gradientMid.value
-        backgroundGradient.endColor = Colors.gradientMax.value
+        backgroundGradient.startColor = Colors.white
+        backgroundGradient.midColor = Colors.gradientMid
+        backgroundGradient.endColor = Colors.gradientMax
         backgroundGradient.startLocation = 0.0
         backgroundGradient.midLocation = 0.45
         backgroundGradient.endLocation = 1.0

@@ -78,7 +78,7 @@ class EnableVerifyViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("No, thanks", for: .normal)
         button.addTarget(self, action: #selector(cancelVerification(_:)), for: .touchUpInside)
-        button.setTitleColor(Colors.mediumAccent.value, for: .normal)
+        button.setTitleColor(Colors.mediumAccent, for: .normal)
         button.titleLabel?.font = UIFont.mediumText
         return button
     }()
@@ -96,9 +96,9 @@ class EnableVerifyViewController: UIViewController {
 
     override func loadView() {
         let gradient = GradientView()
-        gradient.startColor = Colors.overlayWhite.value
-        gradient.midColor = Colors.overlayWhite.value
-        gradient.endColor = Colors.white.value
+        gradient.startColor = Colors.overlayWhite
+        gradient.midColor = Colors.overlayWhite
+        gradient.endColor = Colors.white
 
         gradient.startLocation = 0.0
         gradient.midLocation = 0.32

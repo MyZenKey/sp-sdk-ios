@@ -49,7 +49,7 @@ final class OrDividerView: UIStackView {
         let label = UILabel(frame: .zero)
         label.text = "or"
         label.font = Fonts.mediumAccesory
-        label.textColor = Colors.secondaryText.value
+        label.textColor = Colors.secondaryText
         label.translatesAutoresizingMaskIntoConstraints = false
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 
@@ -58,7 +58,7 @@ final class OrDividerView: UIStackView {
 
     private func newHairline() -> UIView {
         let hairline = UIView(frame: .zero)
-        hairline.backgroundColor = Colors.secondaryText.value
+        hairline.backgroundColor = Colors.secondaryText
         hairline.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
         NSLayoutConstraint.activate([

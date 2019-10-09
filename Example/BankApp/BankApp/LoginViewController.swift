@@ -78,7 +78,7 @@ final class LoginViewController: ScrollingContentViewController {
         button.setAttributedTitle(
             Fonts.mediumAccessoryText(
                 text: "Forgot User ID or Password?",
-                withColor: Colors.heavyText.value
+                withColor: Colors.heavyText
             ),
             for: .normal
         )
@@ -91,7 +91,7 @@ final class LoginViewController: ScrollingContentViewController {
         button.setAttributedTitle(
             Fonts.mediumAccessoryText(
                 text: "Sign up for BankApp",
-                withColor: Colors.brightAccent.value
+                withColor: Colors.brightAccent
             ),
             for: .normal
         )
@@ -145,10 +145,10 @@ final class LoginViewController: ScrollingContentViewController {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
 
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
 
         // FIXME: - Let's abstract this out so it can be easily handled by dark mode.
-        view.layer.shadowColor = Colors.shadow.value.cgColor
+        view.layer.shadowColor = Colors.shadow.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = 4.0
         view.layer.shadowOpacity = 0.24
@@ -193,7 +193,7 @@ final class LoginViewController: ScrollingContentViewController {
     private lazy var footerView: UIView = {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
         return view
     }()
 
@@ -230,7 +230,7 @@ final class LoginViewController: ScrollingContentViewController {
     func layoutView() {
         DebugViewController.addMenu(toViewController: self)
 
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
 
         scrollView.keyboardDismissMode = .interactive
 
@@ -436,7 +436,7 @@ extension LoginViewController: ZenKeyBrandedButtonDelegate {
 
         poweredByLabel.attributedText = Fonts.mediumAccessoryText(
             text: carrierText,
-            withColor: Colors.heavyText.value
+            withColor: Colors.heavyText
         )
         poweredByLabel.isHidden = false
     }

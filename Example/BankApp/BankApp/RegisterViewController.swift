@@ -33,7 +33,7 @@ class RegisterViewController: ScrollingContentViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.attributedText = Fonts.boldHeadlineText(
             text: "Start your future with BankApp.",
-            withColor: Colors.primaryText.value
+            withColor: Colors.primaryText
         )
         label.textAlignment = .center
         label.numberOfLines = 2
@@ -146,9 +146,9 @@ class RegisterViewController: ScrollingContentViewController {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
 
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
 
-        view.layer.shadowColor = Colors.shadow.value.cgColor
+        view.layer.shadowColor = Colors.shadow.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = 4.0
         view.layer.shadowOpacity = 0.24
@@ -182,7 +182,7 @@ class RegisterViewController: ScrollingContentViewController {
     private lazy var footerView: UIView = {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
         return view
     }()
 
@@ -206,7 +206,7 @@ class RegisterViewController: ScrollingContentViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
         signUpButton.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
 
         view.addGestureRecognizer(tapGestureRecognizer)
