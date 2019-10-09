@@ -9,9 +9,9 @@ import UIKit
 @IBDesignable
 class GradientView: UIView {
     
-    @IBInspectable var startColor:   UIColor = AppTheme.gradientTopColor { didSet { updateColors() }}
-    @IBInspectable var midColor:   UIColor = AppTheme.gradientTopColor { didSet { updateColors() }}
-    @IBInspectable var endColor:     UIColor = AppTheme.gradientBottomColor { didSet { updateColors() }}
+    @IBInspectable var startColor:   UIColor = UIColor.clear { didSet { updateColors() }}
+    @IBInspectable var midColor:   UIColor = Colors.gradientMid { didSet { updateColors() }}
+    @IBInspectable var endColor:     UIColor = Colors.gradientMax { didSet { updateColors() }}
     @IBInspectable var startLocation: Double =   0.05 { didSet { updateLocations() }}
     @IBInspectable var midLocation: Double =   0.5 { didSet { updateLocations() }}
     @IBInspectable var endLocation:   Double =   0.95 { didSet { updateLocations() }}
