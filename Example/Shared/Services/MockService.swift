@@ -86,23 +86,4 @@ class MockService: NSObject, ServiceProviderAPIProtocol {
     func getTransactions(completion: @escaping ([Transaction]?, Error?) -> Void) {
         completion(UserAccountStorage.getTransactionHistory().reversed(), nil)
     }
-
-    /// Log in.
-    ///
-    /// - Parameter code: The auth code returned by by `authorize`.
-    /// - Parameter mcc: The mcc returned by by `authorize`
-    /// - Parameter mnc: The mnc returned by by `authorize`
-    func login(
-        withAuthCode code: String,
-        mcc: String,
-        mnc: String,
-        completionHandler tokenResponse: @escaping ((JsonDocument?, Error?) -> Void)) {
-
-        // With the auth code, mcc, and mnc, you have everything you need to re-perform discovery
-        // on your secure server and use the discovered token endpoint to request an access token
-        // from ZenKey. This access token shouldn't reach the client transparently,
-        // but instead be used as the basis for accessing or creating a token within
-        // the domain of your application.
-
-    }
 }
