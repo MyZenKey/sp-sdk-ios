@@ -13,7 +13,7 @@ enum Colors: String {
 
     case brightAccent
     case lightAccent
-    
+
     case primaryText
     case secondaryText
     case heavyText

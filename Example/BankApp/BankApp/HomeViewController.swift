@@ -23,14 +23,16 @@ class HomeViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Account Summary"
         label.font = Fonts.cardSection
+        label.textColor = Colors.brightAccent.value
         return label
     }()
 
     let creditCardLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Credit Card"
+        label.text = "Credit Cards"
         label.font = Fonts.cardSection
+        label.textColor = Colors.brightAccent.value
         return label
     }()
 
@@ -143,6 +145,7 @@ class HomeViewController: UIViewController {
         contentView.addSubview(summaryLabel)
         contentView.addSubview(creditCardLabel)
         contentView.addSubview(demoPurposesLabel)
+        contentView.layoutMargins = UIEdgeInsets(top: 20.0, left: 25.0, bottom: 8.0, right: 25.0)
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -157,44 +160,44 @@ class HomeViewController: UIViewController {
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
 
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            titleLabel.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
             userInfoCard.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            userInfoCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
-            userInfoCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            userInfoCard.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            userInfoCard.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
             sendMoneyButton.topAnchor.constraint(equalTo: userInfoCard.bottomAnchor, constant: 20),
-            sendMoneyButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
-            sendMoneyButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            sendMoneyButton.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            sendMoneyButton.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
             sendMoneyButton.heightAnchor.constraint(equalToConstant: 40),
 
             summaryLabel.topAnchor.constraint(equalTo: sendMoneyButton.bottomAnchor, constant: 25),
-            summaryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
-            summaryLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            summaryLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            summaryLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
             savingsCard.topAnchor.constraint(equalTo: summaryLabel.bottomAnchor, constant: 10),
-            savingsCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
-            savingsCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            savingsCard.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            savingsCard.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
             checkingCard.topAnchor.constraint(equalTo: savingsCard.bottomAnchor, constant: 15),
-            checkingCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
-            checkingCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            checkingCard.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            checkingCard.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
             creditCardLabel.topAnchor.constraint(equalTo: checkingCard.bottomAnchor, constant: 15),
-            creditCardLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
-            creditCardLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            creditCardLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            creditCardLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
             creditCard.topAnchor.constraint(equalTo: creditCardLabel.bottomAnchor, constant: 10),
-            creditCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
-            creditCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            creditCard.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            creditCard.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
             // Allow flexible space before demoPurposesLabel
             demoPurposesLabel.topAnchor.constraint(greaterThanOrEqualTo: creditCard.bottomAnchor, constant: 20),
-            demoPurposesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
-            demoPurposesLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
-            demoPurposesLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -20),
+            demoPurposesLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            demoPurposesLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+            demoPurposesLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.layoutMarginsGuide.bottomAnchor),
             ])
     }
 }
@@ -225,157 +228,6 @@ private extension HomeViewController {
         userInfoCard.userInfo = userInfo
     }
 
-}
-
-class UserCardView: UIView {
-    public var userInfo: UserInfo? {
-        didSet {
-            updateUserInfo()
-        }
-    }
-
-    let avatarImageView: UIImageView = {
-        let avatar = UIImageView(image: UIImage(named: "profile"))
-        avatar.translatesAutoresizingMaskIntoConstraints = false
-        return avatar
-    }()
-
-    let userInfoLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Fonts.primaryText
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
-    }()
-
-    init() {
-        super.init(frame: .zero)
-        layout()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func updateUserInfo() {
-        guard let userInfo = userInfo else {
-            userInfoLabel.text = nil
-            return
-        }
-        let nameAttributes: [NSAttributedString.Key: Any] = [
-            .font: Fonts.heavyText,
-            .foregroundColor: Colors.heavyText.value,
-        ]
-        let infoAttributes: [NSAttributedString.Key: Any] = [
-            .font: Fonts.primaryText,
-            .foregroundColor: Colors.primaryText.value,
-        ]
-        let nameString = NSAttributedString(
-            string: "\(userInfo.name ?? "{name}")\n",
-            attributes: nameAttributes
-        )
-        let infoString = NSAttributedString(
-            string: "\(userInfo.email ?? "{email}")\n\(userInfo.phone ?? "{phone}")\nPostal Code: \(userInfo.postalCode ?? "{postal code}")",
-            attributes: infoAttributes
-        )
-        let combination = NSMutableAttributedString()
-        combination.append(nameString)
-        combination.append(infoString)
-
-        userInfoLabel.attributedText = combination
-    }
-
-    func layout() {
-        backgroundColor = Colors.white.value
-        translatesAutoresizingMaskIntoConstraints = false
-        addSubview(avatarImageView)
-        addSubview(userInfoLabel)
-
-        NSLayoutConstraint.activate([
-            // center avatar
-            avatarImageView.topAnchor.constraint(equalTo: topAnchor, constant: 18),
-            avatarImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
-            avatarImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            avatarImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -18),
-
-            // TODO: Handle dynamic type size - this will overflow if it grows too large
-            userInfoLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 20),
-            userInfoLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
-            userInfoLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            ])
-        addBankShadow()
-    }
-}
-
-class AccountCard: UIView {
-    let backgroundImage: UIImageView
-
-    let accountLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Fonts.heavyText
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    let numberLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Fonts.primaryText
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        return label
-    }()
-
-    let textContainer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    init(_ text: String, icon: UIImage) {
-        self.backgroundImage = UIImageView(image: icon)
-        super.init(frame: .zero)
-        layout()
-        accountLabel.text = text
-        numberLabel.text = "– \(String(format: "%04d", Int.random(in: 0 ..< 10000)))"
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func layout() {
-        backgroundColor = Colors.white.value
-        addSubview(backgroundImage)
-        addSubview(textContainer)
-        textContainer.addSubview(accountLabel)
-        textContainer.addSubview(numberLabel)
-        backgroundImage.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            backgroundImage.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-            backgroundImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
-            backgroundImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
-
-            textContainer.centerYAnchor.constraint(equalTo: centerYAnchor),
-            textContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15.0),
-            textContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15.0),
-
-            accountLabel.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
-            accountLabel.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
-            accountLabel.topAnchor.constraint(equalTo: textContainer.topAnchor),
-
-            numberLabel.topAnchor.constraint(equalTo: accountLabel.bottomAnchor, constant: 4.0),
-            numberLabel.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
-            numberLabel.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
-            numberLabel.bottomAnchor.constraint(equalTo: textContainer.bottomAnchor),
-
-            ])
-        addBankShadow()
-    }
 }
 
 extension UIView {
