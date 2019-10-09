@@ -269,7 +269,7 @@ final class LoginViewController: ScrollingContentViewController {
             // marigns.
             logo.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
             logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            logo.topAnchor.constraint(equalTo: contentView.topAnchor),
+            logo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24.0),
 
             backgroundImage.bottomAnchor.constraint(equalTo: footerView.topAnchor),
 
