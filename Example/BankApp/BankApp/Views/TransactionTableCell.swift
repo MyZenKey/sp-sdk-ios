@@ -61,8 +61,6 @@ final class TransactionTableCell: UITableViewCell {
         let label = UILabel(frame: .zero)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         return label
     }()
 

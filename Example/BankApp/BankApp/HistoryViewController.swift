@@ -108,7 +108,6 @@ private extension HistoryViewController {
     }
 
     func syncTransactions() {
-        // fetch data
         serviceAPI.getTransactions() { [weak self] transactions,_ in
             guard let newTransactions = transactions else {
                 return
