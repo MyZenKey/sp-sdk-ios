@@ -19,8 +19,7 @@ enum Colors: String {
     case primaryText
     case secondaryText
     case heavyText
-
-    // Gradient Values
+    case shadow
     case white
     case overlayWhite
 
@@ -28,7 +27,7 @@ enum Colors: String {
     case gradientMid
     case brownGrey
 
-    case shadow
+    case transShadow
 
     var value: UIColor {
         guard let color = UIColor(named: self.rawValue) else {

@@ -6,51 +6,71 @@
 
 import UIKit
 
-class HomeViewController: BankAppViewController {
+class HomeViewController: UIViewController {
+    let scrollView = UIScrollView()
+    let contentView = UIView()
 
     let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Welcome!"
-        label.font = UIFont.systemFont(ofSize: 24)
-        label.textAlignment = .center
+        label.font = Fonts.largeTitle
+        label.textColor = Colors.brightAccent.value
         return label
     }()
 
-    let userInfoLabel: UILabel = {
+    let summaryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textAlignment = .center
-        label.numberOfLines = 0
+        label.text = "Account Summary"
+        label.font = Fonts.cardSection
+        label.textColor = Colors.brightAccent.value
         return label
     }()
-    
+
+    let creditCardLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Credit Cards"
+        label.font = Fonts.cardSection
+        label.textColor = Colors.brightAccent.value
+        return label
+    }()
+
     let sendMoneyButton: BankAppButton = {
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Send Money", for: .normal)
         button.addTarget(self, action: #selector(sendMoneyTouched(_:)), for: .touchUpInside)
-        button.backgroundColor = UIColor(red: 0.36, green: 0.56, blue: 0.93, alpha: 1.0)
+        button.backgroundColor = Colors.brightAccent.value
+        button.addBankShadow()
         return button
     }()
 
-    let viewHistoryButton: BankAppButton = {
-        let button = BankAppButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("View History", for: .normal)
-        button.addTarget(self, action: #selector(viewHistoryTouched(_:)), for: .touchUpInside)
-        button.backgroundColor = UIColor(red: 0.36, green: 0.56, blue: 0.93, alpha: 1.0)
-        return button
+    let userInfoCard: UserCardView = {
+        let card = UserCardView()
+        return card
     }()
-    
-    let logoutButton: BankAppButton = {
-        let button = BankAppButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Logout", for: .normal)
-        button.addTarget(self, action: #selector(logoutButtonTouched(_:)), for: .touchUpInside)
-        button.backgroundColor = UIColor(red: 0.36, green: 0.56, blue: 0.93, alpha: 1.0)
-        return button
+
+    let savingsCard: AccountCard = {
+        let card = AccountCard("Savings", icon: UIImage(named: "pig") ?? UIImage())
+        card.translatesAutoresizingMaskIntoConstraints = false
+
+        return card
+    }()
+
+    let checkingCard: AccountCard = {
+        let card = AccountCard("Preferred Checking", icon: UIImage(named: "check") ?? UIImage())
+        card.translatesAutoresizingMaskIntoConstraints = false
+
+        return card
+    }()
+
+    let creditCard: AccountCard = {
+        let card = AccountCard("Premier Reserve", icon: UIImage(named: "creditCard") ?? UIImage())
+        card.translatesAutoresizingMaskIntoConstraints = false
+
+        return card
     }()
 
     private var userInfo: UserInfo? {
@@ -59,16 +79,43 @@ class HomeViewController: BankAppViewController {
         }
     }
 
+    private let demoPurposesLabel: UILabel = UIViewController.makeDemoPurposesLabel()
+
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
+
+    override func loadView() {
+        let backgroundGradient = GradientView()
+        backgroundGradient.startColor = Colors.white.value
+        backgroundGradient.midColor = Colors.gradientMid.value
+        backgroundGradient.endColor = Colors.gradientMax.value
+        backgroundGradient.startLocation = 0.0
+        backgroundGradient.midLocation = 0.45
+        backgroundGradient.endLocation = 1.0
+        backgroundGradient.midPointMode = true
+        view = backgroundGradient
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutView()
+        title = "Home"
+
+        // Hamburger
+        let hamburgerButton = UIBarButtonItem(image: UIImage(named:"hamburger"), style: .plain, target: self, action: #selector(viewHistoryTouched(_:)))
+        navigationItem.leftBarButtonItem = hamburgerButton
+        // Sign Out
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(logoutButtonTouched(_:)))
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchUserInfoIfNeeded()
+        navigationController?.isNavigationBarHidden = false
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.isNavigationBarHidden = true
     }
 
     @objc func logoutButtonTouched(_ sender: Any) {
@@ -84,38 +131,74 @@ class HomeViewController: BankAppViewController {
     }
 
     func layoutView() {
-        view.backgroundColor = .white
-        let safeAreaGuide = getSafeLayoutGuide()
-        
-        view.addSubview(titleLabel)
-        view.addSubview(userInfoLabel)
-        view.addSubview(sendMoneyButton)
-        view.addSubview(viewHistoryButton)
-        view.addSubview(logoutButton)
+        view.addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+
+        scrollView.addSubview(contentView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(userInfoCard)
+        contentView.addSubview(sendMoneyButton)
+        contentView.addSubview(savingsCard)
+        contentView.addSubview(checkingCard)
+        contentView.addSubview(creditCard)
+        contentView.addSubview(summaryLabel)
+        contentView.addSubview(creditCardLabel)
+        contentView.addSubview(demoPurposesLabel)
+        contentView.layoutMargins = UIEdgeInsets(top: 20.0, left: 25.0, bottom: 8.0, right: 25.0)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: gradientView.bottomAnchor, constant: 100),
-            titleLabel.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 30),
-            titleLabel.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -30),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            userInfoLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            userInfoLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            userInfoLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            contentView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
 
-            sendMoneyButton.topAnchor.constraint(equalTo: userInfoLabel.bottomAnchor, constant: 20),
-            sendMoneyButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            sendMoneyButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
-            sendMoneyButton.heightAnchor.constraint(equalToConstant: 48),
+            titleLabel.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
-            viewHistoryButton.topAnchor.constraint(equalTo: sendMoneyButton.bottomAnchor, constant: 20),
-            viewHistoryButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            viewHistoryButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
-            viewHistoryButton.heightAnchor.constraint(equalToConstant: 48),
+            userInfoCard.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            userInfoCard.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            userInfoCard.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
 
-            logoutButton.bottomAnchor.constraint(equalTo: illustrationPurposes.topAnchor, constant: -50),
-            logoutButton.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor, constant: 48),
-            logoutButton.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor, constant: -48),
-            logoutButton.heightAnchor.constraint(equalToConstant: 48),
+            sendMoneyButton.topAnchor.constraint(equalTo: userInfoCard.bottomAnchor, constant: 20),
+            sendMoneyButton.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            sendMoneyButton.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+            sendMoneyButton.heightAnchor.constraint(equalToConstant: 40),
+
+            summaryLabel.topAnchor.constraint(equalTo: sendMoneyButton.bottomAnchor, constant: 25),
+            summaryLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            summaryLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+
+            savingsCard.topAnchor.constraint(equalTo: summaryLabel.bottomAnchor, constant: 10),
+            savingsCard.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            savingsCard.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+
+            checkingCard.topAnchor.constraint(equalTo: savingsCard.bottomAnchor, constant: 15),
+            checkingCard.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            checkingCard.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+
+            creditCardLabel.topAnchor.constraint(equalTo: checkingCard.bottomAnchor, constant: 15),
+            creditCardLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            creditCardLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+
+            creditCard.topAnchor.constraint(equalTo: creditCardLabel.bottomAnchor, constant: 10),
+            creditCard.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            creditCard.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+
+            // Allow flexible space before demoPurposesLabel
+            demoPurposesLabel.topAnchor.constraint(greaterThanOrEqualTo: creditCard.bottomAnchor, constant: 20),
+            demoPurposesLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            demoPurposesLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+            demoPurposesLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.layoutMarginsGuide.bottomAnchor),
             ])
     }
 }
@@ -143,15 +226,19 @@ private extension HomeViewController {
     }
     
     func updateUserInfo() {
-        guard let userInfo = userInfo else {
-            userInfoLabel.text = nil
-            return
-        }
+        userInfoCard.userInfo = userInfo
+    }
 
-        userInfoLabel.text = """
-        user: \(userInfo.username)
-        name: \(userInfo.name ?? "{name}") | phone: \(userInfo.phone ?? "{phone}")
-        email: \(userInfo.email ?? "{email}") | zip: \(userInfo.postalCode ?? "{postal code}")
-        """
+}
+
+extension UIView {
+    func addBankShadow() {
+        // Shadows
+        layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+        layer.shadowRadius = 4.0
+        //FIXME: cgcolor should be set in updateSubviews to accomodate trait changes (light/dark mode)
+        layer.shadowColor = Colors.transShadow.value.cgColor
+        layer.masksToBounds = false
+        layer.shadowOpacity = 1.0
     }
 }

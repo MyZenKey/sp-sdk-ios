@@ -29,6 +29,7 @@ class BankAppRouter {
         let homeViewController = HomeViewController()
         navigationController = UINavigationController(rootViewController: homeViewController)
         navigationController.isNavigationBarHidden = true
+        navigationController.navigationBar.tintColor = Colors.heavyText.value
         self.window.rootViewController = navigationController
     }
 
