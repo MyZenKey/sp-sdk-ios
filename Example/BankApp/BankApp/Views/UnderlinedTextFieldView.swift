@@ -13,7 +13,7 @@ class UnderlinedTextFieldView: UIView {
         return true
     }
 
-    var attributedPlaceholder: String? {
+    var styledPlaceholder: String? {
         get { return textField.placeholder }
         set {
             guard let newValue = newValue else {

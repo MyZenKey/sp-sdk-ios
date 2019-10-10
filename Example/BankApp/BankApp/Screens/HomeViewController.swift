@@ -85,7 +85,7 @@ class HomeViewController: UIViewController {
 
     override func loadView() {
         let backgroundGradient = GradientView()
-        backgroundGradient.startColor = Colors.white
+        backgroundGradient.startColor = Colors.gradientMin
         backgroundGradient.midColor = Colors.gradientMid
         backgroundGradient.endColor = Colors.gradientMax
         backgroundGradient.startLocation = 0.0

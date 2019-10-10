@@ -29,6 +29,8 @@ enum Colors {
 
     static let gradientMax = ColorAssets.gradientMax.color
     static let gradientMid = ColorAssets.gradientMid.color
+    static let gradientMin = ColorAssets.primaryBackground.color
+
     static let brownGrey = ColorAssets.brownGrey.color
 
     static let shadow = ColorAssets.primaryTint.color

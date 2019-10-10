@@ -49,14 +49,16 @@ final class LoginViewController: ScrollingContentViewController {
 
     private let usernameTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.attributedPlaceholder = "User ID"
+        field.styledPlaceholder = "User ID"
+        field.textField.autocorrectionType = .no
         return field
     }()
     
     private let passwordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.attributedPlaceholder = "Password"
+        field.styledPlaceholder = "Password"
         field.textField.isSecureTextEntry = true
+        field.textField.autocorrectionType = .no
         field.textField.returnKeyType = .go
         return field
     }()

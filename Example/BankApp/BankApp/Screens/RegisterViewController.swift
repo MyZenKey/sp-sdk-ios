@@ -49,39 +49,43 @@ class RegisterViewController: ScrollingContentViewController {
 
     private let userNameTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.attributedPlaceholder = "User ID"
+        field.textField.autocorrectionType = .no
+        field.styledPlaceholder = "User ID"
         return field
     }()
 
     private let emailTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.attributedPlaceholder = "Email"
+        field.textField.autocorrectionType = .no
+        field.styledPlaceholder = "Email"
         return field
     }()
 
     private let phoneTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.attributedPlaceholder = "Phone Number"
+        field.styledPlaceholder = "Phone Number"
         return field
     }()
 
     private let passwordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.attributedPlaceholder = "Password"
+        field.styledPlaceholder = "Password"
+        field.textField.autocorrectionType = .no
         field.textField.isSecureTextEntry = true
         return field
     }()
 
     private let confirmPasswordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.attributedPlaceholder = "Confirm Password"
+        field.styledPlaceholder = "Confirm Password"
+        field.textField.autocorrectionType = .no
         field.textField.isSecureTextEntry = true
         return field
     }()
 
     private let postalCodeTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.attributedPlaceholder = "Postal Code"
+        field.styledPlaceholder = "Postal Code"
         return field
     }()
 
