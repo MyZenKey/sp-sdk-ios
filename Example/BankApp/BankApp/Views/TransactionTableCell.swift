@@ -16,7 +16,7 @@ final class TransactionTableCell: UITableViewCell {
         didSet {
             circleLabel.attributedText = Fonts.mediumCalloutText(
                 text: circleText,
-                withColor: Colors.white.value
+                withColor: Colors.white
             )
         }
     }
@@ -25,7 +25,7 @@ final class TransactionTableCell: UITableViewCell {
         didSet {
             titleLabel.attributedText = Fonts.boldHeadlineText(
                 text: titleText,
-                withColor: Colors.heavyText.value
+                withColor: Colors.heavyText
             )
         }
     }
@@ -34,7 +34,7 @@ final class TransactionTableCell: UITableViewCell {
         didSet {
             subtitleLabel.attributedText = Fonts.regularHeadlineText(
                 text: subtitleText,
-                withColor: Colors.primaryText.value
+                withColor: Colors.primaryText
             )
         }
     }
@@ -43,7 +43,7 @@ final class TransactionTableCell: UITableViewCell {
         didSet {
             footerLabel.attributedText = Fonts.regularAccessoryText(
                 text: footerText,
-                withColor: Colors.primaryText.value
+                withColor: Colors.primaryText
             )
         }
     }
@@ -52,7 +52,7 @@ final class TransactionTableCell: UITableViewCell {
         didSet {
             accessoryLabel.attributedText = Fonts.boldHeadlineText(
                 text: accessoryText,
-                withColor: Colors.heavyText.value
+                withColor: Colors.heavyText
             )
         }
     }
@@ -68,7 +68,7 @@ final class TransactionTableCell: UITableViewCell {
         let view = CircleView(frame: .zero)
 
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Colors.brightAccent.value
+        view.backgroundColor = Colors.brightAccent
         view.addSubview(circleLabel)
 
         NSLayoutConstraint.activate([

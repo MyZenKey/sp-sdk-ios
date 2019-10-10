@@ -53,6 +53,16 @@ extension Fonts {
             ])
     }
 
+    static func semiboldHeadlineText(text: String, withColor color: UIColor) -> NSAttributedString {
+        return NSAttributedString(
+            string: text,
+            attributes: [
+                .font: Fonts.lightHeadline,
+                .foregroundColor: color,
+                .kern: 0.03
+            ])
+    }
+
     static func mediumAccessoryText(text: String, withColor color: UIColor) -> NSAttributedString {
         return NSAttributedString(
             string: text,

@@ -46,11 +46,11 @@ class UserCardView: UIView {
         }
         let nameAttributes: [NSAttributedString.Key: Any] = [
             .font: Fonts.heavyText,
-            .foregroundColor: Colors.heavyText.value,
+            .foregroundColor: Colors.heavyText,
         ]
         let infoAttributes: [NSAttributedString.Key: Any] = [
             .font: Fonts.primaryText,
-            .foregroundColor: Colors.primaryText.value,
+            .foregroundColor: Colors.primaryText,
         ]
         let nameString = NSAttributedString(
             string: "\(userInfo.name ?? "{name}")\n",
@@ -68,7 +68,7 @@ class UserCardView: UIView {
     }
 
     func layout() {
-        backgroundColor = Colors.white.value
+        backgroundColor = Colors.white
         translatesAutoresizingMaskIntoConstraints = false
         addSubview(avatarImageView)
         addSubview(userInfoLabel)

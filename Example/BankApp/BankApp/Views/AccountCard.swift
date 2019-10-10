@@ -48,7 +48,7 @@ class AccountCard: UIView {
     }
 
     func layout() {
-        backgroundColor = Colors.white.value
+        backgroundColor = Colors.white
         addSubview(backgroundImage)
         addSubview(textContainer)
         textContainer.addSubview(accountLabel)

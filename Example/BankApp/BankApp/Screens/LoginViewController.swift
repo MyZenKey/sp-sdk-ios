@@ -49,34 +49,28 @@ final class LoginViewController: ScrollingContentViewController {
 
     private let usernameTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.placeholder = "User ID"
+        field.styledPlaceholder = "User ID"
+        field.textField.autocorrectionType = .no
         return field
     }()
     
     private let passwordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.placeholder = "Password"
-        field.isSecureTextEntry = true
+        field.styledPlaceholder = "Password"
+        field.textField.isSecureTextEntry = true
+        field.textField.autocorrectionType = .no
+        field.textField.returnKeyType = .go
         return field
     }()
     
-    private let signInButton: BankAppButton = {
-        // TODO: - The api surface area of BankAppButton is crufty and doesn’t intuitively reflect
-        // the redesign requirements. Refractor for a slimmer profile.
+    private lazy var signInButton: BankAppButton = {
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.borderWidth = 2.0
-
-        button.setTitle("Sign In", for: .normal)
-        button.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
-
-        button.borderColor = Colors.brightAccent.value
-        button.backgroundColor = Colors.brightAccent.value
-
+        button.buttonTitle = "Sign In"
         NSLayoutConstraint.activate([
             button.heightAnchor.constraint(equalToConstant: 40.0)
         ])
-
+        button.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
         return button
     }()
 
@@ -86,20 +80,20 @@ final class LoginViewController: ScrollingContentViewController {
         button.setAttributedTitle(
             Fonts.mediumAccessoryText(
                 text: "Forgot User ID or Password?",
-                withColor: Colors.heavyText.value
+                withColor: Colors.heavyText
             ),
             for: .normal
         )
         return button
     }()
     
-    private let registerButton: UIButton = {
+    private lazy var registerButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(
             Fonts.mediumAccessoryText(
                 text: "Sign up for BankApp",
-                withColor: Colors.brightAccent.value
+                withColor: Colors.brightAccent
             ),
             for: .normal
         )
@@ -153,10 +147,10 @@ final class LoginViewController: ScrollingContentViewController {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
 
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
 
         // FIXME: - Let's abstract this out so it can be easily handled by dark mode.
-        view.layer.shadowColor = Colors.shadow.value.cgColor
+        view.layer.shadowColor = Colors.shadow.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = 4.0
         view.layer.shadowOpacity = 0.24
@@ -201,12 +195,9 @@ final class LoginViewController: ScrollingContentViewController {
     private lazy var footerView: UIView = {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
         return view
     }()
-
-    private var outsetConstraint: NSLayoutConstraint!
-    private var photoHeightRestrictionConstraint: NSLayoutConstraint!
 
     private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
         let gestureRecognizer = UITapGestureRecognizer(
@@ -216,12 +207,19 @@ final class LoginViewController: ScrollingContentViewController {
         return gestureRecognizer
     }()
 
+    private var outsetConstraint: NSLayoutConstraint!
+    private var photoHeightRestrictionConstraint: NSLayoutConstraint!
+
+    private var overScrollValue: CGFloat {
+        return -min(0, scrollView.contentOffset.y)
+    }
+
     fileprivate var outsetConstraintConstant: CGFloat {
-        return -view.safeAreaInsets.top
+        return -(view.safeAreaInsets.top + overScrollValue)
     }
 
     fileprivate var photoHeightConstraintConstant: CGFloat {
-        return -(Constants.bottomAreaHeight + (view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom))
+        return -(Constants.bottomAreaHeight + (view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom)) + overScrollValue
     }
 
     private let serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
@@ -234,9 +232,12 @@ final class LoginViewController: ScrollingContentViewController {
     func layoutView() {
         DebugViewController.addMenu(toViewController: self)
 
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
 
-        scrollView.keyboardDismissMode = .onDrag
+        scrollView.keyboardDismissMode = .interactive
+
+        passwordTextField.textField.delegate = self
+        scrollView.delegate = self
 
         updateMargins()
 
@@ -265,7 +266,7 @@ final class LoginViewController: ScrollingContentViewController {
             photoHeightRestrictionConstraint,
             outsetConstraint,
 
-            // postioned relative to the very bottom of the view and it's edges regardless o
+            // positioned relative to the very bottom of the view and it's edges regardless of
             // marigns.
             logo.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor),
             logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -299,13 +300,7 @@ final class LoginViewController: ScrollingContentViewController {
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        // The photo should sit at the top of the screen. This will be pushed outside of the
-        // scroll view's content area by the size of the safe area:
-        outsetConstraint.constant = outsetConstraintConstant
-        // The photo height should scale to fill the space on all screen sizes, less the bottom
-        // space. This is the bottom space constant height adjusted for the unmodified safe area
-        // insets:
-        photoHeightRestrictionConstraint.constant = photoHeightConstraintConstant
+        updatePhotoConstraints()
     }
 
     // MARK: -  Actions
@@ -320,8 +315,8 @@ final class LoginViewController: ScrollingContentViewController {
 
     @objc func signInButtonPressed() {
         serviceAPI.login(
-            withUsername: usernameTextField.text?.lowercased() ?? "",
-            password: passwordTextField.text?.lowercased() ?? "") { [weak self] auth, error in
+            withUsername: usernameTextField.textField.text?.lowercased() ?? "",
+            password: passwordTextField.textField.text?.lowercased() ?? "") { [weak self] auth, error in
 
                 guard auth != nil, error == nil else {
                     self?.showPasswordReminderAlert()
@@ -362,6 +357,32 @@ private extension LoginViewController {
             title: "Enter User Name and password",
             message: "Your username is “jane” and your password is the answer to “Why was 6 afraid of 7? Because …"
         )
+    }
+
+    func updatePhotoConstraints() {
+        // The photo should sit at the top of the screen. This will be pushed outside of the
+        // scroll view's content area by the size of the safe area:
+        outsetConstraint.constant = outsetConstraintConstant
+        // The photo height should scale to fill the space on all screen sizes, less the bottom
+        // space. This is the bottom space constant height adjusted for the unmodified safe area
+        // insets:
+        photoHeightRestrictionConstraint.constant = photoHeightConstraintConstant
+    }
+}
+
+extension LoginViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard textField != passwordTextField.textField else {
+            signInButtonPressed()
+            return true
+        }
+        return true
+    }
+}
+
+extension LoginViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updatePhotoConstraints()
     }
 }
 
@@ -417,7 +438,7 @@ extension LoginViewController: ZenKeyBrandedButtonDelegate {
 
         poweredByLabel.attributedText = Fonts.mediumAccessoryText(
             text: carrierText,
-            withColor: Colors.heavyText.value
+            withColor: Colors.heavyText
         )
         poweredByLabel.isHidden = false
     }

@@ -43,7 +43,7 @@ final class HistoryViewController: UITableViewController {
 
         updateMargins()
 
-        tableView.backgroundColor = Colors.white.value
+        tableView.backgroundColor = Colors.white
         tableView.backgroundView = backgroundView
         tableView.register(
             TransactionTableCell.self,
@@ -55,7 +55,7 @@ final class HistoryViewController: UITableViewController {
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .singleLine
-        tableView.separatorColor = Colors.primaryText.value
+        tableView.separatorColor = Colors.primaryText
         tableView.separatorInset = UIEdgeInsets(
             top: 0,
             left: Constants.largeSpacer,

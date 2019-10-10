@@ -33,7 +33,7 @@ class RegisterViewController: ScrollingContentViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.attributedText = Fonts.boldHeadlineText(
             text: "Start your future with BankApp.",
-            withColor: Colors.primaryText.value
+            withColor: Colors.primaryText
         )
         label.textAlignment = .center
         label.numberOfLines = 2
@@ -49,49 +49,50 @@ class RegisterViewController: ScrollingContentViewController {
 
     private let userNameTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.placeholder = "User ID"
+        field.textField.autocorrectionType = .no
+        field.styledPlaceholder = "User ID"
         return field
     }()
 
     private let emailTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.placeholder = "Email"
+        field.textField.autocorrectionType = .no
+        field.styledPlaceholder = "Email"
         return field
     }()
 
     private let phoneTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.placeholder = "Phone Number"
+        field.styledPlaceholder = "Phone Number"
         return field
     }()
 
     private let passwordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.placeholder = "Password"
-        field.isSecureTextEntry = true
+        field.styledPlaceholder = "Password"
+        field.textField.autocorrectionType = .no
+        field.textField.isSecureTextEntry = true
         return field
     }()
 
     private let confirmPasswordTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.placeholder = "Confirm Password"
-        field.isSecureTextEntry = true
+        field.styledPlaceholder = "Confirm Password"
+        field.textField.autocorrectionType = .no
+        field.textField.isSecureTextEntry = true
         return field
     }()
 
     private let postalCodeTextField: UnderlinedTextFieldView = {
         let field = UnderlinedTextFieldView()
-        field.placeholder = "Postal Code"
+        field.styledPlaceholder = "Postal Code"
         return field
     }()
 
     private let signUpButton: UIButton = {
         let button = BankAppButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.borderWidth = 2.0
-        button.setTitle("Sign Up", for: .normal)
-        button.borderColor = Colors.brightAccent.value
-        button.backgroundColor = Colors.brightAccent.value
+        button.buttonTitle = "Sign Up"
 
         NSLayoutConstraint.activate([
             button.heightAnchor.constraint(equalToConstant: 40.0)
@@ -149,9 +150,9 @@ class RegisterViewController: ScrollingContentViewController {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
 
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
 
-        view.layer.shadowColor = Colors.shadow.value.cgColor
+        view.layer.shadowColor = Colors.shadow.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = 4.0
         view.layer.shadowOpacity = 0.24
@@ -185,25 +186,37 @@ class RegisterViewController: ScrollingContentViewController {
     private lazy var footerView: UIView = {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
         return view
     }()
 
-    fileprivate var cardToTopConstraint: NSLayoutConstraint!
-
     fileprivate var outsetConstraint: NSLayoutConstraint!
+    fileprivate var photoHeightRestrictionConstraint: NSLayoutConstraint!
+
+    private var overScrollValue: CGFloat {
+        return -min(0, scrollView.contentOffset.y)
+    }
+
+    fileprivate var outsetConstraintConstant: CGFloat {
+        return -(view.safeAreaInsets.top + overScrollValue)
+    }
+
+    fileprivate var photoHeightConstraintConstant: CGFloat {
+        return -(Constants.bottomAreaHeight + (view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom)) + overScrollValue
+    }
 
     private var serviceAPI: ServiceProviderAPIProtocol = BuildInfo.serviceProviderAPI()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = Colors.white.value
+        view.backgroundColor = Colors.white
         signUpButton.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
 
         view.addGestureRecognizer(tapGestureRecognizer)
 
-        scrollView.keyboardDismissMode = .onDrag
+        scrollView.keyboardDismissMode = .interactive
+        scrollView.delegate = self
 
         updateMargins()
 
@@ -211,17 +224,27 @@ class RegisterViewController: ScrollingContentViewController {
         contentView.addSubview(footerView)
         contentView.addSubview(contentStackView)
 
-        // background image should shrink to support keeping the distance between card and top
-        // of the screen fixed to it's desired scale.
-        backgroundImage.setContentCompressionResistancePriority(.fittingSizeLevel, for: .vertical)
-
-        cardToTopConstraint = contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor)
         outsetConstraint = backgroundImage.topAnchor.constraint(equalTo: contentView.topAnchor)
 
-        NSLayoutConstraint.activate([
+        photoHeightRestrictionConstraint = backgroundImage.heightAnchor.constraint(
+            equalTo: scrollView.frameLayoutGuide.heightAnchor,
+            constant: photoHeightConstraintConstant
+        )
 
-            cardToTopConstraint,
+        // the photo should take the space of the screen above the footer area.
+        // but should not get so small that the whole stack can't fit on a smaller screen.
+        //
+        // so demote the priority to one below the default conent compression resistance priority:
+        photoHeightRestrictionConstraint.priority = .defaultHigh - 1
+        // set its intrinsic compression resistance to be very low so it will obey most layouts:
+        backgroundImage.setContentCompressionResistancePriority(
+            .defaultLow,
+            for: .vertical
+        )
+
+        NSLayoutConstraint.activate([
             outsetConstraint,
+            photoHeightRestrictionConstraint,
 
             backgroundImage.bottomAnchor.constraint(equalTo: footerView.topAnchor),
 
@@ -230,6 +253,11 @@ class RegisterViewController: ScrollingContentViewController {
             backgroundImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundImage.widthAnchor.constraint(equalTo: view.widthAnchor),
 
+            // ensure the content stack always is at least inside the nav bar:
+            contentStackView.topAnchor.constraint(
+                greaterThanOrEqualTo: contentView.layoutMarginsGuide.topAnchor,
+                constant: Constants.largeSpace
+            ),
             contentStackView.bottomAnchor.constraint(
                 equalTo: footerView.bottomAnchor,
                 constant: -8
@@ -252,16 +280,7 @@ class RegisterViewController: ScrollingContentViewController {
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        // push the photo out by the amount that we get inset
-        outsetConstraint.constant = -view.safeAreaInsets.top
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // on smaller screens, reduce the top float to a percentage of the screen's height
-        // but don't grow over 166 for very large screens.
-        cardToTopConstraint.constant = min(166, scrollView.frame.height * 0.2)
+        updatePhotoConstraints()
     }
 
     @objc func signUpPressed() {
@@ -300,6 +319,17 @@ private extension RegisterViewController {
         margins.left = Constants.largeSpace
         margins.right = Constants.largeSpace
         contentView.layoutMargins = margins
+    }
+
+    func updatePhotoConstraints() {
+        outsetConstraint.constant = outsetConstraintConstant
+        photoHeightRestrictionConstraint.constant = photoHeightConstraintConstant
+    }
+}
+
+extension RegisterViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updatePhotoConstraints()
     }
 }
 

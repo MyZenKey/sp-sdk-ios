@@ -9,9 +9,9 @@ import UIKit
 @IBDesignable
 class GradientView: UIView {
     
-    @IBInspectable var startColor:   UIColor = AppTheme.gradientTopColor { didSet { updateColors() }}
-    @IBInspectable var midColor:   UIColor = AppTheme.gradientTopColor { didSet { updateColors() }}
-    @IBInspectable var endColor:     UIColor = AppTheme.gradientBottomColor { didSet { updateColors() }}
+    @IBInspectable var startColor:   UIColor = Colors.gradientMin { didSet { updateColors() }}
+    @IBInspectable var midColor:   UIColor = Colors.gradientMid { didSet { updateColors() }}
+    @IBInspectable var endColor:     UIColor = Colors.gradientMax { didSet { updateColors() }}
     @IBInspectable var startLocation: Double =   0.05 { didSet { updateLocations() }}
     @IBInspectable var midLocation: Double =   0.5 { didSet { updateLocations() }}
     @IBInspectable var endLocation:   Double =   0.95 { didSet { updateLocations() }}
@@ -57,60 +57,5 @@ class GradientView: UIView {
         updatePoints()
         updateLocations()
         updateColors()
-    }
-}
-
-
-class LogoGradientView: GradientView {
-    let logo: UIImageView = {
-        let logo = UIImageView()
-        logo.translatesAutoresizingMaskIntoConstraints = false
-        logo.image = UIImage(named: "applogo_white")
-        logo.contentMode = .scaleAspectFit
-        return logo
-    }()
-
-    let leadingButtonAreaLayoutGuide: UILayoutGuide = {
-        let guide = UILayoutGuide()
-        guide.identifier = "leading button area layout guide"
-        return guide
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        sharedInit()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        sharedInit()
-    }
-
-    func sharedInit() {
-
-        if (bounds.isEmpty) {
-            sizeToFit()
-        }
-
-        addSubview(logo)
-        addLayoutGuide(leadingButtonAreaLayoutGuide)
-
-        let yAdjustment: CGFloat
-        if #available(iOS 11.0, *) {
-            yAdjustment = 0
-        } else {
-            yAdjustment = UIApplication.shared.statusBarFrame.height
-        }
-
-        addConstraints([
-            logo.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor),
-            logo.centerYAnchor.constraint(equalTo: layoutMarginsGuide.centerYAnchor,
-                                          constant: yAdjustment / 2),
-
-            leadingButtonAreaLayoutGuide.leadingAnchor.constraint(equalTo: leadingAnchor),
-            leadingButtonAreaLayoutGuide.trailingAnchor.constraint(equalTo: logo.leadingAnchor),
-            leadingButtonAreaLayoutGuide.topAnchor.constraint(equalTo: logo.topAnchor),
-            leadingButtonAreaLayoutGuide.bottomAnchor.constraint(equalTo: logo.bottomAnchor),
-        ])
     }
 }

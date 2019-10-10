@@ -15,7 +15,7 @@ class HomeViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Welcome!"
         label.font = Fonts.largeTitle
-        label.textColor = Colors.brightAccent.value
+        label.textColor = Colors.brightAccent
         return label
     }()
 
@@ -24,7 +24,7 @@ class HomeViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Account Summary"
         label.font = Fonts.cardSection
-        label.textColor = Colors.brightAccent.value
+        label.textColor = Colors.brightAccent
         return label
     }()
 
@@ -33,7 +33,7 @@ class HomeViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Credit Cards"
         label.font = Fonts.cardSection
-        label.textColor = Colors.brightAccent.value
+        label.textColor = Colors.brightAccent
         return label
     }()
 
@@ -42,7 +42,7 @@ class HomeViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Send Money", for: .normal)
         button.addTarget(self, action: #selector(sendMoneyTouched(_:)), for: .touchUpInside)
-        button.backgroundColor = Colors.brightAccent.value
+        button.backgroundColor = Colors.brightAccent
         button.addBankShadow()
         return button
     }()
@@ -85,9 +85,9 @@ class HomeViewController: UIViewController {
 
     override func loadView() {
         let backgroundGradient = GradientView()
-        backgroundGradient.startColor = Colors.white.value
-        backgroundGradient.midColor = Colors.gradientMid.value
-        backgroundGradient.endColor = Colors.gradientMax.value
+        backgroundGradient.startColor = Colors.gradientMin
+        backgroundGradient.midColor = Colors.gradientMid
+        backgroundGradient.endColor = Colors.gradientMax
         backgroundGradient.startLocation = 0.0
         backgroundGradient.midLocation = 0.45
         backgroundGradient.endLocation = 1.0
@@ -199,7 +199,7 @@ class HomeViewController: UIViewController {
             demoPurposesLabel.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
             demoPurposesLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
             demoPurposesLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.layoutMarginsGuide.bottomAnchor),
-            ])
+        ])
     }
 }
 
@@ -237,7 +237,7 @@ extension UIView {
         layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
         layer.shadowRadius = 4.0
         //FIXME: cgcolor should be set in updateSubviews to accomodate trait changes (light/dark mode)
-        layer.shadowColor = Colors.transShadow.value.cgColor
+        layer.shadowColor = Colors.transShadow.cgColor
         layer.masksToBounds = false
         layer.shadowOpacity = 1.0
     }
