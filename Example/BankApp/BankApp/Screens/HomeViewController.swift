@@ -200,12 +200,25 @@ class HomeViewController: UIViewController {
             demoPurposesLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
             demoPurposesLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.layoutMarginsGuide.bottomAnchor),
         ])
+
+        let accountCards = [savingsCard, checkingCard, creditCard]
+        accountCards.forEach() {aCard in
+            let gestureRecognizer = UITapGestureRecognizer(
+                target: self,
+                action: #selector(handleTapGesture)
+            )
+            aCard.addGestureRecognizer(gestureRecognizer)
+        }
     }
 }
 
 // MARK: - User Info
 
 private extension HomeViewController {
+    @objc func handleTapGesture() {
+        showAlert(title: "Not Supported", message: "We don’t support checking your account statement, yet. Try sending money to someone instead!")
+    }
+
     func fetchUserInfoIfNeeded() {
         // For the time being we'll treat session state as being "authenticated" even if the access
         // token lapses in the backing endpoint / user defaults.
