@@ -26,6 +26,8 @@ Users establish their mobile device as their primary device by installing the ca
 
 *Note:* This primary device is also the device users can use to authenticate requests from other devices, such as desktops and tablets. See Section 1.2.2 Authorization on Secondary Devices.
 
+![Primary Flow](image/Primary-device-high-level-flow.png)
+
 **Step 1:** &nbsp; The User's Service Provider's mobile app or website makes an authorization code request to the local ZenKey app.
 
 **Step 2:** &nbsp; The User's ZenKey app determines the appropriate wireless carrier to perform SIM and user authentication with and returns an authorization code to your Redirect URI (see section on Redirect URI).
@@ -37,6 +39,8 @@ Users establish their mobile device as their primary device by installing the ca
 Users can also use ZenKey to authenticate on devices other than their primary device, such as a tablet. These secondary devices rely on the user to complete the authentication process.
 
 Users pressing the ZenKey button on a secondary device will see a visual and numeric code as a part of the secondary device authorization process. This code allows the user to associate that secondary device with their primary device. 
+
+![Secondary Device Flow](image/Secondary-device-high-level-flow.png)
 
 **Step 1:** &nbsp; The user is taken to a website where they can select the appropriate carrier. This is known as the carrier Discovery UI website, and is where the user chooses the carrier associated with their primary device. If the user is authorizing a secondary device from an app on a tablet, the SDK will use a webview for this step.
 
@@ -499,6 +503,7 @@ NOTICE: © 2019 XCI JV, LLC. ZENKEY IS A TRADEMARK OF XCI JV, LLC. ALL RIGHTS RE
 
 | Date   | Version      | Description |
 | -------- | --------- | --------------------------------------------- |
+| 10.9.2019 | 0.9.15 | Added revised primary and secondary flow diagrams |
 | 10.4.2019   | 0.9.14   | Added Migrating Accounts section |
 | 9.17.2019 | 0.9.13 | Updated license with Apache 2.0 text. |
 | 9.9.2019 | 0.9.12 | Added minor edits. |
@@ -506,4 +511,5 @@ NOTICE: © 2019 XCI JV, LLC. ZENKEY IS A TRADEMARK OF XCI JV, LLC. ALL RIGHTS RE
 |8.27.2019 | 0.9.10     | Updated high-level flows; Updated sample code.  |
 |8.20.2019 | 0.9.9     | Added section numbers; Added revision history; Added additional info about Redirect URIs to section 4.0 |
 
-<sub> Last Update: Document Version 0.9.14 - October 4, 2019</sub>
+<sub> Last Update: Document Version 0.9.15 - October 9, 2019</sub>
+
