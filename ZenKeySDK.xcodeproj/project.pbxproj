@@ -1,0 +1,840 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		63AD1C082357C734000377A3 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD1C072357C734000377A3 /* Version.swift */; };
+		8A65F9F32315EE24002E7826 /* ZenKey.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A65F9A02315EE24002E7826 /* ZenKey.xcassets */; };
+		8A65F9F42315EE24002E7826 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A65F9A12315EE24002E7826 /* Localizable.strings */; };
+		8A65FA122315EE24002E7826 /* ZenKeyBrandedButton+Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9C32315EE24002E7826 /* ZenKeyBrandedButton+Branding.swift */; };
+		8A65FA132315EE24002E7826 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9C42315EE24002E7826 /* Scope.swift */; };
+		8A65FA142315EE24002E7826 /* String+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9C52315EE24002E7826 /* String+Utilities.swift */; };
+		8A65FA152315EE24002E7826 /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9C62315EE24002E7826 /* SDKConfig.swift */; };
+		8A65FA162315EE24002E7826 /* MobileNetworkSelectionUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9C72315EE24002E7826 /* MobileNetworkSelectionUI.swift */; };
+		8A65FA172315EE24002E7826 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9C82315EE24002E7826 /* Log.swift */; };
+		8A65FA182315EE24002E7826 /* ErrorCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9C92315EE24002E7826 /* ErrorCodes.swift */; };
+		8A65FA192315EE24002E7826 /* MobileNetworkSelectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9CA2315EE24002E7826 /* MobileNetworkSelectionService.swift */; };
+		8A65FA1A2315EE24002E7826 /* ZenKeyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9CB2315EE24002E7826 /* ZenKeyAppDelegate.swift */; };
+		8A65FA1B2315EE24002E7826 /* URLHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9CC2315EE24002E7826 /* URLHandling.swift */; };
+		8A65FA1C2315EE24002E7826 /* OpenIdAuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9CD2315EE24002E7826 /* OpenIdAuthorizationRequest.swift */; };
+		8A65FA1D2315EE24002E7826 /* PromptValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9CE2315EE24002E7826 /* PromptValue.swift */; };
+		8A65FA1E2315EE24002E7826 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9CF2315EE24002E7826 /* Dependencies.swift */; };
+		8A65FA1F2315EE24002E7826 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D02315EE24002E7826 /* DiscoveryService.swift */; };
+		8A65FA202315EE24002E7826 /* Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D12315EE24002E7826 /* Branding.swift */; };
+		8A65FA222315EE24002E7826 /* ConfigCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D32315EE24002E7826 /* ConfigCacheService.swift */; };
+		8A65FA232315EE24002E7826 /* Dictionary+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D42315EE24002E7826 /* Dictionary+Helpers.swift */; };
+		8A65FA242315EE24002E7826 /* RandomStringGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D52315EE24002E7826 /* RandomStringGenerator.swift */; };
+		8A65FA252315EE24002E7826 /* AuthorizationServiceCurrentRequestStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D62315EE24002E7826 /* AuthorizationServiceCurrentRequestStorage.swift */; };
+		8A65FA262315EE24002E7826 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D72315EE24002E7826 /* ImageUtils.swift */; };
+		8A65FA272315EE24002E7826 /* AuthorizationServiceStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D82315EE24002E7826 /* AuthorizationServiceStateMachine.swift */; };
+		8A65FA282315EE24002E7826 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9D92315EE24002E7826 /* NetworkService.swift */; };
+		8A65FA292315EE24002E7826 /* SIMInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9DA2315EE24002E7826 /* SIMInfo.swift */; };
+		8A65FA2A2315EE24002E7826 /* Carrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9DB2315EE24002E7826 /* Carrier.swift */; };
+		8A65FA2B2315EE24002E7826 /* ResponseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9DC2315EE24002E7826 /* ResponseURL.swift */; };
+		8A65FA2D2315EE24002E7826 /* OpenIdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9DE2315EE24002E7826 /* OpenIdService.swift */; };
+		8A65FA2E2315EE24002E7826 /* ZenKeyBrandedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9DF2315EE24002E7826 /* ZenKeyBrandedButton.swift */; };
+		8A65FA2F2315EE24002E7826 /* AuthorizationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9E02315EE24002E7826 /* AuthorizationError.swift */; };
+		8A65FA302315EE24002E7826 /* OpenIdURLResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9E12315EE24002E7826 /* OpenIdURLResolver.swift */; };
+		8A65FA312315EE24002E7826 /* ZenKeyNetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9E22315EE24002E7826 /* ZenKeyNetworkConfig.swift */; };
+		8A65FA322315EE24002E7826 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9E32315EE24002E7826 /* DeviceInfo.swift */; };
+		8A65FA332315EE24002E7826 /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9E42315EE24002E7826 /* AuthorizationService.swift */; };
+		8A65FA342315EE24002E7826 /* CurrentControllerContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9E52315EE24002E7826 /* CurrentControllerContextProvider.swift */; };
+		8A65FA352315EE24002E7826 /* ACRValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9E62315EE24002E7826 /* ACRValue.swift */; };
+		8A65FA362315EE24002E7826 /* OpenIdConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9E72315EE24002E7826 /* OpenIdConfig.swift */; };
+		8A65FA372315EE24002E7826 /* AuthorizationRequestContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9E82315EE24002E7826 /* AuthorizationRequestContext.swift */; };
+		8A65FA382315EE24002E7826 /* LocalizationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9E92315EE24002E7826 /* LocalizationUtils.swift */; };
+		8A65FA392315EE24002E7826 /* ZenKeyAuthorizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9EA2315EE24002E7826 /* ZenKeyAuthorizeButton.swift */; };
+		8A65FA3A2315EE24002E7826 /* CurrentSIMBrandingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9EC2315EE24002E7826 /* CurrentSIMBrandingProvider.swift */; };
+		8A65FA3B2315EE24002E7826 /* OpenIdURLResolverIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9ED2315EE24002E7826 /* OpenIdURLResolverIOS.swift */; };
+		8A65FA3C2315EE24002E7826 /* AuthorizationServiceIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9EE2315EE24002E7826 /* AuthorizationServiceIOS.swift */; };
+		8A65FA3D2315EE24002E7826 /* WebBrowserUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9EF2315EE24002E7826 /* WebBrowserUI.swift */; };
+		8A65FA3E2315EE24002E7826 /* MobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9F02315EE24002E7826 /* MobileNetworkInfoProvider.swift */; };
+		8A65FA3F2315EE24002E7826 /* CarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9F12315EE24002E7826 /* CarrierInfoService.swift */; };
+		8A65FA412315EE49002E7826 /* DependenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9AF2315EE24002E7826 /* DependenciesTests.swift */; };
+		8A65FA432315EE49002E7826 /* ZenKeyAuthorizeButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9B12315EE24002E7826 /* ZenKeyAuthorizeButtonTests.swift */; };
+		8A65FA442315EE49002E7826 /* CurrentSIMBrandingProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9B22315EE24002E7826 /* CurrentSIMBrandingProviderTests.swift */; };
+		8A65FA452315EE49002E7826 /* SDKConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9B32315EE24002E7826 /* SDKConfigTests.swift */; };
+		8A65FA462315EE49002E7826 /* CarrierInfoServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9B42315EE24002E7826 /* CarrierInfoServiceTests.swift */; };
+		8A65FA472315EE49002E7826 /* OpenIdServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9B52315EE24002E7826 /* OpenIdServiceTests.swift */; };
+		8A65FA482315EE49002E7826 /* AuthorizationServiceTests+DiscoveryServiceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9B62315EE24002E7826 /* AuthorizationServiceTests+DiscoveryServiceInterface.swift */; };
+		8A65FA492315EE49002E7826 /* AuthorizationServiceTests+MobileNetworkSelectionInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9B72315EE24002E7826 /* AuthorizationServiceTests+MobileNetworkSelectionInterface.swift */; };
+		8A65FA4A2315EE49002E7826 /* AuthorizationRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9B82315EE24002E7826 /* AuthorizationRequestTests.swift */; };
+		8A65FA4B2315EE49002E7826 /* AuthorizationServiceTests+UserNotFoundError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9B92315EE24002E7826 /* AuthorizationServiceTests+UserNotFoundError.swift */; };
+		8A65FA4C2315EE49002E7826 /* DiscoveryServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9BA2315EE24002E7826 /* DiscoveryServiceTests.swift */; };
+		8A65FA4D2315EE49002E7826 /* AuthorizationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9BB2315EE24002E7826 /* AuthorizationServiceTests.swift */; };
+		8A65FA4E2315EE49002E7826 /* ScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9BC2315EE24002E7826 /* ScopeTests.swift */; };
+		8A65FA4F2315EE49002E7826 /* ConfigCacheServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9BD2315EE24002E7826 /* ConfigCacheServiceTests.swift */; };
+		8A65FA502315EE49002E7826 /* AuthorizationErrorParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9BE2315EE24002E7826 /* AuthorizationErrorParsing.swift */; };
+		8A65FA512315EE49002E7826 /* MobileNetworkSelectionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9C02315EE24002E7826 /* MobileNetworkSelectionServiceTests.swift */; };
+		8A65FA522315EE4D002E7826 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9A32315EE24002E7826 /* Constants.swift */; };
+		8A65FA532315EE52002E7826 /* MockURLResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9A52315EE24002E7826 /* MockURLResolver.swift */; };
+		8A65FA542315EE52002E7826 /* MockMobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9A62315EE24002E7826 /* MockMobileNetworkInfoProvider.swift */; };
+		8A65FA552315EE52002E7826 /* MockNetworkSelectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9A72315EE24002E7826 /* MockNetworkSelectionService.swift */; };
+		8A65FA562315EE52002E7826 /* MockCarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9A82315EE24002E7826 /* MockCarrierInfoService.swift */; };
+		8A65FA572315EE52002E7826 /* MockDiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9A92315EE24002E7826 /* MockDiscoveryService.swift */; };
+		8A65FA582315EE52002E7826 /* MockViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9AA2315EE24002E7826 /* MockViewControllers.swift */; };
+		8A65FA592315EE52002E7826 /* MockResponseQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9AB2315EE24002E7826 /* MockResponseQueue.swift */; };
+		8A65FA5A2315EE52002E7826 /* MockOpenIdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9AC2315EE24002E7826 /* MockOpenIdService.swift */; };
+		8A65FA5B2315EE52002E7826 /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9AD2315EE24002E7826 /* MockNetworkService.swift */; };
+		8A65FA5C2315EE52002E7826 /* DisocoveryConfigMockPayloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9AE2315EE24002E7826 /* DisocoveryConfigMockPayloads.swift */; };
+		8A6ED9182316DBBA007CD4DE /* ZenKeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A6ED9172316DBBA007CD4DE /* ZenKeySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A6ED9192316DD79007CD4DE /* MockAuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6ED9152316DB7D007CD4DE /* MockAuthorizationService.swift */; };
+		8AB309EA228614AA003E08D8 /* ZenKeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 233AF954220A3B080023059C /* ZenKeySDK.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8AB309EB228614AA003E08D8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56BCE47B2203755D00196A17 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 233AF953220A3B080023059C;
+			remoteInfo = ZenKeySDK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		233AF954220A3B080023059C /* ZenKeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZenKeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63AD1C072357C734000377A3 /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		8A65F9A02315EE24002E7826 /* ZenKey.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ZenKey.xcassets; sourceTree = "<group>"; };
+		8A65F9A12315EE24002E7826 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		8A65F9A32315EE24002E7826 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		8A65F9A52315EE24002E7826 /* MockURLResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockURLResolver.swift; sourceTree = "<group>"; };
+		8A65F9A62315EE24002E7826 /* MockMobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockMobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
+		8A65F9A72315EE24002E7826 /* MockNetworkSelectionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNetworkSelectionService.swift; sourceTree = "<group>"; };
+		8A65F9A82315EE24002E7826 /* MockCarrierInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockCarrierInfoService.swift; sourceTree = "<group>"; };
+		8A65F9A92315EE24002E7826 /* MockDiscoveryService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDiscoveryService.swift; sourceTree = "<group>"; };
+		8A65F9AA2315EE24002E7826 /* MockViewControllers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockViewControllers.swift; sourceTree = "<group>"; };
+		8A65F9AB2315EE24002E7826 /* MockResponseQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockResponseQueue.swift; sourceTree = "<group>"; };
+		8A65F9AC2315EE24002E7826 /* MockOpenIdService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockOpenIdService.swift; sourceTree = "<group>"; };
+		8A65F9AD2315EE24002E7826 /* MockNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
+		8A65F9AE2315EE24002E7826 /* DisocoveryConfigMockPayloads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisocoveryConfigMockPayloads.swift; sourceTree = "<group>"; };
+		8A65F9AF2315EE24002E7826 /* DependenciesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependenciesTests.swift; sourceTree = "<group>"; };
+		8A65F9B12315EE24002E7826 /* ZenKeyAuthorizeButtonTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZenKeyAuthorizeButtonTests.swift; sourceTree = "<group>"; };
+		8A65F9B22315EE24002E7826 /* CurrentSIMBrandingProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentSIMBrandingProviderTests.swift; sourceTree = "<group>"; };
+		8A65F9B32315EE24002E7826 /* SDKConfigTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKConfigTests.swift; sourceTree = "<group>"; };
+		8A65F9B42315EE24002E7826 /* CarrierInfoServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarrierInfoServiceTests.swift; sourceTree = "<group>"; };
+		8A65F9B52315EE24002E7826 /* OpenIdServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenIdServiceTests.swift; sourceTree = "<group>"; };
+		8A65F9B62315EE24002E7826 /* AuthorizationServiceTests+DiscoveryServiceInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AuthorizationServiceTests+DiscoveryServiceInterface.swift"; sourceTree = "<group>"; };
+		8A65F9B72315EE24002E7826 /* AuthorizationServiceTests+MobileNetworkSelectionInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AuthorizationServiceTests+MobileNetworkSelectionInterface.swift"; sourceTree = "<group>"; };
+		8A65F9B82315EE24002E7826 /* AuthorizationRequestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationRequestTests.swift; sourceTree = "<group>"; };
+		8A65F9B92315EE24002E7826 /* AuthorizationServiceTests+UserNotFoundError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AuthorizationServiceTests+UserNotFoundError.swift"; sourceTree = "<group>"; };
+		8A65F9BA2315EE24002E7826 /* DiscoveryServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryServiceTests.swift; sourceTree = "<group>"; };
+		8A65F9BB2315EE24002E7826 /* AuthorizationServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceTests.swift; sourceTree = "<group>"; };
+		8A65F9BC2315EE24002E7826 /* ScopeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopeTests.swift; sourceTree = "<group>"; };
+		8A65F9BD2315EE24002E7826 /* ConfigCacheServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigCacheServiceTests.swift; sourceTree = "<group>"; };
+		8A65F9BE2315EE24002E7826 /* AuthorizationErrorParsing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationErrorParsing.swift; sourceTree = "<group>"; };
+		8A65F9BF2315EE24002E7826 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A65F9C02315EE24002E7826 /* MobileNetworkSelectionServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionServiceTests.swift; sourceTree = "<group>"; };
+		8A65F9C32315EE24002E7826 /* ZenKeyBrandedButton+Branding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ZenKeyBrandedButton+Branding.swift"; sourceTree = "<group>"; };
+		8A65F9C42315EE24002E7826 /* Scope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
+		8A65F9C52315EE24002E7826 /* String+Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Utilities.swift"; sourceTree = "<group>"; };
+		8A65F9C62315EE24002E7826 /* SDKConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKConfig.swift; sourceTree = "<group>"; };
+		8A65F9C72315EE24002E7826 /* MobileNetworkSelectionUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionUI.swift; sourceTree = "<group>"; };
+		8A65F9C82315EE24002E7826 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		8A65F9C92315EE24002E7826 /* ErrorCodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorCodes.swift; sourceTree = "<group>"; };
+		8A65F9CA2315EE24002E7826 /* MobileNetworkSelectionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionService.swift; sourceTree = "<group>"; };
+		8A65F9CB2315EE24002E7826 /* ZenKeyAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZenKeyAppDelegate.swift; sourceTree = "<group>"; };
+		8A65F9CC2315EE24002E7826 /* URLHandling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLHandling.swift; sourceTree = "<group>"; };
+		8A65F9CD2315EE24002E7826 /* OpenIdAuthorizationRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenIdAuthorizationRequest.swift; sourceTree = "<group>"; };
+		8A65F9CE2315EE24002E7826 /* PromptValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromptValue.swift; sourceTree = "<group>"; };
+		8A65F9CF2315EE24002E7826 /* Dependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		8A65F9D02315EE24002E7826 /* DiscoveryService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveryService.swift; sourceTree = "<group>"; };
+		8A65F9D12315EE24002E7826 /* Branding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Branding.swift; sourceTree = "<group>"; };
+		8A65F9D32315EE24002E7826 /* ConfigCacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigCacheService.swift; sourceTree = "<group>"; };
+		8A65F9D42315EE24002E7826 /* Dictionary+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Helpers.swift"; sourceTree = "<group>"; };
+		8A65F9D52315EE24002E7826 /* RandomStringGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomStringGenerator.swift; sourceTree = "<group>"; };
+		8A65F9D62315EE24002E7826 /* AuthorizationServiceCurrentRequestStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceCurrentRequestStorage.swift; sourceTree = "<group>"; };
+		8A65F9D72315EE24002E7826 /* ImageUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
+		8A65F9D82315EE24002E7826 /* AuthorizationServiceStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceStateMachine.swift; sourceTree = "<group>"; };
+		8A65F9D92315EE24002E7826 /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		8A65F9DA2315EE24002E7826 /* SIMInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIMInfo.swift; sourceTree = "<group>"; };
+		8A65F9DB2315EE24002E7826 /* Carrier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Carrier.swift; sourceTree = "<group>"; };
+		8A65F9DC2315EE24002E7826 /* ResponseURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseURL.swift; sourceTree = "<group>"; };
+		8A65F9DE2315EE24002E7826 /* OpenIdService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenIdService.swift; sourceTree = "<group>"; };
+		8A65F9DF2315EE24002E7826 /* ZenKeyBrandedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZenKeyBrandedButton.swift; sourceTree = "<group>"; };
+		8A65F9E02315EE24002E7826 /* AuthorizationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationError.swift; sourceTree = "<group>"; };
+		8A65F9E12315EE24002E7826 /* OpenIdURLResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenIdURLResolver.swift; sourceTree = "<group>"; };
+		8A65F9E22315EE24002E7826 /* ZenKeyNetworkConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZenKeyNetworkConfig.swift; sourceTree = "<group>"; };
+		8A65F9E32315EE24002E7826 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
+		8A65F9E42315EE24002E7826 /* AuthorizationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationService.swift; sourceTree = "<group>"; };
+		8A65F9E52315EE24002E7826 /* CurrentControllerContextProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentControllerContextProvider.swift; sourceTree = "<group>"; };
+		8A65F9E62315EE24002E7826 /* ACRValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ACRValue.swift; sourceTree = "<group>"; };
+		8A65F9E72315EE24002E7826 /* OpenIdConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenIdConfig.swift; sourceTree = "<group>"; };
+		8A65F9E82315EE24002E7826 /* AuthorizationRequestContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationRequestContext.swift; sourceTree = "<group>"; };
+		8A65F9E92315EE24002E7826 /* LocalizationUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizationUtils.swift; sourceTree = "<group>"; };
+		8A65F9EA2315EE24002E7826 /* ZenKeyAuthorizeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZenKeyAuthorizeButton.swift; sourceTree = "<group>"; };
+		8A65F9EC2315EE24002E7826 /* CurrentSIMBrandingProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentSIMBrandingProvider.swift; sourceTree = "<group>"; };
+		8A65F9ED2315EE24002E7826 /* OpenIdURLResolverIOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenIdURLResolverIOS.swift; sourceTree = "<group>"; };
+		8A65F9EE2315EE24002E7826 /* AuthorizationServiceIOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceIOS.swift; sourceTree = "<group>"; };
+		8A65F9EF2315EE24002E7826 /* WebBrowserUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebBrowserUI.swift; sourceTree = "<group>"; };
+		8A65F9F02315EE24002E7826 /* MobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
+		8A65F9F12315EE24002E7826 /* CarrierInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarrierInfoService.swift; sourceTree = "<group>"; };
+		8A65F9F22315EE24002E7826 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A6ED9152316DB7D007CD4DE /* MockAuthorizationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockAuthorizationService.swift; sourceTree = "<group>"; };
+		8A6ED9172316DBBA007CD4DE /* ZenKeySDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZenKeySDK.h; sourceTree = "<group>"; };
+		8AB309E5228614AA003E08D8 /* ZenKeySDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZenKeySDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		233AF951220A3B080023059C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AB309E2228614AA003E08D8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AB309EA228614AA003E08D8 /* ZenKeySDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		56BCE47A2203755D00196A17 = {
+			isa = PBXGroup;
+			children = (
+				8A65F99E2315EE24002E7826 /* ZenKeySDK */,
+				8A9DEC40224A9B2A00E010EB /* Frameworks */,
+				56BCE4842203755D00196A17 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		56BCE4842203755D00196A17 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				233AF954220A3B080023059C /* ZenKeySDK.framework */,
+				8AB309E5228614AA003E08D8 /* ZenKeySDKTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A65F99E2315EE24002E7826 /* ZenKeySDK */ = {
+			isa = PBXGroup;
+			children = (
+				8A65F99F2315EE24002E7826 /* Resources */,
+				8A65F9A22315EE24002E7826 /* Tests */,
+				8A65F9C12315EE24002E7826 /* Sources */,
+				8A65F9F22315EE24002E7826 /* Info.plist */,
+			);
+			path = ZenKeySDK;
+			sourceTree = "<group>";
+		};
+		8A65F99F2315EE24002E7826 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8A65F9A02315EE24002E7826 /* ZenKey.xcassets */,
+				8A65F9A12315EE24002E7826 /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8A65F9A22315EE24002E7826 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				8A65F9A32315EE24002E7826 /* Constants.swift */,
+				8A65F9A42315EE24002E7826 /* Mocks */,
+				8A65F9AF2315EE24002E7826 /* DependenciesTests.swift */,
+				8A65F9B12315EE24002E7826 /* ZenKeyAuthorizeButtonTests.swift */,
+				8A65F9B22315EE24002E7826 /* CurrentSIMBrandingProviderTests.swift */,
+				8A65F9B32315EE24002E7826 /* SDKConfigTests.swift */,
+				8A65F9B42315EE24002E7826 /* CarrierInfoServiceTests.swift */,
+				8A65F9B52315EE24002E7826 /* OpenIdServiceTests.swift */,
+				8A65F9B62315EE24002E7826 /* AuthorizationServiceTests+DiscoveryServiceInterface.swift */,
+				8A65F9B72315EE24002E7826 /* AuthorizationServiceTests+MobileNetworkSelectionInterface.swift */,
+				8A65F9B82315EE24002E7826 /* AuthorizationRequestTests.swift */,
+				8A65F9B92315EE24002E7826 /* AuthorizationServiceTests+UserNotFoundError.swift */,
+				8A65F9BA2315EE24002E7826 /* DiscoveryServiceTests.swift */,
+				8A65F9BB2315EE24002E7826 /* AuthorizationServiceTests.swift */,
+				8A65F9BC2315EE24002E7826 /* ScopeTests.swift */,
+				8A65F9BD2315EE24002E7826 /* ConfigCacheServiceTests.swift */,
+				8A65F9BE2315EE24002E7826 /* AuthorizationErrorParsing.swift */,
+				8A65F9BF2315EE24002E7826 /* Info.plist */,
+				8A65F9C02315EE24002E7826 /* MobileNetworkSelectionServiceTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		8A65F9A42315EE24002E7826 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				8A6ED9152316DB7D007CD4DE /* MockAuthorizationService.swift */,
+				8A65F9A52315EE24002E7826 /* MockURLResolver.swift */,
+				8A65F9A62315EE24002E7826 /* MockMobileNetworkInfoProvider.swift */,
+				8A65F9A72315EE24002E7826 /* MockNetworkSelectionService.swift */,
+				8A65F9A82315EE24002E7826 /* MockCarrierInfoService.swift */,
+				8A65F9A92315EE24002E7826 /* MockDiscoveryService.swift */,
+				8A65F9AA2315EE24002E7826 /* MockViewControllers.swift */,
+				8A65F9AB2315EE24002E7826 /* MockResponseQueue.swift */,
+				8A65F9AC2315EE24002E7826 /* MockOpenIdService.swift */,
+				8A65F9AD2315EE24002E7826 /* MockNetworkService.swift */,
+				8A65F9AE2315EE24002E7826 /* DisocoveryConfigMockPayloads.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		8A65F9C12315EE24002E7826 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				8A65F9C22315EE24002E7826 /* Core */,
+				8A65F9EB2315EE24002E7826 /* iOS */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		8A65F9C22315EE24002E7826 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				8A6ED9172316DBBA007CD4DE /* ZenKeySDK.h */,
+				8A65F9C32315EE24002E7826 /* ZenKeyBrandedButton+Branding.swift */,
+				8A65F9C42315EE24002E7826 /* Scope.swift */,
+				8A65F9C52315EE24002E7826 /* String+Utilities.swift */,
+				8A65F9C62315EE24002E7826 /* SDKConfig.swift */,
+				8A65F9C72315EE24002E7826 /* MobileNetworkSelectionUI.swift */,
+				8A65F9C82315EE24002E7826 /* Log.swift */,
+				8A65F9C92315EE24002E7826 /* ErrorCodes.swift */,
+				8A65F9CA2315EE24002E7826 /* MobileNetworkSelectionService.swift */,
+				8A65F9CB2315EE24002E7826 /* ZenKeyAppDelegate.swift */,
+				8A65F9CC2315EE24002E7826 /* URLHandling.swift */,
+				8A65F9CD2315EE24002E7826 /* OpenIdAuthorizationRequest.swift */,
+				8A65F9CE2315EE24002E7826 /* PromptValue.swift */,
+				8A65F9CF2315EE24002E7826 /* Dependencies.swift */,
+				8A65F9D02315EE24002E7826 /* DiscoveryService.swift */,
+				8A65F9D12315EE24002E7826 /* Branding.swift */,
+				8A65F9D32315EE24002E7826 /* ConfigCacheService.swift */,
+				8A65F9D42315EE24002E7826 /* Dictionary+Helpers.swift */,
+				8A65F9D52315EE24002E7826 /* RandomStringGenerator.swift */,
+				8A65F9D62315EE24002E7826 /* AuthorizationServiceCurrentRequestStorage.swift */,
+				8A65F9D72315EE24002E7826 /* ImageUtils.swift */,
+				8A65F9D82315EE24002E7826 /* AuthorizationServiceStateMachine.swift */,
+				8A65F9D92315EE24002E7826 /* NetworkService.swift */,
+				8A65F9DA2315EE24002E7826 /* SIMInfo.swift */,
+				8A65F9DB2315EE24002E7826 /* Carrier.swift */,
+				8A65F9DC2315EE24002E7826 /* ResponseURL.swift */,
+				8A65F9DE2315EE24002E7826 /* OpenIdService.swift */,
+				8A65F9DF2315EE24002E7826 /* ZenKeyBrandedButton.swift */,
+				8A65F9E02315EE24002E7826 /* AuthorizationError.swift */,
+				8A65F9E12315EE24002E7826 /* OpenIdURLResolver.swift */,
+				8A65F9E22315EE24002E7826 /* ZenKeyNetworkConfig.swift */,
+				8A65F9E32315EE24002E7826 /* DeviceInfo.swift */,
+				8A65F9E42315EE24002E7826 /* AuthorizationService.swift */,
+				8A65F9E52315EE24002E7826 /* CurrentControllerContextProvider.swift */,
+				8A65F9E62315EE24002E7826 /* ACRValue.swift */,
+				8A65F9E72315EE24002E7826 /* OpenIdConfig.swift */,
+				8A65F9E82315EE24002E7826 /* AuthorizationRequestContext.swift */,
+				8A65F9E92315EE24002E7826 /* LocalizationUtils.swift */,
+				63AD1C072357C734000377A3 /* Version.swift */,
+				8A65F9EA2315EE24002E7826 /* ZenKeyAuthorizeButton.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		8A65F9EB2315EE24002E7826 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				8A65F9EC2315EE24002E7826 /* CurrentSIMBrandingProvider.swift */,
+				8A65F9ED2315EE24002E7826 /* OpenIdURLResolverIOS.swift */,
+				8A65F9EE2315EE24002E7826 /* AuthorizationServiceIOS.swift */,
+				8A65F9EF2315EE24002E7826 /* WebBrowserUI.swift */,
+				8A65F9F02315EE24002E7826 /* MobileNetworkInfoProvider.swift */,
+				8A65F9F12315EE24002E7826 /* CarrierInfoService.swift */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		8A9DEC40224A9B2A00E010EB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		233AF94F220A3B080023059C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A6ED9182316DBBA007CD4DE /* ZenKeySDK.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		233AF953220A3B080023059C /* ZenKeySDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 233AF965220A3B080023059C /* Build configuration list for PBXNativeTarget "ZenKeySDK" */;
+			buildPhases = (
+				233AF94F220A3B080023059C /* Headers */,
+				233AF950220A3B080023059C /* Sources */,
+				233AF951220A3B080023059C /* Frameworks */,
+				233AF952220A3B080023059C /* Resources */,
+				8AB30A24228A1C86003E08D8 /* SwiftLint */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZenKeySDK;
+			productName = ZenKeySDK;
+			productReference = 233AF954220A3B080023059C /* ZenKeySDK.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		8AB309E4228614AA003E08D8 /* ZenKeySDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8AB309FB228614AA003E08D8 /* Build configuration list for PBXNativeTarget "ZenKeySDKTests" */;
+			buildPhases = (
+				8AB309E1228614AA003E08D8 /* Sources */,
+				8AB309E2228614AA003E08D8 /* Frameworks */,
+				8AB309E3228614AA003E08D8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8AB309EC228614AA003E08D8 /* PBXTargetDependency */,
+			);
+			name = ZenKeySDKTests;
+			productName = ZenKeySDKTests;
+			productReference = 8AB309E5228614AA003E08D8 /* ZenKeySDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		56BCE47B2203755D00196A17 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				DefaultBuildSystemTypeForWorkspace = Original;
+				LastSwiftUpdateCheck = 1020;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = "XCI JV, LLC.";
+				TargetAttributes = {
+					233AF953220A3B080023059C = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1030;
+					};
+					8AB309E4228614AA003E08D8 = {
+						CreatedOnToolsVersion = 10.2;
+					};
+				};
+			};
+			buildConfigurationList = 56BCE47E2203755D00196A17 /* Build configuration list for PBXProject "ZenKeySDK" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 56BCE47A2203755D00196A17;
+			productRefGroup = 56BCE4842203755D00196A17 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				233AF953220A3B080023059C /* ZenKeySDK */,
+				8AB309E4228614AA003E08D8 /* ZenKeySDKTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		233AF952220A3B080023059C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A65F9F32315EE24002E7826 /* ZenKey.xcassets in Resources */,
+				8A65F9F42315EE24002E7826 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AB309E3228614AA003E08D8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8AB30A24228A1C86003E08D8 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		233AF950220A3B080023059C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A65FA302315EE24002E7826 /* OpenIdURLResolver.swift in Sources */,
+				63AD1C082357C734000377A3 /* Version.swift in Sources */,
+				8A65FA362315EE24002E7826 /* OpenIdConfig.swift in Sources */,
+				8A65FA162315EE24002E7826 /* MobileNetworkSelectionUI.swift in Sources */,
+				8A65FA372315EE24002E7826 /* AuthorizationRequestContext.swift in Sources */,
+				8A65FA272315EE24002E7826 /* AuthorizationServiceStateMachine.swift in Sources */,
+				8A65FA2B2315EE24002E7826 /* ResponseURL.swift in Sources */,
+				8A65FA152315EE24002E7826 /* SDKConfig.swift in Sources */,
+				8A65FA1F2315EE24002E7826 /* DiscoveryService.swift in Sources */,
+				8A65FA3E2315EE24002E7826 /* MobileNetworkInfoProvider.swift in Sources */,
+				8A65FA132315EE24002E7826 /* Scope.swift in Sources */,
+				8A65FA222315EE24002E7826 /* ConfigCacheService.swift in Sources */,
+				8A65FA172315EE24002E7826 /* Log.swift in Sources */,
+				8A65FA252315EE24002E7826 /* AuthorizationServiceCurrentRequestStorage.swift in Sources */,
+				8A65FA1D2315EE24002E7826 /* PromptValue.swift in Sources */,
+				8A65FA322315EE24002E7826 /* DeviceInfo.swift in Sources */,
+				8A65FA3F2315EE24002E7826 /* CarrierInfoService.swift in Sources */,
+				8A65FA342315EE24002E7826 /* CurrentControllerContextProvider.swift in Sources */,
+				8A65FA262315EE24002E7826 /* ImageUtils.swift in Sources */,
+				8A65FA282315EE24002E7826 /* NetworkService.swift in Sources */,
+				8A65FA232315EE24002E7826 /* Dictionary+Helpers.swift in Sources */,
+				8A65FA382315EE24002E7826 /* LocalizationUtils.swift in Sources */,
+				8A65FA202315EE24002E7826 /* Branding.swift in Sources */,
+				8A65FA3D2315EE24002E7826 /* WebBrowserUI.swift in Sources */,
+				8A65FA122315EE24002E7826 /* ZenKeyBrandedButton+Branding.swift in Sources */,
+				8A65FA392315EE24002E7826 /* ZenKeyAuthorizeButton.swift in Sources */,
+				8A65FA312315EE24002E7826 /* ZenKeyNetworkConfig.swift in Sources */,
+				8A65FA2D2315EE24002E7826 /* OpenIdService.swift in Sources */,
+				8A65FA2E2315EE24002E7826 /* ZenKeyBrandedButton.swift in Sources */,
+				8A65FA242315EE24002E7826 /* RandomStringGenerator.swift in Sources */,
+				8A65FA1A2315EE24002E7826 /* ZenKeyAppDelegate.swift in Sources */,
+				8A65FA192315EE24002E7826 /* MobileNetworkSelectionService.swift in Sources */,
+				8A65FA3B2315EE24002E7826 /* OpenIdURLResolverIOS.swift in Sources */,
+				8A65FA352315EE24002E7826 /* ACRValue.swift in Sources */,
+				8A65FA2A2315EE24002E7826 /* Carrier.swift in Sources */,
+				8A65FA3C2315EE24002E7826 /* AuthorizationServiceIOS.swift in Sources */,
+				8A65FA2F2315EE24002E7826 /* AuthorizationError.swift in Sources */,
+				8A65FA292315EE24002E7826 /* SIMInfo.swift in Sources */,
+				8A65FA332315EE24002E7826 /* AuthorizationService.swift in Sources */,
+				8A65FA142315EE24002E7826 /* String+Utilities.swift in Sources */,
+				8A65FA3A2315EE24002E7826 /* CurrentSIMBrandingProvider.swift in Sources */,
+				8A65FA1E2315EE24002E7826 /* Dependencies.swift in Sources */,
+				8A65FA1B2315EE24002E7826 /* URLHandling.swift in Sources */,
+				8A65FA182315EE24002E7826 /* ErrorCodes.swift in Sources */,
+				8A65FA1C2315EE24002E7826 /* OpenIdAuthorizationRequest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AB309E1228614AA003E08D8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A65FA4B2315EE49002E7826 /* AuthorizationServiceTests+UserNotFoundError.swift in Sources */,
+				8A65FA472315EE49002E7826 /* OpenIdServiceTests.swift in Sources */,
+				8A65FA4A2315EE49002E7826 /* AuthorizationRequestTests.swift in Sources */,
+				8A65FA492315EE49002E7826 /* AuthorizationServiceTests+MobileNetworkSelectionInterface.swift in Sources */,
+				8A65FA592315EE52002E7826 /* MockResponseQueue.swift in Sources */,
+				8A65FA5B2315EE52002E7826 /* MockNetworkService.swift in Sources */,
+				8A65FA4D2315EE49002E7826 /* AuthorizationServiceTests.swift in Sources */,
+				8A65FA562315EE52002E7826 /* MockCarrierInfoService.swift in Sources */,
+				8A65FA452315EE49002E7826 /* SDKConfigTests.swift in Sources */,
+				8A65FA4C2315EE49002E7826 /* DiscoveryServiceTests.swift in Sources */,
+				8A65FA4E2315EE49002E7826 /* ScopeTests.swift in Sources */,
+				8A65FA502315EE49002E7826 /* AuthorizationErrorParsing.swift in Sources */,
+				8A65FA5C2315EE52002E7826 /* DisocoveryConfigMockPayloads.swift in Sources */,
+				8A65FA462315EE49002E7826 /* CarrierInfoServiceTests.swift in Sources */,
+				8A65FA4F2315EE49002E7826 /* ConfigCacheServiceTests.swift in Sources */,
+				8A65FA532315EE52002E7826 /* MockURLResolver.swift in Sources */,
+				8A65FA572315EE52002E7826 /* MockDiscoveryService.swift in Sources */,
+				8A65FA552315EE52002E7826 /* MockNetworkSelectionService.swift in Sources */,
+				8A65FA582315EE52002E7826 /* MockViewControllers.swift in Sources */,
+				8A65FA5A2315EE52002E7826 /* MockOpenIdService.swift in Sources */,
+				8A65FA412315EE49002E7826 /* DependenciesTests.swift in Sources */,
+				8A6ED9192316DD79007CD4DE /* MockAuthorizationService.swift in Sources */,
+				8A65FA432315EE49002E7826 /* ZenKeyAuthorizeButtonTests.swift in Sources */,
+				8A65FA482315EE49002E7826 /* AuthorizationServiceTests+DiscoveryServiceInterface.swift in Sources */,
+				8A65FA512315EE49002E7826 /* MobileNetworkSelectionServiceTests.swift in Sources */,
+				8A65FA542315EE52002E7826 /* MockMobileNetworkInfoProvider.swift in Sources */,
+				8A65FA442315EE49002E7826 /* CurrentSIMBrandingProviderTests.swift in Sources */,
+				8A65FA522315EE4D002E7826 /* Constants.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8AB309EC228614AA003E08D8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 233AF953220A3B080023059C /* ZenKeySDK */;
+			targetProxy = 8AB309EB228614AA003E08D8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		233AF966220A3B080023059C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ZenKeySDK/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xci.provider.sdk;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		233AF967220A3B080023059C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ZenKeySDK/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xci.provider.sdk;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		56BCE4A92203755E00196A17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		56BCE4AA2203755E00196A17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8AB309ED228614AA003E08D8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = ZenKeySDK/Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.xci.ZenKeySDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8AB309EE228614AA003E08D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = ZenKeySDK/Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.xci.ZenKeySDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		233AF965220A3B080023059C /* Build configuration list for PBXNativeTarget "ZenKeySDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				233AF966220A3B080023059C /* Debug */,
+				233AF967220A3B080023059C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56BCE47E2203755D00196A17 /* Build configuration list for PBXProject "ZenKeySDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56BCE4A92203755E00196A17 /* Debug */,
+				56BCE4AA2203755E00196A17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8AB309FB228614AA003E08D8 /* Build configuration list for PBXNativeTarget "ZenKeySDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8AB309ED228614AA003E08D8 /* Debug */,
+				8AB309EE228614AA003E08D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 56BCE47B2203755D00196A17 /* Project object */;
+}
