@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZenKeySDK'
-  s.version          = '0.9.0'
+  s.version          = '0.9.1'
   s.summary          = 'ZenKeySDK'
 
 # This description is used to generate tags and improve search results.
@@ -36,6 +36,7 @@ TODO: Add long description of the pod here.
   s.resources = ['ZenKeySDK/Resources/*.xcassets', 'ZenKeySDK/Resources/*.lproj/*.strings']
 
   s.ios.frameworks = 'UIKit', 'SafariServices'
+  s.weak_framework = 'CryptoKit'
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'ZenKeySDK/Tests/**/*.swift'

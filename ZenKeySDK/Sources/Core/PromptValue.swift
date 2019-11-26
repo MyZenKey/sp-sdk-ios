@@ -31,4 +31,6 @@ public enum PromptValue: String {
     /// An SP can ask for a user to explicitly re-confirm that the user agrees to the exposure of
     /// their data. The MNO will recapture user consent for the listed scopes.
     case consent
+    /// No prompt specified.
+    case none
 }

@@ -74,7 +74,7 @@ public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
     /// for more than one, and will get the first one the user has achieved. Values returned in
     /// id_token will contain aalx. Service Providers should not ask for any deprecated values
     /// (loax). The default acrValue is aal1.
-    public var acrValues: [ACRValue]? = [.aal1]
+    public var acrValues: [ACRValue]? = []
 
     /// An opaque value used to maintain state between the request and the callback. If
     /// `nil` is passed, a random string will be used.

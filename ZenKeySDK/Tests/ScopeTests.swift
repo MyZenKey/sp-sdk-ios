@@ -11,16 +11,16 @@ import XCTest
 
 class ScopeTests: XCTestCase {
     var dupeScopes: [ScopeProtocol] = {
-        let scopes: [Scope] = [.match, .match, .score, .score, .match, .authorize]
+        let scopes: [Scope] = [.name, .openid, .phone, .phone, .name, .name, .openid]
         return scopes
     }()
 
     func testDedupedSortedOpenIdScopeString() {
-        XCTAssertEqual(dupeScopes.toOpenIdScopes, "authorize match score")
+        XCTAssertEqual(dupeScopes.toOpenIdScopes, "name openid phone")
     }
 
     func testPrependRequiredOpenIdScope() {
         let formattedString = OpenIdScopes(requestedScopes: dupeScopes).networkFormattedString
-        XCTAssertEqual(formattedString, "authorize match score")
+        XCTAssertEqual(formattedString, "name openid phone")
     }
 }

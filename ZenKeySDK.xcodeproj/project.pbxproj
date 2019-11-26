@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		63AD1C082357C734000377A3 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD1C072357C734000377A3 /* Version.swift */; };
+		63DC7B8F238758770002874A /* ZenKeyButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DC7B8E238758770002874A /* ZenKeyButtonView.swift */; };
+		63DC7B91238759C50002874A /* Fonts+ZenKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DC7B90238759C50002874A /* Fonts+ZenKey.swift */; };
 		8A65F9F32315EE24002E7826 /* ZenKey.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A65F9A02315EE24002E7826 /* ZenKey.xcassets */; };
 		8A65F9F42315EE24002E7826 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A65F9A12315EE24002E7826 /* Localizable.strings */; };
 		8A65FA122315EE24002E7826 /* ZenKeyBrandedButton+Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65F9C32315EE24002E7826 /* ZenKeyBrandedButton+Branding.swift */; };
@@ -99,6 +101,8 @@
 /* Begin PBXFileReference section */
 		233AF954220A3B080023059C /* ZenKeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZenKeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63AD1C072357C734000377A3 /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		63DC7B8E238758770002874A /* ZenKeyButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZenKeyButtonView.swift; sourceTree = "<group>"; };
+		63DC7B90238759C50002874A /* Fonts+ZenKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Fonts+ZenKey.swift"; sourceTree = "<group>"; };
 		8A65F9A02315EE24002E7826 /* ZenKey.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ZenKey.xcassets; sourceTree = "<group>"; };
 		8A65F9A12315EE24002E7826 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		8A65F9A32315EE24002E7826 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -296,6 +300,7 @@
 				8A65F9C32315EE24002E7826 /* ZenKeyBrandedButton+Branding.swift */,
 				8A65F9C42315EE24002E7826 /* Scope.swift */,
 				8A65F9C52315EE24002E7826 /* String+Utilities.swift */,
+				63DC7B90238759C50002874A /* Fonts+ZenKey.swift */,
 				8A65F9C62315EE24002E7826 /* SDKConfig.swift */,
 				8A65F9C72315EE24002E7826 /* MobileNetworkSelectionUI.swift */,
 				8A65F9C82315EE24002E7826 /* Log.swift */,
@@ -332,6 +337,7 @@
 				8A65F9E92315EE24002E7826 /* LocalizationUtils.swift */,
 				63AD1C072357C734000377A3 /* Version.swift */,
 				8A65F9EA2315EE24002E7826 /* ZenKeyAuthorizeButton.swift */,
+				63DC7B8E238758770002874A /* ZenKeyButtonView.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -499,6 +505,7 @@
 				8A65FA272315EE24002E7826 /* AuthorizationServiceStateMachine.swift in Sources */,
 				8A65FA2B2315EE24002E7826 /* ResponseURL.swift in Sources */,
 				8A65FA152315EE24002E7826 /* SDKConfig.swift in Sources */,
+				63DC7B8F238758770002874A /* ZenKeyButtonView.swift in Sources */,
 				8A65FA1F2315EE24002E7826 /* DiscoveryService.swift in Sources */,
 				8A65FA3E2315EE24002E7826 /* MobileNetworkInfoProvider.swift in Sources */,
 				8A65FA132315EE24002E7826 /* Scope.swift in Sources */,
@@ -507,6 +514,7 @@
 				8A65FA252315EE24002E7826 /* AuthorizationServiceCurrentRequestStorage.swift in Sources */,
 				8A65FA1D2315EE24002E7826 /* PromptValue.swift in Sources */,
 				8A65FA322315EE24002E7826 /* DeviceInfo.swift in Sources */,
+				63DC7B91238759C50002874A /* Fonts+ZenKey.swift in Sources */,
 				8A65FA3F2315EE24002E7826 /* CarrierInfoService.swift in Sources */,
 				8A65FA342315EE24002E7826 /* CurrentControllerContextProvider.swift in Sources */,
 				8A65FA262315EE24002E7826 /* ImageUtils.swift in Sources */,
@@ -703,6 +711,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					CryptoKit,
+				);
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -757,6 +769,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					CryptoKit,
+				);
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

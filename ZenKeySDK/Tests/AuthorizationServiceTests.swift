@@ -24,7 +24,7 @@ class AuthorizationServiceTests: XCTestCase {
 
     lazy var authorizationService = authorizationServiceFactory()
 
-    let scopes: [Scope] = [.openid, .address, .address, .email]
+    let scopes: [Scope] = [.openid, .name, .email]
 
     override func setUp() {
         super.setUp()
@@ -123,7 +123,7 @@ extension AuthorizationServiceTests {
             scopes: self.scopes,
             fromViewController: expectedController) { _ in
                 XCTAssertEqual(self.mockOpenIdService.lastViewController, expectedController)
-                XCTAssertEqual(self.mockOpenIdService.lastParameters?.formattedScopes, "address email openid")
+                XCTAssertEqual(self.mockOpenIdService.lastParameters?.formattedScopes, "email name openid")
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
@@ -150,7 +150,7 @@ extension AuthorizationServiceTests {
         let expected = OpenIdAuthorizationRequest.Parameters(
             clientId: mockSDKConfig.clientId,
             redirectURL: mockSDKConfig.redirectURL,
-            formattedScopes: "address email openid",
+            formattedScopes: "email name openid",
             state: "foo",
             nonce: "bar",
             acrValues: [.aal2],

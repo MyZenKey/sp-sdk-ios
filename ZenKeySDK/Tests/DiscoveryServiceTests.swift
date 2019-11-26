@@ -81,6 +81,7 @@ class DiscoveryServiceTests: XCTestCase {
             XCTAssertEqual(request?.url?.path, "/.well-known/openid_configuration")
             AssertHasQueryItemPair(url: request?.url, key: "mccmnc", value: "123456")
             AssertHasQueryItemPair(url: request?.url, key: "client_id", value: self.mockClientId)
+            AssertHasQueryItemPair(url: request?.url, key: "sdk_version", value: VERSION)
 
             expectation.fulfill()
         }

@@ -68,7 +68,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocolInternal {
     public func authorize(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
-        acrValues: [ACRValue]? = [.aal1],
+        acrValues: [ACRValue]? = nil,
         state: String? = nil,
         correlationId: String? = nil,
         context: String? = nil,

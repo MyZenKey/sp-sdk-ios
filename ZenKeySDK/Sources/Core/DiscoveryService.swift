@@ -169,12 +169,14 @@ private extension DiscoveryService {
         case clientId = "client_id"
         case mccmnc
         case prompt
+        case version = "sdk_version"
     }
 
     func discoveryEndpoint(forSIMInfo simInfo: SIMInfo?, prompt: Bool = false) -> URL {
 
         var params: [String: String] = [
             Params.clientId.rawValue: sdkConfig.clientId,
+            Params.version.rawValue: VERSION,
         ]
 
         if prompt {

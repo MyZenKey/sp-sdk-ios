@@ -27,13 +27,15 @@ func UnwrapAndAssertNotNil<T>(_ variable: T?,
 }
 
 // swiftlint:disable:next identifier_name
-func AssertHasQueryItemPair(url: URL?, key: String, value: String) {
+func AssertHasQueryItemPair(url: URL?, key: String, value: String, file: StaticString = #file, line: UInt = #line) {
     guard
         let existingURL = url,
         let components = URLComponents(url: existingURL, resolvingAgainstBaseURL: false),
         let queryItems = components.queryItems,
         queryItems.contains(URLQueryItem(name: key, value: value)) else {
-            XCTFail("expected valid url with valid query pair. instead got: \(url.debugDescription)")
+            XCTFail("expected valid url with valid query pair. instead got: \(url.debugDescription)",
+                file: file,
+                line: line)
             return
     }
 }

@@ -95,7 +95,7 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
     }
 
     func testRequestSetProperties() {
-        let testScopes: [Scope] = [.secondFactor]
+        let testScopes: [Scope] = [.openid]
         let testAcrValues: [ACRValue]? = [.aal3, .aal2]
         let testRequestState: String? = "test-request-state"
         let testCorrelationId: String? = "test-correlation-id"
@@ -162,7 +162,11 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
     }
 
     func testButtonUpdatesReportsResult() {
-        let mockResponse = AuthorizedResponse(code: "foo", mcc: "bar", mnc: "bah", redirectURI: URL.mocked)
+        let mockResponse = AuthorizedResponse(code: "foo",
+                                              mcc: "bar",
+                                              mnc: "bah",
+                                              redirectURI: URL.mocked,
+                                              codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier())
         mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate
@@ -196,7 +200,11 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
     }
 
     func testButtonEnabledUponCompletion() {
-        let mockResponse = AuthorizedResponse(code: "foo", mcc: "bar", mnc: "bah", redirectURI: URL.mocked)
+        let mockResponse = AuthorizedResponse(code: "foo",
+                                              mcc: "bar",
+                                              mnc: "bah",
+                                              redirectURI: URL.mocked,
+                                              codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier())
         mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate

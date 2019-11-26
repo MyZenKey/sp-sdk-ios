@@ -32,7 +32,9 @@ class DefaultCurrentControllerContextProvider: CurrentControllerContextProvider 
 
 extension UIViewController {
     static var currentController: UIViewController? {
-        guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
+        let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+
+        guard let rootViewController = keyWindow?.rootViewController else {
             return nil
         }
         var currentViewController: UIViewController? = rootViewController

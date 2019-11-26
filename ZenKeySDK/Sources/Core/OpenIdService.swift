@@ -161,7 +161,8 @@ private extension OpenIdService {
                         code: code,
                         mcc: simInfo.mcc,
                         mnc: simInfo.mnc,
-                        redirectURI: request.parameters.redirectURL
+                        redirectURI: request.parameters.redirectURL,
+                        codeVerifier: request.pkce.codeVerifier
                     )
                 )
             )

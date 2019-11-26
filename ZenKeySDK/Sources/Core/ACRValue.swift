@@ -33,7 +33,8 @@ public enum ACRValue: String {
     /// will not be asked for their pin or biometrics. Any user holding the device will be able to
     /// authenticate/authorize the transaction unless the user has configured their account to
     /// always require 2nd factor (pin | bio).
-    case aal1
+    case aal1 = "a1"
+
     /// AAL2 provides high confidence that the claimant controls an authenticator(s) bound to the
     /// subscriber’s account. Proof of possession and control of two different authentication
     /// factors is required through secure authentication protocol(s). Approved cryptographic
@@ -46,8 +47,8 @@ public enum ACRValue: String {
     ///
     /// Service Providers should ask for aal2 or aal3 anytime they want to ensure the user has
     /// provided their (pin | bio).
+    case aal2 = "a2"
 
-    case aal2
     /// AAL3 provides very high confidence that the claimant controls authenticator(s) bound to the
     /// subscriber’s account. Authentication at AAL3 is based on proof of possession of a key
     /// through a cryptographic protocol. AAL3 authentication requires a hardware-based
@@ -59,5 +60,5 @@ public enum ACRValue: String {
     ///
     /// Service Providers should ask for aal2 or aal3 anytime they want to ensure the user has
     /// provided their (pin | bio).
-    case aal3
+    case aal3 = "a3"
 }

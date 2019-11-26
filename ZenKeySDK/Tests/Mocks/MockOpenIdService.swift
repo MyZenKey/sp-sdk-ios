@@ -11,7 +11,11 @@ import UIKit
 
 class MockOpenIdService: OpenIdServiceProtocol {
 
-    static let mockSuccess = AuthorizedResponse(code: "abc123", mcc: "123", mnc: "456", redirectURI: URL.mocked)
+    static let mockSuccess = AuthorizedResponse(code: "abc123",
+                                                mcc: "123",
+                                                mnc: "456",
+                                                redirectURI: URL.mocked,
+                                                codeVerifier: "JEg9Gg634BoVVTApb_XrVuS2vjHLnxO8MLRkdoLK_4K3Ypogd7ina144-KBXMQEZMLAGUeCxJWEXbDv9--_UXo1zklTWOZ37aB0D1HFsUYxsD7KIHoL-1CPCh3ELCMfV")
     var lastParameters: OpenIdAuthorizationRequest.Parameters?
     var lastCompletion: OpenIdServiceCompletion?
     var lastViewController: UIViewController?

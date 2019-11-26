@@ -32,6 +32,7 @@ public struct AuthorizedResponse: Equatable {
     /// The redirect URI used to deliver the result to the SDK. This must be provided to the
     /// Token Endpoint alongside the autorization code in order to issue the token.
     public let redirectURI: URL
+    public let codeVerifier: String
 }
 
 /// The outcome of an Authorization Operation.
@@ -132,7 +133,7 @@ public extension AuthorizationServiceProtocol {
     func authorize(
         scopes: [ScopeProtocol] = [Scope.openid],
         fromViewController viewController: UIViewController,
-        acrValues: [ACRValue]? = [.aal1],
+        acrValues: [ACRValue]? = nil,
         state: String? = nil,
         correlationId: String? = nil,
         context: String? = nil,
