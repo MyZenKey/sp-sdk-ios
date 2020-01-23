@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 5/16/19.
-//  Copyright © 2019 XCI JV, LLC. All rights reserved.
+//  Copyright © 2019 ZenKey, LLC. All rights reserved.
 //
 
 import UIKit

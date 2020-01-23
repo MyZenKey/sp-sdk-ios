@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 4/16/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.

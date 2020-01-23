@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 5/31/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ enum RequestStateError: Error {
     case generationFailed
 }
 
+/// Derived from https://github.com/openid/AppAuth-iOS
 private extension RandomStringGenerator {
     static func cryptographicallySecureRandomString(byteLength len: Int) -> String? {
         var bytes = [UInt8](repeating: 0, count: len)
@@ -57,6 +58,7 @@ private extension RandomStringGenerator {
     }
 }
 
+/// Derived from https://github.com/openid/AppAuth-iOS
 private extension Data {
     /// base64url encoded string per [rfc 4649 sec. 5](https://www.ietf.org/rfc/rfc4648.txt)
     ///
