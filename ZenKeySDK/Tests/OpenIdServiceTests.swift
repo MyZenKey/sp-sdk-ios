@@ -277,16 +277,16 @@ class AuthorizationRequestPKCETests: XCTestCase {
     }
 
     func testGeneratesValidCodeChallenge() {
-        let codeVerifier = "JEg9Gg634BoVVTApb_XrVuS2vjHLnxO8MLRkdoLK_4K3Ypogd7ina144-KBXMQEZMLAGUeCxJWEXbDv9--_UXo1zklTWOZ37aB0D1HFsUYxsD7KIHoL-1CPCh3ELCMfV"
-
-        let expectedCodeChallenge = "MTI4N2U2NjExYjBhMjQwNjAzMDM2ZGZkYmFlMDhhNzU4NzVjYWFiZDkxNmVhODNmYzJhOTg0YmQ4MWE3ODllMA=="
+        // Test PKCE spec value: https://tools.ietf.org/html/rfc7636#appendix-B
+        let codeVerifier = "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
+        let expectedCodeChallenge = "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"
         let testCodeChallenge = ProofKeyForCodeExchange.generateCodeChallenge(codeVerifier: codeVerifier)
 
         XCTAssertEqual(testCodeChallenge, expectedCodeChallenge)
 
-        let codeVerifier1 = "0zPYEcprd3VCoPo.CDmEqp5s47jfOpavpxZtmJ2gn_8g_rIIhdb4t8ItSnDJhDroZCBngc5bIDmVNQ~M065iGbn26Wg5JZhJ37Cy0gr9M2BNRslDiIu9OuG1IV_oMHxE"
-
-        let expectedCodeChallenge1 = "MjMyNWMyMjgyYzE3OGU0NzUwZmY4YzFjMzFlODc0NzZkYWNjOGRhOTFjOWYzZWYxOGJiYzVmNGNjMjAxODVmOQ=="
+        // Test full ZenKey verifier.
+        let codeVerifier1 = "x9Y~JzZVf7I0WLA.pcX11iSIR8W8B8J~7s9xfA6ftqlW5MMaJHdz0QwyOFLzcTKdchX7HNVwE9ty6m6j5ofep02_-fcx.cwt4FKaqzrtPZEMPa2gj.R70fQ2RA4z82XM"
+        let expectedCodeChallenge1 = "IjEemByjpngW8wqvWtBeylz6DTKmWvuNkyf6qK0e_Xo"
         let testCodeChallenge1 = ProofKeyForCodeExchange.generateCodeChallenge(codeVerifier: codeVerifier1)
 
         XCTAssertEqual(testCodeChallenge1, expectedCodeChallenge1)

@@ -26,6 +26,7 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 ### Removed
 ### Deprecated
 ### Fixed
+- PKCE codeChallenge generation now avoids extra hex encoding, and padding.
 ### Security
 
 ## [0.9.2] - 2020-01-22
