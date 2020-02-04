@@ -163,8 +163,7 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
 
     func testButtonUpdatesReportsResult() {
         let mockResponse = AuthorizedResponse(code: "foo",
-                                              mcc: "bar",
-                                              mnc: "bah",
+                                              mccmnc: "barbah",
                                               redirectURI: URL.mocked,
                                               codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier())
         mockAuthorizationService.mockResult = .code(mockResponse)
@@ -201,8 +200,7 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
 
     func testButtonEnabledUponCompletion() {
         let mockResponse = AuthorizedResponse(code: "foo",
-                                              mcc: "bar",
-                                              mnc: "bah",
+                                              mccmnc: "barbah",
                                               redirectURI: URL.mocked,
                                               codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier())
         mockAuthorizationService.mockResult = .code(mockResponse)

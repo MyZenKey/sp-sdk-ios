@@ -25,10 +25,8 @@ import UIKit
 public struct AuthorizedResponse: Equatable {
     /// Authorization code returned from the issuer.
     public let code: String
-    /// The Mobile Country Code used to identify the correct issuer.
-    public let mcc: String
-    /// The Mobile Network Code used to identify the correct issuer.
-    public let mnc: String
+    /// The Mobile Country Code and Mobile Network Code used to identify the correct issuer.
+    public let mccmnc: String
     /// The redirect URI used to deliver the result to the SDK. This must be provided to the
     /// Token Endpoint alongside the autorization code in order to issue the token.
     public let redirectURI: URL

@@ -21,18 +21,9 @@
 import Foundation
 
 struct SIMInfo: Equatable {
-    let mcc: String
-    let mnc: String
+    let mccmnc: String
 
     init(mcc: String, mnc: String) {
-        self.mcc = mcc
-        self.mnc = mnc
-    }
-}
-
-extension SIMInfo {
-    /// a string with the format '{mcc}{mnc}'
-    var networkString: String {
-        return "\(mcc)\(mnc)"
+        self.mccmnc = "\(mcc)\(mnc)"
     }
 }

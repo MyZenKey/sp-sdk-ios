@@ -191,8 +191,7 @@ extension AuthorizationServiceTests {
                 }
                 let mockedResponse = MockOpenIdService.mockSuccess
                 XCTAssertEqual(payload.code, mockedResponse.code)
-                XCTAssertEqual(payload.mcc, mockedResponse.mcc)
-                XCTAssertEqual(payload.mnc, mockedResponse.mnc)
+                XCTAssertEqual(payload.mccmnc, mockedResponse.mccmnc)
         }
         wait(for: [expectation], timeout: timeout)
     }

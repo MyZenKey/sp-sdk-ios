@@ -22,8 +22,10 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 
 ## [Unreleased]
 ### Added
+- New `mccmnc` parameter to `AuthorizedResponse`, use instead of mcc and mnc.  
 ### Changed
 ### Removed
+- [breaking] `mcc` and `mnc` parameters removed from `AuthorizedResponse`. Use `.mccmnc` instead. 
 ### Deprecated
 ### Fixed
 - PKCE codeChallenge generation now avoids extra hex encoding, and padding.

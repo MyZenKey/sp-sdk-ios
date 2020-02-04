@@ -184,7 +184,7 @@ private extension DiscoveryService {
         }
 
         if let simInfo = simInfo {
-            params[Params.mccmnc.rawValue] = simInfo.networkString
+            params[Params.mccmnc.rawValue] = simInfo.mccmnc
         }
 
         return hostConfig.resource(

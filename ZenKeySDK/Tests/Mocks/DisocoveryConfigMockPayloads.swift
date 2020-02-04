@@ -48,7 +48,7 @@ enum DiscoveryConfigMockPayloads {
             "client_secret_basic",
         ],
         "userinfo_endpoint": "https://iam.msg.t-mobile.com/oidc/v1/userinfo",
-        "mccmnc": Int(MockSIMs.tmobile.networkString)!,
+        "mccmnc": Int(MockSIMs.tmobile.mccmnc)!,
     ]
 
     static let carrierNotFound: [String: Any] = [
