@@ -23,6 +23,7 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 ## [Unreleased]
 ### Added
 - New `mccmnc` parameter to `AuthorizedResponse`, use instead of mcc and mnc.  
+- Support added for new `last_4_social` scope
 ### Changed
 ### Removed
 - [breaking] `mcc` and `mnc` parameters removed from `AuthorizedResponse`. Use `.mccmnc` instead. 
