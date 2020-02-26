@@ -23,10 +23,11 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 ## [Unreleased]
 ### Added
 - New `mccmnc` parameter to `AuthorizedResponse`, use instead of mcc and mnc.  
+- CONTRIBUTING.md file, defining the open source contribution policy.
 - Support added for new `last_4_social` scope
 ### Changed
 ### Removed
-- [breaking] `mcc` and `mnc` parameters removed from `AuthorizedResponse`. Use `.mccmnc` instead. 
+- [breaking] `mcc` and `mnc` parameters removed from `AuthorizedResponse`. Use `.mccmnc` instead.
 ### Deprecated
 ### Fixed
 - PKCE codeChallenge generation now avoids extra hex encoding, and padding.
