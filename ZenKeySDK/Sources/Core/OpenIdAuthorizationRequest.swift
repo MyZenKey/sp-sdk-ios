@@ -228,5 +228,5 @@ extension Data {
         encodedContext = encodedContext.replacingOccurrences(of: "/", with: "_")
         return encodedContext
     }
-    //TODO: refactor with base64URLEncodedString() including no_wrap option.
+    //TODO: refactor to combine with base64URLEncodedString() including a no_wrap option.
 }

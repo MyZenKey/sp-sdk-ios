@@ -60,6 +60,10 @@ extension AuthorizationServiceTests {
                 XCTAssertEqual(payload.code, mockedResponse.code)
                 XCTAssertEqual(payload.mccmnc, mockedResponse.mccmnc)
                 XCTAssertEqual(payload.codeVerifier, mockedResponse.codeVerifier)
+                XCTAssertEqual(payload.nonce, mockedResponse.nonce)
+                XCTAssertEqual(payload.acrValues, mockedResponse.acrValues)
+                XCTAssertEqual(payload.correlationId, mockedResponse.correlationId)
+                XCTAssertEqual(payload.context, mockedResponse.context)
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)

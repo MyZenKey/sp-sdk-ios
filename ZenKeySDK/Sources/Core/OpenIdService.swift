@@ -161,7 +161,11 @@ private extension OpenIdService {
                         code: code,
                         mccmnc: simInfo.mccmnc,
                         redirectURI: request.parameters.redirectURL,
-                        codeVerifier: request.pkce.codeVerifier
+                        codeVerifier: request.pkce.codeVerifier,
+                        nonce: request.parameters.nonce,
+                        acrValues: request.parameters.acrValues,
+                        correlationId: request.parameters.correlationId,
+                        context: request.parameters.context
                     )
                 )
             )
