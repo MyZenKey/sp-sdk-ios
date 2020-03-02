@@ -47,7 +47,7 @@ public enum Scope: String, ScopeProtocol, Equatable {
 
     /// User postal code
     case postalCode = "postal_code"
-    
+
     /// Last four digits of user SSN
     case last4Social = "last_4_social"
 

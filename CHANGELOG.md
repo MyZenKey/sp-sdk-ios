@@ -5,7 +5,8 @@ Any release before 1.0.0 may contain breaking changes.
 After 1.0.0 this project will adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Versions
-- [0.9.2 - 2020-01-22](#091---2020-01-22)
+- [0.9.3 - 2020-03-02](#093---2020-03-02)
+- [0.9.2 - 2020-01-22](#092---2020-01-22)
 - [0.9.1 - 2019-11-25](#091---2019-11-25)
 - [0.9.0 - 2019-10-21](#090---2019-10-21)
 
@@ -22,16 +23,21 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 
 ## [Unreleased]
 ### Added
+### Changed
+### Removed
+### Deprecated
+### Fixed
+### Security
+
+## [0.9.3] - 2020-03-02
+### Added
 - New `mccmnc` parameter to `AuthorizedResponse`, use instead of mcc and mnc.  
 - CONTRIBUTING.md file, defining the open source contribution policy.
 - Support added for new `last_4_social` scope
-### Changed
 ### Removed
 - [breaking] `mcc` and `mnc` parameters removed from `AuthorizedResponse`. Use `.mccmnc` instead.
-### Deprecated
 ### Fixed
 - PKCE codeChallenge generation now avoids extra hex encoding, and padding.
-### Security
 
 ## [0.9.2] - 2020-01-22
 ### Added
@@ -42,9 +48,7 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 - Copyright in file headers
 ### Removed
 - [breaking] `ZenKeyButtonView` made private until carrier endorsement work is completed. Use ZenKeyAuthorizeButton instead.
-### Deprecated
-### Fixed
-### Security
+
 
 ## [0.9.1] - 2019-11-25
 ### Added
