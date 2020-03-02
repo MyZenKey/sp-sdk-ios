@@ -159,10 +159,13 @@ private extension OpenIdService {
                 result: .code(
                     AuthorizedResponse(
                         code: code,
-                        mcc: simInfo.mcc,
-                        mnc: simInfo.mnc,
+                        mccmnc: simInfo.mccmnc,
                         redirectURI: request.parameters.redirectURL,
-                        codeVerifier: request.pkce.codeVerifier
+                        codeVerifier: request.pkce.codeVerifier,
+                        nonce: request.parameters.nonce,
+                        acrValues: request.parameters.acrValues,
+                        correlationId: request.parameters.correlationId,
+                        context: request.parameters.context
                     )
                 )
             )

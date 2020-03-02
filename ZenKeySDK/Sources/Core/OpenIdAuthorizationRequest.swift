@@ -165,7 +165,7 @@ struct ProofKeyForCodeExchange: Equatable {
         if challenge == codeVerifier {
             codeChallengeMethod = .plain
             // encode with base64url if we can't use SHA256
-            codeChallenge = codeVerifier.base64URLString()
+            codeChallenge = codeVerifier
         } else {
             codeChallengeMethod = .s256
             codeChallenge = challenge
@@ -183,7 +183,6 @@ struct ProofKeyForCodeExchange: Equatable {
             Log.log(.error, "Failed to render utf8 codeVerifier")
             return codeVerifier
         }
-
         var shaByteArray: [UInt8]
 
         // work around compiler/linker issues by checking twice. Archive fails if only test #available
@@ -202,9 +201,8 @@ struct ProofKeyForCodeExchange: Equatable {
                 CC_SHA256(buffer.baseAddress, CC_LONG(buffer.count), &shaByteArray)
             }
         }
-        // lower-case hex representation
-        let shaHexString = shaByteArray.map { String(format: "%02x", UInt8($0)) }.joined()
-        return shaHexString.base64URLString()
+        let base64sha = Data(bytes: shaByteArray as [UInt8], count: shaByteArray.count).base64URLString()
+        return base64sha
     }
 
     // Generate codeVerifier, a random string of length 128 from chars in `validChars`.
@@ -216,14 +214,19 @@ struct ProofKeyForCodeExchange: Equatable {
     }
 }
 
-extension String {
+extension Data {
     // Returns string encoded with base64url encoding as per RFC-4648 [https://tools.ietf.org/html/rfc4648]
-    // Replaces '+' and '/' with '-' and '_' respectively. Padding is not omitted.
-    func base64URLString() -> String {
-        var encodedContext = Data(self.utf8).base64EncodedString()
+    // Replaces '+' and '/' with '-' and '_' respectively.
+    // Padding is omitted.
+    // With no base64EncodedString options, there should be "no wrap" (e.g. no linefeed characters)
 
+    func base64URLString() -> String {
+        var encodedContext = self.base64EncodedString()
+
+        encodedContext = encodedContext.replacingOccurrences(of: "=", with: "")
         encodedContext = encodedContext.replacingOccurrences(of: "+", with: "-")
         encodedContext = encodedContext.replacingOccurrences(of: "/", with: "_")
         return encodedContext
     }
+    //TODO: refactor to combine with base64URLEncodedString() including a no_wrap option.
 }

@@ -163,10 +163,13 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
 
     func testButtonUpdatesReportsResult() {
         let mockResponse = AuthorizedResponse(code: "foo",
-                                              mcc: "bar",
-                                              mnc: "bah",
+                                              mccmnc: "barbah",
                                               redirectURI: URL.mocked,
-                                              codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier())
+                                              codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier(),
+                                              nonce: nil,
+                                              acrValues: [ZenKeySDK.ACRValue.aal3],
+                                              correlationId: nil,
+                                              context: nil)
         mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate
@@ -201,10 +204,13 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
 
     func testButtonEnabledUponCompletion() {
         let mockResponse = AuthorizedResponse(code: "foo",
-                                              mcc: "bar",
-                                              mnc: "bah",
+                                              mccmnc: "barbah",
                                               redirectURI: URL.mocked,
-                                              codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier())
+                                              codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier(),
+                                              nonce: nil,
+                                              acrValues: [ZenKeySDK.ACRValue.aal3],
+                                              correlationId: nil,
+                                              context: nil)
         mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate

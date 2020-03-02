@@ -103,7 +103,7 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
     }
 
     private func identifer(forSIMInfo simInfo: SIMInfo) -> String {
-        return "\(simInfo.mcc)\(simInfo.mnc)"
+        return simInfo.mccmnc
     }
 }
 
