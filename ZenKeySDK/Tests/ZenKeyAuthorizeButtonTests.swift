@@ -102,6 +102,7 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
         let testContext: String? = "test-context"
         let testPrompt: PromptValue? = .consent
         let testNonce: String? = "test-nonce"
+        let testTheme: Theme? = Theme.dark
 
         button.scopes = testScopes
         button.acrValues = testAcrValues
@@ -110,6 +111,7 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
         button.context = testContext
         button.prompt = testPrompt
         button.nonce = testNonce
+        button.theme = testTheme
 
         button.handlePress(sender: button)
         XCTAssertEqual(mockAuthorizationService.lastScopes as? [Scope], testScopes)
@@ -119,6 +121,7 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
         XCTAssertEqual(mockAuthorizationService.lastContext, testContext)
         XCTAssertEqual(mockAuthorizationService.lastPrompt, testPrompt)
         XCTAssertEqual(mockAuthorizationService.lastNonce, testNonce)
+        XCTAssertEqual(mockAuthorizationService.lastTheme, testTheme)
     }
 
     func testGetsCurrentViewController() {

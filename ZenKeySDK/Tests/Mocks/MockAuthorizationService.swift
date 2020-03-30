@@ -20,6 +20,7 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
     var lastContext: String?
     var lastPrompt: PromptValue?
     var lastNonce: String?
+    var lastTheme: Theme?
 
     var lastViewController: UIViewController?
     var lastCompletion: AuthorizationCompletion?
@@ -36,6 +37,7 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
         lastContext = nil
         lastPrompt = nil
         lastNonce = nil
+        lastTheme = nil
 
         lastViewController = nil
         lastCompletion = nil
@@ -57,6 +59,7 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
         context: String?,
         prompt: PromptValue?,
         nonce: String?,
+        theme: Theme?,
         completion: @escaping AuthorizationCompletion) {
 
         lastScopes = scopes
@@ -66,6 +69,7 @@ class MockAuthorizationService: AuthorizationServiceProtocol {
         lastContext = context
         lastPrompt = prompt
         lastNonce = nonce
+        lastTheme = theme
 
         lastViewController = viewController
         lastCompletion = completion

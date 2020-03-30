@@ -23,6 +23,7 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 
 ## [Unreleased]
 ### Added
+- Optional `theme` parameter to override light/dark theme for authorization UX.
 ### Changed
 ### Removed
 ### Deprecated

@@ -105,6 +105,11 @@ public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
     /// `RandomStringGenerator` class exposes a method suitable for generating this value.
     public var nonce: String?
 
+    /// Optional Theme (.light or .dark) to be used for the authorization UX. If included it will
+    /// override user preference to ensure a coherent, consistent experience with the Service
+    /// Provider's app design.
+    public var theme: Theme?
+
     /// the button's delegate
     /// - SeeAlso: ZenKeyAuthorizeButtonDelegate
     public weak var delegate: ZenKeyAuthorizeButtonDelegate?
@@ -167,7 +172,8 @@ public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
             correlationId: correlationId,
             context: context,
             prompt: prompt,
-            nonce: nonce) { [weak self] result in
+            nonce: nonce,
+            theme: theme) { [weak self] result in
                 self?.handle(result: result)
         }
     }

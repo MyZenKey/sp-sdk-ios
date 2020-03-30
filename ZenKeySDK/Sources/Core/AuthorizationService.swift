@@ -102,6 +102,9 @@ public protocol AuthorizationServiceProtocol: AnyObject {
     ///     entropy MUST be present in the nonce values used to prevent attackers from guessing
     ///     values. The nonce is optional and the default value is `nil`. The
     ///     `RandomStringGenerator` class exposes a method suitable for generating this value.
+    ///   - theme: Optional Theme (.light or .dark) to be used for the authorization UX. If included it
+    ///     will override user preference to ensure a coherent, consistent experience with the Service
+    ///     Provider's app design.
     ///   - completion: an escaping block executed asynchronously, on the main thread. This
     ///    block will take one parameter, a result, see `AuthorizationResult` for more information.
     ///
@@ -121,6 +124,7 @@ public protocol AuthorizationServiceProtocol: AnyObject {
                    context: String?,
                    prompt: PromptValue?,
                    nonce: String?,
+                   theme: Theme?,
                    completion: @escaping AuthorizationCompletion)
 
     /// Cancels the current authorization request, if any.
@@ -141,6 +145,7 @@ public extension AuthorizationServiceProtocol {
         context: String? = nil,
         prompt: PromptValue? = nil,
         nonce: String? = nil,
+        theme: Theme? = nil,
         completion: @escaping AuthorizationCompletion) {
 
         authorize(
@@ -152,6 +157,7 @@ public extension AuthorizationServiceProtocol {
             context: context,
             prompt: prompt,
             nonce: nonce,
+            theme: theme,
             completion: completion
         )
     }
@@ -185,6 +191,7 @@ extension AuthorizationService: AuthorizationServiceProtocol {
         context: String?,
         prompt: PromptValue?,
         nonce: String?,
+        theme: Theme?,
         completion: @escaping AuthorizationCompletion) {
 
         if let previousRequest = AuthorizationServiceCurrentRequestStorage.shared.currentRequestingService {
@@ -202,6 +209,7 @@ extension AuthorizationService: AuthorizationServiceProtocol {
             context: context,
             prompt: prompt,
             nonce: nonce,
+            theme: theme,
             completion: completion
         )
     }

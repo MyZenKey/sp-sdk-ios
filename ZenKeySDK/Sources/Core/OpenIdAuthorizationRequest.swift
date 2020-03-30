@@ -56,6 +56,7 @@ extension OpenIdAuthorizationRequest {
         let context: String?
         var loginHintToken: String?
         let version: String
+        let theme: Theme?
 
         init(clientId: String,
              redirectURL: URL,
@@ -66,7 +67,8 @@ extension OpenIdAuthorizationRequest {
              prompt: PromptValue?,
              correlationId: String?,
              context: String?,
-             loginHintToken: String?) {
+             loginHintToken: String?,
+             theme: Theme?) {
 
             self.clientId = clientId
             self.redirectURL = redirectURL
@@ -79,6 +81,7 @@ extension OpenIdAuthorizationRequest {
             self.context = context
             self.loginHintToken = loginHintToken
             self.version = VERSION
+            self.theme = theme
         }
 
         mutating func safeSet(state: String) {
@@ -110,6 +113,7 @@ extension OpenIdAuthorizationRequest {
         case codeChallenge = "code_challenge"
         case codeChallengeMethod = "code_challenge_method"
         case version = "sdk_version"
+        case options = "options"
     }
 
     var authorizationRequestURL: URL {
@@ -131,6 +135,7 @@ extension OpenIdAuthorizationRequest {
             URLQueryItem(name: Keys.codeChallenge.rawValue, value: pkce.codeChallenge),
             URLQueryItem(name: Keys.codeChallengeMethod.rawValue, value: pkce.codeChallengeMethod.rawValue),
             URLQueryItem(name: Keys.version.rawValue, value: VERSION),
+            URLQueryItem(name: Keys.options.rawValue, value: parameters.theme?.rawValue),
         ].filter() { $0.value != nil }
 
         var builder = URLComponents(url: resource, resolvingAgainstBaseURL: false)

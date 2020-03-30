@@ -157,7 +157,8 @@ extension AuthorizationServiceTests {
             prompt: .consent,
             correlationId: "bar",
             context: "biz",
-            loginHintToken: nil
+            loginHintToken: nil,
+            theme: Theme.dark
         )
 
         authorizationService.authorize(
@@ -168,7 +169,8 @@ extension AuthorizationServiceTests {
             correlationId: expected.correlationId,
             context: expected.context,
             prompt: expected.prompt,
-            nonce: expected.nonce) { _ in
+            nonce: expected.nonce,
+            theme: expected.theme) { _ in
                 XCTAssertEqual(self.mockOpenIdService.lastViewController, expectedController)
                 XCTAssertEqual(self.mockOpenIdService.lastParameters, expected)
                 expectation.fulfill()

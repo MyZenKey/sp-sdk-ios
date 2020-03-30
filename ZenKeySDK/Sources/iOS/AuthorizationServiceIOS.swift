@@ -74,6 +74,7 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocolInternal {
         context: String? = nil,
         prompt: PromptValue? = nil,
         nonce: String? = nil,
+        theme: Theme? = nil,
         completion: @escaping AuthorizationCompletion) {
 
         precondition(Thread.isMainThread, "You should only call `authorize` from the main thread.")
@@ -88,7 +89,8 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocolInternal {
             prompt: prompt,
             correlationId: correlationId,
             context: context,
-            loginHintToken: nil
+            loginHintToken: nil,
+            theme: theme
         )
 
         let stateMachine = AuthorizationServiceStateMachine(

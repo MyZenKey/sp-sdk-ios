@@ -95,7 +95,8 @@ extension OpenIdAuthorizationRequest.Parameters {
             prompt: nil,
             correlationId: nil,
             context: nil,
-            loginHintToken: nil
+            loginHintToken: nil,
+            theme: nil
         )
     }
 }
