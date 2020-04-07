@@ -54,20 +54,6 @@ private extension RandomStringGenerator {
         }
 
         return Data(bytes: &bytes, count: len)
-            .base64URLEncodedString()
-    }
-}
-
-/// Derived from https://github.com/openid/AppAuth-iOS
-private extension Data {
-    /// base64url encoded string per [rfc 4649 sec. 5](https://www.ietf.org/rfc/rfc4648.txt)
-    ///
-    /// omits padding and substitutes the 62nd and 63rd character for url safe variants.
-    func base64URLEncodedString() -> String {
-        return self
-            .base64EncodedString(options: .lineLength64Characters)
-            .replacingOccurrences(of: "=", with: "")
-            .replacingOccurrences(of: "+", with: "-")
-            .replacingOccurrences(of: "/", with: "_")
+            .base64URLString(noWrap: false)
     }
 }

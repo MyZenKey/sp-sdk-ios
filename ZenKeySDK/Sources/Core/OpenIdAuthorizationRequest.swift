@@ -223,15 +223,16 @@ extension Data {
     // Returns string encoded with base64url encoding as per RFC-4648 [https://tools.ietf.org/html/rfc4648]
     // Replaces '+' and '/' with '-' and '_' respectively.
     // Padding is omitted.
-    // With no base64EncodedString options, there should be "no wrap" (e.g. no linefeed characters)
 
-    func base64URLString() -> String {
-        var encodedContext = self.base64EncodedString()
-
+    func base64URLString(noWrap: Bool = true) -> String {
+        var encodedOptions: Data.Base64EncodingOptions = []
+        if noWrap == false {
+            encodedOptions = .lineLength64Characters
+        }
+        var encodedContext = self.base64EncodedString(options: encodedOptions)
         encodedContext = encodedContext.replacingOccurrences(of: "=", with: "")
         encodedContext = encodedContext.replacingOccurrences(of: "+", with: "-")
         encodedContext = encodedContext.replacingOccurrences(of: "/", with: "_")
         return encodedContext
     }
-    //TODO: refactor to combine with base64URLEncodedString() including a no_wrap option.
 }
