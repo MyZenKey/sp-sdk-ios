@@ -18,6 +18,7 @@
 //  limitations under the License.
 //
 
+//  swiftlint:disable file_length
 import UIKit
 
 /// A protocol which represents the interface for handling changes to branding information.
