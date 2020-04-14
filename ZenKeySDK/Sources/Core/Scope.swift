@@ -45,6 +45,12 @@ public enum Scope: String, ScopeProtocol, Equatable {
     /// User phone
     case phone
 
+    /// User address
+    case address
+
+    /// User date of birth
+    case birthdate
+
     /// User postal code
     case postalCode = "postal_code"
 
