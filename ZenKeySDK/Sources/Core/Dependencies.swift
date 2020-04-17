@@ -166,25 +166,28 @@ private extension Dependencies {
 
 extension Dependencies {
     /// Pulls the registered instance of the inferred type out of the dependency container.
-    ///
-    /// - Warning: If the inferred type is Optional<T> this function will not work. Always use a
-    ///     non-optional variable to drive the inference and assign to the optional variable as
-    ///     necessary.
     func resolve<T>() -> T {
-        guard let dependency = dependencies["\(T.self)"] else {
-            fatalError("attemtping to resolve a dependency of type \(T.self) that doesn't exist")
-        }
-
-        // FIXME: support optionals or remove type inferrence api
-        // currently this type infrence doesn't support inferring the wrapped inner out of an
-        // optional type – it will fail with a fatal error. use a non-optional typed var as a work
-        // around in the mean time.
-        guard let typedValue = dependency.value as? T else {
-            fatalError("attemtping to resolve a dependency of type \(T.self) that doesn't exist")
-        }
-
-        return typedValue
+        return resolveFor(name: "\(T.self)")
     }
+    /// Pulls the registered instance of the inferred type out of the dependency container.
+    func resolve<T: WrappedDependency>() -> T {
+        return resolveFor(name: "\(T.innerType)")
+    }
+
+    private func resolveFor<T>(name: String) -> T {
+        guard let dependency = dependencies["\(name)"], let value = dependency.value as? T else {
+            fatalError("attempting to resolve a dependency of type \(name) that doesn't exist")
+        }
+
+        return value
+    }
+}
+
+protocol WrappedDependency {
+    static var innerType: Any.Type { get }
+}
+extension Optional: WrappedDependency {
+    static var innerType: Any.Type { Wrapped.self }
 }
 
 private extension Dependencies {

@@ -46,7 +46,14 @@ class DependenciesTests: XCTestCase {
         assertResolutionViaFactory(type: AuthorizationServiceProtocolInternal.self, fromContainer: dependencies)
 
         assertResolutionViaFactory(type: BrandingProvider.self, fromContainer: dependencies)
+
+        assertOptionalResolution(type: DiscoveryServiceProtocol.self, fromContainer: dependencies)
     }
+}
+
+func assertOptionalResolution<T>(type: T.Type, fromContainer container: Dependencies) {
+    let value: T? = container.resolve()
+    XCTAssertNotNil(value)
 }
 
 func assertResolutionViaFactory<T>(type: T.Type, fromContainer container: Dependencies) {

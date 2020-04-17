@@ -29,6 +29,7 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 ### Removed
 ### Deprecated
 ### Fixed
+- Allow inferred optional dependancies to resolve without error
 ### Security
 
 ## [0.9.3] - 2020-03-02

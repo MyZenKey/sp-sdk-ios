@@ -62,8 +62,7 @@ public class ZenKeyAppDelegate {
         do {
             let sdkConfig = try SDKConfig.load(fromBundle: Bundle.main)
             self.dependencies = Dependencies(sdkConfig: sdkConfig, options: zenKeyOptions)
-            let discoveryService: DiscoveryServiceProtocol = self.dependencies.resolve()
-            self.discoveryService = discoveryService
+            self.discoveryService = self.dependencies.resolve()
             prefetchOIDC()
         } catch {
             fatalError("Bundle configuration error: \(error)")
