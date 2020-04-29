@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 3/11/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -35,11 +35,12 @@ public enum OAuthErrorCode: String {
     /// The service provider has constructed a bad request. This may be due to any of the parameters
     /// submitted. The service provider should only use code or async-token.
     case unsupportedResponseType = "unsupported_response_type"
-    /// The service provider has constructed a bad request. The service provider should visit the
-    /// service portal to confirm the
-    /// scopes allowed.
+    /// The service provider has constructed a bad request.
+    /// The service provider should visit the
+    /// service portal to confirm the scopes allowed.
     case invalidScope = "invalid_scope"
-    case serverError = "server_error"
+    /// There is a problem with the ZenKey solution or application.
+    /// An SP may assume that a retry at a later time may be successful.
     case temporarilyUnavailable = "temporarily_unavailable"
     /// The resource owner or authorization server denied the request.
     ///
@@ -58,7 +59,7 @@ extension OAuthErrorCode: AuthorizationErrorTypeMappable {
             return .unknownError
         case .invalidScope:
             return .invalidRequest
-        case .serverError, .temporarilyUnavailable:
+        case .temporarilyUnavailable:
             return .serverError
         }
     }
@@ -79,7 +80,7 @@ public enum OpenIdErrorCode: String {
     /// This error may be returned while carriers are still adding support for Request objects.
     case requestNotSupported = "request_not_supported"
     /// Request URI’s won’t be supported.
-    case requestUIRNotSupported = "request_uri_not_supported"
+    case requestURINotSupported = "request_uri_not_supported"
     /// Dynamic registration will not be supported.
     case registrationNotSupported = "registration_not_supported"
     /// This error should never be returned in the context of ZenKey.
@@ -95,7 +96,7 @@ extension OpenIdErrorCode: AuthorizationErrorTypeMappable {
             return .invalidRequest
         case .interactionRequired, .loginRequired, .accountSelectionRequired, .consentRequired,
              .invalidRequestURI, .requestNotSupported,
-             .requestUIRNotSupported, .registrationNotSupported:
+             .requestURINotSupported, .registrationNotSupported:
             return .unknownError
         }
     }
@@ -109,8 +110,6 @@ public enum ZenKeyErrorCode: String {
     ///
     /// The service provider should re-try discovery to locate this user.
     case userNotFound = "user_not_found"
-    /// The user has denied the transaction.
-    case requestDenied = "request_denied"
     /// The user may not have access to their phone and therefore the transaction may have failed.
     /// Or the user did not notice the request.
     case authenticationTimedOut = "authentication_timed_out"
@@ -122,26 +121,26 @@ public enum ZenKeyErrorCode: String {
     /// Note: this may occure after the carrier has been unable retrying a push message
     /// to a device <x> times. Over <x> min.
     case deviceUnavailable = "device_unavailable"
-    /// In the event device authentication has failed.
-    case deviceAuthenticationFailure = "device_authentication_failure"
     /// A user that does not have the CCID application, and or has decided not to install the CCID
     /// application. This error is likely on server initiated responses where the user does not have
     /// the app. Or may accur if the user had CCID but then changed devices, or uninstalled the app.
     case userUnsupported = "user_unsupported"
     /// The login hint token returned by discovery ui is not valid for this user on this carrier.
     case invalidLoginHint = "invalid_login_hint"
+    /// Formatting is incorrect. SP should try to use an extracted sub as login_hint.
+    case invalidLoginHintToken = "invalid_login_hint_token"
 }
 
 extension ZenKeyErrorCode: AuthorizationErrorTypeMappable {
     var errorType: AuthorizationError.ErrorType {
         switch self {
-        case .requestDenied, .deviceUnavailable, .deviceAuthenticationFailure:
+        case .deviceUnavailable:
             return .requestDenied
         case .networkFailure:
             return .networkFailure
         case .authenticationTimedOut:
             return .requestTimeout
-        case .userNotFound, .userUnsupported, .invalidLoginHint:
+        case .userNotFound, .userUnsupported, .invalidLoginHint, .invalidLoginHintToken:
             return .discoveryStateError
         }
     }

@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 4/3/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ public protocol ZenKeyAuthorizeButtonDelegate: AnyObject {
 /// via a delegeate.
 public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
 
-    /// A boolean indicating whether the backing autorization service is currently making a request
+    /// A boolean indicating whether the backing authorization service is currently making a request
     ///
     /// - SeeAlso: `AuthorizationService`
     public var isAuthorizing: Bool {
@@ -54,17 +54,27 @@ public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
     ///
     /// - SeeAlso: ScopeProtocol
     /// - SeeAlso: Scopes
-    public var scopes: [ScopeProtocol] = [] {
+    public var scopes: [ScopeProtocol] = []
+
+    /// Allows the type of title to be set. "Sign in with ZenKey" is the default,
+    /// and "Continue with ZenKey" is used if the titleType is set to .continue.
+    public var titleType: TitleType = TitleType.signInWith {
         didSet {
             updateButtonText()
         }
+    }
+
+    /// An enum specifying which text appears on the button.
+    public enum TitleType {
+        case continueWith
+        case signInWith
     }
 
     /// An array of authentication context class refernces. Service Providers may ask
     /// for more than one, and will get the first one the user has achieved. Values returned in
     /// id_token will contain aalx. Service Providers should not ask for any deprecated values
     /// (loax). The default acrValue is aal1.
-    public var acrValues: [ACRValue]? = [.aal1]
+    public var acrValues: [ACRValue]? = []
 
     /// An opaque value used to maintain state between the request and the callback. If
     /// `nil` is passed, a random string will be used.
@@ -94,6 +104,11 @@ public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
     /// values. The nonce is optional and the default value is `nil`. The
     /// `RandomStringGenerator` class exposes a method suitable for generating this value.
     public var nonce: String?
+
+    /// Optional Theme (.light or .dark) to be used for the authorization UX. If included it will
+    /// override user preference to ensure a coherent, consistent experience with the Service
+    /// Provider's app design.
+    public var theme: Theme?
 
     /// the button's delegate
     /// - SeeAlso: ZenKeyAuthorizeButtonDelegate
@@ -157,7 +172,8 @@ public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
             correlationId: correlationId,
             context: context,
             prompt: prompt,
-            nonce: nonce) { [weak self] result in
+            nonce: nonce,
+            theme: theme) { [weak self] result in
                 self?.handle(result: result)
         }
     }
@@ -197,16 +213,11 @@ private extension ZenKeyAuthorizeButton {
     }
 
     func updateButtonText() {
-        let scopesSet = Set<String>(scopes.map { $0.scopeString })
-        if  scopesSet.contains(Scope.authenticate.rawValue) ||
-            scopesSet.contains(Scope.register.rawValue) {
+        switch titleType {
+        case TitleType.continueWith:
+            updateBrandedText(Localization.Buttons.continueWithZenKey)
+        case TitleType.signInWith:
             updateBrandedText(Localization.Buttons.signInWithZenKey)
-        } else if scopesSet.contains(Scope.authorize.rawValue) ||
-                  scopesSet.contains(Scope.secondFactor.rawValue) {
-            updateBrandedText(Localization.Buttons.continueWithZenKey)
-        } else {
-            // use generic 'continue' message by default.
-            updateBrandedText(Localization.Buttons.continueWithZenKey)
         }
     }
 }

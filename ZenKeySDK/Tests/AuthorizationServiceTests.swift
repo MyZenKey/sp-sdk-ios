@@ -3,7 +3,19 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 2/26/19.
-//  Copyright © 2019 XCI JV, LLC. All rights reserved.
+//  Copyright © 2019 ZenKey, LLC. All rights reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import XCTest
@@ -24,7 +36,7 @@ class AuthorizationServiceTests: XCTestCase {
 
     lazy var authorizationService = authorizationServiceFactory()
 
-    let scopes: [Scope] = [.openid, .address, .address, .email]
+    let scopes: [Scope] = [.openid, .name, .email]
 
     override func setUp() {
         super.setUp()
@@ -123,7 +135,7 @@ extension AuthorizationServiceTests {
             scopes: self.scopes,
             fromViewController: expectedController) { _ in
                 XCTAssertEqual(self.mockOpenIdService.lastViewController, expectedController)
-                XCTAssertEqual(self.mockOpenIdService.lastParameters?.formattedScopes, "address email openid")
+                XCTAssertEqual(self.mockOpenIdService.lastParameters?.formattedScopes, "email name openid")
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)
@@ -150,14 +162,15 @@ extension AuthorizationServiceTests {
         let expected = OpenIdAuthorizationRequest.Parameters(
             clientId: mockSDKConfig.clientId,
             redirectURL: mockSDKConfig.redirectURL,
-            formattedScopes: "address email openid",
+            formattedScopes: "email name openid",
             state: "foo",
             nonce: "bar",
             acrValues: [.aal2],
             prompt: .consent,
             correlationId: "bar",
             context: "biz",
-            loginHintToken: nil
+            loginHintToken: nil,
+            theme: Theme.dark
         )
 
         authorizationService.authorize(
@@ -168,7 +181,8 @@ extension AuthorizationServiceTests {
             correlationId: expected.correlationId,
             context: expected.context,
             prompt: expected.prompt,
-            nonce: expected.nonce) { _ in
+            nonce: expected.nonce,
+            theme: expected.theme) { _ in
                 XCTAssertEqual(self.mockOpenIdService.lastViewController, expectedController)
                 XCTAssertEqual(self.mockOpenIdService.lastParameters, expected)
                 expectation.fulfill()
@@ -191,8 +205,7 @@ extension AuthorizationServiceTests {
                 }
                 let mockedResponse = MockOpenIdService.mockSuccess
                 XCTAssertEqual(payload.code, mockedResponse.code)
-                XCTAssertEqual(payload.mcc, mockedResponse.mcc)
-                XCTAssertEqual(payload.mnc, mockedResponse.mnc)
+                XCTAssertEqual(payload.mccmnc, mockedResponse.mccmnc)
         }
         wait(for: [expectation], timeout: timeout)
     }

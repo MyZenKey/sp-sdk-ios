@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 3/18/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -103,7 +103,7 @@ class ConfigCacheService: ConfigCacheServiceProtocol {
     }
 
     private func identifer(forSIMInfo simInfo: SIMInfo) -> String {
-        return "\(simInfo.mcc)\(simInfo.mnc)"
+        return simInfo.mccmnc
     }
 }
 

@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 5/30/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -31,4 +31,6 @@ public enum PromptValue: String {
     /// An SP can ask for a user to explicitly re-confirm that the user agrees to the exposure of
     /// their data. The MNO will recapture user consent for the listed scopes.
     case consent
+    /// No prompt specified.
+    case none
 }

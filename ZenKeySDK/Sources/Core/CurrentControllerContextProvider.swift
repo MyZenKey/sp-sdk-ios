@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 4/12/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -32,7 +32,9 @@ class DefaultCurrentControllerContextProvider: CurrentControllerContextProvider 
 
 extension UIViewController {
     static var currentController: UIViewController? {
-        guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
+        let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+
+        guard let rootViewController = keyWindow?.rootViewController else {
             return nil
         }
         var currentViewController: UIViewController? = rootViewController

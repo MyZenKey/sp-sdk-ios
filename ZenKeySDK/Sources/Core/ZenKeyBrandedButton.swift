@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 4/10/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 //  limitations under the License.
 //
 
+//  swiftlint:disable file_length
 import UIKit
 
 /// A protocol which represents the interface for handling changes to branding information.
@@ -174,12 +175,12 @@ public class ZenKeyBrandedButton: UIButton {
         let widthDelta = boundsSize.width - contentSize.width
         let heightDelta = boundsSize.height - contentSize.height
 
-        // if negative, apply bounded to minimum insets, else use the marigns:
+        // if negative, apply delta to insets, else use the marigns:
         let widthModifier = widthDelta >= 0 ? 0 : widthDelta
         let heightModifier = heightDelta >= 0 ? 0 : heightDelta
         let fitMargins = CGSize(
-            width: max( (Insets.horizontal * 2) + widthModifier, Insets.Minimum.horizontal * 2 ),
-            height: max( (Insets.vertical * 2) + heightModifier, Insets.Minimum.vertical * 2 )
+            width: Insets.horizontal * 2 + widthModifier,
+            height: Insets.vertical * 2 + heightModifier
         )
 
         return CGRect(x: fitMargins.width / 2,
@@ -202,9 +203,15 @@ public class ZenKeyBrandedButton: UIButton {
         // min x must be >= image + interitem spacing, max x must be <= right margin
         // y axis: use content rect
         let titleSize = measuredTitleSize
-        let boundedTextRectCenteredInButton = CGRect(
-            x: contentRect.minX + max((contentRect.width - titleSize.width), 1) / 2,
-            y: contentRect.minY + max((contentRect.height - titleSize.height), 1) / 2,
+        let imageSize = measuredImageSize
+
+        // the width of the space remaining in the contentRect after the image has been placed,
+        // plus the rightmost padding
+        let remainingWidth = (contentRect.width - imageSize.width) + Insets.horizontal
+
+        let boundedTextRectCenteredInRemainingSpace = CGRect(
+            x: contentRect.minX + imageSize.width + max(remainingWidth - titleSize.width, 1) / 2,
+            y: contentRect.minY + max(contentRect.height - titleSize.height, 1) / 2,
             width: min(titleSize.width, contentRect.width),
             height: min(titleSize.height, contentRect.width)
         )
@@ -215,12 +222,12 @@ public class ZenKeyBrandedButton: UIButton {
         //    then use the centered frame.
         // 2) if text won't fit in that space, left justify and grow from there.
         let xOrigin: CGFloat
-        if boundedTextRectCenteredInButton.width >= titleSize.width &&
-            boundedTextRectCenteredInButton.minX >= imageRectPlusInteritem {
-            xOrigin = boundedTextRectCenteredInButton.origin.x
+        if boundedTextRectCenteredInRemainingSpace.width >= titleSize.width &&
+            boundedTextRectCenteredInRemainingSpace.minX >= imageRectPlusInteritem {
+            xOrigin = boundedTextRectCenteredInRemainingSpace.origin.x
         } else {
             // NOTE: we could also grow from the right:
-            // ie: contentRect.maxX - boundedTextRectCenteredInButton.size.width
+            // ie: contentRect.maxX - boundedTextRectCenteredInRemainingSpace.size.width
             // or attempt to center this rect bewteen the imageRectPlusInteritem & right margin
             xOrigin = imageRectPlusInteritem
         }
@@ -228,7 +235,7 @@ public class ZenKeyBrandedButton: UIButton {
         return CGRect(
             x: xOrigin,
             y: contentRect.minY,
-            width: min( boundedTextRectCenteredInButton.size.width, contentRect.maxX - xOrigin ),
+            width: min( boundedTextRectCenteredInRemainingSpace.size.width, contentRect.maxX - xOrigin ),
             height: contentRect.height
         )
     }
@@ -240,13 +247,13 @@ public class ZenKeyBrandedButton: UIButton {
             return .zero
         }
 
-        // preserve aspect ratio if scaled down
-        // constraining axis is delta with greater abs:
+        // Preserve aspect ratio if scaled down.
+        // Constraining axis is delta with greater abs:
         let deltaX = contentRect.size.width - imageSize.width
         let deltaY = contentRect.size.height - imageSize.height
 
-        // use image size if it will fit
-        guard deltaX <= 0 || deltaY <= 0 else {
+        // use image size if it will fit in the contentRect
+        if deltaX > 0 && deltaY > 0 {
             return CGRect(
                 x: contentRect.minX,
                 y: contentRect.midY - imageSize.height / 2,
@@ -420,12 +427,12 @@ private extension ZenKeyBrandedButton {
 private extension ZenKeyBrandedButton {
     enum Constants {
         static let cornerRadius: CGFloat = 2
-        static let interitemSpacing: CGFloat = 25
+        static let interitemSpacing: CGFloat = 20
     }
 
     enum Insets {
         static let vertical: CGFloat = 12
-        static let horizontal: CGFloat = 24
+        static let horizontal: CGFloat = 20
         // swiftlint:disable:next nesting
         enum Minimum {
             static let vertical: CGFloat = 5

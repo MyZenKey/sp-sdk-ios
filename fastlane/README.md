@@ -21,51 +21,16 @@ or alternatively using `brew cask install fastlane`
 fastlane ios test
 ```
 Runs tests
-### ios develop
+### ios bump
 ```
-fastlane ios develop
+fastlane ios bump
 ```
-Builds and submits a Develop release to Hockey
-### ios sprint
+Bumps ZenKeySDK.podspec and Version.swift
+### ios release
 ```
-fastlane ios sprint
+fastlane ios release
 ```
-Builds and submits a Sprint release to Hockey
-### ios bankapp_roundtrip
-```
-fastlane ios bankapp_roundtrip
-```
-Archives BankApp for submission to Browserstack as part of round trip UI testing with the CCID app.
-### ios generate_docs
-```
-fastlane ios generate_docs
-```
-Generates Docs
-### ios post_docs
-```
-fastlane ios post_docs
-```
-Posts Docs to Slack
-### ios coverage
-```
-fastlane ios coverage
-```
-Runs Code Coverage
-### ios update_pods
-```
-fastlane ios update_pods
-```
-Updates the pods for all Example repos
-### ios write_secrets
-```
-fastlane ios write_secrets
-```
-Write secret configs
-### ios strip_secrets
-```
-fastlane ios strip_secrets
-```
-Remove secrets from configs
+Makes new GitHub release from master
 
 ----
 

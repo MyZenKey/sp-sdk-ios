@@ -3,7 +3,19 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 6/6/19.
-//  Copyright © 2019 XCI JV, LLC. All rights reserved.
+//  Copyright © 2019 ZenKey, LLC. All rights reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import XCTest
@@ -58,8 +70,12 @@ extension AuthorizationServiceTests {
                 }
                 let mockedResponse = MockOpenIdService.mockSuccess
                 XCTAssertEqual(payload.code, mockedResponse.code)
-                XCTAssertEqual(payload.mcc, mockedResponse.mcc)
-                XCTAssertEqual(payload.mnc, mockedResponse.mnc)
+                XCTAssertEqual(payload.mccmnc, mockedResponse.mccmnc)
+                XCTAssertEqual(payload.codeVerifier, mockedResponse.codeVerifier)
+                XCTAssertEqual(payload.nonce, mockedResponse.nonce)
+                XCTAssertEqual(payload.acrValues, mockedResponse.acrValues)
+                XCTAssertEqual(payload.correlationId, mockedResponse.correlationId)
+                XCTAssertEqual(payload.context, mockedResponse.context)
                 expectation.fulfill()
         }
         wait(for: [expectation], timeout: timeout)

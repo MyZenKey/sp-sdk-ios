@@ -1,5 +1,5 @@
 ### Addresses
-This Pull Request addresses  [XCI-XXXX](https://raizlabs.atlassian.net/browse/XCI-XXXX)
+This Pull Request addresses [Ticket #XXXX](Ticket or issue link)
 
 ### Notes:
 [Optional: list the changes you've made, conceptually]

@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 5/31/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ enum RequestStateError: Error {
     case generationFailed
 }
 
+/// Derived from https://github.com/openid/AppAuth-iOS
 private extension RandomStringGenerator {
     static func cryptographicallySecureRandomString(byteLength len: Int) -> String? {
         var bytes = [UInt8](repeating: 0, count: len)
@@ -53,19 +54,6 @@ private extension RandomStringGenerator {
         }
 
         return Data(bytes: &bytes, count: len)
-            .base64URLEncodedString()
-    }
-}
-
-private extension Data {
-    /// base64url encoded string per [rfc 4649 sec. 5](https://www.ietf.org/rfc/rfc4648.txt)
-    ///
-    /// omits padding and substitutes the 62nd and 63rd character for url safe variants.
-    func base64URLEncodedString() -> String {
-        return self
-            .base64EncodedString(options: .lineLength64Characters)
-            .replacingOccurrences(of: "=", with: "")
-            .replacingOccurrences(of: "+", with: "-")
-            .replacingOccurrences(of: "/", with: "_")
+            .base64URLString(noWrap: false)
     }
 }

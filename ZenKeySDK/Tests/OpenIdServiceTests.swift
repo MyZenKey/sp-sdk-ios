@@ -3,7 +3,19 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 3/6/19.
-//  Copyright © 2019 XCI JV, LLC. All rights reserved.
+//  Copyright © 2019 ZenKey, LLC. All rights reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import XCTest
@@ -84,8 +96,7 @@ class OpenIdServiceTests: XCTestCase {
                 }
 
                 XCTAssertEqual(response.code, "TESTCODE")
-                XCTAssertEqual(response.mcc, MockSIMs.tmobile.mcc)
-                XCTAssertEqual(response.mnc, MockSIMs.tmobile.mnc)
+                XCTAssertEqual(response.mccmnc, MockSIMs.tmobile.mccmnc)
                 XCTAssertEqual(response.redirectURI, OpenIdServiceTests.mockParameters.redirectURL)
         }
 
@@ -234,7 +245,8 @@ extension OpenIdServiceTests {
         prompt: nil,
         correlationId: nil,
         context: nil,
-        loginHintToken: nil
+        loginHintToken: nil,
+        theme: nil
     )
 
     static let mockRequest = OpenIdAuthorizationRequest(resource: URL.mocked, parameters: mockParameters)
@@ -246,6 +258,52 @@ extension OpenIdServiceTests {
             issuer: URL.mocked
         )
     )
+}
+
+class AuthorizationRequestPKCETests: XCTestCase {
+
+    static let mockParameters = OpenIdAuthorizationRequest.Parameters(
+        clientId: "foo",
+        redirectURL: URL(string: "testapp://zenkey/authorize")!,
+        formattedScopes: "openid",
+        state: "bar",
+        nonce: nil,
+        acrValues: [.aal1],
+        prompt: nil,
+        correlationId: nil,
+        context: nil,
+        loginHintToken: nil,
+        theme: nil
+    )
+
+    override class func setUp() {
+        super.setUp()
+    }
+
+    func testGeneratesValidCodeVerifier() {
+        let mockRequest = OpenIdAuthorizationRequest(resource: URL.mocked, parameters: Self.mockParameters)
+        let codeVerifier = mockRequest.pkce.codeVerifier
+        XCTAssertTrue(codeVerifier.count == 128)
+        let validCharSet =
+            CharacterSet.init(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~")
+        XCTAssertTrue(validCharSet.isSuperset(of: CharacterSet(charactersIn: codeVerifier)))
+    }
+
+    func testGeneratesValidCodeChallenge() {
+        // Test PKCE spec value: https://tools.ietf.org/html/rfc7636#appendix-B
+        let codeVerifier = "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
+        let expectedCodeChallenge = "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"
+        let testCodeChallenge = ProofKeyForCodeExchange.generateCodeChallenge(codeVerifier: codeVerifier)
+
+        XCTAssertEqual(testCodeChallenge, expectedCodeChallenge)
+
+        // Test full ZenKey verifier.
+        let codeVerifier1 = "x9Y~JzZVf7I0WLA.pcX11iSIR8W8B8J~7s9xfA6ftqlW5MMaJHdz0QwyOFLzcTKdchX7HNVwE9ty6m6j5ofep02_-fcx.cwt4FKaqzrtPZEMPa2gj.R70fQ2RA4z82XM"
+        let expectedCodeChallenge1 = "IjEemByjpngW8wqvWtBeylz6DTKmWvuNkyf6qK0e_Xo"
+        let testCodeChallenge1 = ProofKeyForCodeExchange.generateCodeChallenge(codeVerifier: codeVerifier1)
+
+        XCTAssertEqual(testCodeChallenge1, expectedCodeChallenge1)
+    }
 }
 
 // MARK: - Request Building
@@ -263,34 +321,19 @@ class AuthorizationURLBuilderTests: XCTestCase {
             prompt: nil,
             correlationId: nil,
             context: nil,
-            loginHintToken: nil
+            loginHintToken: nil,
+            theme: nil
         )
 
         let request = OpenIdAuthorizationRequest(resource: URL.mocked, parameters: parameters)
+        let challenge = request.pkce.codeChallenge.replacingOccurrences(of: "=", with: "%3D")
 
         let expectedURL = URL(
             // swiftlint:disable:next line_length
-            string: "https://rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://rightpoint.com&response_type=code"
+            string: "https://myzenkey.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://myzenkey.com&response_type=code&code_challenge=\(challenge)&code_challenge_method=S256&sdk_version=\(VERSION)"
         )!
 
         XCTAssertEqual(request.authorizationRequestURL, expectedURL)
-    }
-
-    func testBase64EncodesContextCorrectly() {
-        let parameters = OpenIdAuthorizationRequest.Parameters(
-            clientId: "1234",
-            redirectURL: URL.mocked,
-            formattedScopes: "openid profile email",
-            state: "foo",
-            nonce: "bar",
-            acrValues: [.aal1],
-            prompt: .consent,
-            correlationId: "fizz",
-            context: "buzz",
-            loginHintToken: "boo"
-        )
-
-        XCTAssertEqual(parameters.base64EncodedContext, "YnV6eg==")
     }
 
     func testBuildsCorrectRequestWithOptionalParameters() {
@@ -303,16 +346,64 @@ class AuthorizationURLBuilderTests: XCTestCase {
             acrValues: [.aal1],
             prompt: .consent,
             correlationId: "fizz",
-            context: "buzz",
-            loginHintToken: "boo"
+            context: "buz zz ",
+            loginHintToken: "boo",
+            theme: Theme.dark
+        )
+
+        let parameters1 = OpenIdAuthorizationRequest.Parameters(
+            clientId: "1234",
+            redirectURL: URL.mocked,
+            formattedScopes: "openid profile email",
+            state: "foo",
+            nonce: "bar",
+            acrValues: [.aal1],
+            prompt: .consent,
+            correlationId: "fizz",
+            context: "!*'();:@&=+$,/?#[]😀",
+            loginHintToken: "boo",
+            theme: Theme.light
+        )
+
+        let parameters2 = OpenIdAuthorizationRequest.Parameters(
+            clientId: "1234",
+            redirectURL: URL.mocked,
+            formattedScopes: "openid profile email",
+            state: "foo",
+            nonce: "bar",
+            acrValues: [.aal1],
+            prompt: .consent,
+            correlationId: "fizz",
+            context: "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz0123456789-_.~",
+            loginHintToken: "boo",
+            theme: Theme.dark
         )
 
         let request = OpenIdAuthorizationRequest(resource: URL.mocked, parameters: parameters)
+        let request1 = OpenIdAuthorizationRequest(resource: URL.mocked, parameters: parameters1)
+        let request2 = OpenIdAuthorizationRequest(resource: URL.mocked, parameters: parameters2)
+
+        let challenge = request.pkce.codeChallenge.replacingOccurrences(of: "=", with: "%3D")
+        let challenge1 = request1.pkce.codeChallenge.replacingOccurrences(of: "=", with: "%3D")
+        let challenge2 = request2.pkce.codeChallenge.replacingOccurrences(of: "=", with: "%3D")
 
         let expectedURL = URL(
             // swiftlint:disable:next line_length
-            string: "https://rightpoint.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://rightpoint.com&response_type=code&state=foo&nonce=bar&login_hint_token=boo&acr_values=aal1&correlation_id=fizz&context=YnV6eg%3D%3D&prompt=consent"
+            string: "https://myzenkey.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://myzenkey.com&response_type=code&state=foo&nonce=bar&login_hint_token=boo&acr_values=a1&correlation_id=fizz&context=buz%20zz%20&prompt=consent&code_challenge=\(challenge)&code_challenge_method=S256&sdk_version=\(VERSION)&options=dark"
          )!
         XCTAssertEqual(request.authorizationRequestURL, expectedURL)
-    }
+
+        let expectedURL1 = URL(
+            // swiftlint:disable:next line_length
+            string: "https://myzenkey.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://myzenkey.com&response_type=code&state=foo&nonce=bar&login_hint_token=boo&acr_values=a1&correlation_id=fizz&context=!*'();:@%26%3D+$,/?%23%5B%5D%F0%9F%98%80&prompt=consent&code_challenge=\(challenge1)&code_challenge_method=S256&sdk_version=\(VERSION)&options=light"
+            )!
+        XCTAssertEqual(request1.authorizationRequestURL, expectedURL1)
+
+        let expectedURL2 = URL(
+            // swiftlint:disable:next line_length
+            string: "https://myzenkey.com?client_id=1234&scope=openid%20profile%20email&redirect_uri=https://myzenkey.com&response_type=code&state=foo&nonce=bar&login_hint_token=boo&acr_values=a1&correlation_id=fizz&context=ABCDEFGHIJKLMNOPQRSTUVWXYZ%20abcdefghijklmnopqrstuvwxyz0123456789-_.~&prompt=consent&code_challenge=\(challenge2)&code_challenge_method=S256&sdk_version=\(VERSION)&options=dark"
+            )!
+        XCTAssertEqual(request2.authorizationRequestURL, expectedURL2)
+
+        }
 }

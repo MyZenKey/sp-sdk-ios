@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 2/21/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -169,12 +169,14 @@ private extension DiscoveryService {
         case clientId = "client_id"
         case mccmnc
         case prompt
+        case version = "sdk_version"
     }
 
     func discoveryEndpoint(forSIMInfo simInfo: SIMInfo?, prompt: Bool = false) -> URL {
 
         var params: [String: String] = [
             Params.clientId.rawValue: sdkConfig.clientId,
+            Params.version.rawValue: VERSION,
         ]
 
         if prompt {
@@ -182,7 +184,7 @@ private extension DiscoveryService {
         }
 
         if let simInfo = simInfo {
-            params[Params.mccmnc.rawValue] = simInfo.networkString
+            params[Params.mccmnc.rawValue] = simInfo.mccmnc
         }
 
         return hostConfig.resource(

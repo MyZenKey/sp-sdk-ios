@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 2/21/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -21,18 +21,9 @@
 import Foundation
 
 struct SIMInfo: Equatable {
-    let mcc: String
-    let mnc: String
+    let mccmnc: String
 
     init(mcc: String, mnc: String) {
-        self.mcc = mcc
-        self.mnc = mnc
-    }
-}
-
-extension SIMInfo {
-    /// a string with the format '{mcc}{mnc}'
-    var networkString: String {
-        return "\(mcc)\(mnc)"
+        self.mccmnc = "\(mcc)\(mnc)"
     }
 }

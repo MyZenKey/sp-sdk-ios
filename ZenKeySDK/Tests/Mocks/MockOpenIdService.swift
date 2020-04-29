@@ -3,7 +3,19 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 5/30/19.
-//  Copyright © 2019 XCI JV, LLC. All rights reserved.
+//  Copyright © 2019 ZenKey, LLC. All rights reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import UIKit
@@ -11,7 +23,15 @@ import UIKit
 
 class MockOpenIdService: OpenIdServiceProtocol {
 
-    static let mockSuccess = AuthorizedResponse(code: "abc123", mcc: "123", mnc: "456", redirectURI: URL.mocked)
+    static let mockSuccess = AuthorizedResponse(code: "abc123",
+                                                mccmnc: "123456",
+                                                redirectURI: URL.mocked,
+                                                codeVerifier: "JEg9Gg634BoVVTApb_XrVuS2vjHLnxO8MLRkdoLK_4K3Ypogd7ina144-KBXMQEZMLAGUeCxJWEXbDv9--_UXo1zklTWOZ37aB0D1HFsUYxsD7KIHoL-1CPCh3ELCMfV",
+                                                nonce: "654321",
+                                                acrValues: ZenKeySDK.ACRValue.aal3.rawValue,
+                                                correlationId: "162534",
+                                                context: "Transfer initiated successfully",
+                                                clientId: "abc123")
     var lastParameters: OpenIdAuthorizationRequest.Parameters?
     var lastCompletion: OpenIdServiceCompletion?
     var lastViewController: UIViewController?

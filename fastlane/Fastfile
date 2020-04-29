@@ -6,64 +6,29 @@ default_platform :ios
 
 # Set by build environment
 # FL_HOCKEY_API_TOKEN
-# MATCH_PASSWORD
 # CIRCLE_API_TOKEN
-# SLACK_URL - set the hook URL in the CircleCI environment
-
-# BANK_APP_SECRET
 
 # defined in config
 # JAZZY_OUTPUT
 # JAZZY_ARTIFACTS
 
-BANK_APP = 'BankApp'
+# ENV ----------------------
 
-PRODUCT_NAMES = [BANK_APP]
-
-# hockey app id hashes
-DEVELOP_IDS = {
-  BANK_APP => '0aa24abecfcb48d7ab03ea1cf26074cb',
-}
-
-SPRINT_IDS = {
-  BANK_APP => 'e771ef86bdcd40f698cb7610682ea589',
-}
-
-SECRETS_MAP = {
-  BANK_APP => ENV['BANK_APP_SECRET'],
-}
-
-XCCONFIGS_PATHS = {
-  BANK_APP => '../Example/BankApp/BankApp/Resources/xcconfig',
-}
-
-SECRETS_CONFIG_NAME = 'Secrets.xcconfig'
-
-  # ENV ----------------------
-
-ENV['RZ_ARTIFACTS'] = './build'
-ENV['RZ_TEST_REPORTS'] ||= ENV['CIRCLE_TEST_REPORTS'] || './build'
+ENV['BUILD_DIR'] = './build'
+ENV['TEST_REPORTS'] ||= ENV['CIRCLE_TEST_REPORTS'] || './build'
 ENV['FASTLANE_XCODE_LIST_TIMEOUT'] = '120'
 ENV['CI_BUILD'] = 'yes'
-ENV['FL_HOCKEY_NOTIFY'] = '0'
 
-DERIVED_DATA_PATH = "#{ENV['RZ_TEST_REPORTS']}/derived_data"
+DERIVED_DATA_PATH = "#{ENV['TEST_REPORTS']}/derived_data"
 TEST_PROJCET = 'ZenKeySDK.xcodeproj'
 TEST_PROJCET_PATH = "./#{TEST_PROJCET}"
 TEST_SCHEME = "ZenKeySDKTests"
+REPOSITORY_NAME = "MyZenKey/sp-sdk-ios"
+API_TOKEN = ENV['FL_GITHUB_RELEASE_API_TOKEN']
 
   # LANES ----------------------
 
 platform :ios do
-  before_all do
-    setup_circle_ci
-    match(type: "enterprise", readonly: true)
-    if ENV['RZ_ARTIFACTS'] && ENV['RZ_ARTIFACTS'].length > 0
-      sh 'rm -rf $RZ_ARTIFACTS && mkdir $RZ_ARTIFACTS'
-    end
-  end
-
-  # BUILDS ----------------------
 
   desc "Runs tests"
   lane :test do
@@ -71,8 +36,8 @@ platform :ios do
       project: TEST_PROJCET_PATH,
       output_types: 'junit,html',
       scheme: TEST_SCHEME,
-      output_directory: "#{ENV['RZ_TEST_REPORTS']}/scan",
-      buildlog_path: "#{ENV['RZ_ARTIFACTS']}",
+      output_directory: "#{ENV['TEST_REPORTS']}/scan",
+      buildlog_path: "#{ENV['BUILD_DIR']}",
       code_coverage: true,
       derived_data_path: DERIVED_DATA_PATH
     )
@@ -83,255 +48,52 @@ platform :ios do
     if !ENV['CIRCLE_TEST_REPORTS'].nil?
       # CircleCI requires the "xml" extension for test reporting
       puts "Fixing JUnit report name"
-      sh "cp #{ENV['RZ_TEST_REPORTS']}/scan/report.junit #{ENV['RZ_TEST_REPORTS']}/scan/report.xml"
+      sh "cp #{ENV['TEST_REPORTS']}/scan/report.junit #{ENV['TEST_REPORTS']}/scan/report.xml"
     end
   end
 
-  desc "Builds and submits a Develop release to Hockey"
-  lane :develop do
-    write_secrets
+  desc "Bumps ZenKeySDK.podspec and Version.swift"
+  lane :bump do
+    version = get_version
+    UI.important("Current version: #{version}")
+    new_version = UI.input("New version?")
 
-    PRODUCT_NAMES.each do |productName|
-      buildName = "develop-#{productName}"
-      buildDemoApp(productName, buildName, 'enterprise', {
-        teamID: "XRTVVR644Y",
-        signingCertificate: "iPhone Distribution",
-      })
-      hockey(
-        ipa: productIPA(productName),
-        public_identifier: DEVELOP_IDS[productName],
-        bypass_cdn: true
-      )
-      # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_DEVELOPZZ')
-      slack(message: "Successfully uploaded #{buildName} build number #{build_number} to develop", success: true)  
+    files = ['../ZenKeySDK.podspec', '../ZenKeySDK/Sources/Core/Version.swift']
+    files.each do |file|
+      text = File.read(file)
+      new_contents = text.gsub(/#{version}/, new_version)
+      File.open(file, "w") {|file| file.puts new_contents }
     end
   end
 
-  desc "Builds and submits a Sprint release to Hockey"
-  lane :sprint do
-    write_secrets
+  desc "Makes new GitHub release from master"
+  lane :release do
+    ensure_git_branch(branch: "master")
+    ensure_git_status_clean
 
-    PRODUCT_NAMES.each do |productName|
-      buildName = "sprint-#{productName}"
-      buildDemoApp(productName, buildName, 'enterprise', {
-        teamID: "XRTVVR644Y",
-        signingCertificate: "iPhone Distribution",
-      })
-      hockey(
-        ipa: productIPA(productName),
-        public_identifier: SPRINT_IDS[productName],
-        bypass_cdn: true
-      )
-      # upload_symbols_to_crashlytics(:api_token => 'ZZCRASHLYTICS_API_TOKEN_SPRINTZZ')
-      slack(message: "Successfully uploaded #{buildName} build number #{build_number} to sprint", success: true)
-    end
-  end
+    version = get_version
+    UI.important("Version: #{version}")
 
-  desc 'Archives BankApp for submission to Browserstack as part of round trip UI testing with the CCID app.'
-  lane :bankapp_roundtrip do
-    buildDemoApp(BANK_APP, "develop-#{BANK_APP}", 'enterprise', {
-      teamID: "XRTVVR644Y",
-      signingCertificate: "iPhone Distribution",
-    })
-  end
-
-  # ADMIN ----------------------
-
-  desc "Generates Docs"
-  lane :generate_docs do
-    jazzy_output = ENV['JAZZY_OUTPUT']
-    jazzy_artifacts = ENV['JAZZY_ARTIFACTS']
-
-    Dir.chdir('../') do
-      sh "jazzy --clean --output #{jazzy_output}"
-    end
-    zip(path: jazzy_output, output_path: jazzy_artifacts)
-  end
-
-  desc "Posts Docs to Slack"
-  lane :post_docs do
-    # Private token set in Env
-    token = ENV['CIRCLE_API_TOKEN']
-    # These are already in the Circle environment
-    # https://circleci.com/docs/2.0/env-vars/#build-specific-environment-variables
-    username = ENV['CIRCLE_PROJECT_USERNAME']
-    reponame = ENV['CIRCLE_PROJECT_REPONAME']
-    build = ENV['CIRCLE_BUILD_NUM']
-
-    if !(token.nil? or username.nil? or reponame.nil? or build.nil?)
-      fetcher = CircleciArtifact::Fetcher.new(token: token, username: username, reponame: reponame, build: build)
-      docs = CircleciArtifact::Query.new(url_substring: "docs")
-      queries = [docs]
-      results = fetcher.fetch_queries(queries)
-      docs_url = results.url_for_query(docs)
-      if !docs_url.nil?
-        slack(message: "[Documentation](#{docs_url}) for iOS Provider SDK – build number: #{build_number}", success: true)
-      else
-        slack(message: "Unable to find documentation artifacts!", success: false)
-      end
-    else
-      slack(message: "Missing CircleCI artifacts. Most likely the [CIRCLE_API_TOKEN](https://github.com/Raizlabs/circleci_artifact#getting-started) is not set, or not running on CircleCI.", success: false)
-    end
-  end
-
-  desc "Runs Code Coverage"
-  lane :coverage do
-    slather_use_coveralls = "false"
-    slather_use_circleci = "false"
-
-    if !ENV['CIRCLE_BUILD_NUM'].nil?
-      slather_use_circleci = "true"
-    end
-
-    # Add targets here as you create internal frameworks
-    xcov_targets = "ZenKeySDK.framework"
-    xcov_scheme = TEST_SCHEME
-
-    xcov(
-      project: TEST_PROJCET_PATH,
-      scheme: xcov_scheme,
-      output_directory: "#{ENV['RZ_TEST_REPORTS']}/xcov",
-      include_targets: xcov_targets,
-      derived_data_path: DERIVED_DATA_PATH
+    changelog = prompt(
+      text: "Changelog: ",
+      multi_line_end_keyword: "END"
     )
 
-    slather_proj = TEST_PROJCET
-    slather_scheme = TEST_SCHEME
-    # Add binaries here as you create internal frameworks
-    slather_binaries = ['ZenKeySDK']
-    slather_output_directory = "#{ENV['RZ_TEST_REPORTS']}/slather"
-
-    # html and cobertura_xml output must be run separately
-    slather(
-      proj: slather_proj,
-      scheme: slather_scheme,
-      binary_basename: slather_binaries,
-      output_directory: slather_output_directory,
-      html: "true",
-      build_directory: DERIVED_DATA_PATH,
-      verbose: true
-    )
-    # Using Cobertura XML allows us to upload to Codecov.io
-    # Uploading to codecov is handled separately in the .circleci/config.yml
-    slather(
-      proj: slather_proj,
-      scheme: slather_scheme,
-      binary_basename: slather_binaries,
-      output_directory: slather_output_directory,
-      circleci: slather_use_circleci,
-      coveralls: slather_use_coveralls,
-      cobertura_xml: "true",
-      build_directory: DERIVED_DATA_PATH,
-      verbose: true
+    github_release = set_github_release(
+      name: version,
+      tag_name: version,
+      description: changelog,
+      commitish: "master",
+      repository_name: REPOSITORY_NAME,
+      api_token: API_TOKEN
     )
   end
 
-  desc "Updates the pods for all Example repos"
-  lane :update_pods do
-    Dir.chdir('../Example') do
-      directories = Dir.glob('*').select { |file| File.directory? file }
-      directories.each do |entry|
-        Dir.chdir("./#{entry}") do
-          puts "in #{Dir.pwd}"
-          sh "bundle exec pod install" unless !File.exists? "Podfile" 
-        end
-      end
-    end  
-  end
-
-  # SECRETS ----------------------
-
-  desc "Write secret configs"
-  lane :write_secrets do
-    PRODUCT_NAMES.each do |name|
-      xcConfigsDir(name) do
-        # write the include secrets for each file
-        forEachXCConfig do |file|
-          include_secrets = "#include \"./#{SECRETS_CONFIG_NAME}\"\n"
-          file.write(include_secrets) unless File.readlines(file).grep(/#{SECRETS_CONFIG_NAME}/).size > 0
-        end
-        
-        # lastly write out the secrets config
-        File.open(SECRETS_CONFIG_NAME, "w+") do |file|
-          file.write("ZK_APP_SECRET = #{SECRETS_MAP[name]}")
-        end
-      end
-    end
-  end
-
-  desc "Remove secrets from configs"
-  lane :strip_secrets do
-    PRODUCT_NAMES.each do |name|
-      xcConfigsDir(name) do
-        # remove the secrets file if present:
-        FileUtils.rm(SECRETS_CONFIG_NAME) if File.exists? SECRETS_CONFIG_NAME
-
-        # delete secrets by copying all but those lines:
-        forEachXCConfig do |file, file_name|
-          temp_file = "#{file_name}.tmp"
-          File.open(temp_file, "w+") do |temp|
-            File.readlines(file).each_with_index do |line|
-              temp.write line unless line =~ /#{SECRETS_CONFIG_NAME}/
-            end
-          end
-
-          FileUtils.mv(temp_file, file_name)
-        end
-      end
-      
-      # clear temp files:
-      FileUtils.rm Dir.glob('*').select { |path| File.extname(path) =~ /.tmp/ }
-    end
-  end
-
-  # Helpers ----------------------
-
-  def buildDemoApp(name, scheme, export_method, export_options)
-    workspacePath = File.expand_path("../Example/#{name}/#{name}.xcworkspace")
-    gym(
-      workspace: workspacePath,
-      output_directory: "#{ENV['RZ_ARTIFACTS']}",
-      output_name: name,
-      export_method: export_method,
-      scheme: scheme,
-      include_bitcode: true,
-      xcargs: "BUILD_NUMBER=#{build_number}",
-      buildlog_path: "#{ENV['RZ_ARTIFACTS']}",
-      export_options: export_options
-    )
-  end
-
-  def build_number
-    `git rev-list HEAD --count`.chomp()
-  end
-
-  def productIPA(productName)
-    "#{ENV['RZ_ARTIFACTS']}/#{productName}.ipa"
-  end
-  
-  # performs the given block in the xcconfig dir for the given product name, if it is known
-  def xcConfigsDir product_name, &block
-    configs_dir = XCCONFIGS_PATHS[product_name]
-    if configs_dir
-      Dir.chdir(configs_dir) do
-        block.call()
-      end
-    else
-      puts "no dir for name #{product_name}"
-    end
-  end
-
-  # returns all xcconfig files in the current dir
-  def all_xcconfigs
-    return Dir.glob('*').select { |path| File.extname(path) == ".xcconfig" }
-  end
-
-  # executes the given block for each xcconfig file with the "write only mode"
-  def forEachXCConfig &block
-    all_xcconfigs.each do |path|
-      File.open(path, "a") do |file|
-        block.call(file, path)
-      end
-    end
+  desc "Gets latest version from ZenKeySDK.podspec"
+  private_lane :get_version do
+    fastlane_require 'cocoapods'
+    spec_file = "../ZenKeySDK.podspec"
+    spec = Pod::Specification.from_file(spec_file)
+    spec.version.to_s
   end
 end

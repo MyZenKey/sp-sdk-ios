@@ -3,7 +3,19 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 2/25/19.
-//  Copyright © 2019 XCI JV, LLC. All rights reserved.
+//  Copyright © 2019 ZenKey, LLC. All rights reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import XCTest
@@ -27,13 +39,15 @@ func UnwrapAndAssertNotNil<T>(_ variable: T?,
 }
 
 // swiftlint:disable:next identifier_name
-func AssertHasQueryItemPair(url: URL?, key: String, value: String) {
+func AssertHasQueryItemPair(url: URL?, key: String, value: String, file: StaticString = #file, line: UInt = #line) {
     guard
         let existingURL = url,
         let components = URLComponents(url: existingURL, resolvingAgainstBaseURL: false),
         let queryItems = components.queryItems,
         queryItems.contains(URLQueryItem(name: key, value: value)) else {
-            XCTFail("expected valid url with valid query pair. instead got: \(url.debugDescription)")
+            XCTFail("expected valid url with valid query pair. instead got: \(url.debugDescription)",
+                file: file,
+                line: line)
             return
     }
 }
@@ -58,7 +72,7 @@ struct MockSIMs {
 
 extension URL {
     static var mocked: URL {
-        return URL(string: "https://rightpoint.com")!
+        return URL(string: "https://myzenkey.com")!
     }
 }
 
@@ -93,7 +107,8 @@ extension OpenIdAuthorizationRequest.Parameters {
             prompt: nil,
             correlationId: nil,
             context: nil,
-            loginHintToken: nil
+            loginHintToken: nil,
+            theme: nil
         )
     }
 }

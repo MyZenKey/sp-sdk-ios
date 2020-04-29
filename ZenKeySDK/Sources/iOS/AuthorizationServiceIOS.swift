@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 5/3/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -68,12 +68,13 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocolInternal {
     public func authorize(
         scopes: [ScopeProtocol],
         fromViewController viewController: UIViewController,
-        acrValues: [ACRValue]? = [.aal1],
+        acrValues: [ACRValue]? = nil,
         state: String? = nil,
         correlationId: String? = nil,
         context: String? = nil,
         prompt: PromptValue? = nil,
         nonce: String? = nil,
+        theme: Theme? = nil,
         completion: @escaping AuthorizationCompletion) {
 
         precondition(Thread.isMainThread, "You should only call `authorize` from the main thread.")
@@ -88,7 +89,8 @@ extension AuthorizationServiceIOS: AuthorizationServiceProtocolInternal {
             prompt: prompt,
             correlationId: correlationId,
             context: context,
-            loginHintToken: nil
+            loginHintToken: nil,
+            theme: theme
         )
 
         let stateMachine = AuthorizationServiceStateMachine(

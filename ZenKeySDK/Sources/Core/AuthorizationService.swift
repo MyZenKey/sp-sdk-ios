@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 2/19/19.
-//  Copyright © 2019 XCI JV, LLC.
+//  Copyright © 2019 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -22,16 +22,34 @@ import UIKit
 
 /// Represents the successful compltion of an autorization request. The code should be used to
 /// retrieve a token from a secure server.
-public struct AuthorizedResponse: Equatable {
+public struct AuthorizedResponse: Encodable, Equatable {
     /// Authorization code returned from the issuer.
     public let code: String
-    /// The Mobile Country Code used to identify the correct issuer.
-    public let mcc: String
-    /// The Mobile Network Code used to identify the correct issuer.
-    public let mnc: String
+    /// The Mobile Country Code and Mobile Network Code used to identify the correct issuer.
+    public let mccmnc: String
     /// The redirect URI used to deliver the result to the SDK. This must be provided to the
     /// Token Endpoint alongside the autorization code in order to issue the token.
     public let redirectURI: URL
+    public let codeVerifier: String
+    public let nonce: String?
+    public let acrValues: String?
+    public let correlationId: String?
+    public let context: String?
+    public let clientId: String
+
+    // Encodable support provided for convenience.
+    // Keys match those used in carrier token request/response.
+    enum CodingKeys: String, CodingKey {
+        case code
+        case mccmnc
+        case redirectURI = "redirect_uri"
+        case codeVerifier = "code_verifier"
+        case nonce
+        case acrValues = "acr_values"
+        case correlationId = "correlation_id"
+        case context
+        case clientId = "client_id"
+    }
 }
 
 /// The outcome of an Authorization Operation.
@@ -99,6 +117,9 @@ public protocol AuthorizationServiceProtocol: AnyObject {
     ///     entropy MUST be present in the nonce values used to prevent attackers from guessing
     ///     values. The nonce is optional and the default value is `nil`. The
     ///     `RandomStringGenerator` class exposes a method suitable for generating this value.
+    ///   - theme: Optional Theme (.light or .dark) to be used for the authorization UX. If included it
+    ///     will override user preference to ensure a coherent, consistent experience with the Service
+    ///     Provider's app design.
     ///   - completion: an escaping block executed asynchronously, on the main thread. This
     ///    block will take one parameter, a result, see `AuthorizationResult` for more information.
     ///
@@ -118,6 +139,7 @@ public protocol AuthorizationServiceProtocol: AnyObject {
                    context: String?,
                    prompt: PromptValue?,
                    nonce: String?,
+                   theme: Theme?,
                    completion: @escaping AuthorizationCompletion)
 
     /// Cancels the current authorization request, if any.
@@ -132,12 +154,13 @@ public extension AuthorizationServiceProtocol {
     func authorize(
         scopes: [ScopeProtocol] = [Scope.openid],
         fromViewController viewController: UIViewController,
-        acrValues: [ACRValue]? = [.aal1],
+        acrValues: [ACRValue]? = nil,
         state: String? = nil,
         correlationId: String? = nil,
         context: String? = nil,
         prompt: PromptValue? = nil,
         nonce: String? = nil,
+        theme: Theme? = nil,
         completion: @escaping AuthorizationCompletion) {
 
         authorize(
@@ -149,6 +172,7 @@ public extension AuthorizationServiceProtocol {
             context: context,
             prompt: prompt,
             nonce: nonce,
+            theme: theme,
             completion: completion
         )
     }
@@ -182,6 +206,7 @@ extension AuthorizationService: AuthorizationServiceProtocol {
         context: String?,
         prompt: PromptValue?,
         nonce: String?,
+        theme: Theme?,
         completion: @escaping AuthorizationCompletion) {
 
         if let previousRequest = AuthorizationServiceCurrentRequestStorage.shared.currentRequestingService {
@@ -199,6 +224,7 @@ extension AuthorizationService: AuthorizationServiceProtocol {
             context: context,
             prompt: prompt,
             nonce: nonce,
+            theme: theme,
             completion: completion
         )
     }
