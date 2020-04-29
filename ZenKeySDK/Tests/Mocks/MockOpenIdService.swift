@@ -28,9 +28,10 @@ class MockOpenIdService: OpenIdServiceProtocol {
                                                 redirectURI: URL.mocked,
                                                 codeVerifier: "JEg9Gg634BoVVTApb_XrVuS2vjHLnxO8MLRkdoLK_4K3Ypogd7ina144-KBXMQEZMLAGUeCxJWEXbDv9--_UXo1zklTWOZ37aB0D1HFsUYxsD7KIHoL-1CPCh3ELCMfV",
                                                 nonce: "654321",
-                                                acrValues: [ZenKeySDK.ACRValue.aal3],
+                                                acrValues: ZenKeySDK.ACRValue.aal3.rawValue,
                                                 correlationId: "162534",
-                                                context: "Transfer initiated successfully")
+                                                context: "Transfer initiated successfully",
+                                                clientId: "abc123")
     var lastParameters: OpenIdAuthorizationRequest.Parameters?
     var lastCompletion: OpenIdServiceCompletion?
     var lastViewController: UIViewController?

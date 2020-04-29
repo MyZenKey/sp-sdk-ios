@@ -22,7 +22,7 @@ import UIKit
 
 /// Represents the successful compltion of an autorization request. The code should be used to
 /// retrieve a token from a secure server.
-public struct AuthorizedResponse: Equatable {
+public struct AuthorizedResponse: Encodable, Equatable {
     /// Authorization code returned from the issuer.
     public let code: String
     /// The Mobile Country Code and Mobile Network Code used to identify the correct issuer.
@@ -32,9 +32,24 @@ public struct AuthorizedResponse: Equatable {
     public let redirectURI: URL
     public let codeVerifier: String
     public let nonce: String?
-    public let acrValues: [ACRValue]?
+    public let acrValues: String?
     public let correlationId: String?
     public let context: String?
+    public let clientId: String
+
+    // Encodable support provided for convenience.
+    // Keys match those used in carrier token request/response.
+    enum CodingKeys: String, CodingKey {
+        case code
+        case mccmnc
+        case redirectURI = "redirect_uri"
+        case codeVerifier = "code_verifier"
+        case nonce
+        case acrValues = "acr_values"
+        case correlationId = "correlation_id"
+        case context
+        case clientId = "client_id"
+    }
 }
 
 /// The outcome of an Authorization Operation.

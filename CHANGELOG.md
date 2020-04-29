@@ -5,6 +5,7 @@ Any release before 1.0.0 may contain breaking changes.
 After 1.0.0 this project will adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Versions
+- [1.0.0 - 2020-04-29](#100---2020-04-29)
 - [0.9.3 - 2020-03-02](#093---2020-03-02)
 - [0.9.2 - 2020-01-22](#092---2020-01-22)
 - [0.9.1 - 2019-11-25](#091---2019-11-25)
@@ -23,13 +24,24 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 
 ## [Unreleased]
 ### Added
-- Optional `theme` parameter to override light/dark theme for authorization UX.
-- `address` and `birthdate` scopes
 ### Changed
 ### Removed
 ### Deprecated
 ### Fixed
-- Allow inferred optional dependancies to resolve without error
+### Security
+
+## [1.0.0] - 2020-04-29
+### Added
+- Example app that demonstrates a simple programmatic integration of the SDK.
+- `clientId` added to `AuthorizedResponse`.
+- Optional `theme` parameter to override light/dark theme for authorization UX.
+- `address` and `birthdate` scopes
+### Changed
+- `AuthorizedResponse` conforms to `Encodable` to simplify forwarding to server.
+### Removed
+### Deprecated
+### Fixed
+- Allow inferred optional dependencies to resolve without error.
 ### Security
 
 ## [0.9.3] - 2020-03-02

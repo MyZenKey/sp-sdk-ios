@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 2/25/19.
-//  Copyright © 2019 ZenKey, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -35,11 +35,6 @@ protocol NetworkServiceProtocol {
 
 class NetworkService: NetworkServiceProtocol {
     let jsonDecoder = JSONDecoder()
-
-    let session: URLSession = {
-        let config = URLSessionConfiguration.default
-        return URLSession(configuration: config)
-    }()
 
     func requestJSON<T: Decodable>(
         request: URLRequest,
@@ -78,7 +73,7 @@ extension NetworkService {
 
             guard let data = data else {
                 Log.log(.error, "Network response missing data")
-                return .failure(NetworkServiceError.invalidResponseBody(request: request))
+                return .failure(.invalidResponseBody(request: request))
             }
 
             do {

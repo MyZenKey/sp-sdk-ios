@@ -182,9 +182,10 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
                                               redirectURI: URL.mocked,
                                               codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier(),
                                               nonce: nil,
-                                              acrValues: [ZenKeySDK.ACRValue.aal3],
+                                              acrValues: ZenKeySDK.ACRValue.aal3.rawValue,
                                               correlationId: nil,
-                                              context: nil)
+                                              context: nil,
+                                              clientId: "foobar")
         mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate
@@ -223,9 +224,10 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
                                               redirectURI: URL.mocked,
                                               codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier(),
                                               nonce: nil,
-                                              acrValues: [ZenKeySDK.ACRValue.aal3],
+                                              acrValues: ZenKeySDK.ACRValue.aal3.rawValue,
                                               correlationId: nil,
-                                              context: nil)
+                                              context: nil,
+                                              clientId: "foobah")
         mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate

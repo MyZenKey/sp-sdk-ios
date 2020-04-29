@@ -1,0 +1,23 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'ZenKey-SDK-Example' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for ZenKey-SDK-Example
+  
+  # For your app, use the public pod instead of the local copy
+  # pod 'ZenKeySDK'
+  pod 'ZenKeySDK', :path => '../../'
+
+  target 'ZenKey-SDK-ExampleTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'ZenKey-SDK-ExampleUITests' do
+    # Pods for testing
+  end
+
+end

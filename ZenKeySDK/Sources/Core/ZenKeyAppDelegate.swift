@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 2/13/19.
-//  Copyright © 2019 ZenKey, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -65,6 +65,7 @@ public class ZenKeyAppDelegate {
             self.discoveryService = self.dependencies.resolve()
             prefetchOIDC()
         } catch {
+
             fatalError("Bundle configuration error: \(error)")
         }
     }
