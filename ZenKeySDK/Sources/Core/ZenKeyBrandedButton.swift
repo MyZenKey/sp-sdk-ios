@@ -42,6 +42,7 @@ public protocol ZenKeyBrandedButtonDelegate: AnyObject {
 }
 
 /// A branded ZenKeyButton
+@IBDesignable
 public class ZenKeyBrandedButton: UIButton {
 
     /// the button's brandding delegate
@@ -121,6 +122,11 @@ public class ZenKeyBrandedButton: UIButton {
 
     public override func awakeFromNib() {
         super.awakeFromNib()
+        configureButton()
+    }
+
+    public override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
         configureButton()
     }
 

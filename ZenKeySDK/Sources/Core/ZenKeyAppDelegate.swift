@@ -37,7 +37,11 @@ public class ZenKeyAppDelegate {
     /// instances is unsupported.
     public static let shared = ZenKeyAppDelegate()
 
+    #if TARGET_INTERFACE_BUILDER
+    private(set) var dependencies = Dependencies(sdkConfig: SDKConfig())
+    #else
     private(set) var dependencies: Dependencies!
+    #endif
 
     private var discoveryService: DiscoveryServiceProtocol!
 

@@ -24,6 +24,7 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 
 ## [Unreleased]
 ### Added
+- Button support for IBDesignable
 ### Changed
 ### Removed
 ### Deprecated

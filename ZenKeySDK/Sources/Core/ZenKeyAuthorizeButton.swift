@@ -147,6 +147,11 @@ public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
         configureButton()
     }
 
+    public override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
+        configureButton()
+    }
+
     /// Cancels the current authorization request, if any.
     public func cancel() {
         authorizationService.cancel()
