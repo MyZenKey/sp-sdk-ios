@@ -1,69 +1,66 @@
-## ZenKey SDK Example App
+## The ZenKey SDK Example App
 
-This example app demonstrates a basic programmatic integration of the ZenKey SDK. For security, you must create a real `client_id` before testing the ZenKey sign-in flow, and you must run the app on a real phone with a real SIM card to authorize a request. You can target an iPad simulator to test a secondary-device flow, but will still need your carrier's ZenKey app installed on a real phone.
+This ZenKey example app uses a simple programmatic UI to demonstrate how to integrate the ZenKey SDK for sign-in. Because of the secure nature of the ZenKey service, you will need to create real project credentials and use those to build the app and test with a real phone.
 
-Follow along with the steps in the ios-quickstart guide:
-<https://developer.myzenkey.com/ios-quickstart/>
+This basic integration of the ZenKey SDK matches the steps described in the [iOS Quick Start Guide](https://developer.myzenkey.com/ios-quickstart/).
 
-### What does the Example App do?
+Search for `// ZENKEY SDK` to find the integration steps in the example code.
 
-This example presents a simple sign-in UX. Once you have configured your `client_id`, tapping on the "Sign in with ZenKey" button will begin a basic sign-in flow. The SDK will resolve whether the user is on their primary device or secondary device and help them install the ZenKey app for their carrier, if needed. Finally they will be prompted to authorize your app within the ZenKey app and redirected back to the example app with an `AuthorizedResponse` from the user's carrier. The `AuthorizedResponse` will include all the parameters you will need to pass to your secure backend—`code`, `mccmnc`, `redirectURI`, and `codeVerifier`—in order to issue a final token request and complete the authentication flow.
 
-## Overview
+## Set up
 
-Although you should be able to build `ZenKey-SDK-Example.xcworkspace` immediately, you will see errors until you assign real project credentials for a secure exchange. There are three steps to set-up for a full auth flow:
+There are three steps to building and running the `ZenKey-SDK-Example` app to test a complete auth flow:
 
-1. Configure Your `client_id`
-2. Set Up Sample Backend
-3. Configure Your `baseURL`
+1. Configure a `client_id`.
+2. Create a sample backend server.
+3. Set the location of your sample backend server.
 
-## 1. Configure Your `client_id `
+## 1. Configure a `client_id`
 
-You will need to create an account and project in the ZenKey Developer Portal:
-<https://portal.myzenkey.com>
+Create an account and project in the [ZenKey Developer Portal](https://portal.myzenkey.com).
 
-When creating a project, the portal will recommend a default `redirect-uri`. For the simplest integration, it is recommended that you keep this default value, as the SDK expects it to be available for the quick-start integration. You can always add or edit other URIs later.
+When creating a project, the portal provides a default `redirect-uri`. To simplify ZenKey integration, keep this default value; the SDK uses the default for quick-start integration. You can always add or edit the URI at a later time. See the [iOS Integration Guide](https://developer.myzenkey.com/ios/) for details about using a custom `redirect-uri`.
 
-Once your project has been approved, copy your `client_id` and secret from the ZenKey Developer Portal dashboard. You will be notified when your `client_id` has been provisioned and is ready for use. Requests will fail if the `client_id` is not yet provisioned.
+Once your project receives approval, copy your `client_id` and secret from the ZenKey Developer Portal dashboard. You can start using the `client_id` after it is provisioned by the carriers. Using a non-provisioned `client_id` will cause errors in API responses.
 
-Next, you will need to add your `client_id` to the `ZenKey-SDK-Example` app. Select the `Info.plist` and replace the current value of "\<your-client-id\>" with your `client_id`. This occurs in two places: in `ZenKeyClientId` and `Item 0` under `URL Types`. Once complete, your `Info.plist` should resemble the sample shown here:
+Next, add your `client_id` to the `ZenKey-SDK-Example` app:
+1. Select the `Info.plist`.
+2. Replace the current value of "\<your-client-id\>" with your `client_id` in two places: in `ZenKeyClientId` and in `Item 0` under `URL Types`.
+Afterwards, your `Info.plist` should resemble this sample:
 
-![Example Info.plist](https://developer.myzenkey.com/static/plist_example-fee9d2c8f143c6588810064b768f6cd9.png)
+   ![Example Info.plist](https://developer.myzenkey.com/static/plist_example-fee9d2c8f143c6588810064b768f6cd9.png)
 
-## Configure Your `redirect-uri` (Optional)
+## 2. Create a sample backend server
 
-If you are not using the default `redirect-uri` for this `client_id` (provided by the portal) please consult the integration guide to set up a custom `redirect-uri` (a Universal Link requires setting up proof of ownership with Apple):
-<https://developer.myzenkey.com/ios/>
+The `ZenKey-SDK-Example` app can only start the ZenKey authorization flow. For security, the final token request must be made from a secure server. To test the complete authorization flow, use the provided Python sample code to set up a server instance. In the instance, you set the ZenKey secret you got from the portal. The server sample code and instructions are here:
+[API Backend Sample Repo](https://github.com/MyZenKey/sp-sdk-provider-integration-web/Examples/APIBackend).
 
-## 2. Set Up Sample Backend
+Note: Never store the ZenKey secret in a public binary.
 
-The `ZenKey-SDK-Example` app can only begin a ZenKey auth flow. For security, the final token request must be done on a secure server. For you to test the complete round-trip, we also provide backend sample code to set up an instance of the APIs used by the sample app. It is in this backend instance that you will set the ZenKey secret you got from the portal (the secret should never be stored in a public binary). Find the backend sample code and instructions here:
-<https://github.com/MyZenKey/sp-sdk-provider-integration-web/Examples/APIBackend>
+## 3. Set the location of the sample backend server
 
-## 3. Configure Your `baseURL`
+The `ZenKey-SDK-Example` app needs to know how to call the APIs in the server sample code. In the `Info.plist`'s `baseURL` key, replace "\<your-base-url\>" with the location of the sample backend server instance you created.
 
-Finally, the `ZenKey-SDK-Example` app needs to know how to call the APIs you just set up. In the `Info.plist`'s `baseURL` key, replace "\<your-base-url\>" with the location of the sample backend instance you created.
+## Run the example app
 
-## Completion
+You can run the example app on a real phone with a real SIM card to authorize a sign-in request; or you can use an iPad simulator to test a secondary-device flow, where you pair the device with a primary phone.
 
-Now you can build and run the `ZenKey-SDK-Example` app on a test device. Tapping on the "Sign in with ZenKey" button will let the SDK begin a carrier auth request, which will provide an auth-code which is used to sign in to the sample backend service.
+To test a carrier authorization request:
+1. Launch the sample app and tap "Sign in with ZenKey".
+2. The SDK Determines if it is running on a primary or secondary device and helps you install the ZenKey app for your carrier, if needed.
+3. The SDK launches the ZenKey app which asks you to authorize your app.
+4. The ZenKey app redirects you back to the example app with an `AuthorizedResponse` from the user's carrier.
+5. The example app uses the `AuthorizedResponse` to request a sign-in from the sample server.
+6. The sample server makes the token request and userInfo request to complete sign-in.
 
-## Feedback
+## Send us your feedback
 
 Please report bugs or issues to our [support team](mailto:techsupport@myzenkey.com).
 
-## History
+## View SDK version and history information
 
 View history of SDK versions and changes in the [Changelog](../../CHANGELOG.md).
 
 ## License
 
-Copyright © 2020 ZenKey, LLC.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
-NOTICE: © 2020 ZenKey, LLC. ZENKEY IS A TRADEMARK OF ZenKey, LLC. ALL RIGHTS RESERVED. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE
+NOTICE: © 2020 ZENKEY, LLC. ZENKEY IS A TRADEMARK OF ZENKEY, LLC. ALL RIGHTS RESERVED. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE.
