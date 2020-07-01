@@ -39,11 +39,8 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 - Button support for IBDesignable
 ### Changed
 - `AuthorizedResponse` conforms to `Encodable` to simplify forwarding to server.
-### Removed
-### Deprecated
 ### Fixed
 - Allow inferred optional dependencies to resolve without error.
-### Security
 
 ## [0.9.3] - 2020-03-02
 ### Added
@@ -64,7 +61,6 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 - Copyright in file headers
 ### Removed
 - [breaking] `ZenKeyButtonView` made private until carrier endorsement work is completed. Use ZenKeyAuthorizeButton instead.
-
 
 ## [0.9.1] - 2019-11-25
 ### Added
