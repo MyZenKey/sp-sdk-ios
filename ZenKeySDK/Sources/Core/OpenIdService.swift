@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 2/27/19.
-//  Copyright © 2019 ZenKey, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -155,6 +155,10 @@ private extension OpenIdService {
         switch validatedCode {
         case .success(let code):
             Log.log(.info, "Resolving URL with successful code.")
+            // Get acr param
+            let acrString = request.parameters.acrValues?
+                .map() { $0.rawValue }
+                .joined(separator: " ")
             dismissUIAndConclude(
                 result: .code(
                     AuthorizedResponse(
@@ -163,9 +167,10 @@ private extension OpenIdService {
                         redirectURI: request.parameters.redirectURL,
                         codeVerifier: request.pkce.codeVerifier,
                         nonce: request.parameters.nonce,
-                        acrValues: request.parameters.acrValues,
+                        acrValues: acrString,
                         correlationId: request.parameters.correlationId,
-                        context: request.parameters.context
+                        context: request.parameters.context,
+                        clientId: request.parameters.clientId
                     )
                 )
             )

@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 7/26/19.
-//  Copyright © 2019 ZenKey, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -56,6 +56,7 @@ extension OpenIdAuthorizationRequest {
         let context: String?
         var loginHintToken: String?
         let version: String
+        let theme: Theme?
 
         init(clientId: String,
              redirectURL: URL,
@@ -66,7 +67,8 @@ extension OpenIdAuthorizationRequest {
              prompt: PromptValue?,
              correlationId: String?,
              context: String?,
-             loginHintToken: String?) {
+             loginHintToken: String?,
+             theme: Theme?) {
 
             self.clientId = clientId
             self.redirectURL = redirectURL
@@ -79,6 +81,7 @@ extension OpenIdAuthorizationRequest {
             self.context = context
             self.loginHintToken = loginHintToken
             self.version = VERSION
+            self.theme = theme
         }
 
         mutating func safeSet(state: String) {
@@ -110,6 +113,7 @@ extension OpenIdAuthorizationRequest {
         case codeChallenge = "code_challenge"
         case codeChallengeMethod = "code_challenge_method"
         case version = "sdk_version"
+        case options = "options"
     }
 
     var authorizationRequestURL: URL {
@@ -131,6 +135,7 @@ extension OpenIdAuthorizationRequest {
             URLQueryItem(name: Keys.codeChallenge.rawValue, value: pkce.codeChallenge),
             URLQueryItem(name: Keys.codeChallengeMethod.rawValue, value: pkce.codeChallengeMethod.rawValue),
             URLQueryItem(name: Keys.version.rawValue, value: VERSION),
+            URLQueryItem(name: Keys.options.rawValue, value: parameters.theme?.rawValue),
         ].filter() { $0.value != nil }
 
         var builder = URLComponents(url: resource, resolvingAgainstBaseURL: false)
@@ -218,11 +223,13 @@ extension Data {
     // Returns string encoded with base64url encoding as per RFC-4648 [https://tools.ietf.org/html/rfc4648]
     // Replaces '+' and '/' with '-' and '_' respectively.
     // Padding is omitted.
-    // With no base64EncodedString options, there should be "no wrap" (e.g. no linefeed characters)
 
-    func base64URLString() -> String {
-        var encodedContext = self.base64EncodedString()
-
+    func base64URLString(noWrap: Bool = true) -> String {
+        var encodedOptions: Data.Base64EncodingOptions = []
+        if noWrap == false {
+            encodedOptions = .lineLength64Characters
+        }
+        var encodedContext = self.base64EncodedString(options: encodedOptions)
         encodedContext = encodedContext.replacingOccurrences(of: "=", with: "")
         encodedContext = encodedContext.replacingOccurrences(of: "+", with: "-")
         encodedContext = encodedContext.replacingOccurrences(of: "/", with: "_")

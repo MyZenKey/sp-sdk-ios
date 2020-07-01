@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 4/10/19.
-//  Copyright © 2019 ZenKey, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 //  limitations under the License.
 //
 
+//  swiftlint:disable file_length
 import UIKit
 
 /// A protocol which represents the interface for handling changes to branding information.
@@ -41,6 +42,7 @@ public protocol ZenKeyBrandedButtonDelegate: AnyObject {
 }
 
 /// A branded ZenKeyButton
+@IBDesignable
 public class ZenKeyBrandedButton: UIButton {
 
     /// the button's brandding delegate
@@ -120,6 +122,11 @@ public class ZenKeyBrandedButton: UIButton {
 
     public override func awakeFromNib() {
         super.awakeFromNib()
+        configureButton()
+    }
+
+    public override func prepareForInterfaceBuilder() {
+        super.prepareForInterfaceBuilder()
         configureButton()
     }
 

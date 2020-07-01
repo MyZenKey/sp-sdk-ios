@@ -3,7 +3,7 @@
 //  ZenKeySDK
 //
 //  Created by Adam Tierney on 2/13/19.
-//  Copyright © 2019 ZenKey, LLC.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -37,7 +37,11 @@ public class ZenKeyAppDelegate {
     /// instances is unsupported.
     public static let shared = ZenKeyAppDelegate()
 
+    #if TARGET_INTERFACE_BUILDER
+    private(set) var dependencies = Dependencies(sdkConfig: SDKConfig())
+    #else
     private(set) var dependencies: Dependencies!
+    #endif
 
     private var discoveryService: DiscoveryServiceProtocol!
 
@@ -62,10 +66,10 @@ public class ZenKeyAppDelegate {
         do {
             let sdkConfig = try SDKConfig.load(fromBundle: Bundle.main)
             self.dependencies = Dependencies(sdkConfig: sdkConfig, options: zenKeyOptions)
-            let discoveryService: DiscoveryServiceProtocol = self.dependencies.resolve()
-            self.discoveryService = discoveryService
+            self.discoveryService = self.dependencies.resolve()
             prefetchOIDC()
         } catch {
+
             fatalError("Bundle configuration error: \(error)")
         }
     }

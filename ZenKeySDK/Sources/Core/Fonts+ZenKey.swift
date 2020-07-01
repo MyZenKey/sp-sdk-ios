@@ -2,8 +2,8 @@
 //  Fonts+ZenKey.swift
 //  ZenKeySDK
 //
-//  Created by Chad on 11/21/19.
-//  Copyright © 2019 ZenKey, LLC.
+//  Created by Chad Mealey on 11/21/19.
+//  Copyright © 2019-2020 ZenKey, LLC.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.

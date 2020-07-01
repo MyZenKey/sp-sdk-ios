@@ -5,6 +5,7 @@ Any release before 1.0.0 may contain breaking changes.
 After 1.0.0 this project will adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Versions
+- [1.0.0 - 2020-04-29](#100---2020-04-29)
 - [0.9.3 - 2020-03-02](#093---2020-03-02)
 - [0.9.2 - 2020-01-22](#092---2020-01-22)
 - [0.9.1 - 2019-11-25](#091---2019-11-25)
@@ -29,6 +30,18 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 ### Fixed
 ### Security
 
+## [1.0.0] - 2020-04-29
+### Added
+- Example app that demonstrates a simple programmatic integration of the SDK.
+- `clientId` added to `AuthorizedResponse`.
+- Optional `theme` parameter to override light/dark theme for authorization UX.
+- `address` and `birthdate` scopes
+- Button support for IBDesignable
+### Changed
+- `AuthorizedResponse` conforms to `Encodable` to simplify forwarding to server.
+### Fixed
+- Allow inferred optional dependencies to resolve without error.
+
 ## [0.9.3] - 2020-03-02
 ### Added
 - New `mccmnc` parameter to `AuthorizedResponse`, use instead of mcc and mnc.  
@@ -48,7 +61,6 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 - Copyright in file headers
 ### Removed
 - [breaking] `ZenKeyButtonView` made private until carrier endorsement work is completed. Use ZenKeyAuthorizeButton instead.
-
 
 ## [0.9.1] - 2019-11-25
 ### Added

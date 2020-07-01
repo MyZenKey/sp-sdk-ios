@@ -5,6 +5,18 @@
 //  Created by Adam Tierney on 4/12/19.
 //  Copyright © 2019 ZenKey, LLC. All rights reserved.
 //
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
 
 import XCTest
 @testable import ZenKeySDK
@@ -102,6 +114,7 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
         let testContext: String? = "test-context"
         let testPrompt: PromptValue? = .consent
         let testNonce: String? = "test-nonce"
+        let testTheme: Theme? = Theme.dark
 
         button.scopes = testScopes
         button.acrValues = testAcrValues
@@ -110,6 +123,7 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
         button.context = testContext
         button.prompt = testPrompt
         button.nonce = testNonce
+        button.theme = testTheme
 
         button.handlePress(sender: button)
         XCTAssertEqual(mockAuthorizationService.lastScopes as? [Scope], testScopes)
@@ -119,6 +133,7 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
         XCTAssertEqual(mockAuthorizationService.lastContext, testContext)
         XCTAssertEqual(mockAuthorizationService.lastPrompt, testPrompt)
         XCTAssertEqual(mockAuthorizationService.lastNonce, testNonce)
+        XCTAssertEqual(mockAuthorizationService.lastTheme, testTheme)
     }
 
     func testGetsCurrentViewController() {
@@ -167,9 +182,10 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
                                               redirectURI: URL.mocked,
                                               codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier(),
                                               nonce: nil,
-                                              acrValues: [ZenKeySDK.ACRValue.aal3],
+                                              acrValues: ZenKeySDK.ACRValue.aal3.rawValue,
                                               correlationId: nil,
-                                              context: nil)
+                                              context: nil,
+                                              clientId: "foobar")
         mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate
@@ -208,9 +224,10 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
                                               redirectURI: URL.mocked,
                                               codeVerifier: ProofKeyForCodeExchange.generateCodeVerifier(),
                                               nonce: nil,
-                                              acrValues: [ZenKeySDK.ACRValue.aal3],
+                                              acrValues: ZenKeySDK.ACRValue.aal3.rawValue,
                                               correlationId: nil,
-                                              context: nil)
+                                              context: nil,
+                                              clientId: "foobah")
         mockAuthorizationService.mockResult = .code(mockResponse)
         let mockDelegate = MockAuthorizationButtonDelegate()
         button.delegate = mockDelegate

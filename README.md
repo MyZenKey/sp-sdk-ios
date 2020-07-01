@@ -7,8 +7,9 @@ ZenKey SDKs (iOS and Android) and web integrations provide effective resources f
 ## Try It Out
 
 1. Check out the SDK code for iOS and Android SDKs, as well as web integrations at https://github.com/myzenkey.
-2. Learn the ZenKey flow by exploring the Developer Playground (http://developer.myzenkey.com). You can submit requests to various endpoints and view the responses your users will experience.
-3. Start coding! Visit http://developer.myzenkey.com for documentation (integration guides, references and best practices) and API resources including SDKs for iOS and Android and resources for Web integration.
+2. Build and test the [Example App](./Example/ZenKey-SDK-Example).
+3. Learn the ZenKey flow by exploring the Developer Playground (http://developer.myzenkey.com). You can submit requests to various endpoints and view the responses your users will experience.
+4. Start coding! Visit http://developer.myzenkey.com for documentation (integration guides, references and best practices) and API resources including SDKs for iOS and Android and resources for Web integration.
 
 ## Features
 
@@ -26,12 +27,4 @@ View history of SDK versions and changes in the [Changelog](./CHANGELOG.md).
 
 ## License
 
-Copyright © 2020 XCI JV, LLC.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
-NOTICE: © 2020 XCI JV, LLC. ZENKEY IS A TRADEMARK OF XCI JV, LLC. ALL RIGHTS RESERVED. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE
+NOTICE: © 2019-2020 ZENKEY, LLC. ZENKEY IS A TRADEMARK OF ZENKEY, LLC. ALL RIGHTS RESERVED. THE INFORMATION CONTAINED HEREIN IS NOT AN OFFER, COMMITMENT, REPRESENTATION OR WARRANTY AND IS SUBJECT TO CHANGE.
