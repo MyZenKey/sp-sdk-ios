@@ -24,7 +24,6 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 
 ## [Unreleased]
 ### Added
-- Button support for IBDesignable
 ### Changed
 ### Removed
 ### Deprecated
@@ -37,6 +36,7 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 - `clientId` added to `AuthorizedResponse`.
 - Optional `theme` parameter to override light/dark theme for authorization UX.
 - `address` and `birthdate` scopes
+- Button support for IBDesignable
 ### Changed
 - `AuthorizedResponse` conforms to `Encodable` to simplify forwarding to server.
 ### Removed
