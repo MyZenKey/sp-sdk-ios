@@ -33,7 +33,7 @@ Afterwards, your `Info.plist` should resemble this sample:
 ## 2. Create a sample backend server
 
 The `ZenKey-SDK-Example` app can only start the ZenKey authorization flow. For security, the final token request must be made from a secure server. To test the complete authorization flow, use the provided Python sample code to set up a server instance. In the instance, you set the ZenKey secret you got from the portal. The server sample code and instructions are here:
-[API Backend Sample Repo](https://github.com/MyZenKey/sp-sdk-provider-integration-web/Examples/APIBackend).
+[API Backend Sample Repo](https://github.com/MyZenKey/sp-sdk-provider-integration-web/tree/master/Examples/APIBackend).
 
 Note: Never store the ZenKey secret in a public binary.
 
