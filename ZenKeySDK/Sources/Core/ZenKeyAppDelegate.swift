@@ -22,10 +22,13 @@ import UIKit
 
 /// This class represents the entry point for the application and mirrors the behavior of
 /// UIApplication's UIApplicationDelegate type. This property should be accessed via its `shared`
-/// singleton instance to ensure there is only one instance per application. There are two methods
+/// singleton instance to ensure there is only one instance per application.
+///
+/// There are two methods
 /// that consumers are responsible for forwarding in the UIApplicationDelegate type:
+///
 /// `application(_:didFinishLaunchingWithOptions:)`
-/// and
+///
 /// `application(_:open:options)`
 ///
 /// - SeeAlso: UIApplicationDelegate
@@ -45,61 +48,74 @@ public class ZenKeyAppDelegate {
 
     private var discoveryService: DiscoveryServiceProtocol!
 
-    /// The entry point for the ZenKeyLogin SDK. You should call this method during your
-    /// applicaiton's `application(_:didFinishLaunchingWithOptions:)` method before returning.
+    /// The entry point for the ZenKey SDK. You should call this method during your
+    /// application's `application(_:didFinishLaunchingWithOptions:)` method before returning.
     ///
     /// - Parameters:
-    ///   - application: The UIApplication instance received by your application's app
-    ///     delegate
-    ///   - launchOptions: The launchOptions received by your applicaiton's app delegate
+    ///   - application: The UIApplication instance received by your application's AppDelegate
+    ///   - launchOptions: The launchOptions received by your application's AppDelegate
     ///   - zenKeyOptions: ZenKey specific options.
     ///
-    /// This method is responsible for configuring the ZenKeyLogin SDK and should be called
+    /// This method is responsible for configuring the ZenKey SDK and should be called
     /// before performing any other actions with the SDK.
     ///
-    /// - SeeAlso: UIApplicationDelegate.application(_:didFinishLaunchingWithOptions:)
+    /// - SeeAlso: `UIApplicationDelegate.application(_:didFinishLaunchingWithOptions:)`
     public func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?,
         zenKeyOptions: ZenKeyOptions = [:]) {
-        // initialize sdk config
+        // Initialize ZenKey SDK config
         do {
             let sdkConfig = try SDKConfig.load(fromBundle: Bundle.main)
             self.dependencies = Dependencies(sdkConfig: sdkConfig, options: zenKeyOptions)
             self.discoveryService = self.dependencies.resolve()
             prefetchOIDC()
         } catch {
-
             fatalError("Bundle configuration error: \(error)")
         }
     }
 
-    /// Call this method in your application delegates's `application(_:open:options)` method.
-    /// This provides `ZenKeyLogin` the opportunity to handle the inbound URL.
+    /// Call this method in your AppDelegate's `application(_:open:options:)` method.
+    /// This provides the ZenKey SDK the opportunity to handle the inbound URL.
+    ///
+    /// This method's return value allows you to easily skip your app's URL handling if a
+    /// ZenKey URL is successfully handled:
+    ///
+    /// ```swift
+    /// if ZenKeyAppDelegate.shared.application(app, open: url, options: options) {
+    ///     // ZenKey has successfully processed the redirect.
+    ///     return true
+    /// }
+    ///
+    /// // Perform any other URL processing your app may need.
+    ///
+    /// return false
+    /// ```
     ///
     /// - Parameters:
-    ///   - application: The UIApplication instance received by your application's app
-    ///     delegate
-    ///   - url: The URL parameter received by your applications app delegate
-    ///   - options: The options received by your applicaiton's app delegate
+    ///   - application: The UIApplication instance received by your application's AppDelegate
+    ///   - url: The URL parameter received by your application's AppDelegate
+    ///   - options: The options received by your application's AppDelegate
     ///
-    /// - Returns: a boolean indicating true if `ZenKeyLogin` successfully handled the url
-    /// passed into it, or `false`, if the URL remains un-handled.
+    /// - Returns: A boolean indicating `true` if the ZenKey SDK successfully handled the url
+    /// passed into it, or `false`, if the URL remains unhandled.
     ///
-    /// - SeeAlso: UIApplicationDelegate.application(_:open:options)`
+    /// - SeeAlso: `UIApplicationDelegate.application(_:open:options)`
     public func application(
         _ app: UIApplication,
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 
-        // This scheme is ZenKey specifc and any requests sent to this scheme should be
-        // handled by us.
+        // This scheme is ZenKey specific and any requests sent to this scheme should be
+        // handled by the ZenKey SDK.
         guard url.scheme == dependencies.sdkConfig.redirectScheme else {
             return false
         }
 
         guard let currentAuthorizationService =
             AuthorizationServiceCurrentRequestStorage.shared.currentRequestingService else {
+            Log.log(.error, "Cannot complete auth. This may be caused by the app being killed before auth was complete, or because you have multiple apps installed using the same client_id.")
+            showErrorAlert(Localization.Errors.incomingRequest)
             return false
         }
 
@@ -120,5 +136,22 @@ private extension ZenKeyAppDelegate {
             forSIMInfo: simInfo,
             prompt: false
         ) { _ in  /* fail silently, prefetch is best effort only */ }
+    }
+
+    private func showErrorAlert(_ message: String) {
+        guard let controller = UIViewController.currentController else {
+            Log.log(.verbose, "No view controller available for error alert")
+            return
+        }
+
+        let alert = UIAlertController(
+            title: Localization.Alerts.error,
+            message: message,
+            preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(
+            title: Localization.Alerts.ok,
+            style: UIAlertAction.Style.default,
+            handler: nil))
+        controller.present(alert, animated: true, completion: nil)
     }
 }

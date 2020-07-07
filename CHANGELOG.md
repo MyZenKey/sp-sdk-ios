@@ -24,10 +24,14 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 
 ## [Unreleased]
 ### Added
+- Button support for IBDesignable
+- Basic SceneDelegate support
+- Shows alert when app is launched by a redirect that cannot be handled
 ### Changed
 ### Removed
 ### Deprecated
 ### Fixed
+- The podspec wasn't properly packaging Localizable.strings
 ### Security
 
 ## [1.0.0] - 2020-04-29

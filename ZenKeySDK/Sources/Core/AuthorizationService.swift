@@ -67,8 +67,8 @@ extension AuthorizationResult: CustomStringConvertible {
     public var description: String {
         let base = "AuthorizationResult:"
         switch self {
-        case .code:
-            return "\(base) auth code"
+        case .code(let response):
+            return "\(base) auth code: \(response.code)"
         case .error(let error):
             return "\(base) error: \(error.errorType)"
         case .cancelled:
