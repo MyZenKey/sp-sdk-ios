@@ -124,9 +124,21 @@ class HomeViewController: UIViewController {
         layoutView()
     }
 
+    // Hiding potentially sensitive data from the task switcher to avoid screen capture exploits
     override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self]_ in
+            self?.usernameLabel.layer.opacity = 1
+        }
+        NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self]_ in
+            self?.usernameLabel.layer.opacity = 0
+        }
+
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
         super.viewWillAppear(animated)
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
 }

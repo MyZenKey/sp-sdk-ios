@@ -19,6 +19,7 @@
 //
 
 import UIKit
+import LocalAuthentication
 import ZenKeySDK
 
 @UIApplicationMain
@@ -46,6 +47,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = nav
         self.window?.makeKeyAndVisible()
 
+        checkDeviceLockStatus()
+        checkDeviceJailbreakStatus()
+
+        return true
+    }
+
+    func application(_ application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: UIApplication.ExtensionPointIdentifier) -> Bool {
+        // Disable third-party keyboards if your app allows users to type sensitive data
+        if extensionPointIdentifier == .keyboard {
+            return false
+        }
         return true
     }
 
@@ -64,4 +76,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return false
     }
 
+}
+
+extension AppDelegate {
+    func checkDeviceLockStatus() {
+        let deviceWillLock = LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+        if !deviceWillLock {
+            // If your app stores sensitive data, you may want to confirm that the user's device is
+            // protected by at least a passcode.
+            showErrorAlert(Localized.Error.Startup.unprotected, completion: checkDeviceLockStatus)
+        }
+    }
+
+    func checkDeviceJailbreakStatus() {
+        let canWriteToPrivate = (try? "Jailbreak test".write(toFile: "/private/test jailbreak", atomically: true, encoding: .utf8)) != nil
+
+        let deviceIsJailbroken =
+            canWriteToPrivate ||
+            FileManager.default.fileExists(atPath: "/Applications/Cydia.app") ||
+            FileManager.default.fileExists(atPath: "/Library/MobileSubstrate/MobileSubstrate.dylib") ||
+            FileManager.default.fileExists(atPath: "/etc/apt") ||
+            FileManager.default.fileExists(atPath: "/private/var/lib/apt") ||
+            UIApplication.shared.canOpenURL(URL(string: "cydia://package/com.example.package")!)
+
+        if deviceIsJailbroken {
+            // If your app stores sensitive data, you may want to confirm that the user's device is
+            // not jailbroken.
+            showErrorAlert(Localized.Error.Startup.jailbroken, completion: checkDeviceJailbreakStatus)
+        }
+    }
+}
+
+extension AppDelegate {
+    private func showErrorAlert(_ message: String, completion: @escaping (() -> ())) {
+        guard let controller = self.window?.rootViewController else { return }
+
+        let alert = UIAlertController(
+            title: Localized.Alert.errorTitle,
+            message: message,
+            preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(
+            title: Localized.Alert.ok,
+            style: UIAlertAction.Style.default,
+            handler: { _ in completion() }))
+        controller.present(alert, animated: true, completion: nil)
+    }
 }

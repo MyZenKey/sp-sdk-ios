@@ -108,6 +108,7 @@ class SignInViewController: UIViewController {
         let field = StyledTextField()
         field.translatesAutoresizingMaskIntoConstraints = false
         field.placeholder = Localized.SignIn.userPlaceholder
+        field.autocorrectionType = .no
         field.delegate = self
         return field
     }()
@@ -370,6 +371,7 @@ extension SignInViewController: ZenKeyAuthorizeButtonDelegate {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
+                        self?.passwordField.text = ""
                         self?.navigateToHomeScreen()
                     case .failure(let signInError):
                         // Stop showing loading activity
