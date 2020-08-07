@@ -25,6 +25,13 @@ enum Localization {
         static let signInWithZenKey = LocalizationUtils.localizedString("Sign in with ZenKey")
         static let continueWithZenKey = LocalizationUtils.localizedString("Continue with ZenKey")
     }
+    enum Alerts {
+        static let ok = LocalizationUtils.localizedString("OK")
+        static let error = LocalizationUtils.localizedString("Error")
+    }
+    enum Errors {
+        static let incomingRequest = LocalizationUtils.localizedString("Your last request could not be completed")
+    }
 }
 
 private class LocalizationUtils {

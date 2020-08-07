@@ -99,12 +99,59 @@ extension SignOutError: LocalizedError {
     }
 }
 
+// Expects to be decoded with JSONEncoder's keyDecodingStrategy set to .convertFromSnakeCase
 struct ZenKeyAttributes: Decodable {
     let sub: String
-    let name: String?
-    let phoneNumber: String?
+    let name: ZenKeyAttributesNameValue?
+    let birthdate: ZenKeyAttributesStringValue?
+    let email: ZenKeyAttributesStringValue?
+    let picture: ZenKeyAttributesStringValue?
+    let address: ZenKeyAttributesAddressValue?
+    let postalCode: ZenKeyAttributesStringValue?
+    let phone: ZenKeyAttributesStringValue?
+    let isAdult18: ZenKeyAttributesBoolValue?
+    let isAdult21: ZenKeyAttributesBoolValue?
+    let isOver13: ZenKeyAttributesBoolValue?
+    let last4Social: ZenKeyAttributesStringValue?
+
+    enum CodingKeys: String, CodingKey {
+        case sub, name, birthdate, email, picture, address, phone
+        case postalCode, last4Social, isAdult18, isAdult21, isOver13
+    }
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        sub = try values.decode(String.self, forKey: .sub)
+        name = try? values.decode(ZenKeyAttributesNameValue.self, forKey: .name)
+        birthdate = try? values.decode(ZenKeyAttributesStringValue.self, forKey: .birthdate)
+        email = try? values.decode(ZenKeyAttributesStringValue.self, forKey: .email)
+        picture = try? values.decode(ZenKeyAttributesStringValue.self, forKey: .picture)
+        address = try? values.decode(ZenKeyAttributesAddressValue.self, forKey: .address)
+        postalCode = try? values.decode(ZenKeyAttributesStringValue.self, forKey: .postalCode)
+        phone = try? values.decode(ZenKeyAttributesStringValue.self, forKey: .phone)
+        isAdult18 = try? values.decode(ZenKeyAttributesBoolValue.self, forKey: .isAdult18)
+        isAdult21 = try? values.decode(ZenKeyAttributesBoolValue.self, forKey: .isAdult21)
+        isOver13 = try? values.decode(ZenKeyAttributesBoolValue.self, forKey: .isOver13)
+        last4Social = try? values.decode(ZenKeyAttributesStringValue.self, forKey: .last4Social)
+    }
+}
+struct ZenKeyAttributesStringValue: Decodable {
+    let value: String
+}
+struct ZenKeyAttributesBoolValue: Decodable {
+    let value: Bool
+}
+struct ZenKeyAttributesNameValue: Decodable {
+    let value: String
+    let givenName: String
+    let familyName: String
+}
+struct ZenKeyAttributesAddressValue: Codable {
+    let formatted: String?
+    let streetAddress: String?
+    let locality: String?
+    let region: String?
     let postalCode: String?
-    let email: String?
+    let country: String?
 }
 
 struct ErrorResponse: Decodable {

@@ -33,7 +33,10 @@ internal enum Localized {
         internal static let configuration = Localized.text("Error.ConfigurationError")
         internal static let discoveryState = Localized.text("Error.DiscoveryStateError")
         internal static let unknown = Localized.text("Error.UnknownError")
-
+        internal enum Startup {
+            internal static let unprotected = Localized.text("Error.Startup.Unprotected")
+            internal static let jailbroken = Localized.text("Error.Startup.Jailbroken")
+        }
     }
     internal enum Home {
         internal static let activities = Localized.text("Home.Activities")
