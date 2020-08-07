@@ -71,6 +71,7 @@ public class ZenKeyAppDelegate {
             self.discoveryService = self.dependencies.resolve()
             prefetchOIDC()
         } catch {
+
             fatalError("Bundle configuration error: \(error)")
         }
     }
