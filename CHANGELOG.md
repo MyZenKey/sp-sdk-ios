@@ -29,6 +29,7 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 ### Removed
 ### Deprecated
 ### Fixed
+- Cleared buildtime/linter warnings.
 ### Security
 
 ## [1.1.0] - 2020-07-15

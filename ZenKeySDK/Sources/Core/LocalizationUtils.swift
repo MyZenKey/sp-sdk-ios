@@ -26,7 +26,7 @@ enum Localization {
         static let continueWithZenKey = LocalizationUtils.localizedString("Continue with ZenKey")
     }
     enum Alerts {
-        static let ok = LocalizationUtils.localizedString("OK")
+        static let okay = LocalizationUtils.localizedString("OK")
         static let error = LocalizationUtils.localizedString("Error")
     }
     enum Errors {

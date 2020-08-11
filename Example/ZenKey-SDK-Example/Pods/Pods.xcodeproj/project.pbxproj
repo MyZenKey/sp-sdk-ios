@@ -7,90 +7,89 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0225725DB5A0A8DA7859F8471491095A /* ZenKeyNetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABF43BEE48DD3981EF650EF0B6EC19F /* ZenKeyNetworkConfig.swift */; };
-		06EEB3385FD95B3664A2CAAB876538EA /* CurrentSIMBrandingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAB3D42F499DB8C1A6AB102DC5F3F57 /* CurrentSIMBrandingProvider.swift */; };
-		0C76A904B2017AFD2F49A88885085142 /* ZenKeyButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BDE24734D421C813D9DB67E43242BA /* ZenKeyButtonView.swift */; };
-		0E04252C3D471EBA87486F77CF0559CE /* Fonts+ZenKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F2E66F21716F372F989A04217A9D0A /* Fonts+ZenKey.swift */; };
-		15508C31B934D96782B7A7DA7C9D7A3B /* ZenKeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 124D3A91285FEEF8CECB8CDA86B21D79 /* ZenKeySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		16B3AC426F920D02F85E709679957B3A /* OpenIdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E3029BD3B3EB44200EF322116A51B2 /* OpenIdService.swift */; };
-		190721B2B54ACBB081C8C187DB0D1993 /* AuthorizationServiceStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A00E7A48C9A1E49A06F8EA2EA47576 /* AuthorizationServiceStateMachine.swift */; };
-		1B6A26D57523F814031B243E21BC0EC0 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23E24D9327B749B8D1A8B8ED66AE86B /* NetworkService.swift */; };
-		1C0DB0F37EC797F9793929B7F4F941CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E922EC85C89E0B6395343169180AD4D2 /* UIKit.framework */; };
-		1C451C63A4CE78013B2ABA2F6E6A8A5D /* ZenKeySDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8224F07110470BFDF502C0C578741B55 /* ZenKeySDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1FCAAA54404AFD660C0A539276DEA2DC /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD1EAFB6FC438CCCEE0F2734EC9AD8E /* SafariServices.framework */; };
-		21CD6305CE95A8B6AAB5537CA2FBECC5 /* AuthorizationServiceCurrentRequestStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3B6C193C5B2195EBBB4983247C1AD1 /* AuthorizationServiceCurrentRequestStorage.swift */; };
-		2D1448C13226984A573F7D5D13345380 /* AuthorizationRequestContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEF76B164DA7EFAFEE356A89B41090F /* AuthorizationRequestContext.swift */; };
-		2F6EC42C50D42E4E0F3A860721EF028B /* CurrentControllerContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C852CA348E5AED8A18A1D557385800 /* CurrentControllerContextProvider.swift */; };
-		316D93D06A8DDC767C513BF6B3A6BE3D /* Pods-ZenKey-SDK-Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 804854857B97DE7F0CE4084AB300297B /* Pods-ZenKey-SDK-Example-dummy.m */; };
-		32B6065A763E2BC3C535A946BCA56558 /* AuthorizationServiceIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A75C6D01258B136119DBA7EA9057F7B /* AuthorizationServiceIOS.swift */; };
-		38AA775E6209FFE55F3964984FA297B4 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5EB38B1537A769C6243A30A29BEB43 /* DeviceInfo.swift */; };
-		4907C25FA3DC54FB27909CDE3024C9AB /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA5F385E88591D4A5FAE8AE432FC72 /* Theme.swift */; };
-		4E91901120F9B250E454B6DD05D6AF35 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B39A67F217C2B33AA2EE9FE94B89BCA /* Dependencies.swift */; };
-		5429A98D6182EC7082DAB9A96EFFD0EC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43054426538AB1F5CDE363E30BDFFD66 /* Foundation.framework */; };
-		58755F25B6CA33B76332C385DF9624F5 /* WebBrowserUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC793D094A7670822AA26B59B3214F24 /* WebBrowserUI.swift */; };
-		5FF544043AC31D35881AB9A4EA426301 /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCFC100D50747B589FAD0699D7A021 /* AuthorizationService.swift */; };
-		60205E3C899206009756A05A04A151AE /* Carrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6426B330C399AB6E462506E0CAE45023 /* Carrier.swift */; };
-		60D741FED54ADA83887B26D1C3D8EE16 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A15D460C0BA0A3DDFF6AE721401D43F /* Localizable.strings */; };
-		62546298A1D8D214485BC8E3DB0CD956 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43054426538AB1F5CDE363E30BDFFD66 /* Foundation.framework */; };
-		638A0349A9F0B028955A45AE5C374AE1 /* ZenKeyBrandedButton+Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC74C58BF8402C62EDD0EB53B5FBF36 /* ZenKeyBrandedButton+Branding.swift */; };
-		69A84D2EE9B026C9AAF4FEC0EBC87DEE /* ErrorCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124EFF36E90BEEB82D5906A79A860F91 /* ErrorCodes.swift */; };
-		69D75B4B92CAF3E3E280CB70218C61A6 /* OpenIdURLResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F3C7F2766A1D30C2F1C7AFFA544B91 /* OpenIdURLResolver.swift */; };
-		6F1BFB65B0479FC40251C04B2D59D62A /* LocalizationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11C21B991C5E5BE3B1BCA32BF28CA5E /* LocalizationUtils.swift */; };
-		7283C0E4A9083F75C2B558D023C9BEDB /* PromptValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37884C709DC5BD0E49BD89043EE4CF5B /* PromptValue.swift */; };
-		72CDBD2AF54872685A6EC745BDA8F879 /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30D50784C0474AA7CC35731ADD15E5DA /* SDKConfig.swift */; };
-		766BD87A73308D930184E5168B51EA4E /* AuthorizationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B158E26CB29FF7770004B81E86DA2 /* AuthorizationError.swift */; };
-		777B46BC4263714903E72183EBC5AAB7 /* MobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA0EDEC808B01DB4A9217099FE621CD /* MobileNetworkInfoProvider.swift */; };
-		780BBD00795B1828A7FC576C6225FFAC /* Pods-ZenKey-SDK-Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A29960FDA4A975A6F871DDEB378530 /* Pods-ZenKey-SDK-Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7CE198E059C8DD5FD66ECC9E7F1BAA6E /* OpenIdURLResolverIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699961EF77AB64C1DAA01176F636200C /* OpenIdURLResolverIOS.swift */; };
-		7D1068A0F24F368619AA0B1453E36763 /* URLHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4D3088E4F780C4E1FD8C2F849D5CF6 /* URLHandling.swift */; };
-		7E2536A078B1B591BCF166075A60E61F /* ZenKeyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D30831274061BC8FD8DD81E6CE6AE1 /* ZenKeyAppDelegate.swift */; };
-		809BCDB19672F812451E7B1F628C8215 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E6390564CE0C383CA21703C24D6C32 /* Log.swift */; };
-		8316178B85FE8D8C557A938F2C6F6175 /* ResponseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD739537F66E79F764B02143C3809E9 /* ResponseURL.swift */; };
-		8582E6F8B562C0F03A4A1B33AADE1174 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43054426538AB1F5CDE363E30BDFFD66 /* Foundation.framework */; };
-		86A936C526B5EF14A3C0401B8DABDEFA /* String+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6277EF6E25BDCCB921B04FF645A3ADAE /* String+Utilities.swift */; };
-		8B3AE8A22D3BCA233004CAE6339B80EF /* ZenKeyBrandedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B3107945F9BC44CA55376D2CFE7DAD /* ZenKeyBrandedButton.swift */; };
-		8CE02671A8E730327CE7B4025C2285AE /* Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D7E53C7DDDC2D55F5611E932F18813 /* Branding.swift */; };
-		9169DC093D6D2B68CB17B2FD115E3C11 /* CarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901D5E725D7F17BEAB482494C5FFE81A /* CarrierInfoService.swift */; };
-		93C1E0B2538A147810A37D2E9338A253 /* Pods-ZenKey-SDK-ExampleTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 01AE62ED4E73BED982EE75675424E4F7 /* Pods-ZenKey-SDK-ExampleTests-dummy.m */; };
-		97293615E3BD1A4D1D7475D909410AB9 /* RandomStringGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605F46282B5E95770BEC421D1961DE01 /* RandomStringGenerator.swift */; };
-		A008E6B196A1A36B4332C3B0F3437003 /* OpenIdAuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81E7E315862F4E920E675272711F144 /* OpenIdAuthorizationRequest.swift */; };
-		A04C82754CCB09F31A0474A4373550B5 /* MobileNetworkSelectionUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCA01DD1E1398F44D0B2FDB80949A3BC /* MobileNetworkSelectionUI.swift */; };
-		A27BCDE8B1B4A443ACC190544A64F288 /* OpenIdConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0F14C728E93E6A856DE755B78EA986 /* OpenIdConfig.swift */; };
-		A5CA66FA56B86C12650DBD62DC6F1FA4 /* MobileNetworkSelectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8653CE2F89C9A988C04D7105A7810F /* MobileNetworkSelectionService.swift */; };
-		AAA74E263990C4684F43F149B4C44E7B /* ZenKey.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B9818B57961749A702A0B34A9A31AEF /* ZenKey.xcassets */; };
-		AD28FF2E7EF3A18101B5A987EA9C3C9E /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 07155FE6CC73F0B0CB0B3F560ED3221C /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-dummy.m */; };
-		BB3A293313A012ADABEE08683CA21AA2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43054426538AB1F5CDE363E30BDFFD66 /* Foundation.framework */; };
-		BDA7D1E3DFCC800CD824C2F30D6FA29B /* Pods-ZenKey-SDK-ExampleTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E695F62907DFA91CACFDE376BE87ADF /* Pods-ZenKey-SDK-ExampleTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C3447164EB10E95AE26306B9AC45CDDD /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4270112245DA2B698830936D2E7FB8A5 /* Version.swift */; };
-		C833DF28AA9180F14546D0040DF914FF /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C5510BA978564A2C9FE1F91F95E71421 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CBC52DB00E111100E317767417641FF6 /* ZenKeySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2CFBB50911C2BD7707FBDC8DE84367 /* ZenKeySceneDelegate.swift */; };
-		D54BA4EEC6F502D7BF1B9C23CA396C1F /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9395C13AFCCFAC15918677B81D3CF7 /* DiscoveryService.swift */; };
-		DC12BF061887EA2B967FF660105EBB27 /* ZenKeySDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FE0A22A8CC5A3100676F3D9E740847BF /* ZenKeySDK-dummy.m */; };
-		ED1574B16AC9D98E62F922DB58E486D0 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766A6DBF2871E5C55123E78E995A9744 /* Scope.swift */; };
-		F019C2A1C42A3CF374AC7876206DC965 /* SIMInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC66543B43ED1441420D7A9A4E7325 /* SIMInfo.swift */; };
-		F6F445116A68F164B38E91FC3678E8D9 /* ConfigCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B8BF7F982532C8EDC08D605A73215E /* ConfigCacheService.swift */; };
-		F759CF1E834BF726B21443B70AAD42FF /* Dictionary+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30CA1563FAC381664DD0159DD7364B3 /* Dictionary+Helpers.swift */; };
-		FAC415A4545BB6DC07646C9413755C89 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B8C3294455D1CA20914F02C189CF45 /* ImageUtils.swift */; };
-		FBC5EF8E683012B68C0F75A16881DA11 /* ACRValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96ADB2704803EC68D8645BB6B57E2218 /* ACRValue.swift */; };
-		FFE5976C7F1A85AA64E499D0ACE954BC /* ZenKeyAuthorizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CBCDA5CEC113E065137B1466B9B316 /* ZenKeyAuthorizeButton.swift */; };
+		018CB828A52AC944388EF6850CA1AC1D /* OpenIdURLResolverIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C2407066851F5D267FDDF1DD6B75C5 /* OpenIdURLResolverIOS.swift */; };
+		023F66CC052DC3C8B17005A0AEF174A4 /* Pods-ZenKey-SDK-ExampleTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 01AE62ED4E73BED982EE75675424E4F7 /* Pods-ZenKey-SDK-ExampleTests-dummy.m */; };
+		02DDD5EEC3A3C5CC216B22FCEFE9F4FF /* OpenIdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EC99028FB169D52D2270034411EB5E /* OpenIdService.swift */; };
+		0421331C6ED47B3757735BA0E5A11E7F /* ZenKey.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6204D2923549D6A277E4BA0A37AEAE30 /* ZenKey.xcassets */; };
+		0470F7DD3D5084808506F9EA47316B55 /* URLHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C15CCC305A88CAF396E5B5EDF669A4 /* URLHandling.swift */; };
+		0AC414B2D7A6551E6D4337915EDADFE7 /* SDKConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D39B29E1A04C8D076EF2CFA073B794 /* SDKConfig.swift */; };
+		1879A09717C71C384D20C1FBA1A9CE0A /* AuthorizationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33945FD2FC0A443AA4708163DB8C2CD4 /* AuthorizationError.swift */; };
+		1F4D5390E5725C29B1E5E21E11BD3C52 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C5510BA978564A2C9FE1F91F95E71421 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22A89A44742928F7703284D4CCEA992E /* Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D8F4E2597E518AC02991BD4C218D42 /* Branding.swift */; };
+		2595F9BABDF1DBE124BD8DB81AB3DBBA /* Carrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B984DEAD5A1D31024B0F3432F00EDE02 /* Carrier.swift */; };
+		2764879F22E6362E4E311B3300FF7DC9 /* MobileNetworkSelectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1496C99CD99F6FDF286C071963F0241F /* MobileNetworkSelectionService.swift */; };
+		320F102ACD46FA495D649BC92D3DDDA3 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF42830E54A14A28BDDC2311E0197473 /* Scope.swift */; };
+		335D5DA89F22D794C02E35FAFB6F8FC5 /* ZenKeyBrandedButton+Branding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2B31FB42A537D7360DBDE720BFFE45 /* ZenKeyBrandedButton+Branding.swift */; };
+		336098DB7DB4449F9D1A726C7690BA9B /* CurrentSIMBrandingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95EEB6D25D5F0044137A94B54EDAE30D /* CurrentSIMBrandingProvider.swift */; };
+		35B47C6F3E6CB82F6884F5B368E959A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43054426538AB1F5CDE363E30BDFFD66 /* Foundation.framework */; };
+		3B20EFB1C07ECAC8522026788A144493 /* AuthorizationRequestContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27AF6B8C69AFA39B6759F226451E7AC /* AuthorizationRequestContext.swift */; };
+		48F174B6A8559CBED5D1020E23DCDEB9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E922EC85C89E0B6395343169180AD4D2 /* UIKit.framework */; };
+		4F08117F5196860B19ED8A8FB9F9B3D9 /* AuthorizationServiceIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ADBF16873D91885F82F10C9FC66255B /* AuthorizationServiceIOS.swift */; };
+		5323554EFBFB5FA29C41862369F2B808 /* PromptValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA82E1DC7400C3E23E821E7402D18E79 /* PromptValue.swift */; };
+		5408DA2AB93BD90B232B4FAC8D7F8027 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43054426538AB1F5CDE363E30BDFFD66 /* Foundation.framework */; };
+		5461F22204C3AA2D930B322252619D1C /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D171E0616DAD7276CB46121D302197 /* Version.swift */; };
+		547373B9EF77658CF0C3FE8298E9ACF1 /* OpenIdConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3917CD1738025817883E9432867932 /* OpenIdConfig.swift */; };
+		5DAC3563C9A487F0165403DD93323153 /* ZenKeyAuthorizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AFCE3BC7BB1F117257C00925EC9898 /* ZenKeyAuthorizeButton.swift */; };
+		6520F2E216520B082B73D345B2599E82 /* AuthorizationServiceCurrentRequestStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE531BF2E79F48F895AEB179A6BDD0E /* AuthorizationServiceCurrentRequestStorage.swift */; };
+		660B6C430B1CE483BA20741F2D75ABDD /* Pods-ZenKey-SDK-ExampleTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E695F62907DFA91CACFDE376BE87ADF /* Pods-ZenKey-SDK-ExampleTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		67CFADDE9D28F722B8091FA8CAC640FE /* ZenKeySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78562B9C7629EADB8480AD4A63B2455 /* ZenKeySceneDelegate.swift */; };
+		692A4F2ADA07A88188B0E9C4DFB0259B /* ACRValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10686FC5CD34493950402B2A02374FE7 /* ACRValue.swift */; };
+		70A447509F72C9E0DD5C870771AFD311 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 07155FE6CC73F0B0CB0B3F560ED3221C /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-dummy.m */; };
+		717163FF449EA9062B65E71019D8A2EB /* Pods-ZenKey-SDK-Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 804854857B97DE7F0CE4084AB300297B /* Pods-ZenKey-SDK-Example-dummy.m */; };
+		7A3E23008EB60F134F2456E715EA6517 /* CurrentControllerContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DD8DD26B8E0A243D44CDA00066491D /* CurrentControllerContextProvider.swift */; };
+		7EB237DBEB52C89DE7B0764F6BC4BAD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43054426538AB1F5CDE363E30BDFFD66 /* Foundation.framework */; };
+		7FF0A9B050DB067D691BEB86DE1B9F56 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FA4276084921645CC7A5E9A3E25913 /* Theme.swift */; };
+		82F43D359CF356BA96F2CD3BD0068865 /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481BC8E6A326554EE562D6F6749E1893 /* AuthorizationService.swift */; };
+		8A22E58F677DA0620BA22E74E50EE274 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8889249C13A1F904DC32F6FD19E74B2F /* ImageUtils.swift */; };
+		93E943C7A8EDC3A570BE0781A1BBD8C0 /* ZenKeyNetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECA4DFB755EC77CA3E9A133CCEA2CA2 /* ZenKeyNetworkConfig.swift */; };
+		95A21028BD33E2FED2B56C31C99054AD /* AuthorizationServiceStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9023C72313811306DA616171F4C87487 /* AuthorizationServiceStateMachine.swift */; };
+		98033767A89331ED4B5BB6C5012B8F2E /* ZenKeyBrandedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D079C9BC9AC6E09D2BD4D884A335EE9 /* ZenKeyBrandedButton.swift */; };
+		9B58281E70B4465792E71C1BB79F4F18 /* OpenIdAuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639F64F294104CCFC69355D2E7FF7CD /* OpenIdAuthorizationRequest.swift */; };
+		A02D3E23751DB5F2C365881AD4581F78 /* String+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF710A32DC2A6CB5C0C43DA43AC579D6 /* String+Utilities.swift */; };
+		A0F234520E50E52A09B292618E445E10 /* ZenKeySDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 13FC704DF4FA5DBBF67D2A7FB4D834DC /* ZenKeySDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A4C5D21986315C78BB78E32EAD6EAB10 /* RandomStringGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D256175B9F67BA3054433F3F57EA5E6 /* RandomStringGenerator.swift */; };
+		AB28CEE91367BA0F05725404C1E652B3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43054426538AB1F5CDE363E30BDFFD66 /* Foundation.framework */; };
+		B827F475F145AD81BF0F0FB72A446A38 /* SIMInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4315148123FD9450774EC73B53E1C0E /* SIMInfo.swift */; };
+		B982E433EAE87AA59E2382D328CB4AA0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADA6B2058025012C7C7DEEBE0AF6C02 /* Log.swift */; };
+		BB7DC303620DC1CA8DFC261948894372 /* ResponseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037558854C242AF2018902F4E9C04769 /* ResponseURL.swift */; };
+		BC51C75FFB0C450D1C889CA41530BEA1 /* ZenKeySDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FEBE99E65DFF283DD1ADBDECF26C30 /* ZenKeySDK-dummy.m */; };
+		BF7D5EEEE63BBC77C7CF1266A6D88982 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 63A4FEFACD26D8729BA3DDCA0EFEBD27 /* Localizable.strings */; };
+		C87DD51C9B2CFBD6783314E34DD6CA63 /* Pods-ZenKey-SDK-Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A29960FDA4A975A6F871DDEB378530 /* Pods-ZenKey-SDK-Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C8A130C6620801E2C2F6E54B91F2DC64 /* MobileNetworkInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1026B5D7A106517B67584296C73215D /* MobileNetworkInfoProvider.swift */; };
+		CA49ACE605487C52186853A4425B3095 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A399CB5B30B93D0624879395116C6A85 /* DeviceInfo.swift */; };
+		CC529FB90B72AAD7F2A8852A38233832 /* DiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D92332162B131D59E667019C86383F /* DiscoveryService.swift */; };
+		CCBE989F301A76EFC61CF3797A19793A /* CarrierInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CFCBC5ED3C389D9998BC3CA0D968422 /* CarrierInfoService.swift */; };
+		D00969B8EB0B552ECF145A37AF0EFA9E /* ZenKeySDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CCAB99D3790C099800980A8BD8C4233E /* ZenKeySDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D1CF684635AA0E93FA8A341FBA34C05A /* ErrorCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE674D9CABABBFFA78D7D4AADCF330AC /* ErrorCodes.swift */; };
+		D6736D0C3546661314B36181AC852C32 /* Fonts+ZenKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEB3EE0C0F8E4EE7EDD988D47E8F213 /* Fonts+ZenKey.swift */; };
+		DA990A4171CEB4F91F4D32E80388F70E /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AD1EAFB6FC438CCCEE0F2734EC9AD8E /* SafariServices.framework */; };
+		DC4D953F4ED7EF88CCD7B5CFB5248758 /* LocalizationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC5E5A953881E5CFC0F21BC471EC2FF /* LocalizationUtils.swift */; };
+		DF766D19BAF954C8D6FBB10889D966DD /* ZenKeyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE37C3046155A2F8B2E1BA57ABDF8F37 /* ZenKeyAppDelegate.swift */; };
+		E7AFCB9028572EEE340897703EA90D9E /* Dictionary+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB429D62144B6CF1C6728965749DD468 /* Dictionary+Helpers.swift */; };
+		EC29533EE88DE8968D7A2FD73CB1E336 /* ConfigCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E371D01D31F895AEFCF403DCECCC581 /* ConfigCacheService.swift */; };
+		EEC6A51A359CE5BA9EEC04B8DB3CE8A5 /* MobileNetworkSelectionUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373C5740DBC8AE450C964DFEF3EA750 /* MobileNetworkSelectionUI.swift */; };
+		F35BE881CD4C283F32A44FE49562B4AE /* WebBrowserUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB72ABA106E58ABE37B182C78BEED1B5 /* WebBrowserUI.swift */; };
+		F3B8F45003F8D8EAABDCF384F5CFF2FD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED22B7D97A4DB4BE25D341D14061814 /* NetworkService.swift */; };
+		F4C95A0737FB86A92746E202519D1A7A /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9CBDADABF4BE8F83CB328EBA256FEB8 /* Dependencies.swift */; };
+		F8BCF4DE982B6F524B2C71C45605B27B /* OpenIdURLResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D3A74D572E6EE7A728601FB41EA326 /* OpenIdURLResolver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		624C58F47B0416ED88F406CD8788D89D /* PBXContainerItemProxy */ = {
+		1186EE0A88C913D8B403F5569F3225B9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 1A65E62E69EC397BA18A40AF9F76B2E6;
 			remoteInfo = "Pods-ZenKey-SDK-Example";
 		};
-		ADD08FDE615DB1D72C68D733E9E977DB /* PBXContainerItemProxy */ = {
+		3BF546D2CC5032CCED282F55663104AA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 14092FDB3628F90B43C9C0492B0F4EF5;
 			remoteInfo = ZenKeySDK;
 		};
-		FCD6F61829D92B74D26D6F1538C93726 /* PBXContainerItemProxy */ = {
+		A463A4D04F4BD532057348548C11EC45 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -101,134 +100,134 @@
 
 /* Begin PBXFileReference section */
 		01AE62ED4E73BED982EE75675424E4F7 /* Pods-ZenKey-SDK-ExampleTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ZenKey-SDK-ExampleTests-dummy.m"; sourceTree = "<group>"; };
-		03D30831274061BC8FD8DD81E6CE6AE1 /* ZenKeyAppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeyAppDelegate.swift; sourceTree = "<group>"; };
-		069DB85880F53852C192CA88E86357B0 /* ZenKeySDK-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ZenKeySDK-Info.plist"; sourceTree = "<group>"; };
+		037558854C242AF2018902F4E9C04769 /* ResponseURL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ResponseURL.swift; sourceTree = "<group>"; };
 		07155FE6CC73F0B0CB0B3F560ED3221C /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-dummy.m"; sourceTree = "<group>"; };
 		083D1BA68B65F32E6164CA6B787AED6F /* Pods-ZenKey-SDK-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZenKey-SDK-Example.debug.xcconfig"; sourceTree = "<group>"; };
-		08E6390564CE0C383CA21703C24D6C32 /* Log.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
-		0CFCFC100D50747B589FAD0699D7A021 /* AuthorizationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationService.swift; sourceTree = "<group>"; };
+		0ADA6B2058025012C7C7DEEBE0AF6C02 /* Log.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		0BE531BF2E79F48F895AEB179A6BDD0E /* AuthorizationServiceCurrentRequestStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceCurrentRequestStorage.swift; sourceTree = "<group>"; };
 		0E4A708C4A47FF332D5C4E3B399B7583 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		124D3A91285FEEF8CECB8CDA86B21D79 /* ZenKeySDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZenKeySDK.h; sourceTree = "<group>"; };
-		124EFF36E90BEEB82D5906A79A860F91 /* ErrorCodes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ErrorCodes.swift; sourceTree = "<group>"; };
+		10686FC5CD34493950402B2A02374FE7 /* ACRValue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ACRValue.swift; sourceTree = "<group>"; };
+		13FC704DF4FA5DBBF67D2A7FB4D834DC /* ZenKeySDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZenKeySDK.h; sourceTree = "<group>"; };
+		1496C99CD99F6FDF286C071963F0241F /* MobileNetworkSelectionService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionService.swift; sourceTree = "<group>"; };
 		14C2F839440725CA7E402F8059F394BF /* Pods-ZenKey-SDK-Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ZenKey-SDK-Example-Info.plist"; sourceTree = "<group>"; };
-		1689B60E33CF72CB3DFCE53FA676EB9E /* ZenKeySDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = ZenKeySDK.modulemap; sourceTree = "<group>"; };
+		15D39B29E1A04C8D076EF2CFA073B794 /* SDKConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SDKConfig.swift; sourceTree = "<group>"; };
+		18D171E0616DAD7276CB46121D302197 /* Version.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		1C0E2DBBF35947F84D15AF35F2A588D8 /* Pods-ZenKey-SDK-Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ZenKey-SDK-Example-frameworks.sh"; sourceTree = "<group>"; };
-		1CB4076E03C1CDB28FF4B3CAF862F1F8 /* ZenKeySDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ZenKeySDK-prefix.pch"; sourceTree = "<group>"; };
+		1CFCBC5ED3C389D9998BC3CA0D968422 /* CarrierInfoService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CarrierInfoService.swift; sourceTree = "<group>"; };
+		1E371D01D31F895AEFCF403DCECCC581 /* ConfigCacheService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConfigCacheService.swift; sourceTree = "<group>"; };
 		23A29960FDA4A975A6F871DDEB378530 /* Pods-ZenKey-SDK-Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ZenKey-SDK-Example-umbrella.h"; sourceTree = "<group>"; };
 		2A80E91B5B9A582F99CF217940BF3D50 /* Pods-ZenKey-SDK-ExampleTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ZenKey-SDK-ExampleTests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		2D9B158E26CB29FF7770004B81E86DA2 /* AuthorizationError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationError.swift; sourceTree = "<group>"; };
-		30D50784C0474AA7CC35731ADD15E5DA /* SDKConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SDKConfig.swift; sourceTree = "<group>"; };
-		34B8C3294455D1CA20914F02C189CF45 /* ImageUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
-		37884C709DC5BD0E49BD89043EE4CF5B /* PromptValue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PromptValue.swift; sourceTree = "<group>"; };
-		3A0F14C728E93E6A856DE755B78EA986 /* OpenIdConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenIdConfig.swift; sourceTree = "<group>"; };
+		2ADBF16873D91885F82F10C9FC66255B /* AuthorizationServiceIOS.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceIOS.swift; sourceTree = "<group>"; };
+		33945FD2FC0A443AA4708163DB8C2CD4 /* AuthorizationError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationError.swift; sourceTree = "<group>"; };
+		397A6AF8C362C2D8E38011249DAAA2C7 /* ZenKeySDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ZenKeySDK-prefix.pch"; sourceTree = "<group>"; };
 		3AD1EAFB6FC438CCCEE0F2734EC9AD8E /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/SafariServices.framework; sourceTree = DEVELOPER_DIR; };
-		3B9818B57961749A702A0B34A9A31AEF /* ZenKey.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = ZenKey.xcassets; path = ZenKeySDK/Resources/ZenKey.xcassets; sourceTree = "<group>"; };
-		4270112245DA2B698830936D2E7FB8A5 /* Version.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		3C2B31FB42A537D7360DBDE720BFFE45 /* ZenKeyBrandedButton+Branding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "ZenKeyBrandedButton+Branding.swift"; sourceTree = "<group>"; };
 		43054426538AB1F5CDE363E30BDFFD66 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		43FA4276084921645CC7A5E9A3E25913 /* Theme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		481BC8E6A326554EE562D6F6749E1893 /* AuthorizationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationService.swift; sourceTree = "<group>"; };
 		4C503558E78CF62876BBE96F57D3E4F8 /* Pods-ZenKey-SDK-ExampleTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ZenKey-SDK-ExampleTests.modulemap"; sourceTree = "<group>"; };
 		4E5D6DD811C8E23B343A7AB6576834A0 /* Pods-ZenKey-SDK-ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZenKey-SDK-ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		4FEF76B164DA7EFAFEE356A89B41090F /* AuthorizationRequestContext.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationRequestContext.swift; sourceTree = "<group>"; };
-		50E3029BD3B3EB44200EF322116A51B2 /* OpenIdService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenIdService.swift; sourceTree = "<group>"; };
-		5A15D460C0BA0A3DDFF6AE721401D43F /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = ZenKeySDK/Resources/Localizable.strings; sourceTree = "<group>"; };
-		5B39A67F217C2B33AA2EE9FE94B89BCA /* Dependencies.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		4ED22B7D97A4DB4BE25D341D14061814 /* NetworkService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		51D3A74D572E6EE7A728601FB41EA326 /* OpenIdURLResolver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenIdURLResolver.swift; sourceTree = "<group>"; };
+		5373C5740DBC8AE450C964DFEF3EA750 /* MobileNetworkSelectionUI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionUI.swift; sourceTree = "<group>"; };
+		57DD8DD26B8E0A243D44CDA00066491D /* CurrentControllerContextProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CurrentControllerContextProvider.swift; sourceTree = "<group>"; };
+		5D256175B9F67BA3054433F3F57EA5E6 /* RandomStringGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RandomStringGenerator.swift; sourceTree = "<group>"; };
+		5D35A150D509D39CD66ABC884A4DFDB1 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		5DE145492379DFCAA06EC554BA076B5E /* ZenKeySDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ZenKeySDK.framework; path = ZenKeySDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5E2CFBB50911C2BD7707FBDC8DE84367 /* ZenKeySceneDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeySceneDelegate.swift; sourceTree = "<group>"; };
-		605F46282B5E95770BEC421D1961DE01 /* RandomStringGenerator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RandomStringGenerator.swift; sourceTree = "<group>"; };
-		6277EF6E25BDCCB921B04FF645A3ADAE /* String+Utilities.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "String+Utilities.swift"; sourceTree = "<group>"; };
-		63F2E66F21716F372F989A04217A9D0A /* Fonts+ZenKey.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Fonts+ZenKey.swift"; sourceTree = "<group>"; };
-		6426B330C399AB6E462506E0CAE45023 /* Carrier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Carrier.swift; sourceTree = "<group>"; };
+		6204D2923549D6A277E4BA0A37AEAE30 /* ZenKey.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = ZenKey.xcassets; path = ZenKeySDK/Resources/ZenKey.xcassets; sourceTree = "<group>"; };
+		63A4FEFACD26D8729BA3DDCA0EFEBD27 /* Localizable.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = ZenKeySDK/Resources/Localizable.strings; sourceTree = "<group>"; };
+		63C2407066851F5D267FDDF1DD6B75C5 /* OpenIdURLResolverIOS.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenIdURLResolverIOS.swift; sourceTree = "<group>"; };
+		652CD7DE932DD1B6CCF0F4A9A17B6A78 /* ZenKeySDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = ZenKeySDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		67722DB82E1E65627176EF39A05882FA /* Pods_ZenKey_SDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ZenKey_SDK_Example.framework; path = "Pods-ZenKey-SDK-Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		691B886C24E3AC50F095806A6E0EC51B /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-frameworks.sh"; sourceTree = "<group>"; };
-		699961EF77AB64C1DAA01176F636200C /* OpenIdURLResolverIOS.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenIdURLResolverIOS.swift; sourceTree = "<group>"; };
-		6A75C6D01258B136119DBA7EA9057F7B /* AuthorizationServiceIOS.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceIOS.swift; sourceTree = "<group>"; };
-		6B4D3088E4F780C4E1FD8C2F849D5CF6 /* URLHandling.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = URLHandling.swift; sourceTree = "<group>"; };
-		6B5EB38B1537A769C6243A30A29BEB43 /* DeviceInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		71B71BFAB77FEDF9942E4B4F0E043980 /* Pods-ZenKey-SDK-Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ZenKey-SDK-Example.modulemap"; sourceTree = "<group>"; };
 		72CA9A57DAA7752684EEAD66BBF65D71 /* Pods-ZenKey-SDK-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZenKey-SDK-Example.release.xcconfig"; sourceTree = "<group>"; };
-		766A6DBF2871E5C55123E78E995A9744 /* Scope.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
-		77DA5F385E88591D4A5FAE8AE432FC72 /* Theme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		7E695F62907DFA91CACFDE376BE87ADF /* Pods-ZenKey-SDK-ExampleTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ZenKey-SDK-ExampleTests-umbrella.h"; sourceTree = "<group>"; };
 		804854857B97DE7F0CE4084AB300297B /* Pods-ZenKey-SDK-Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ZenKey-SDK-Example-dummy.m"; sourceTree = "<group>"; };
-		8224F07110470BFDF502C0C578741B55 /* ZenKeySDK-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ZenKeySDK-umbrella.h"; sourceTree = "<group>"; };
-		8DAB3D42F499DB8C1A6AB102DC5F3F57 /* CurrentSIMBrandingProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CurrentSIMBrandingProvider.swift; sourceTree = "<group>"; };
-		901D5E725D7F17BEAB482494C5FFE81A /* CarrierInfoService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CarrierInfoService.swift; sourceTree = "<group>"; };
-		91CBCDA5CEC113E065137B1466B9B316 /* ZenKeyAuthorizeButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeyAuthorizeButton.swift; sourceTree = "<group>"; };
-		96ADB2704803EC68D8645BB6B57E2218 /* ACRValue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ACRValue.swift; sourceTree = "<group>"; };
-		9C8653CE2F89C9A988C04D7105A7810F /* MobileNetworkSelectionService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionService.swift; sourceTree = "<group>"; };
+		85FEBE99E65DFF283DD1ADBDECF26C30 /* ZenKeySDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ZenKeySDK-dummy.m"; sourceTree = "<group>"; };
+		8889249C13A1F904DC32F6FD19E74B2F /* ImageUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
+		9023C72313811306DA616171F4C87487 /* AuthorizationServiceStateMachine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceStateMachine.swift; sourceTree = "<group>"; };
+		90E637ED04BB379C2D1E2D860B2FC959 /* ZenKeySDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = ZenKeySDK.modulemap; sourceTree = "<group>"; };
+		91558D3DDB992C5A5EEDD1151A8432D3 /* ZenKeySDK-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ZenKeySDK-Info.plist"; sourceTree = "<group>"; };
+		95C15CCC305A88CAF396E5B5EDF669A4 /* URLHandling.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = URLHandling.swift; sourceTree = "<group>"; };
+		95EEB6D25D5F0044137A94B54EDAE30D /* CurrentSIMBrandingProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CurrentSIMBrandingProvider.swift; sourceTree = "<group>"; };
+		98EC99028FB169D52D2270034411EB5E /* OpenIdService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenIdService.swift; sourceTree = "<group>"; };
+		9CEB3EE0C0F8E4EE7EDD988D47E8F213 /* Fonts+ZenKey.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Fonts+ZenKey.swift"; sourceTree = "<group>"; };
+		9D079C9BC9AC6E09D2BD4D884A335EE9 /* ZenKeyBrandedButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeyBrandedButton.swift; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9DCF323573AD263B60279E3D07B9DBB7 /* Pods_ZenKey_SDK_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ZenKey_SDK_ExampleTests.framework; path = "Pods-ZenKey-SDK-ExampleTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A06D4F8E922CA2B51448A97FF5B24F0D /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-acknowledgements.plist"; sourceTree = "<group>"; };
-		A1D33DBCD397E7788CEC06638FB8E370 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		ACFC66543B43ED1441420D7A9A4E7325 /* SIMInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SIMInfo.swift; sourceTree = "<group>"; };
+		A399CB5B30B93D0624879395116C6A85 /* DeviceInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
+		AB3917CD1738025817883E9432867932 /* OpenIdConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenIdConfig.swift; sourceTree = "<group>"; };
 		AF0AA3A0221B90EF602E633F65FA04B0 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-Info.plist"; sourceTree = "<group>"; };
-		B11C21B991C5E5BE3B1BCA32BF28CA5E /* LocalizationUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LocalizationUtils.swift; sourceTree = "<group>"; };
 		B4DFB94CB1AF4862DD565E265629FD3C /* Pods-ZenKey-SDK-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZenKey-SDK-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		B730E65327A59FA730687D9B228E8B69 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
-		B81E7E315862F4E920E675272711F144 /* OpenIdAuthorizationRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenIdAuthorizationRequest.swift; sourceTree = "<group>"; };
-		B8A00E7A48C9A1E49A06F8EA2EA47576 /* AuthorizationServiceStateMachine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceStateMachine.swift; sourceTree = "<group>"; };
-		B9B3107945F9BC44CA55376D2CFE7DAD /* ZenKeyBrandedButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeyBrandedButton.swift; sourceTree = "<group>"; };
-		BA9395C13AFCCFAC15918677B81D3CF7 /* DiscoveryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DiscoveryService.swift; sourceTree = "<group>"; };
-		BC3B6C193C5B2195EBBB4983247C1AD1 /* AuthorizationServiceCurrentRequestStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationServiceCurrentRequestStorage.swift; sourceTree = "<group>"; };
-		BC793D094A7670822AA26B59B3214F24 /* WebBrowserUI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebBrowserUI.swift; sourceTree = "<group>"; };
-		BCA0EDEC808B01DB4A9217099FE621CD /* MobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
-		BFC74C58BF8402C62EDD0EB53B5FBF36 /* ZenKeyBrandedButton+Branding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "ZenKeyBrandedButton+Branding.swift"; sourceTree = "<group>"; };
-		C30CA1563FAC381664DD0159DD7364B3 /* Dictionary+Helpers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Dictionary+Helpers.swift"; sourceTree = "<group>"; };
+		B8AFCE3BC7BB1F117257C00925EC9898 /* ZenKeyAuthorizeButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeyAuthorizeButton.swift; sourceTree = "<group>"; };
+		B984DEAD5A1D31024B0F3432F00EDE02 /* Carrier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Carrier.swift; sourceTree = "<group>"; };
+		B9CBDADABF4BE8F83CB328EBA256FEB8 /* Dependencies.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		BC357900A810E9A329E35B3BE41DCDCB /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		BF710A32DC2A6CB5C0C43DA43AC579D6 /* String+Utilities.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "String+Utilities.swift"; sourceTree = "<group>"; };
 		C5510BA978564A2C9FE1F91F95E71421 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-umbrella.h"; sourceTree = "<group>"; };
 		C96ED27E4B21381C708BE5AA5074F29D /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.modulemap"; sourceTree = "<group>"; };
 		CBD8976EFDD90CF4F97E028F542A5210 /* Pods-ZenKey-SDK-Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ZenKey-SDK-Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		CC1B56EC350C0FB048E07BD3D6F4CA04 /* Pods-ZenKey-SDK-ExampleTests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ZenKey-SDK-ExampleTests-Info.plist"; sourceTree = "<group>"; };
+		CCAB99D3790C099800980A8BD8C4233E /* ZenKeySDK-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ZenKeySDK-umbrella.h"; sourceTree = "<group>"; };
+		CDC5E5A953881E5CFC0F21BC471EC2FF /* LocalizationUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LocalizationUtils.swift; sourceTree = "<group>"; };
+		CE674D9CABABBFFA78D7D4AADCF330AC /* ErrorCodes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ErrorCodes.swift; sourceTree = "<group>"; };
 		CFD411B5A300D691AD26BBD68758B5C8 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		D1B8BF7F982532C8EDC08D605A73215E /* ConfigCacheService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConfigCacheService.swift; sourceTree = "<group>"; };
-		D5BDE24734D421C813D9DB67E43242BA /* ZenKeyButtonView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeyButtonView.swift; sourceTree = "<group>"; };
-		D7F3C7F2766A1D30C2F1C7AFFA544B91 /* OpenIdURLResolver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenIdURLResolver.swift; sourceTree = "<group>"; };
-		DABF43BEE48DD3981EF650EF0B6EC19F /* ZenKeyNetworkConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeyNetworkConfig.swift; sourceTree = "<group>"; };
-		DCA01DD1E1398F44D0B2FDB80949A3BC /* MobileNetworkSelectionUI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MobileNetworkSelectionUI.swift; sourceTree = "<group>"; };
-		DCD739537F66E79F764B02143C3809E9 /* ResponseURL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ResponseURL.swift; sourceTree = "<group>"; };
-		DF0D8F1AFC794156DF057285B3D9DEF1 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		E01DBD4F276638BE63526E6A601A28D1 /* ZenKeySDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = ZenKeySDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		E3583124576D8AFDA38AC94C66EEEEA1 /* ZenKeySDK.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ZenKeySDK.xcconfig; sourceTree = "<group>"; };
-		E5D7E53C7DDDC2D55F5611E932F18813 /* Branding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Branding.swift; sourceTree = "<group>"; };
+		D249B40A188937E448359DB6BA01D47E /* ZenKeySDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ZenKeySDK.release.xcconfig; sourceTree = "<group>"; };
+		D639F64F294104CCFC69355D2E7FF7CD /* OpenIdAuthorizationRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenIdAuthorizationRequest.swift; sourceTree = "<group>"; };
+		D8D8F4E2597E518AC02991BD4C218D42 /* Branding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Branding.swift; sourceTree = "<group>"; };
+		DB429D62144B6CF1C6728965749DD468 /* Dictionary+Helpers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Dictionary+Helpers.swift"; sourceTree = "<group>"; };
+		E1026B5D7A106517B67584296C73215D /* MobileNetworkInfoProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MobileNetworkInfoProvider.swift; sourceTree = "<group>"; };
 		E655BD10B10C6995EA5E8E0603154016 /* Pods_ZenKey_SDK_Example_ZenKey_SDK_ExampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ZenKey_SDK_Example_ZenKey_SDK_ExampleUITests.framework; path = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E922EC85C89E0B6395343169180AD4D2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		E9C852CA348E5AED8A18A1D557385800 /* CurrentControllerContextProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CurrentControllerContextProvider.swift; sourceTree = "<group>"; };
+		EE37C3046155A2F8B2E1BA57ABDF8F37 /* ZenKeyAppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeyAppDelegate.swift; sourceTree = "<group>"; };
+		EECA4DFB755EC77CA3E9A133CCEA2CA2 /* ZenKeyNetworkConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeyNetworkConfig.swift; sourceTree = "<group>"; };
+		EF42830E54A14A28BDDC2311E0197473 /* Scope.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
 		F0F9555C6A8B22A8710C008DF6123127 /* Pods-ZenKey-SDK-ExampleTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ZenKey-SDK-ExampleTests-acknowledgements.plist"; sourceTree = "<group>"; };
-		F23E24D9327B749B8D1A8B8ED66AE86B /* NetworkService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		F27AF6B8C69AFA39B6759F226451E7AC /* AuthorizationRequestContext.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationRequestContext.swift; sourceTree = "<group>"; };
+		F3D92332162B131D59E667019C86383F /* DiscoveryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DiscoveryService.swift; sourceTree = "<group>"; };
+		F4315148123FD9450774EC73B53E1C0E /* SIMInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SIMInfo.swift; sourceTree = "<group>"; };
+		F78562B9C7629EADB8480AD4A63B2455 /* ZenKeySceneDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ZenKeySceneDelegate.swift; sourceTree = "<group>"; };
+		FA82E1DC7400C3E23E821E7402D18E79 /* PromptValue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PromptValue.swift; sourceTree = "<group>"; };
+		FB29F14860ACCE9CEBB90896066BE245 /* ZenKeySDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ZenKeySDK.debug.xcconfig; sourceTree = "<group>"; };
+		FB72ABA106E58ABE37B182C78BEED1B5 /* WebBrowserUI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WebBrowserUI.swift; sourceTree = "<group>"; };
 		FB87E0073CC36387148E89D8F816A6E4 /* Pods-ZenKey-SDK-Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ZenKey-SDK-Example-acknowledgements.plist"; sourceTree = "<group>"; };
-		FE0A22A8CC5A3100676F3D9E740847BF /* ZenKeySDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ZenKeySDK-dummy.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		5AFF03CFFB3F8E5D620230537E13767E /* Frameworks */ = {
+		6AEF2E471699AC9B873A306C5D4805E0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8582E6F8B562C0F03A4A1B33AADE1174 /* Foundation.framework in Frameworks */,
+				7EB237DBEB52C89DE7B0764F6BC4BAD2 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E4AA684832E72039F207A0CA181DC03D /* Frameworks */ = {
+		925A3C48E1B1044DDBC0F399767BE777 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				62546298A1D8D214485BC8E3DB0CD956 /* Foundation.framework in Frameworks */,
+				5408DA2AB93BD90B232B4FAC8D7F8027 /* Foundation.framework in Frameworks */,
+				DA990A4171CEB4F91F4D32E80388F70E /* SafariServices.framework in Frameworks */,
+				48F174B6A8559CBED5D1020E23DCDEB9 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EBCD37C3D05CAD89872D3591216A8B07 /* Frameworks */ = {
+		C3CE2A7C2D3596FDA6EE319ABAAA6EFB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB3A293313A012ADABEE08683CA21AA2 /* Foundation.framework in Frameworks */,
-				1FCAAA54404AFD660C0A539276DEA2DC /* SafariServices.framework in Frameworks */,
-				1C0DB0F37EC797F9793929B7F4F941CB /* UIKit.framework in Frameworks */,
+				35B47C6F3E6CB82F6884F5B368E959A5 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F6CAD6498FBCF132D8FDAC775149B8F2 /* Frameworks */ = {
+		F5C4A01EF9D6ECAF9ADFE126C6220B4F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5429A98D6182EC7082DAB9A96EFFD0EC /* Foundation.framework in Frameworks */,
+				AB28CEE91367BA0F05725404C1E652B3 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +240,57 @@
 				541F699406A1F370B78BFC079121F63E /* iOS */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		118BBE194954E93861793299FD2FD6D0 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				10686FC5CD34493950402B2A02374FE7 /* ACRValue.swift */,
+				33945FD2FC0A443AA4708163DB8C2CD4 /* AuthorizationError.swift */,
+				F27AF6B8C69AFA39B6759F226451E7AC /* AuthorizationRequestContext.swift */,
+				481BC8E6A326554EE562D6F6749E1893 /* AuthorizationService.swift */,
+				0BE531BF2E79F48F895AEB179A6BDD0E /* AuthorizationServiceCurrentRequestStorage.swift */,
+				9023C72313811306DA616171F4C87487 /* AuthorizationServiceStateMachine.swift */,
+				D8D8F4E2597E518AC02991BD4C218D42 /* Branding.swift */,
+				B984DEAD5A1D31024B0F3432F00EDE02 /* Carrier.swift */,
+				1E371D01D31F895AEFCF403DCECCC581 /* ConfigCacheService.swift */,
+				57DD8DD26B8E0A243D44CDA00066491D /* CurrentControllerContextProvider.swift */,
+				B9CBDADABF4BE8F83CB328EBA256FEB8 /* Dependencies.swift */,
+				A399CB5B30B93D0624879395116C6A85 /* DeviceInfo.swift */,
+				DB429D62144B6CF1C6728965749DD468 /* Dictionary+Helpers.swift */,
+				F3D92332162B131D59E667019C86383F /* DiscoveryService.swift */,
+				CE674D9CABABBFFA78D7D4AADCF330AC /* ErrorCodes.swift */,
+				9CEB3EE0C0F8E4EE7EDD988D47E8F213 /* Fonts+ZenKey.swift */,
+				8889249C13A1F904DC32F6FD19E74B2F /* ImageUtils.swift */,
+				CDC5E5A953881E5CFC0F21BC471EC2FF /* LocalizationUtils.swift */,
+				0ADA6B2058025012C7C7DEEBE0AF6C02 /* Log.swift */,
+				1496C99CD99F6FDF286C071963F0241F /* MobileNetworkSelectionService.swift */,
+				5373C5740DBC8AE450C964DFEF3EA750 /* MobileNetworkSelectionUI.swift */,
+				4ED22B7D97A4DB4BE25D341D14061814 /* NetworkService.swift */,
+				D639F64F294104CCFC69355D2E7FF7CD /* OpenIdAuthorizationRequest.swift */,
+				AB3917CD1738025817883E9432867932 /* OpenIdConfig.swift */,
+				98EC99028FB169D52D2270034411EB5E /* OpenIdService.swift */,
+				51D3A74D572E6EE7A728601FB41EA326 /* OpenIdURLResolver.swift */,
+				FA82E1DC7400C3E23E821E7402D18E79 /* PromptValue.swift */,
+				5D256175B9F67BA3054433F3F57EA5E6 /* RandomStringGenerator.swift */,
+				037558854C242AF2018902F4E9C04769 /* ResponseURL.swift */,
+				EF42830E54A14A28BDDC2311E0197473 /* Scope.swift */,
+				15D39B29E1A04C8D076EF2CFA073B794 /* SDKConfig.swift */,
+				F4315148123FD9450774EC73B53E1C0E /* SIMInfo.swift */,
+				BF710A32DC2A6CB5C0C43DA43AC579D6 /* String+Utilities.swift */,
+				43FA4276084921645CC7A5E9A3E25913 /* Theme.swift */,
+				95C15CCC305A88CAF396E5B5EDF669A4 /* URLHandling.swift */,
+				18D171E0616DAD7276CB46121D302197 /* Version.swift */,
+				EE37C3046155A2F8B2E1BA57ABDF8F37 /* ZenKeyAppDelegate.swift */,
+				B8AFCE3BC7BB1F117257C00925EC9898 /* ZenKeyAuthorizeButton.swift */,
+				9D079C9BC9AC6E09D2BD4D884A335EE9 /* ZenKeyBrandedButton.swift */,
+				3C2B31FB42A537D7360DBDE720BFFE45 /* ZenKeyBrandedButton+Branding.swift */,
+				EECA4DFB755EC77CA3E9A133CCEA2CA2 /* ZenKeyNetworkConfig.swift */,
+				F78562B9C7629EADB8480AD4A63B2455 /* ZenKeySceneDelegate.swift */,
+				13FC704DF4FA5DBBF67D2A7FB4D834DC /* ZenKeySDK.h */,
+			);
+			name = Core;
+			path = ZenKeySDK/Sources/Core;
 			sourceTree = "<group>";
 		};
 		144913C5A06160E5D9A64D4F890E2F40 /* Pods-ZenKey-SDK-Example */ = {
@@ -276,36 +326,21 @@
 			path = "Target Support Files/Pods-ZenKey-SDK-ExampleTests";
 			sourceTree = "<group>";
 		};
+		2E1ED9241AB8D4212C7950F849A1CCAB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				63A4FEFACD26D8729BA3DDCA0EFEBD27 /* Localizable.strings */,
+				6204D2923549D6A277E4BA0A37AEAE30 /* ZenKey.xcassets */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		43E18147FEC412592F870239EF05EEA6 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				56AA74D4D98FF1EB81AF5929D1FFED49 /* ZenKeySDK */,
+				AAAA37BF2FAAF05574BC8AC4AD5782DF /* ZenKeySDK */,
 			);
 			name = "Development Pods";
-			sourceTree = "<group>";
-		};
-		4F015CB0160DE613430CCDE27C3F7228 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				6A75C6D01258B136119DBA7EA9057F7B /* AuthorizationServiceIOS.swift */,
-				901D5E725D7F17BEAB482494C5FFE81A /* CarrierInfoService.swift */,
-				8DAB3D42F499DB8C1A6AB102DC5F3F57 /* CurrentSIMBrandingProvider.swift */,
-				BCA0EDEC808B01DB4A9217099FE621CD /* MobileNetworkInfoProvider.swift */,
-				699961EF77AB64C1DAA01176F636200C /* OpenIdURLResolverIOS.swift */,
-				BC793D094A7670822AA26B59B3214F24 /* WebBrowserUI.swift */,
-			);
-			name = iOS;
-			path = ZenKeySDK/Sources/iOS;
-			sourceTree = "<group>";
-		};
-		52A5D81438CF94A7E42B507BCF15E50D /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				DF0D8F1AFC794156DF057285B3D9DEF1 /* LICENSE */,
-				A1D33DBCD397E7788CEC06638FB8E370 /* README.md */,
-				E01DBD4F276638BE63526E6A601A28D1 /* ZenKeySDK.podspec */,
-			);
-			name = Pod;
 			sourceTree = "<group>";
 		};
 		541F699406A1F370B78BFC079121F63E /* iOS */ = {
@@ -316,33 +351,6 @@
 				E922EC85C89E0B6395343169180AD4D2 /* UIKit.framework */,
 			);
 			name = iOS;
-			sourceTree = "<group>";
-		};
-		56AA74D4D98FF1EB81AF5929D1FFED49 /* ZenKeySDK */ = {
-			isa = PBXGroup;
-			children = (
-				7AB8EF8D7C8AFCAD1356B23656AC9FB3 /* Core */,
-				4F015CB0160DE613430CCDE27C3F7228 /* iOS */,
-				52A5D81438CF94A7E42B507BCF15E50D /* Pod */,
-				C4261A640CEEED398E3C8EEC52EB25D7 /* Resources */,
-				5B3A18C4AEF7D7CF6FB467C405384926 /* Support Files */,
-			);
-			name = ZenKeySDK;
-			path = ../../..;
-			sourceTree = "<group>";
-		};
-		5B3A18C4AEF7D7CF6FB467C405384926 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				1689B60E33CF72CB3DFCE53FA676EB9E /* ZenKeySDK.modulemap */,
-				E3583124576D8AFDA38AC94C66EEEEA1 /* ZenKeySDK.xcconfig */,
-				FE0A22A8CC5A3100676F3D9E740847BF /* ZenKeySDK-dummy.m */,
-				069DB85880F53852C192CA88E86357B0 /* ZenKeySDK-Info.plist */,
-				1CB4076E03C1CDB28FF4B3CAF862F1F8 /* ZenKeySDK-prefix.pch */,
-				8224F07110470BFDF502C0C578741B55 /* ZenKeySDK-umbrella.h */,
-			);
-			name = "Support Files";
-			path = "Example/ZenKey-SDK-Example/Pods/Target Support Files/ZenKeySDK";
 			sourceTree = "<group>";
 		};
 		72B7971DAF2E949A1AB0805BDD9AE8D3 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests */ = {
@@ -362,58 +370,6 @@
 			path = "Target Support Files/Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests";
 			sourceTree = "<group>";
 		};
-		7AB8EF8D7C8AFCAD1356B23656AC9FB3 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				96ADB2704803EC68D8645BB6B57E2218 /* ACRValue.swift */,
-				2D9B158E26CB29FF7770004B81E86DA2 /* AuthorizationError.swift */,
-				4FEF76B164DA7EFAFEE356A89B41090F /* AuthorizationRequestContext.swift */,
-				0CFCFC100D50747B589FAD0699D7A021 /* AuthorizationService.swift */,
-				BC3B6C193C5B2195EBBB4983247C1AD1 /* AuthorizationServiceCurrentRequestStorage.swift */,
-				B8A00E7A48C9A1E49A06F8EA2EA47576 /* AuthorizationServiceStateMachine.swift */,
-				E5D7E53C7DDDC2D55F5611E932F18813 /* Branding.swift */,
-				6426B330C399AB6E462506E0CAE45023 /* Carrier.swift */,
-				D1B8BF7F982532C8EDC08D605A73215E /* ConfigCacheService.swift */,
-				E9C852CA348E5AED8A18A1D557385800 /* CurrentControllerContextProvider.swift */,
-				5B39A67F217C2B33AA2EE9FE94B89BCA /* Dependencies.swift */,
-				6B5EB38B1537A769C6243A30A29BEB43 /* DeviceInfo.swift */,
-				C30CA1563FAC381664DD0159DD7364B3 /* Dictionary+Helpers.swift */,
-				BA9395C13AFCCFAC15918677B81D3CF7 /* DiscoveryService.swift */,
-				124EFF36E90BEEB82D5906A79A860F91 /* ErrorCodes.swift */,
-				63F2E66F21716F372F989A04217A9D0A /* Fonts+ZenKey.swift */,
-				34B8C3294455D1CA20914F02C189CF45 /* ImageUtils.swift */,
-				B11C21B991C5E5BE3B1BCA32BF28CA5E /* LocalizationUtils.swift */,
-				08E6390564CE0C383CA21703C24D6C32 /* Log.swift */,
-				9C8653CE2F89C9A988C04D7105A7810F /* MobileNetworkSelectionService.swift */,
-				DCA01DD1E1398F44D0B2FDB80949A3BC /* MobileNetworkSelectionUI.swift */,
-				F23E24D9327B749B8D1A8B8ED66AE86B /* NetworkService.swift */,
-				B81E7E315862F4E920E675272711F144 /* OpenIdAuthorizationRequest.swift */,
-				3A0F14C728E93E6A856DE755B78EA986 /* OpenIdConfig.swift */,
-				50E3029BD3B3EB44200EF322116A51B2 /* OpenIdService.swift */,
-				D7F3C7F2766A1D30C2F1C7AFFA544B91 /* OpenIdURLResolver.swift */,
-				37884C709DC5BD0E49BD89043EE4CF5B /* PromptValue.swift */,
-				605F46282B5E95770BEC421D1961DE01 /* RandomStringGenerator.swift */,
-				DCD739537F66E79F764B02143C3809E9 /* ResponseURL.swift */,
-				766A6DBF2871E5C55123E78E995A9744 /* Scope.swift */,
-				30D50784C0474AA7CC35731ADD15E5DA /* SDKConfig.swift */,
-				ACFC66543B43ED1441420D7A9A4E7325 /* SIMInfo.swift */,
-				6277EF6E25BDCCB921B04FF645A3ADAE /* String+Utilities.swift */,
-				77DA5F385E88591D4A5FAE8AE432FC72 /* Theme.swift */,
-				6B4D3088E4F780C4E1FD8C2F849D5CF6 /* URLHandling.swift */,
-				4270112245DA2B698830936D2E7FB8A5 /* Version.swift */,
-				03D30831274061BC8FD8DD81E6CE6AE1 /* ZenKeyAppDelegate.swift */,
-				91CBCDA5CEC113E065137B1466B9B316 /* ZenKeyAuthorizeButton.swift */,
-				B9B3107945F9BC44CA55376D2CFE7DAD /* ZenKeyBrandedButton.swift */,
-				BFC74C58BF8402C62EDD0EB53B5FBF36 /* ZenKeyBrandedButton+Branding.swift */,
-				D5BDE24734D421C813D9DB67E43242BA /* ZenKeyButtonView.swift */,
-				DABF43BEE48DD3981EF650EF0B6EC19F /* ZenKeyNetworkConfig.swift */,
-				5E2CFBB50911C2BD7707FBDC8DE84367 /* ZenKeySceneDelegate.swift */,
-				124D3A91285FEEF8CECB8CDA86B21D79 /* ZenKeySDK.h */,
-			);
-			name = Core;
-			path = ZenKeySDK/Sources/Core;
-			sourceTree = "<group>";
-		};
 		8E1125F522D39EA6C47FA58C6E40A7BC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -425,6 +381,58 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		995F658A6B9913B566BE4BA460FCD16A /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				90E637ED04BB379C2D1E2D860B2FC959 /* ZenKeySDK.modulemap */,
+				85FEBE99E65DFF283DD1ADBDECF26C30 /* ZenKeySDK-dummy.m */,
+				91558D3DDB992C5A5EEDD1151A8432D3 /* ZenKeySDK-Info.plist */,
+				397A6AF8C362C2D8E38011249DAAA2C7 /* ZenKeySDK-prefix.pch */,
+				CCAB99D3790C099800980A8BD8C4233E /* ZenKeySDK-umbrella.h */,
+				FB29F14860ACCE9CEBB90896066BE245 /* ZenKeySDK.debug.xcconfig */,
+				D249B40A188937E448359DB6BA01D47E /* ZenKeySDK.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "Example/ZenKey-SDK-Example/Pods/Target Support Files/ZenKeySDK";
+			sourceTree = "<group>";
+		};
+		AAAA37BF2FAAF05574BC8AC4AD5782DF /* ZenKeySDK */ = {
+			isa = PBXGroup;
+			children = (
+				118BBE194954E93861793299FD2FD6D0 /* Core */,
+				AD4873980F9BA35BD30EE53D3993F539 /* iOS */,
+				BD32227E8E5D92477B609E759E3BBD82 /* Pod */,
+				2E1ED9241AB8D4212C7950F849A1CCAB /* Resources */,
+				995F658A6B9913B566BE4BA460FCD16A /* Support Files */,
+			);
+			name = ZenKeySDK;
+			path = ../../..;
+			sourceTree = "<group>";
+		};
+		AD4873980F9BA35BD30EE53D3993F539 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				2ADBF16873D91885F82F10C9FC66255B /* AuthorizationServiceIOS.swift */,
+				1CFCBC5ED3C389D9998BC3CA0D968422 /* CarrierInfoService.swift */,
+				95EEB6D25D5F0044137A94B54EDAE30D /* CurrentSIMBrandingProvider.swift */,
+				E1026B5D7A106517B67584296C73215D /* MobileNetworkInfoProvider.swift */,
+				63C2407066851F5D267FDDF1DD6B75C5 /* OpenIdURLResolverIOS.swift */,
+				FB72ABA106E58ABE37B182C78BEED1B5 /* WebBrowserUI.swift */,
+			);
+			name = iOS;
+			path = ZenKeySDK/Sources/iOS;
+			sourceTree = "<group>";
+		};
+		BD32227E8E5D92477B609E759E3BBD82 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				5D35A150D509D39CD66ABC884A4DFDB1 /* LICENSE */,
+				BC357900A810E9A329E35B3BE41DCDCB /* README.md */,
+				652CD7DE932DD1B6CCF0F4A9A17B6A78 /* ZenKeySDK.podspec */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
 		C0D7B5EA6510EB449FF011171BF4C0AB /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -433,15 +441,6 @@
 				2C087AB966524E26521F4D081A4B2852 /* Pods-ZenKey-SDK-ExampleTests */,
 			);
 			name = "Targets Support Files";
-			sourceTree = "<group>";
-		};
-		C4261A640CEEED398E3C8EEC52EB25D7 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				5A15D460C0BA0A3DDFF6AE721401D43F /* Localizable.strings */,
-				3B9818B57961749A702A0B34A9A31AEF /* ZenKey.xcassets */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -458,36 +457,36 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		429B3F98D7842CC23C416DC4B8935386 /* Headers */ = {
+		0D452B4BCB2639B612EC4B0C5C1D8083 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C833DF28AA9180F14546D0040DF914FF /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-umbrella.h in Headers */,
+				C87DD51C9B2CFBD6783314E34DD6CA63 /* Pods-ZenKey-SDK-Example-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4AE78D3015930FAFED3951F00293AD6E /* Headers */ = {
+		1F787978B4D5A489CB8E2E8B894C81B1 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				780BBD00795B1828A7FC576C6225FFAC /* Pods-ZenKey-SDK-Example-umbrella.h in Headers */,
+				660B6C430B1CE483BA20741F2D75ABDD /* Pods-ZenKey-SDK-ExampleTests-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		99B1DED6393CD78826E7737817915F4B /* Headers */ = {
+		4F773EF9EC0AB70D32338E2E28ECA40D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BDA7D1E3DFCC800CD824C2F30D6FA29B /* Pods-ZenKey-SDK-ExampleTests-umbrella.h in Headers */,
+				1F4D5390E5725C29B1E5E21E11BD3C52 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F92EEC98EB91CA1421EA2F76538D4308 /* Headers */ = {
+		DA804A3ED22FE2081D1B752D8FAC0E5F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C451C63A4CE78013B2ABA2F6E6A8A5D /* ZenKeySDK-umbrella.h in Headers */,
-				15508C31B934D96782B7A7DA7C9D7A3B /* ZenKeySDK.h in Headers */,
+				D00969B8EB0B552ECF145A37AF0EFA9E /* ZenKeySDK-umbrella.h in Headers */,
+				A0F234520E50E52A09B292618E445E10 /* ZenKeySDK.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,12 +495,12 @@
 /* Begin PBXNativeTarget section */
 		14092FDB3628F90B43C9C0492B0F4EF5 /* ZenKeySDK */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4F2CB5DA1F165B929656A42B754E8629 /* Build configuration list for PBXNativeTarget "ZenKeySDK" */;
+			buildConfigurationList = 75A56F4CA311FBE6381DFDE835E6E08D /* Build configuration list for PBXNativeTarget "ZenKeySDK" */;
 			buildPhases = (
-				F92EEC98EB91CA1421EA2F76538D4308 /* Headers */,
-				FA78A7CF4BE2A8827450A850055F15DF /* Sources */,
-				EBCD37C3D05CAD89872D3591216A8B07 /* Frameworks */,
-				B7AC8C7278C1B0B13FD7DD52C2283567 /* Resources */,
+				DA804A3ED22FE2081D1B752D8FAC0E5F /* Headers */,
+				E50F8890E723F785F9B0509695B0D086 /* Sources */,
+				925A3C48E1B1044DDBC0F399767BE777 /* Frameworks */,
+				0574F2E15A5588A876E852C132CF6B92 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -514,17 +513,17 @@
 		};
 		1A65E62E69EC397BA18A40AF9F76B2E6 /* Pods-ZenKey-SDK-Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EEC3AD882DA2837A13C996BD51CF57A3 /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-Example" */;
+			buildConfigurationList = A5F8D43C88ACB7FBDD7FF53F9FCDF380 /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-Example" */;
 			buildPhases = (
-				4AE78D3015930FAFED3951F00293AD6E /* Headers */,
-				2E13C81CAA71EC05FC0909E73BC6B406 /* Sources */,
-				F6CAD6498FBCF132D8FDAC775149B8F2 /* Frameworks */,
-				B604D41AE7749246FDC70E4590B688C6 /* Resources */,
+				0D452B4BCB2639B612EC4B0C5C1D8083 /* Headers */,
+				15B4108FC4146955543AB563CF019CEF /* Sources */,
+				6AEF2E471699AC9B873A306C5D4805E0 /* Frameworks */,
+				9B1D7D26E956EE5643C41C66DC7C12BB /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				1CEACB504BC15AE2C489755FDA747043 /* PBXTargetDependency */,
+				A4DDDE6C672D44F71E86C7F46FDE917E /* PBXTargetDependency */,
 			);
 			name = "Pods-ZenKey-SDK-Example";
 			productName = "Pods-ZenKey-SDK-Example";
@@ -533,17 +532,17 @@
 		};
 		D4E8D80A8E48242D116FDA4FF74ED14F /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7595A557693BE5A20D1B3DE1BE6D6E8C /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests" */;
+			buildConfigurationList = C7F3878729FA49C5AB6CF93F495E1D76 /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests" */;
 			buildPhases = (
-				429B3F98D7842CC23C416DC4B8935386 /* Headers */,
-				0B71642F6134835CE29E83F0C7AC37B0 /* Sources */,
-				E4AA684832E72039F207A0CA181DC03D /* Frameworks */,
-				12D592792B350F9DE2D7C592C048FBD6 /* Resources */,
+				4F773EF9EC0AB70D32338E2E28ECA40D /* Headers */,
+				00CE6A0C7710CDC268E5215465CF2E24 /* Sources */,
+				F5C4A01EF9D6ECAF9ADFE126C6220B4F /* Frameworks */,
+				9FF5E5EC7123B08D3C7CB621634F8C49 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				A834EAF7D62230E8E3AE8FCB75EF396E /* PBXTargetDependency */,
+				B81183D4BDC25647C7A1FF2FB41C9246 /* PBXTargetDependency */,
 			);
 			name = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests";
 			productName = "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests";
@@ -552,17 +551,17 @@
 		};
 		FD6FEA22277F28C831E9C2C67216258A /* Pods-ZenKey-SDK-ExampleTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F75983D9FA28F6251438A31026FF0719 /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-ExampleTests" */;
+			buildConfigurationList = AD5941D5BB9C65E771ACB383BA6E1082 /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-ExampleTests" */;
 			buildPhases = (
-				99B1DED6393CD78826E7737817915F4B /* Headers */,
-				B22D95D25544D17FCB42EE24921387F3 /* Sources */,
-				5AFF03CFFB3F8E5D620230537E13767E /* Frameworks */,
-				EDFAB5907AA48DA64BA7C23BFB170975 /* Resources */,
+				1F787978B4D5A489CB8E2E8B894C81B1 /* Headers */,
+				5E20484515D850DCE37B19104B79621B /* Sources */,
+				C3CE2A7C2D3596FDA6EE319ABAAA6EFB /* Frameworks */,
+				462BAD7B6D31BCA3F592884250329900 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				25AE53A90643FEA83E54D6300B3EA05B /* PBXTargetDependency */,
+				9104750B9A8BE16D59417C5F447E0CA5 /* PBXTargetDependency */,
 			);
 			name = "Pods-ZenKey-SDK-ExampleTests";
 			productName = "Pods-ZenKey-SDK-ExampleTests";
@@ -600,30 +599,30 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		12D592792B350F9DE2D7C592C048FBD6 /* Resources */ = {
+		0574F2E15A5588A876E852C132CF6B92 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF7D5EEEE63BBC77C7CF1266A6D88982 /* Localizable.strings in Resources */,
+				0421331C6ED47B3757735BA0E5A11E7F /* ZenKey.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		462BAD7B6D31BCA3F592884250329900 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B604D41AE7749246FDC70E4590B688C6 /* Resources */ = {
+		9B1D7D26E956EE5643C41C66DC7C12BB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B7AC8C7278C1B0B13FD7DD52C2283567 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				60D741FED54ADA83887B26D1C3D8EE16 /* Localizable.strings in Resources */,
-				AAA74E263990C4684F43F149B4C44E7B /* ZenKey.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EDFAB5907AA48DA64BA7C23BFB170975 /* Resources */ = {
+		9FF5E5EC7123B08D3C7CB621634F8C49 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -633,149 +632,110 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		0B71642F6134835CE29E83F0C7AC37B0 /* Sources */ = {
+		00CE6A0C7710CDC268E5215465CF2E24 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD28FF2E7EF3A18101B5A987EA9C3C9E /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-dummy.m in Sources */,
+				70A447509F72C9E0DD5C870771AFD311 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2E13C81CAA71EC05FC0909E73BC6B406 /* Sources */ = {
+		15B4108FC4146955543AB563CF019CEF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				316D93D06A8DDC767C513BF6B3A6BE3D /* Pods-ZenKey-SDK-Example-dummy.m in Sources */,
+				717163FF449EA9062B65E71019D8A2EB /* Pods-ZenKey-SDK-Example-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B22D95D25544D17FCB42EE24921387F3 /* Sources */ = {
+		5E20484515D850DCE37B19104B79621B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93C1E0B2538A147810A37D2E9338A253 /* Pods-ZenKey-SDK-ExampleTests-dummy.m in Sources */,
+				023F66CC052DC3C8B17005A0AEF174A4 /* Pods-ZenKey-SDK-ExampleTests-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FA78A7CF4BE2A8827450A850055F15DF /* Sources */ = {
+		E50F8890E723F785F9B0509695B0D086 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBC5EF8E683012B68C0F75A16881DA11 /* ACRValue.swift in Sources */,
-				766BD87A73308D930184E5168B51EA4E /* AuthorizationError.swift in Sources */,
-				2D1448C13226984A573F7D5D13345380 /* AuthorizationRequestContext.swift in Sources */,
-				5FF544043AC31D35881AB9A4EA426301 /* AuthorizationService.swift in Sources */,
-				21CD6305CE95A8B6AAB5537CA2FBECC5 /* AuthorizationServiceCurrentRequestStorage.swift in Sources */,
-				32B6065A763E2BC3C535A946BCA56558 /* AuthorizationServiceIOS.swift in Sources */,
-				190721B2B54ACBB081C8C187DB0D1993 /* AuthorizationServiceStateMachine.swift in Sources */,
-				8CE02671A8E730327CE7B4025C2285AE /* Branding.swift in Sources */,
-				60205E3C899206009756A05A04A151AE /* Carrier.swift in Sources */,
-				9169DC093D6D2B68CB17B2FD115E3C11 /* CarrierInfoService.swift in Sources */,
-				F6F445116A68F164B38E91FC3678E8D9 /* ConfigCacheService.swift in Sources */,
-				2F6EC42C50D42E4E0F3A860721EF028B /* CurrentControllerContextProvider.swift in Sources */,
-				06EEB3385FD95B3664A2CAAB876538EA /* CurrentSIMBrandingProvider.swift in Sources */,
-				4E91901120F9B250E454B6DD05D6AF35 /* Dependencies.swift in Sources */,
-				38AA775E6209FFE55F3964984FA297B4 /* DeviceInfo.swift in Sources */,
-				F759CF1E834BF726B21443B70AAD42FF /* Dictionary+Helpers.swift in Sources */,
-				D54BA4EEC6F502D7BF1B9C23CA396C1F /* DiscoveryService.swift in Sources */,
-				69A84D2EE9B026C9AAF4FEC0EBC87DEE /* ErrorCodes.swift in Sources */,
-				0E04252C3D471EBA87486F77CF0559CE /* Fonts+ZenKey.swift in Sources */,
-				FAC415A4545BB6DC07646C9413755C89 /* ImageUtils.swift in Sources */,
-				6F1BFB65B0479FC40251C04B2D59D62A /* LocalizationUtils.swift in Sources */,
-				809BCDB19672F812451E7B1F628C8215 /* Log.swift in Sources */,
-				777B46BC4263714903E72183EBC5AAB7 /* MobileNetworkInfoProvider.swift in Sources */,
-				A5CA66FA56B86C12650DBD62DC6F1FA4 /* MobileNetworkSelectionService.swift in Sources */,
-				A04C82754CCB09F31A0474A4373550B5 /* MobileNetworkSelectionUI.swift in Sources */,
-				1B6A26D57523F814031B243E21BC0EC0 /* NetworkService.swift in Sources */,
-				A008E6B196A1A36B4332C3B0F3437003 /* OpenIdAuthorizationRequest.swift in Sources */,
-				A27BCDE8B1B4A443ACC190544A64F288 /* OpenIdConfig.swift in Sources */,
-				16B3AC426F920D02F85E709679957B3A /* OpenIdService.swift in Sources */,
-				69D75B4B92CAF3E3E280CB70218C61A6 /* OpenIdURLResolver.swift in Sources */,
-				7CE198E059C8DD5FD66ECC9E7F1BAA6E /* OpenIdURLResolverIOS.swift in Sources */,
-				7283C0E4A9083F75C2B558D023C9BEDB /* PromptValue.swift in Sources */,
-				97293615E3BD1A4D1D7475D909410AB9 /* RandomStringGenerator.swift in Sources */,
-				8316178B85FE8D8C557A938F2C6F6175 /* ResponseURL.swift in Sources */,
-				ED1574B16AC9D98E62F922DB58E486D0 /* Scope.swift in Sources */,
-				72CDBD2AF54872685A6EC745BDA8F879 /* SDKConfig.swift in Sources */,
-				F019C2A1C42A3CF374AC7876206DC965 /* SIMInfo.swift in Sources */,
-				86A936C526B5EF14A3C0401B8DABDEFA /* String+Utilities.swift in Sources */,
-				4907C25FA3DC54FB27909CDE3024C9AB /* Theme.swift in Sources */,
-				7D1068A0F24F368619AA0B1453E36763 /* URLHandling.swift in Sources */,
-				C3447164EB10E95AE26306B9AC45CDDD /* Version.swift in Sources */,
-				58755F25B6CA33B76332C385DF9624F5 /* WebBrowserUI.swift in Sources */,
-				7E2536A078B1B591BCF166075A60E61F /* ZenKeyAppDelegate.swift in Sources */,
-				FFE5976C7F1A85AA64E499D0ACE954BC /* ZenKeyAuthorizeButton.swift in Sources */,
-				638A0349A9F0B028955A45AE5C374AE1 /* ZenKeyBrandedButton+Branding.swift in Sources */,
-				8B3AE8A22D3BCA233004CAE6339B80EF /* ZenKeyBrandedButton.swift in Sources */,
-				0C76A904B2017AFD2F49A88885085142 /* ZenKeyButtonView.swift in Sources */,
-				0225725DB5A0A8DA7859F8471491095A /* ZenKeyNetworkConfig.swift in Sources */,
-				CBC52DB00E111100E317767417641FF6 /* ZenKeySceneDelegate.swift in Sources */,
-				DC12BF061887EA2B967FF660105EBB27 /* ZenKeySDK-dummy.m in Sources */,
+				692A4F2ADA07A88188B0E9C4DFB0259B /* ACRValue.swift in Sources */,
+				1879A09717C71C384D20C1FBA1A9CE0A /* AuthorizationError.swift in Sources */,
+				3B20EFB1C07ECAC8522026788A144493 /* AuthorizationRequestContext.swift in Sources */,
+				82F43D359CF356BA96F2CD3BD0068865 /* AuthorizationService.swift in Sources */,
+				6520F2E216520B082B73D345B2599E82 /* AuthorizationServiceCurrentRequestStorage.swift in Sources */,
+				4F08117F5196860B19ED8A8FB9F9B3D9 /* AuthorizationServiceIOS.swift in Sources */,
+				95A21028BD33E2FED2B56C31C99054AD /* AuthorizationServiceStateMachine.swift in Sources */,
+				22A89A44742928F7703284D4CCEA992E /* Branding.swift in Sources */,
+				2595F9BABDF1DBE124BD8DB81AB3DBBA /* Carrier.swift in Sources */,
+				CCBE989F301A76EFC61CF3797A19793A /* CarrierInfoService.swift in Sources */,
+				EC29533EE88DE8968D7A2FD73CB1E336 /* ConfigCacheService.swift in Sources */,
+				7A3E23008EB60F134F2456E715EA6517 /* CurrentControllerContextProvider.swift in Sources */,
+				336098DB7DB4449F9D1A726C7690BA9B /* CurrentSIMBrandingProvider.swift in Sources */,
+				F4C95A0737FB86A92746E202519D1A7A /* Dependencies.swift in Sources */,
+				CA49ACE605487C52186853A4425B3095 /* DeviceInfo.swift in Sources */,
+				E7AFCB9028572EEE340897703EA90D9E /* Dictionary+Helpers.swift in Sources */,
+				CC529FB90B72AAD7F2A8852A38233832 /* DiscoveryService.swift in Sources */,
+				D1CF684635AA0E93FA8A341FBA34C05A /* ErrorCodes.swift in Sources */,
+				D6736D0C3546661314B36181AC852C32 /* Fonts+ZenKey.swift in Sources */,
+				8A22E58F677DA0620BA22E74E50EE274 /* ImageUtils.swift in Sources */,
+				DC4D953F4ED7EF88CCD7B5CFB5248758 /* LocalizationUtils.swift in Sources */,
+				B982E433EAE87AA59E2382D328CB4AA0 /* Log.swift in Sources */,
+				C8A130C6620801E2C2F6E54B91F2DC64 /* MobileNetworkInfoProvider.swift in Sources */,
+				2764879F22E6362E4E311B3300FF7DC9 /* MobileNetworkSelectionService.swift in Sources */,
+				EEC6A51A359CE5BA9EEC04B8DB3CE8A5 /* MobileNetworkSelectionUI.swift in Sources */,
+				F3B8F45003F8D8EAABDCF384F5CFF2FD /* NetworkService.swift in Sources */,
+				9B58281E70B4465792E71C1BB79F4F18 /* OpenIdAuthorizationRequest.swift in Sources */,
+				547373B9EF77658CF0C3FE8298E9ACF1 /* OpenIdConfig.swift in Sources */,
+				02DDD5EEC3A3C5CC216B22FCEFE9F4FF /* OpenIdService.swift in Sources */,
+				F8BCF4DE982B6F524B2C71C45605B27B /* OpenIdURLResolver.swift in Sources */,
+				018CB828A52AC944388EF6850CA1AC1D /* OpenIdURLResolverIOS.swift in Sources */,
+				5323554EFBFB5FA29C41862369F2B808 /* PromptValue.swift in Sources */,
+				A4C5D21986315C78BB78E32EAD6EAB10 /* RandomStringGenerator.swift in Sources */,
+				BB7DC303620DC1CA8DFC261948894372 /* ResponseURL.swift in Sources */,
+				320F102ACD46FA495D649BC92D3DDDA3 /* Scope.swift in Sources */,
+				0AC414B2D7A6551E6D4337915EDADFE7 /* SDKConfig.swift in Sources */,
+				B827F475F145AD81BF0F0FB72A446A38 /* SIMInfo.swift in Sources */,
+				A02D3E23751DB5F2C365881AD4581F78 /* String+Utilities.swift in Sources */,
+				7FF0A9B050DB067D691BEB86DE1B9F56 /* Theme.swift in Sources */,
+				0470F7DD3D5084808506F9EA47316B55 /* URLHandling.swift in Sources */,
+				5461F22204C3AA2D930B322252619D1C /* Version.swift in Sources */,
+				F35BE881CD4C283F32A44FE49562B4AE /* WebBrowserUI.swift in Sources */,
+				DF766D19BAF954C8D6FBB10889D966DD /* ZenKeyAppDelegate.swift in Sources */,
+				5DAC3563C9A487F0165403DD93323153 /* ZenKeyAuthorizeButton.swift in Sources */,
+				335D5DA89F22D794C02E35FAFB6F8FC5 /* ZenKeyBrandedButton+Branding.swift in Sources */,
+				98033767A89331ED4B5BB6C5012B8F2E /* ZenKeyBrandedButton.swift in Sources */,
+				93E943C7A8EDC3A570BE0781A1BBD8C0 /* ZenKeyNetworkConfig.swift in Sources */,
+				67CFADDE9D28F722B8091FA8CAC640FE /* ZenKeySceneDelegate.swift in Sources */,
+				BC51C75FFB0C450D1C889CA41530BEA1 /* ZenKeySDK-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		1CEACB504BC15AE2C489755FDA747043 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ZenKeySDK;
-			target = 14092FDB3628F90B43C9C0492B0F4EF5 /* ZenKeySDK */;
-			targetProxy = ADD08FDE615DB1D72C68D733E9E977DB /* PBXContainerItemProxy */;
-		};
-		25AE53A90643FEA83E54D6300B3EA05B /* PBXTargetDependency */ = {
+		9104750B9A8BE16D59417C5F447E0CA5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Pods-ZenKey-SDK-Example";
 			target = 1A65E62E69EC397BA18A40AF9F76B2E6 /* Pods-ZenKey-SDK-Example */;
-			targetProxy = 624C58F47B0416ED88F406CD8788D89D /* PBXContainerItemProxy */;
+			targetProxy = 1186EE0A88C913D8B403F5569F3225B9 /* PBXContainerItemProxy */;
 		};
-		A834EAF7D62230E8E3AE8FCB75EF396E /* PBXTargetDependency */ = {
+		A4DDDE6C672D44F71E86C7F46FDE917E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ZenKeySDK;
 			target = 14092FDB3628F90B43C9C0492B0F4EF5 /* ZenKeySDK */;
-			targetProxy = FCD6F61829D92B74D26D6F1538C93726 /* PBXContainerItemProxy */;
+			targetProxy = 3BF546D2CC5032CCED282F55663104AA /* PBXContainerItemProxy */;
+		};
+		B81183D4BDC25647C7A1FF2FB41C9246 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ZenKeySDK;
+			target = 14092FDB3628F90B43C9C0492B0F4EF5 /* ZenKeySDK */;
+			targetProxy = A463A4D04F4BD532057348548C11EC45 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		19349DEAD189A87B621F0AC05BF9DCD0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4E5D6DD811C8E23B343A7AB6576834A0 /* Pods-ZenKey-SDK-ExampleTests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-ZenKey-SDK-ExampleTests/Pods-ZenKey-SDK-ExampleTests-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-ZenKey-SDK-ExampleTests/Pods-ZenKey-SDK-ExampleTests.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 		257497152829C177993B5EC99C1D227A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -836,45 +796,9 @@
 			};
 			name = Release;
 		};
-		5D5B7ED8C243607E0F483FF34C98AEF6 /* Debug */ = {
+		43E2258BBADC4D19A4B6429B8B092889 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E3583124576D8AFDA38AC94C66EEEEA1 /* ZenKeySDK.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/ZenKeySDK/ZenKeySDK-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK.modulemap";
-				PRODUCT_MODULE_NAME = ZenKeySDK;
-				PRODUCT_NAME = ZenKeySDK;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		AC2359C6EE834A1253FCCCE3F017A707 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 083D1BA68B65F32E6164CA6B787AED6F /* Pods-ZenKey-SDK-Example.debug.xcconfig */;
+			baseConfigurationReference = 0E4A708C4A47FF332D5C4E3B399B7583 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -887,7 +811,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-ZenKey-SDK-Example/Pods-ZenKey-SDK-Example-Info.plist";
+				INFOPLIST_FILE = "Target Support Files/Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests/Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -896,7 +820,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-ZenKey-SDK-Example/Pods-ZenKey-SDK-Example.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests/Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -910,46 +834,7 @@
 			};
 			name = Debug;
 		};
-		AD44E8BCA575F34F187D17962E3350CC /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B4DFB94CB1AF4862DD565E265629FD3C /* Pods-ZenKey-SDK-ExampleTests.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-ZenKey-SDK-ExampleTests/Pods-ZenKey-SDK-ExampleTests-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-ZenKey-SDK-ExampleTests/Pods-ZenKey-SDK-ExampleTests.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		B4A79ACA3CE869B2220678FD57D900AC /* Release */ = {
+		5416B6FAD9A0711B7185B5D6B59FCB24 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 72CA9A57DAA7752684EEAD66BBF65D71 /* Pods-ZenKey-SDK-Example.release.xcconfig */;
 			buildSettings = {
@@ -988,9 +873,86 @@
 			};
 			name = Release;
 		};
-		C706C651E6FEDC86B9456EBD0DE5264F /* Release */ = {
+		7905F97D296A1F92C7CAA893134134E1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E3583124576D8AFDA38AC94C66EEEEA1 /* ZenKeySDK.xcconfig */;
+			baseConfigurationReference = 4E5D6DD811C8E23B343A7AB6576834A0 /* Pods-ZenKey-SDK-ExampleTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ZenKey-SDK-ExampleTests/Pods-ZenKey-SDK-ExampleTests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ZenKey-SDK-ExampleTests/Pods-ZenKey-SDK-ExampleTests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		986843C3A6EB84808C5C65E04D141B67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B4DFB94CB1AF4862DD565E265629FD3C /* Pods-ZenKey-SDK-ExampleTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-ZenKey-SDK-ExampleTests/Pods-ZenKey-SDK-ExampleTests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ZenKey-SDK-ExampleTests/Pods-ZenKey-SDK-ExampleTests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		AFBC1E2C7B2731740864391C4CC955A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D249B40A188937E448359DB6BA01D47E /* ZenKeySDK.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
@@ -1025,9 +987,9 @@
 			};
 			name = Release;
 		};
-		CFB997730A6BEC79C11F1FDDDB7B5A33 /* Debug */ = {
+		C43B32ED724B870BEDFD0A8D26C314B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0E4A708C4A47FF332D5C4E3B399B7583 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.debug.xcconfig */;
+			baseConfigurationReference = 083D1BA68B65F32E6164CA6B787AED6F /* Pods-ZenKey-SDK-Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -1040,7 +1002,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests/Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests-Info.plist";
+				INFOPLIST_FILE = "Target Support Files/Pods-ZenKey-SDK-Example/Pods-ZenKey-SDK-Example-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1049,7 +1011,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests/Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-ZenKey-SDK-Example/Pods-ZenKey-SDK-Example.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -1127,7 +1089,7 @@
 			};
 			name = Debug;
 		};
-		FED29BA2FA7597C9A37E434011DE7D2A /* Release */ = {
+		F4AC1585C3A1114A51672DBF2FE807B8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B730E65327A59FA730687D9B228E8B69 /* Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests.release.xcconfig */;
 			buildSettings = {
@@ -1166,6 +1128,42 @@
 			};
 			name = Release;
 		};
+		F916C70AFFC30D932CBAB713A00DB317 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FB29F14860ACCE9CEBB90896066BE245 /* ZenKeySDK.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/ZenKeySDK/ZenKeySDK-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/ZenKeySDK/ZenKeySDK.modulemap";
+				PRODUCT_MODULE_NAME = ZenKeySDK;
+				PRODUCT_NAME = ZenKeySDK;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1178,38 +1176,38 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4F2CB5DA1F165B929656A42B754E8629 /* Build configuration list for PBXNativeTarget "ZenKeySDK" */ = {
+		75A56F4CA311FBE6381DFDE835E6E08D /* Build configuration list for PBXNativeTarget "ZenKeySDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5D5B7ED8C243607E0F483FF34C98AEF6 /* Debug */,
-				C706C651E6FEDC86B9456EBD0DE5264F /* Release */,
+				F916C70AFFC30D932CBAB713A00DB317 /* Debug */,
+				AFBC1E2C7B2731740864391C4CC955A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7595A557693BE5A20D1B3DE1BE6D6E8C /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests" */ = {
+		A5F8D43C88ACB7FBDD7FF53F9FCDF380 /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CFB997730A6BEC79C11F1FDDDB7B5A33 /* Debug */,
-				FED29BA2FA7597C9A37E434011DE7D2A /* Release */,
+				C43B32ED724B870BEDFD0A8D26C314B8 /* Debug */,
+				5416B6FAD9A0711B7185B5D6B59FCB24 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EEC3AD882DA2837A13C996BD51CF57A3 /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-Example" */ = {
+		AD5941D5BB9C65E771ACB383BA6E1082 /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-ExampleTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AC2359C6EE834A1253FCCCE3F017A707 /* Debug */,
-				B4A79ACA3CE869B2220678FD57D900AC /* Release */,
+				7905F97D296A1F92C7CAA893134134E1 /* Debug */,
+				986843C3A6EB84808C5C65E04D141B67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F75983D9FA28F6251438A31026FF0719 /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-ExampleTests" */ = {
+		C7F3878729FA49C5AB6CF93F495E1D76 /* Build configuration list for PBXNativeTarget "Pods-ZenKey-SDK-Example-ZenKey-SDK-ExampleUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				19349DEAD189A87B621F0AC05BF9DCD0 /* Debug */,
-				AD44E8BCA575F34F187D17962E3350CC /* Release */,
+				43E2258BBADC4D19A4B6429B8B092889 /* Debug */,
+				F4AC1585C3A1114A51672DBF2FE807B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
