@@ -39,7 +39,7 @@ public protocol ZenKeyAuthorizeButtonDelegate: AnyObject {
 }
 
 /// A button which encapsulates the ZenKey authorization logic and exposes the outcomes
-/// via a delegeate.
+/// via a delegate.
 public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
 
     /// A boolean indicating whether the backing authorization service is currently making a request

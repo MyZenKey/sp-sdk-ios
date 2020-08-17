@@ -361,11 +361,24 @@ extension SignInViewController: ZenKeyAuthorizeButtonDelegate {
         switch result {
         case .code(let authorizedResponse):
             //
-            // We recommended that you send the entire authorizedResponse to your secure backend.
-            // authorizedResponse contains the parameters needed for the token request, except for your
+            // We recommended that you send the entire AuthorizedResponse to your secure backend. An
+            // AuthorizedResponse contains the parameters needed for the token request, except for your
             // ZenKey secret. It also contains parameter that you can use to validate the token response.
             //
             // This signInService.signIn function is only an example of how you might set up your endpoint.
+            //
+            // In account migration scenarios, where a user of your app has changed from one phone
+            // carrier to another, the carrier's token endpoint response will contain one or more
+            // `port_token` values for previous carriers associated with this user in the past. Your
+            // backend can use that port token to update the user in your database, and return
+            // the appropriate user for this sign-in request.
+            //
+            // However, there are some scenarios in which the backend will be unable to associate it
+            // with an existing user and a returning user may appear to be a new user in this sign-in
+            // response.
+            //
+            // You should always give a new user an opportunity to link to an existing account in your
+            // database. (descibed below as an "unlinkedUser" instead of a "newUser")
             //
             signInService.signIn(authResponse: authorizedResponse) { [weak self] result in
                 DispatchQueue.main.async {
