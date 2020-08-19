@@ -25,6 +25,7 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 
 ## [Unreleased]
 ### Added
+- Example app: Documentation comments on user carrier migration.
 ### Changed
 ### Removed
 ### Deprecated
