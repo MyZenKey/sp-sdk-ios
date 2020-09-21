@@ -27,6 +27,8 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 ### Added
 - Example app: Documentation comments on user carrier migration.
 ### Changed
+- Update README.md files to fix broken links
+- Update the name of the Developer Portal throughout the docs
 ### Removed
 ### Deprecated
 ### Fixed

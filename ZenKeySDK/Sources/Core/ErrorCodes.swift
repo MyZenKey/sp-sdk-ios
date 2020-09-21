@@ -25,11 +25,11 @@ import Foundation
 /// for additional info, see: [OAuth 2.0 Authorization Section 4.2.2.1](https://tools.ietf.org/html/rfc6749#page-35)
 public enum OAuthErrorCode: String {
     /// The service provider has constructed a bad request. This may be due to any of the parameters
-    /// submitted. The service provider should visit the service portal to confirm the parameters
+    /// submitted. The service provider should visit the developer portal to confirm the parameters
     /// they should use.
     case invalidRequest = "invalid_request"
     /// The service provider has constructed a bad request. This may be due to any of the parameters
-    /// submitted. The service provider should visit the service portal to confirm the parameters
+    /// submitted. The service provider should visit the developer portal to confirm the parameters
     /// they should use.
     case unauthorizedClient = "unauthorized_client"
     /// The service provider has constructed a bad request. This may be due to any of the parameters
@@ -37,7 +37,7 @@ public enum OAuthErrorCode: String {
     case unsupportedResponseType = "unsupported_response_type"
     /// The service provider has constructed a bad request.
     /// The service provider should visit the
-    /// service portal to confirm the scopes allowed.
+    /// developer portal to confirm the scopes allowed.
     case invalidScope = "invalid_scope"
     /// There is a problem with the ZenKey solution or application.
     /// An SP may assume that a retry at a later time may be successful.

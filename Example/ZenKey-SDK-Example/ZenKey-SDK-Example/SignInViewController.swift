@@ -31,7 +31,7 @@ class SignInViewController: UIViewController {
     lazy var zenKeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
 
-        // Other scopes registered for this client_id in the SP portal can be added here.
+        // Other scopes registered for this client_id in the Developer portal can be added here.
         let scopes: [Scope] = [.openid]
         button.scopes = scopes
 
