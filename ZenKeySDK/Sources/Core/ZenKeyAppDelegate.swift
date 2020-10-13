@@ -115,6 +115,7 @@ public class ZenKeyAppDelegate {
 
         guard let currentAuthorizationService =
             AuthorizationServiceCurrentRequestStorage.shared.currentRequestingService else {
+            // swiftlint:disable:next line_length
             Log.log(.error, "Cannot complete auth. This may be caused by the app being killed before auth was complete, or because you have multiple apps installed using the same client_id.")
             showErrorAlert(Localization.Errors.incomingRequest)
             return false
@@ -150,7 +151,7 @@ private extension ZenKeyAppDelegate {
             message: message,
             preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(
-            title: Localization.Alerts.ok,
+            title: Localization.Alerts.okay,
             style: UIAlertAction.Style.default,
             handler: nil))
         controller.present(alert, animated: true, completion: nil)

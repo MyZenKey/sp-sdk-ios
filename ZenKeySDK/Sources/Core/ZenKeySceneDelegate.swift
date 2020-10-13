@@ -52,7 +52,9 @@ public class ZenKeySceneDelegate {
     ///       which contains the URL contexts to handle
     ///
     /// - SeeAlso: `UIWindowSceneDelegate.scene(_:willConnectTo:options:)`
-    public func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+    public func scene(_ scene: UIScene,
+                      willConnectTo session: UISceneSession,
+                      options connectionOptions: UIScene.ConnectionOptions) {
         guard connectionOptions.urlContexts.count > 0 else { return }
 
         var observer: NSObjectProtocol?

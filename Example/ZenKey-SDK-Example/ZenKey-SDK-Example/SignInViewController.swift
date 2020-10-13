@@ -31,7 +31,7 @@ class SignInViewController: UIViewController {
     lazy var zenKeyButton: ZenKeyAuthorizeButton = {
         let button = ZenKeyAuthorizeButton()
 
-        // Other scopes registered for this client_id in the SP portal can be added here.
+        // Other scopes registered for this client_id in the Developer portal can be added here.
         let scopes: [Scope] = [.openid]
         button.scopes = scopes
 
@@ -361,11 +361,24 @@ extension SignInViewController: ZenKeyAuthorizeButtonDelegate {
         switch result {
         case .code(let authorizedResponse):
             //
-            // We recommended that you send the entire authorizedResponse to your secure backend.
-            // authorizedResponse contains the parameters needed for the token request, except for your
+            // We recommended that you send the entire AuthorizedResponse to your secure backend. An
+            // AuthorizedResponse contains the parameters needed for the token request, except for your
             // ZenKey secret. It also contains parameter that you can use to validate the token response.
             //
             // This signInService.signIn function is only an example of how you might set up your endpoint.
+            //
+            // In account migration scenarios, where a user of your app has changed from one phone
+            // carrier to another, the carrier's token endpoint response will contain one or more
+            // `port_token` values for previous carriers associated with this user. Your
+            // backend can use that port token to update the user in your database, and return
+            // the appropriate user for this sign-in request.
+            //
+            // However, there are some scenarios in which the backend will be unable to associate it
+            // with an existing user, and a returning user may appear to be a new user in this sign-in
+            // response. (In the code example below, both a new user and a returning user that can't
+            // be associated in the backend are represented with `.unlinkedUser`.) For this reason,
+            // you should always give what appears to be a new user the opportunity to link to an
+            // existing account in your database.
             //
             signInService.signIn(authResponse: authorizedResponse) { [weak self] result in
                 DispatchQueue.main.async {

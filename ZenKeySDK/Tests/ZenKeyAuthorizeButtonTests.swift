@@ -96,9 +96,6 @@ class ZenKeyAuthorizeButtonTests: XCTestCase {
         XCTAssertTrue(button.isCurrentColorScheme(appearance.highlighted))
     }
 
-    // TODO: handle branding
-    // NOTE: will require mocking button via configCacheService:carrierInfoService:
-
     // MARK: - authorization:
     func testAuthorizationServiceCalled() {
         XCTAssertNil(mockAuthorizationService.lastCompletion)

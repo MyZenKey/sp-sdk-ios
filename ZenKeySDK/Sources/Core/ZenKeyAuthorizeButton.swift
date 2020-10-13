@@ -39,7 +39,7 @@ public protocol ZenKeyAuthorizeButtonDelegate: AnyObject {
 }
 
 /// A button which encapsulates the ZenKey authorization logic and exposes the outcomes
-/// via a delegeate.
+/// via a delegate.
 public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
 
     /// A boolean indicating whether the backing authorization service is currently making a request
@@ -84,7 +84,7 @@ public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
     public var requestState: String?
 
     /// A string value or `nil`. Service Providers may send a tracking ID used
-    /// for transaction logging. SP’s will need to use the service portal for access to any
+    /// for transaction logging. SP’s will need to use the developer portal for access to any
     /// individual log entries. The default value is `nil`.
     public var correlationId: String?
 

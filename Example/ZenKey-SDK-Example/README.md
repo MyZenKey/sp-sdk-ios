@@ -28,7 +28,7 @@ Next, add your `client_id` to the `ZenKey-SDK-Example` app:
 2. Replace the current value of "\<your-client-id\>" with your `client_id` in two places: in `ZenKeyClientId` and in `Item 0` under `URL Types`.
 Afterwards, your `Info.plist` should resemble this sample:
 
-   ![Example Info.plist](https://developer.myzenkey.com/static/plist_example-fee9d2c8f143c6588810064b768f6cd9.png)
+   ![Example Info.plist](./images/Configure_Client_ID.png)
 
 ## 2. Create a sample backend server
 

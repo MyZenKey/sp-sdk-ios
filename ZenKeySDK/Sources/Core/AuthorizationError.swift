@@ -35,7 +35,7 @@ public struct AuthorizationError: Error, Equatable {
         /// There was a problem communicating over the network. Check your connection and try again.
         case networkFailure
         /// There is an error configuring the SDK. Confirm your configuration locally and with the
-        /// service provider portal.
+        /// developer portal.
         case configurationError
         /// There is an inconsistency with the user's state. Retry discovery.
         case discoveryStateError

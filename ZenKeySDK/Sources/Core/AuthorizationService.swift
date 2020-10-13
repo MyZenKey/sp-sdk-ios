@@ -101,7 +101,7 @@ public protocol AuthorizationServiceProtocol: AnyObject {
     ///   - state: an opaque value used to maintain state between the request and the callback. If
     ///     `nil` is passed, a random string will be used.
     ///   - correlationId: A string value or `nil`. Service Providers may send a tracking ID used
-    ///     for transaction logging. SP’s will need to use the service portal for access to any
+    ///     for transaction logging. SP’s will need to use the developer portal for access to any
     ///     individual log entries. The default value is `nil`.
     ///   - context: A string value or `nil`. Service Providers will be able to submit
     ///     “text string” for authorization by the user. Best practice is a server-initiated request

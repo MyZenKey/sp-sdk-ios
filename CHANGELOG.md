@@ -5,6 +5,7 @@ Any release before 1.0.0 may contain breaking changes.
 After 1.0.0 this project will adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Versions
+- [1.2.0 - 2020-09-30](#120---2020-09-30)
 - [1.1.0 - 2020-07-15](#110---2020-07-15)
 - [1.0.0 - 2020-04-29](#100---2020-04-29)
 - [0.9.3 - 2020-03-02](#093---2020-03-02)
@@ -30,6 +31,16 @@ When the Unreleased section becomes a new version, duplicate the Template to cre
 ### Deprecated
 ### Fixed
 ### Security
+
+## [1.2.0] - 2020-09-30
+### Added
+- Example app: Documentation comments on user carrier migration
+- Xcode 12 support
+### Changed
+- Update README.md files to fix broken links
+- Update the name of the Developer Portal throughout the docs
+### Fixed
+- Buildtime/linter warnings
 
 ## [1.1.0] - 2020-07-15
 ### Added

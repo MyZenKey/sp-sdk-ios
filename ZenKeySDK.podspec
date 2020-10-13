@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZenKeySDK'
-  s.version          = '1.1.0'
+  s.version          = '1.2.0'
   s.summary          = 'ZenKeySDK'
   s.description      = <<-DESC
   The ZenKey SDK enables service providers to authenticate users with their mobile device or web browser.
