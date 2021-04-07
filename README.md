@@ -27,18 +27,18 @@ As the iOS SP SDK is imported as a `pod` by other ZenKey repositories, the proce
      - Make version link at top
      - Title unreleased section with version
      - Create new unreleased section from template
-  5. Check for any updated dependencies (e.g. in Gemfile.lock)
-  6. Run tests on develop!
-  7. Update/build/test the example app(s) with the new SDK version: 
+  3. Check for any updated dependencies (e.g. in Gemfile.lock)
+  4. Run tests on develop!
+  5. Update/build/test the example app(s) with the new SDK version: 
      - `pod update ZenKeySDK`
      - Run tests
-  8. Clear publication with JV:
+  6. Clear publication with JV:
      - Push local develop branch to remote
      - Notify security team about doing a new scan Make any changes needed to pass scans 
      - Confirm JV approval for publication
-  9. Squash merge develop PR into master (single commit in history for release)
-  10. Run tests on master!
-  11. Tag release on master branch
+  7. Squash merge develop PR into master (single commit in history for release)
+  8. Run tests on master!
+  9. Tag release on master branch
 
 ### Part 2 - Publish to Cocoapod trunk repo
   1. Get access to techsupport@myzenkey.com SalesForce account (either direct access or someone who has access and can approve the session below)
