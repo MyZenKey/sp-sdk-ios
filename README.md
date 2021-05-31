@@ -11,6 +11,12 @@ ZenKey SDKs (iOS and Android) and web integrations provide effective resources f
 3. Learn the ZenKey flow by exploring the Developer Playground (https://playground.myzenkey.com/playground). You can submit requests to various endpoints and view the responses your users will experience.
 4. Start coding! Visit http://developer.myzenkey.com for documentation (integration guides, references and best practices) and API resources including SDKs for iOS and Android and resources for Web integration.
 
+## Government ID
+
+By default the ZenKey SDK is setup to handle non-premium scopes.  So if you are already an SDK user, and have no plans to support premium scopes, everything still works as is.  No changes needed in your project.
+
+Otherwise, use the ***scopes*** property on **ZenKeyAuthorizeButton** to set a fixed array of supported scopes.  To adopt premium scopes, like government ID, assign an *empty array* of scopes.  In this state, supported scopes will be fetched at launch.
+
 ## Features
 
 - Developer Portal login - Setup your account as a service provider at http://portal.myzenkey.com
