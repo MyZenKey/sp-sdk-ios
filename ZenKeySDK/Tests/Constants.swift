@@ -91,7 +91,8 @@ extension AuthorizationError {
 extension OpenIdConfig {
     static var mocked: OpenIdConfig {
         return OpenIdConfig(authorizationEndpoint: URL.mocked,
-                            issuer: URL.mocked)
+                            issuer: URL.mocked,
+                            supportedScopes: ["openid", "profile", "email", "address"])
     }
 }
 

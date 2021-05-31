@@ -170,7 +170,8 @@ class DiscoveryServiceTests: XCTestCase {
         mockNetworkService.mockError(.networkError(error))
         let expectedConfig = OpenIdConfig(
             authorizationEndpoint: URL.mocked,
-            issuer: URL.mocked
+            issuer: URL.mocked,
+            supportedScopes: ["openid", "profile", "email", "address"]
         )
         mockConfigCacheService.cacheConfig(
             expectedConfig,
@@ -217,7 +218,8 @@ class DiscoveryServiceTests: XCTestCase {
                 simInfo: MockSIMs.tmobile,
                 openIdConfig: OpenIdConfig(
                     authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
-                    issuer: URL(string: "https://brass.account.t-mobile.com")!
+                    issuer: URL(string: "https://brass.account.t-mobile.com")!,
+                    supportedScopes: ["openid", "profile", "email", "address"]
                 )
             )
 
@@ -251,7 +253,8 @@ class DiscoveryServiceTests: XCTestCase {
                 simInfo: MockSIMs.tmobile,
                 openIdConfig: OpenIdConfig(
                     authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
-                    issuer: URL(string: "https://brass.account.t-mobile.com")!
+                    issuer: URL(string: "https://brass.account.t-mobile.com")!,
+                    supportedScopes: ["openid", "profile", "email", "address"]
                 )
             )
 
@@ -289,7 +292,8 @@ class DiscoveryServiceTests: XCTestCase {
 
                 let expectedResult = OpenIdConfig(
                     authorizationEndpoint: URL(string: "https://xcid.t-mobile.com/verify/authorize")!,
-                    issuer: URL(string: "https://brass.account.t-mobile.com")!
+                    issuer: URL(string: "https://brass.account.t-mobile.com")!,
+                    supportedScopes: ["openid", "profile", "email", "address"]
                 )
 
                 XCTAssertEqual(

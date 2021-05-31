@@ -40,7 +40,8 @@ class CurrentSIMBrandingProviderTests: XCTestCase {
             issuer: URL.mocked,
             linkBranding: "test mock branding",
             linkImage: URL.mocked,
-            branding: URL.mocked
+            branding: URL.mocked,
+            supportedScopes: ["openid", "profile", "email", "address"]
         )
         configCacheService.cacheConfig(config, forSIMInfo: simInfo)
         XCTAssertEqual(currentSIMBrandingProvider.buttonBranding, config.buttonBranding)
@@ -52,7 +53,8 @@ class CurrentSIMBrandingProviderTests: XCTestCase {
             issuer: URL.mocked,
             linkBranding: "test mock branding",
             linkImage: URL.mocked,
-            branding: URL.mocked
+            branding: URL.mocked,
+            supportedScopes: ["openid", "profile", "email", "address"]
         )
 
         var calls = 0

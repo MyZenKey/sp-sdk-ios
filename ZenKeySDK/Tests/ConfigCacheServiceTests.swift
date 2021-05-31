@@ -124,7 +124,8 @@ private extension ConfigCacheServiceTests {
         let value = Int.random(in: 0..<100)
         return OpenIdConfig(
             authorizationEndpoint: URL(string: "xci://?bar=\(value)")!,
-            issuer: URL(string: "xci://?bah=\(value)")!
+            issuer: URL(string: "xci://?bah=\(value)")!,
+            supportedScopes: ["openid", "profile", "email", "address"]
         )
     }
 }

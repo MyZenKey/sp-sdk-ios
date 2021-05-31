@@ -255,7 +255,8 @@ extension OpenIdServiceTests {
         simInfo: MockSIMs.tmobile,
         openIdConfig: OpenIdConfig(
             authorizationEndpoint: URL.mocked,
-            issuer: URL.mocked
+            issuer: URL.mocked,
+            supportedScopes: ["openid", "profile", "email", "address"]
         )
     )
 }
