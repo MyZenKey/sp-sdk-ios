@@ -20,7 +20,23 @@
 
 import Foundation
 
-struct SIMInfo: Equatable {
+public protocol SIMProtocol {
+    var mccmnc: String { get }
+    var mcc: String { get }
+    var mnc: String { get }
+}
+
+public extension SIMProtocol {
+    var mcc: String {
+        String(mccmnc.prefix(3))
+    }
+    var mnc: String {
+        String(mccmnc.suffix(3))
+    }
+
+}
+
+struct SIMInfo: Equatable, SIMProtocol {
     let mccmnc: String
 
     init(mcc: String, mnc: String) {

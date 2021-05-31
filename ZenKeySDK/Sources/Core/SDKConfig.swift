@@ -97,12 +97,45 @@ extension SDKConfig {
     }
 }
 
-protocol ZenKeyBundleProtocol {
+// swiftlint:disable unused_setter_value
+
+public typealias BundleClosure = () -> Void
+public protocol ZenKeyBundleProtocol {
     var clientId: String? { get }
     var urlSchemes: [String] { get }
     var customURLScheme: String? { get }
     var customURLHost: String? { get }
     var customURLPath: String? { get }
+    var info: Any? { get set }
+    var sim: SIMProtocol? { get set }
+    var closure: BundleClosure? { get set }
+}
+
+extension ZenKeyBundleProtocol {
+    public var info: Any? {
+        get {
+            .none
+        }
+        set {
+            return
+        }
+    }
+    public var sim: SIMProtocol? {
+        get {
+            .none
+        }
+        set {
+            return
+        }
+    }
+    public var closure: BundleClosure? {
+        get {
+            .none
+        }
+        set {
+            return
+        }
+    }
 }
 
 private enum PlistKeys: String {
@@ -114,23 +147,23 @@ private enum PlistKeys: String {
 }
 
 extension Bundle: ZenKeyBundleProtocol {
-    var clientId: String? {
+    public var clientId: String? {
         return object(forInfoDictionaryKey: PlistKeys.clientId.rawValue) as? String
     }
 
-    var customURLScheme: String? {
+    public var customURLScheme: String? {
         return object(forInfoDictionaryKey: PlistKeys.customScheme.rawValue) as? String
     }
 
-    var customURLHost: String? {
+    public var customURLHost: String? {
         return object(forInfoDictionaryKey: PlistKeys.customHost.rawValue) as? String
     }
 
-    var customURLPath: String? {
+    public var customURLPath: String? {
         return object(forInfoDictionaryKey: PlistKeys.customPath.rawValue) as? String
     }
 
-    var urlSchemes: [String] {
+    public var urlSchemes: [String] {
         guard
             let urlTypes = object(forInfoDictionaryKey: PlistKeys.bundleURLTypes.rawValue) as? [[String: Any]] else {
                 return []

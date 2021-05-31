@@ -20,7 +20,7 @@
 
 import Foundation
 
-struct OpenIdConfig: Equatable {
+struct OpenIdConfig: Equatable, ScopeZen {
     /// The authorization enpdoint to issue authroization requests to.
     let authorizationEndpoint: URL
     /// The open id issuer.
@@ -32,17 +32,27 @@ struct OpenIdConfig: Equatable {
     let linkImage: URL?
     /// TBD: how this is used
     let branding: URL?
+    /// Service Provider's supported scopes
+    var supportedScopes: [String]
 
     init(authorizationEndpoint: URL,
          issuer: URL,
          linkBranding: String? = nil,
          linkImage: URL? = nil,
-         branding: URL? = nil) {
+         branding: URL? = nil,
+         supportedScopes: [String]) {
         self.authorizationEndpoint = authorizationEndpoint
         self.issuer = issuer
         self.linkBranding = linkBranding
         self.linkImage = linkImage
         self.branding = branding
+        self.supportedScopes = supportedScopes
+    }
+
+    // MARK: ScopeZen
+
+    var serviceProviderSupportedScopes: [ScopeProtocol] {
+        Scope.toScopes(rawValues: supportedScopes)
     }
 }
 
@@ -53,6 +63,7 @@ extension OpenIdConfig: Decodable {
         case linkBranding = "link_branding"
         case linkImage = "link_image"
         case branding
+        case supportedScopes = "scopes_supported"
     }
 }
 

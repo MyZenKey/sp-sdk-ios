@@ -52,9 +52,22 @@ public final class ZenKeyAuthorizeButton: ZenKeyBrandedButton {
     /// The scopes the button will request when pressed. Assign this property before the button
     /// issues its request.
     ///
+    /// Triggering `didSet` with an empty array will subscribe to published updates
+    /// of supported sp scopes.  When OpenIDConfig is fetched at launch, ConfigCacheService
+    /// will notify this button to sync its scopes.
+    ///
+    /// Triggering `didSet` with a non-empty array will stay fixed and not be affected by published scopes.
+    ///
     /// - SeeAlso: ScopeProtocol
     /// - SeeAlso: Scopes
-    public var scopes: [ScopeProtocol] = []
+    public var scopes: [ScopeProtocol] = [] {
+        didSet {
+            registerForPublishedScopes()
+        }
+    }
+
+    // used inside of registerForPublishedScopes
+    private var isRegistered = false
 
     /// Allows the type of title to be set. "Sign in with ZenKey" is the default,
     /// and "Continue with ZenKey" is used if the titleType is set to .continue.
@@ -224,5 +237,14 @@ private extension ZenKeyAuthorizeButton {
         case TitleType.signInWith:
             updateBrandedText(Localization.Buttons.signInWithZenKey)
         }
+    }
+
+    private func registerForPublishedScopes() {
+        guard scopes.isEmpty, isRegistered == false else { return }
+        ZenKeyAppDelegate.shared.register { [weak self] scopes in
+            guard let scopes = scopes else { return }
+            self?.scopes = scopes
+        }
+        isRegistered.toggle()
     }
 }

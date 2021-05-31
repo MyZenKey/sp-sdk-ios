@@ -34,6 +34,9 @@ import UIKit
 /// - SeeAlso: UIApplicationDelegate
 public class ZenKeyAppDelegate {
 
+    /// Used in performAlternateFlow
+    public var injectedBundle: ZenKeyBundleProtocol?
+
     /// The shared `ZenKeyAppDelegate` instance.
     ///
     /// This should be the only instance of the `ZenKeyAppDelegate` used. Creation of other
@@ -66,14 +69,34 @@ public class ZenKeyAppDelegate {
         zenKeyOptions: ZenKeyOptions = [:]) {
         // Initialize ZenKey SDK config
         do {
-            let sdkConfig = try SDKConfig.load(fromBundle: Bundle.main)
+            let sdkConfig = try SDKConfig.load(fromBundle: injectedBundle ?? Bundle.main)
             self.dependencies = Dependencies(sdkConfig: sdkConfig, options: zenKeyOptions)
             self.discoveryService = self.dependencies.resolve()
-            prefetchOIDC()
+            guard let bundle = injectedBundle else {
+                // normal flow
+                prefetchOIDC()
+                return
+            }
+            performAlternateFlow(bundle: bundle)
         } catch {
 
             fatalError("Bundle configuration error: \(error)")
         }
+    }
+
+    public func inject(bundle: ZenKeyBundleProtocol) {
+        injectedBundle = bundle
+    }
+
+    private func performAlternateFlow(bundle: ZenKeyBundleProtocol) {
+        guard let openIdConfig = bundle.info as? OpenIdConfig else { return }
+        guard let mcc = bundle.sim?.mcc else { return }
+        guard let mnc = bundle.sim?.mnc else { return }
+        guard let alert = bundle.closure else { return }
+        let sim = SIMInfo(mcc: mcc, mnc: mnc)
+        let cacheConfig: ConfigCacheServiceProtocol = dependencies.resolve()
+        alert()
+        cacheConfig.cacheConfig(openIdConfig, forSIMInfo: sim)
     }
 
     /// Call this method in your AppDelegate's `application(_:open:options:)` method.
@@ -122,6 +145,18 @@ public class ZenKeyAppDelegate {
         }
 
         return currentAuthorizationService.resolve(url: url)
+    }
+
+    func register(sim: SIMProtocol? = .none, _ action: @escaping ScopePublisher) {
+        var simInfo: SIMInfo? {
+            guard let sim = sim else { return .none }
+            return SIMInfo(mcc: sim.mcc, mnc: sim.mnc)
+        }
+
+        let currentDeviceInfo: CarrierInfoServiceProtocol = dependencies.resolve()
+        discoveryService.registerScopeSubscriber(sim: simInfo ?? currentDeviceInfo.primarySIM) { scopes in
+            action(scopes)
+        }
     }
 }
 

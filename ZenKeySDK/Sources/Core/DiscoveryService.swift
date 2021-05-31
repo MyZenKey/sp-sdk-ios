@@ -55,6 +55,27 @@ protocol DiscoveryServiceProtocol {
     func discoverConfig(forSIMInfo simInfo: SIMInfo?,
                         prompt: Bool,
                         completion: @escaping DiscoveryServiceCompletion)
+
+    /// Fetch the cached config that maps to sim.
+    /// - Parameters:
+    ///   - sim: The sim info to pass to the discovery service
+    /// - Returns: Cached instance that conforms to ScopeZen.
+    func cachedScopezen(at sim: SIMProtocol) -> ScopeZen?
+
+    /// Register for updates to qualified sp scopes.
+    /// - Parameters:
+    ///   - sim: The sim info to pass to the discovery service
+    func registerScopeSubscriber(sim: SIMInfo?, _ publish: @escaping ScopePublisher)
+}
+
+extension DiscoveryServiceProtocol {
+    func cachedScopezen(at sim: SIMProtocol) -> ScopeZen? {
+        .none
+    }
+
+    func registerScopeSubscriber(sim: SIMInfo?, _ publish: @escaping ScopePublisher) {
+        return
+    }
 }
 
 class DiscoveryService: DiscoveryServiceProtocol {
@@ -65,6 +86,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
 
     private let discoveryPath = "/.well-known/openid_configuration"
     private let discoveryEndpointFormat = "%@?&mccmnc=%@%@"
+    private var observer: CacheObserver?
 
     init(sdkConfig: SDKConfig,
          hostConfig: ZenKeyNetworkConfig,
@@ -89,6 +111,19 @@ class DiscoveryService: DiscoveryServiceProtocol {
             DispatchQueue.main.async {
                 completion(result)
             }
+        }
+    }
+
+    func cachedScopezen(at sim: SIMProtocol) -> ScopeZen? {
+        guard let simInfo = sim as? SIMInfo else { return .none }
+        return configCacheService.config(forSIMInfo: simInfo)
+    }
+
+    func registerScopeSubscriber(sim: SIMInfo?, _ publish: @escaping ScopePublisher) {
+        guard let simInfo = sim else { return }
+        observer = configCacheService.addCacheObserver() { [weak self] _ in
+            guard let scopezen = self?.cachedScopezen(at: simInfo) else { return }
+            publish(scopezen.serviceProviderSupportedScopes)
         }
     }
 }

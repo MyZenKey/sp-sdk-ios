@@ -20,6 +20,15 @@
 
 import Foundation
 
+/// Defines closure to pass back scopes.
+public typealias ScopePublisher = ([ScopeProtocol]?) -> Void
+
+/// Adopting types know sp's supported scopes.
+public protocol ScopeZen {
+    /// Supported scopes as an array of Scope.
+    var serviceProviderSupportedScopes: [ScopeProtocol] { get }
+}
+
 /// The protocol any type must conform to to represent a scope request.
 public protocol ScopeProtocol {
     /// The string which will represent the scope over the network.
@@ -27,7 +36,7 @@ public protocol ScopeProtocol {
 }
 
 /// The predefined scopes supported by ZenKey.
-public enum Scope: String, ScopeProtocol, Equatable {
+public enum Scope: String, ScopeProtocol, Equatable, CaseIterable {
     /// This scope will return an ID_token from the Token endpoint. Future updates may include
     /// additional data claims in the ID_token.  Note: even the access token is a JWT.
     case openid
@@ -57,8 +66,35 @@ public enum Scope: String, ScopeProtocol, Equatable {
     /// Last four digits of user SSN
     case last4Social = "last_4_social"
 
+    /// GovId
+    case proofing
+
     public var scopeString: String {
         return self.rawValue
+    }
+
+    /// Scopes offered at a premium level of service.
+    public static var premiumScopes: [ScopeProtocol] {
+        [Scope.proofing]
+    }
+
+    /// All sp's should support these scopes.  Computed by Scope.allCases - premiumScopes.
+    public static var universalScopes: [ScopeProtocol] {
+        var allSet = Set(allCases)
+
+        // must convert this to [Scope] as [ScopeProtocol] is not Hashable
+        // Set only works with Hashable
+        let premiumSet = premiumScopes.map { Scope(rawValue: $0.scopeString) }.compactMap { $0 }
+        allSet.subtract(premiumSet)
+        return Array(allSet)
+    }
+
+    /// Convert an array of strings to equivalent array of scopes.
+    /// - Parameters:
+    ///   - rawValues: Array of strings to be returned as scopes.
+    /// - Returns: Array of scopes.
+    public static func toScopes(rawValues: [String]) -> [ScopeProtocol] {
+        rawValues.deduplicateStrings.sorted().map { Scope(rawValue: $0) }.compactMap { $0 }
     }
 }
 
