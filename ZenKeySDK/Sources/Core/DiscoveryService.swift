@@ -60,7 +60,7 @@ protocol DiscoveryServiceProtocol {
     /// - Parameters:
     ///   - sim: The sim info to pass to the discovery service
     /// - Returns: Cached instance that conforms to ScopeZen.
-    func cachedScopezen(at sim: SIMProtocol) -> ScopeZen?
+    func cachedScopeZen(at sim: SIMProtocol) -> ScopeZen?
 
     /// Register for updates to qualified sp scopes.
     /// - Parameters:
@@ -69,7 +69,7 @@ protocol DiscoveryServiceProtocol {
 }
 
 extension DiscoveryServiceProtocol {
-    func cachedScopezen(at sim: SIMProtocol) -> ScopeZen? {
+    func cachedScopeZen(at sim: SIMProtocol) -> ScopeZen? {
         .none
     }
 
@@ -114,7 +114,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
         }
     }
 
-    func cachedScopezen(at sim: SIMProtocol) -> ScopeZen? {
+    func cachedScopeZen(at sim: SIMProtocol) -> ScopeZen? {
         guard let simInfo = sim as? SIMInfo else { return .none }
         return configCacheService.config(forSIMInfo: simInfo)
     }
@@ -122,7 +122,7 @@ class DiscoveryService: DiscoveryServiceProtocol {
     func registerScopeSubscriber(sim: SIMInfo?, _ publish: @escaping ScopePublisher) {
         guard let simInfo = sim else { return }
         observer = configCacheService.addCacheObserver() { [weak self] _ in
-            guard let scopezen = self?.cachedScopezen(at: simInfo) else { return }
+            guard let scopezen = self?.cachedScopeZen(at: simInfo) else { return }
             publish(scopezen.serviceProviderSupportedScopes)
         }
     }

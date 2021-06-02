@@ -147,6 +147,12 @@ public class ZenKeyAppDelegate {
         return currentAuthorizationService.resolve(url: url)
     }
 
+    /// Register for updates to qualified sp scopes.  This is considered the registration
+    /// entry point since ZenKeyAppDelegate is a singleton that is globally visible.
+    /// - Parameters:
+    ///   - sim: The sim info to pass to the discovery service.  Normally the sim is available from
+    ///          the device hardware, so this defaults to .none.  On a simulator you could pass
+    ///          something else.
     func register(sim: SIMProtocol? = .none, _ action: @escaping ScopePublisher) {
         var simInfo: SIMInfo? {
             guard let sim = sim else { return .none }
