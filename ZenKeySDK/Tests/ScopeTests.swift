@@ -35,4 +35,32 @@ class ScopeTests: XCTestCase {
         let formattedString = OpenIdScopes(requestedScopes: dupeScopes).networkFormattedString
         XCTAssertEqual(formattedString, "name openid phone")
     }
+
+    func testPremiumScopesExclusive() {
+        XCTAssertTrue(Scope.premiumScopes.filter { Scope.universalScopes.contains($0) }.isEmpty)
+    }
+
+    func testUniversalScopesExclusive() {
+        XCTAssertTrue(Scope.universalScopes.filter { Scope.premiumScopes.contains($0) }.isEmpty)
+    }
+
+    func testUniversalScopesNotEmpty() {
+        XCTAssertFalse(Scope.universalScopes.isEmpty)
+    }
+
+    func testStringToScope() {
+        let input = ["name", "openid", "phone", "proofing"]
+        XCTAssertEqual(Scope.toScopes(rawValues: input).toOpenIdScopes, input.joined(separator: " "))
+    }
+
+    func testStringToScopeNoDupsSorted() {
+        let input = ["openid", "name", "phone", "phone", "name", "name", "openid"]
+        XCTAssertEqual(Scope.toScopes(rawValues: input).toOpenIdScopes, "name openid phone")
+    }
+
+    func testStringToScopeNonExist() {
+        let realScopeName = "proofing"
+        let input = ["\(realScopeName)", "elmer", "fudd", "yosemite", "sam"]
+        XCTAssertEqual(Scope.toScopes(rawValues: input).toOpenIdScopes, "\(realScopeName)")
+    }
 }
