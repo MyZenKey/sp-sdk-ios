@@ -66,7 +66,7 @@ public enum Scope: String, ScopeProtocol, Equatable, CaseIterable {
 
     /// Scopes offered at a premium level of service.
     public static var premiumScopes: [Scope] {
-        [Scope.proofing]
+        [Scope.proofing, Scope.last4Social]
     }
 
     /// All sp's should support these scopes.  Computed by Scope.allCases - premiumScopes.
